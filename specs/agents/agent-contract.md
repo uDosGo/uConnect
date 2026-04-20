@@ -1,3 +1,28 @@
+# [🟡 PLANNED] Agent Contract Specification
+
+**Target Version:** v2.0.0
+**Status:** Specification complete, no implementation
+**Dependencies:** Mastra integration
+**Blockers:** None
+
+## Current State
+
+- ✅ Input/Output format defined
+- ✅ Error response format specified
+- ✅ Agent manifest schema designed
+- ❌ No reference implementation
+- ❌ No validation tools
+- ❌ No agent registry
+
+## Next Steps
+
+1. Implement reference agent using specification
+2. Create validation script
+3. Build agent registry prototype
+4. Integrate with Mastra framework
+
+---
+
 # Agent Contract Specification
 
 ## Overview

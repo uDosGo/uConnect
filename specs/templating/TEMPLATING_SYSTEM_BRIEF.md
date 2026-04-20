@@ -1,4 +1,8 @@
-# uDevFramework Templating System
+# [🟡 PLANNED] uDevFramework Templating System
+
+**Target Version:** v2.0.0
+**Status:** Specification Complete, Implementation Not Started
+**Last Updated:** 2025-04-20
 
 ## The Problem
 

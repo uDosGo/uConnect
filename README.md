@@ -24,6 +24,19 @@ udev init my-new-project
 udev update .
 ```
 
+## Implementation Status
+
+**Current Version:** v1.2.0
+
+| Area | Status | Notes |
+|------|--------|-------|
+| **CLI Core** | ✅ Working | Help, spec, rule commands |
+| **Templating** | 🟡 Planned | Specification complete |
+| **Layer System** | 🟡 Planned | Design phase |
+| **Flavour System** | 🟡 Planned | Not implemented |
+
+See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) for full details.
+
 ## Philosophy
 
 - **Universal spine** – Consistent directory structure across all repos
