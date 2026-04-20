@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const commands = {
+  init: (projectName) => {
+    console.log(`🚀 Creating new project: ${projectName}`);
+    execSync(`cp -r ${__dirname}/../scaffold/. ${projectName}`);
+    console.log(`✅ Project created. cd ${projectName} && npm install`);
+  },
+  
+  update: (projectPath = '.') => {
+    console.log(`🔄 Updating ${projectPath} with latest framework...`);
+    // Copy scaffold files, merge configs
+    execSync(`rsync -av ${__dirname}/../scaffold/ ${projectPath}/ --exclude node_modules --exclude .git`);
+    console.log(`✅ Updated. Run 'npm install' to refresh dependencies.`);
+  },
+  
+  spec: (specName) => {
+    const specPath = path.join(__dirname, '../specs', specName);
+    if (fs.existsSync(specPath)) {
+      console.log(fs.readFileSync(specPath, 'utf-8'));
+    } else {
+      console.error(`❌ Spec not found: ${specName}`);
+      console.log('Available specs: architecture/, api/, cli/, agents/');
+    }
+  },
+  
+  rule: (ruleName) => {
+    const rulePath = path.join(__dirname, '../rules', ruleName);
+    if (fs.existsSync(rulePath)) {
+      console.log(fs.readFileSync(rulePath, 'utf-8'));
+    } else {
+      console.error(`❌ Rule not found: ${ruleName}`);
+      console.log('Available rules: codegen-rules.md, security-rules.md, style-rules.md, review-rules.md');
+    }
+  },
+  
+  install: () => {
+    console.log('🔧 Installing udev CLI...');
+    execSync(`chmod +x ${__dirname}/udev`);
+    execSync(`sudo ln -sf ${__dirname}/udev /usr/local/bin/udev`);
+    console.log('✅ Installed. Run `udev --help` to get started.');
+  },
+  
+  help: () => {
+    console.log(`
+uDevFramework CLI
+
+Usage:
+  udev init <project-name>    Create new project from scaffold
+  udev update [path]          Update project to latest framework
+  udev spec <spec-name>       View a specification
+  udev rule <rule-name>       View a rule file
+  udev install                Install udev globally
+
+Examples:
+  udev init my-new-agent
+  udev update ~/code-vault/sonic-screwdriver
+  udev spec architecture/universal-spine.md
+  udev rule codegen-rules.md
+`);
+  }
+};
+
+const command = process.argv[2];
+const arg = process.argv[3];
+
+if (commands[command]) {
+  commands[command](arg);
+} else {
+  commands.help();
+}
