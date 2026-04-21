@@ -45,6 +45,33 @@ const commands = {
     console.log('✅ Installed. Run `udev --help` to get started.');
   },
   
+  ok: (subcommand, arg1, arg2) => {
+    const okCommands = require('./ok-commands');
+    
+    if (!subcommand) {
+      okCommands.help();
+      return;
+    }
+    
+    switch (subcommand) {
+      case 'list':
+        okCommands.list();
+        break;
+      case 'validate':
+        okCommands.validate(arg1);
+        break;
+      case 'init':
+        okCommands.init(arg1, arg2);
+        break;
+      case 'status':
+        okCommands.status();
+        break;
+      case 'help':
+      default:
+        okCommands.help();
+    }
+  },
+  
   help: () => {
     console.log(`
 uDevFramework CLI
@@ -54,6 +81,7 @@ Usage:
   udev update [path]          Update project to latest framework
   udev spec <spec-name>       View a specification
   udev rule <rule-name>       View a rule file
+  udev ok <command>           OK (Orchestration Kernel) commands
   udev install                Install udev globally
 
 Examples:
@@ -61,15 +89,23 @@ Examples:
   udev update ~/code-vault/sonic-screwdriver
   udev spec architecture/universal-spine.md
   udev rule codegen-rules.md
+  udev ok list
+  udev ok init reasoning ./my-tool
 `);
   }
 };
 
 const command = process.argv[2];
-const arg = process.argv[3];
+const subcommand = process.argv[3];
+const arg1 = process.argv[4];
+const arg2 = process.argv[5];
 
 if (commands[command]) {
-  commands[command](arg);
+  if (command === 'ok') {
+    commands[command](subcommand, arg1, arg2);
+  } else {
+    commands[command](arg1);
+  }
 } else {
   commands.help();
 }
