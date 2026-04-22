@@ -1,0 +1,21 @@
+name: Validate courses
+
+on:
+  pull_request:
+    paths:
+      - "courses/**"
+      - "scripts/validate-courses.sh"
+  push:
+    branches:
+      - main
+    paths:
+      - "courses/**"
+      - "scripts/validate-courses.sh"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate course shells
+        run: bash scripts/validate-courses.sh

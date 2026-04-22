@@ -1,0 +1,26 @@
+# Copy to vault/system/llm-sources.yaml or rely on ~/.udos-llm/sources.yaml
+sources:
+  rss_feeds:
+    - url: "https://news.ycombinator.com/rss"
+      refresh: hourly
+      tags: ["tech", "news"]
+  web_pages:
+    - url: "https://example.com/docs"
+      depth: 1
+      refresh: weekly
+      tags: ["docs"]
+  documents:
+    - path: "vault/content/**/*.md"
+      watch: false
+      tags: ["personal"]
+  social:
+    - platform: github
+      user: octocat
+      repo: Hello-World
+      refresh: daily
+      tags: ["code"]
+
+ollama:
+  host: "http://127.0.0.1:11434"
+  embed_model: "nomic-embed-text"
+  chat_model: "llama3.2"

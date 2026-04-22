@@ -1,0 +1,48 @@
+{
+  "name": "@udos/sonic-express",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Sonic-express — uDos installer: prerequisites, core build, global `do` link, launchers.",
+  "type": "module",
+  "bin": {
+    "sonic-express": "./bin/sonic-express.mjs"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start:webhook": "tsx src/webhook-server.ts",
+    "dev:webhook": "nodemon --watch src --ext ts --exec 'tsx src/webhook-server.ts'",
+    "install": "tsx src/main.ts install",
+    "start": "tsx src/main.ts start",
+    "stop": "tsx src/main.ts stop",
+    "restart": "tsx src/main.ts restart",
+    "health": "tsx src/main.ts health",
+    "self-heal": "tsx src/main.ts self-heal",
+    "cleanup": "tsx src/main.ts cleanup",
+    "init": "tsx src/main.ts init",
+    "init-health": "tsx src/main.ts init-health",
+    "init-self-heal": "tsx src/main.ts init-self-heal",
+    "init-restart": "tsx src/main.ts init-restart",
+    "init-cleanup": "tsx src/main.ts init-cleanup",
+    "sonic": "tsx src/sonic-main.ts",
+    "sonic:build": "tsc src/sonic-cli.ts src/sonic-main.ts --outDir dist --module es2022 --target es2022"
+  },
+  "dependencies": {
+    "@udos/shared-types": "*",
+    "@udos/shared-utils": "*",
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.3.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/express": "^4.17.25",
+    "@types/fs-extra": "^11.0.4",
+    "body-parser": "^1.20.4",
+    "express": "^4.22.1",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.21.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

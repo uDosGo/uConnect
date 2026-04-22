@@ -1,0 +1,45 @@
+#!/bin/bash
+# uDosConnect Maintenance Command Set
+
+CMD=$1
+shift
+
+case $CMD in
+    ping)
+        echo "🔍 PING: Scanning for files matching pattern..."
+        find . -maxdepth 1 -type f -name "$1" 2>/dev/null
+        ;;
+    pong)
+        if [ -e "$1" ]; then
+            echo "✅ PONG: $1 exists"
+            ls -la "$1"
+        else
+            echo "❌ PONG: $1 not found"
+            exit 1
+        fi
+        ;;
+    clean)
+        echo "🧹 CLEAN: Removing temporary files..."
+        # Safe patterns only
+        rm -f debug_*.js debug_*.py 2>/dev/null || true
+        rm -rf exports/ distro/ cdn/ .cache/ 2>/dev/null || true
+        echo "✅ Clean complete"
+        ;;
+    tidy)
+        echo "📁 TIDY: Organizing files..."
+        mkdir -p .docs/archive .config 2>/dev/null || true
+        mv *_SUMMARY.md .docs/archive/ 2>/dev/null || true
+        mv *.config.json .config/ 2>/dev/null || true
+        echo "✅ Tidy complete"
+        ;;
+    status)
+        echo "📊 STATUS: uDosConnect Repository"
+        echo "Files in root: $(find . -maxdepth 1 -type f | wc -l)"
+        echo "Directories: $(find . -maxdepth 1 -type d | wc -l)"
+        echo "Disk usage: $(du -sh . | cut -f1)"
+        ;;
+    *)
+        echo "Usage: $0 {ping|pong|clean|tidy|status}"
+        exit 1
+        ;;
+esac

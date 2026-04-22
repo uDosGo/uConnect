@@ -1,0 +1,50 @@
+# uDos Development Cycle Flow
+# Cycle 1, Round 3: Core Integration Layer
+
+name: dev-cycle
+version: "1.0"
+description: "Structured development cycle for uDos projects"
+
+steps:
+  - name: plan
+    action: round/plan
+    input:
+      - ".udos/tasks/backlog.md"
+    output:
+      - ".udos/tasks/round-{{round.current}}.md"
+    description: "Create round plan from backlog"
+
+  - name: develop
+    action: parallel
+    steps:
+      - name: code
+        agent: codegen
+        action: generate
+        description: "AI-powered code generation"
+      - name: test
+        agent: tester
+        action: run
+        description: "Automated testing"
+      - name: document
+        action: docs/generate
+        description: "Auto-generate documentation"
+
+  - name: review
+    action: safety/check
+    level: "{{safety.level}}"
+    description: "Run comprehensive safety checks"
+
+  - name: integrate
+    action: git/merge
+    branch: "round/{{round.current}}"
+    description: "Merge changes to main branch"
+
+  - name: release
+    action: version/tag
+    version: "{{round.target_version}}"
+    description: "Tag release version"
+
+  - name: archive
+    action: feed/archive
+    round: "{{round.current}}"
+    description: "Archive round feed for history"

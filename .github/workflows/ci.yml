@@ -1,0 +1,58 @@
+name: CI
+on: [push, pull_request]
+
+# Permissions required for this workflow
+permissions:
+  contents: read
+  pull-requests: read
+  actions: read
+  checks: write
+  statuses: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install dependencies
+        run: npm install
+      - name: Run pre-commit checks
+        run: |
+          chmod +x scripts/fix_comma.sh
+          ./scripts/fix_comma.sh
+      - name: Run ESLint
+        run: npm run lint:check
+      - name: Send uDos Feed Notification on Failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const payload = {
+              event: "workflow_failure",
+              repo: context.repo.repo,
+              workflow: "CI",
+              status: "failed",
+              timestamp: new Date().toISOString(),
+              message: "CI workflow failed.",
+              details: {
+                run_id: context.runId,
+                run_number: context.runNumber,
+                workflow_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              }
+            };
+            
+            // Send the payload to your custom webhook endpoint
+            await fetch('${{ secrets.UDOS_WEBHOOK_URL }}', {
+              method: 'POST',
+              body: JSON.stringify(payload),
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${{ secrets.UDOS_WEBHOOK_TOKEN }}`
+              }
+            });

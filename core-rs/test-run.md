@@ -1,0 +1,3 @@
+```ucode
+PRINT "Hello, world!"
+```

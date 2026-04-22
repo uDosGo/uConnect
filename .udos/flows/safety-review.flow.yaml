@@ -1,0 +1,28 @@
+# uDos Safety Review Flow
+# Cycle 1, Round 3: Core Integration Layer
+
+name: safety-review
+version: "1.0"
+description: "Comprehensive safety review process"
+
+steps:
+  - name: precheck
+    action: safety/check
+    level: "{{safety.level}}"
+    description: "Run automated safety checks"
+
+  - name: human_review
+    action: require/approval
+    approvers: 1
+    timeout_hours: 24
+    description: "Human review of safety report"
+
+  - name: exceptions
+    action: handle/exceptions
+    if: "precheck.failed"
+    description: "Handle any safety exceptions"
+
+  - name: finalize
+    action: safety/approve
+    artifact: ".udos/safety/reviews/{{date}}.md"
+    description: "Finalize safety approval"

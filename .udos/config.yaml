@@ -1,0 +1,57 @@
+# uDos Development Configuration
+# Cycle 1, Round 3: Core Integration Layer
+
+project:
+  name: uDos
+  type: udosconnect
+  version: 0.5.0
+  spine: main
+  description: "Universal Feed Engine & Round-Based Development System"
+
+safety:
+  level: normal
+  require_review_for: [code_gen, refactor, major]
+  auto_approve_patch: true
+  max_exceptions_per_round: 2
+  auto_hallucination_check: true
+
+round:
+  current: "0.5.0"
+  duration_days: 10
+  start_date: "2026-04-19"
+  target_version: "0.5.0"
+  focus: "Core Integration Layer - WP Integration & REST API"
+
+agents:
+  enabled: [codegen, tester, reviewer]
+  codegen:
+    model: dsc2
+    require_approval: true
+    max_output_lines: 200
+    banned_patterns: ["eval(", "exec(", "rm -rf", "process.exit"]
+  tester:
+    auto_run: true
+    max_retries: 3
+    coverage_threshold: 80
+  reviewer:
+    model: claude-3.5-sonnet
+    require_human_approval: true
+
+flows:
+  dev_cycle: ".udos/flows/dev-cycle.flow.yaml"
+  safety_review: ".udos/flows/safety-review.flow.yaml"
+  release: ".udos/flows/release.flow.yaml"
+
+feed:
+  sync_with_master: true
+  local_only: false
+  auto_archive: true
+
+spines:
+  current: main
+  available: [main, lightweight, experimental]
+
+docs:
+  auto_generate: true
+  output_dir: ".udos/docs"
+  format: [markdown, html]

@@ -1,0 +1,12 @@
+{
+  "name": "@udos/vault-manager",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Vault path and table helpers — port from uDosGo packages/vault",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

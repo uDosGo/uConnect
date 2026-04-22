@@ -1,0 +1,4 @@
+# Optional upstream clones (not committed; run git clone per README)
+markdown-runtime/rnmd/
+markdown-runtime/marki/
+foam/foam/
