@@ -1,0 +1,27 @@
+{
+  "name": "@udos/ok-base",
+  "version": "1.0.0",
+  "description": "Base OK contracts and types for the uDos ecosystem",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint . --fix"
+  },
+  "dependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "@types/jest": "^29.0.0"
+  },
+  "keywords": ["udos", "ok", "contracts", "base"],
+  "author": "Fred Booker <fred@udos.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fredporter/uDevFramework.git"
+  }
+}
