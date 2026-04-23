@@ -1,0 +1,128 @@
+# Webhook Configuration
+# This file configures webhook endpoints and retry behavior
+
+# Global webhook settings
+settings:
+  # Maximum payload size (bytes)
+  max_payload_size: 1048576  # 1MB
+  
+  # Default timeout for webhook deliveries (seconds)
+  timeout: 30
+  
+  # User agent for webhook requests
+  user_agent: "uDos-Webhooks/1.0"
+  
+  # Global retry settings (can be overridden per webhook)
+  retry:
+    max_attempts: 5
+    base_delay: 1  # seconds
+    max_delay: 3600  # 1 hour
+    multiplier: 2
+    jitter: true  # Add random ±20% to delays
+
+# Webhook endpoints configuration
+endpoints:
+  # Example webhook for conflict notifications
+  - id: "conflict-notifier"
+    name: "Conflict Notifier"
+    url: "https://your-service.example.com/webhooks/conflicts"
+    
+    # Event types this webhook should receive
+    events:
+      - "conflict_detected"
+      - "conflict_resolved"
+    
+    # Custom headers
+    headers:
+      X-API-Key: "your-secret-key"
+      Content-Type: "application/json"
+    
+    # Retry settings (overrides global)
+    retry:
+      max_attempts: 3
+      max_delay: 1800  # 30 minutes
+    
+    # Enable/disable this webhook
+    enabled: true
+    
+    # Description for documentation
+    description: "Receives notifications about reply conflicts"
+
+  # Example webhook for system monitoring
+  - id: "system-monitor"
+    name: "System Monitor"
+    url: "https://monitoring.example.com/api/webhooks"
+    
+    events:
+      - "system_error"
+      - "webhook_failed"
+      - "rate_limit_violation"
+    
+    headers:
+      Authorization: "Bearer your-monitoring-token"
+    
+    # No custom retry settings - uses global
+    
+    enabled: true
+    description: "Receives system health and error notifications"
+
+# Dead letter queue settings
+dead_letter:
+  # Maximum age of items in dead letter queue (days)
+  max_age: 30
+  
+  # Notification settings for dead letter items
+  notifications:
+    enabled: true
+    # Send email when items are added to dead letter
+    email:
+      enabled: true
+      recipients: ["admin@example.com"]
+      template: "dead_letter_notification.html"
+    
+    # Webhook notification
+    webhook:
+      enabled: false
+      # url: "https://your-alert-system.example.com/dead-letter"
+
+# Queue processing settings
+queue:
+  # Number of worker processes
+  workers: 2
+  
+  # Batch size for processing
+  batch_size: 10
+  
+  # Polling interval (seconds)
+  poll_interval: 5
+  
+  # Maximum concurrent deliveries
+  max_concurrent: 5
+
+# Security settings
+security:
+  # Validate SSL certificates (disable only for testing)
+  validate_ssl: true
+  
+  # IP restrictions (optional)
+  # allowed_ips: ["192.168.1.0/24", "10.0.0.0/8"]
+  
+  # Signature verification (if webhooks are signed)
+  signature:
+    enabled: false
+    # secret: "your-signing-secret"
+    # header: "X-Webhook-Signature"
+
+# Logging
+logging:
+  level: "info"  # debug, info, warn, error
+  file: "logs/webhooks.log"
+  max_size: "10MB"
+  max_files: 5
+
+# Metrics (if monitoring is enabled)
+metrics:
+  enabled: false
+  # Prometheus endpoint
+  # endpoint: "/metrics"
+  # port: 9090

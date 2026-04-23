@@ -1,0 +1,21 @@
+{
+  "name": "@udos/obf-grid",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OBF Grid — parse ```grid blocks, terminal/HTML-ish render (design tool for surfaces)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1"
+  }
+}

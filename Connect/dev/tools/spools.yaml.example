@@ -1,0 +1,38 @@
+# dev/tools/spools.yaml.example
+# Copy to vault .local/spools.yaml when spool engine lands (see docs/specs/feeds-and-spool.md).
+
+spools:
+  - name: "condense-sandbox"
+    source: "@sandbox/**/*.md"
+    processor: "condense"
+    output: "same"
+    schedule: "weekly"
+    options:
+      target_ratio: 0.7
+      preserve_code_blocks: true
+      preserve_links: true
+
+  - name: "dedupe-sections"
+    source: "@sandbox/**/*.md"
+    processor: "dedupe-sections"
+    output: "same"
+    schedule: "weekly"
+    options:
+      min_block_length: 50
+      leave_links: true
+
+  - name: "summarize-private"
+    source: "@private/**/*.md"
+    processor: "summarize"
+    output: "@sandbox/summaries/"
+    schedule: "monthly"
+    options:
+      summary_ratio: 0.2
+
+  - name: "feed-dedupe"
+    source: "@user/feeds/*.json"
+    processor: "dedupe-list-items"
+    output: "same"
+    schedule: "daily"
+    options:
+      dedupe_key: "url"

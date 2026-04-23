@@ -1,0 +1,128 @@
+# WordPress Adaptor Definition
+# Experiment adaptor for uDos WordPress integration
+# Status: A1 prototype (stub implementation)
+
+name: wordpress
+version: 1
+description: "Sync uDos tasks and notes with WordPress posts and pages"
+
+capabilities:
+  - import: posts → notes
+  - export: notes → posts
+  - sync: bidirectional
+  - watch: real-time updates (A2)
+
+config:
+  required:
+    - WORDPRESS_URL
+    - WORDPRESS_USERNAME
+    - WORDPRESS_APPLICATION_PASSWORD
+  optional:
+    - POST_TYPE
+    - CATEGORY_FILTER
+    - TAG_FILTER
+    - SYNC_INTERVAL_MINUTES
+
+mappings:
+  # WordPress Post → uDos Note
+  post_to_note:
+    title: post.title.rendered
+    content: post.content.rendered
+    status: map_status(post.status)
+    tags: post.tags
+    categories: post.categories
+    created_at: post.date
+    updated_at: post.modified
+    metadata:
+      wordpress_id: post.id
+      wordpress_url: post.link
+      author: post.author
+
+  # uDos Note → WordPress Post
+  note_to_post:
+    title: note.title
+    content: note.content
+    status: map_status(note.status)
+    tags: note.tags
+    categories: note.categories
+    excerpt: note.excerpt
+    comment_status: "open"
+    ping_status: "open"
+
+commands:
+  - name: sync
+    action: "Fetch WordPress posts → update uDos notes → push changes"
+    description: "Bidirectional sync between WordPress and uDos"
+  
+  - name: import-all
+    action: "Import all WordPress posts as uDos notes"
+    description: "One-time import of existing WordPress content"
+  
+  - name: export-all
+    action: "Export all uDos notes as WordPress posts"
+    description: "One-time export of uDos content to WordPress"
+  
+  - name: watch
+    action: "Watch for WordPress changes and sync automatically"
+    description: "Real-time synchronization (A2 feature)"
+    status: "stub"
+
+field_mappings:
+  status:
+    wordpress_to_udos:
+      publish: "active"
+      draft: "draft"
+      pending: "review"
+      private: "private"
+      trash: "archived"
+    
+    udos_to_wordpress:
+      active: "publish"
+      draft: "draft"
+      review: "pending"
+      private: "private"
+      archived: "trash"
+
+events:
+  - name: "post:created"
+    description: "Fired when a new WordPress post is created"
+    payload:
+      - post_id
+      - post_title
+      - post_url
+  
+  - name: "post:updated"
+    description: "Fired when a WordPress post is updated"
+    payload:
+      - post_id
+      - post_title
+      - post_url
+      - changes
+  
+  - name: "post:deleted"
+    description: "Fired when a WordPress post is deleted"
+    payload:
+      - post_id
+      - post_title
+  
+  - name: "sync:completed"
+    description: "Fired when synchronization completes"
+    payload:
+      - synced_count
+      - created_count
+      - updated_count
+      - deleted_count
+      - duration_ms
+
+security:
+  permissions:
+    - network: ["wordpress.org", "*.wordpress.com"]
+    - filesystem: [".udos/", ".local/"]
+  rate_limits:
+    api_calls_per_minute: 60
+    sync_interval_minutes: 5
+
+# A1 Implementation Notes
+# This is a prototype definition for A1 testing
+# Actual WordPress API integration will be implemented in A2
+# Vector DB integration (for semantic search) will be added in A3

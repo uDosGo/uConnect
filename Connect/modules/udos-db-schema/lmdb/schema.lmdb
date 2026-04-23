@@ -1,0 +1,13 @@
+# LMDB tier (T4) — structure (documentation)
+
+Binary LMDB environment path (default): `~/.udos/vectors.lmdb`
+
+Logical stores (see uDosDev UDOS_FIVE_TIER_DATABASE_STRATEGY_LOCKED_v1.md):
+
+- `vector:{uuid}` → float32 embedding bytes
+- `meta:{uuid}` → JSON metadata (voxel_id, cell_index, content_hash, tags)
+- `sync:{lamport}:{uuid}` → CRDT operation payload (implementation-specific)
+
+HNSW (or IVF) index lives in process memory or companion file — not inside LMDB keys above.
+
+This file is documentation only; the on-disk LMDB is created by the vector runtime.

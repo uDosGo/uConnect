@@ -1,0 +1,12 @@
+# Example Vibe rule (TOML)
+# Split into commit.toml, release.toml, budget.toml, test.toml as needed.
+
+[meta]
+name = "example"
+description = "Starter rule — replace with real VibeCLI behaviour."
+
+[commit]
+# max_subject_length = 72
+
+[test]
+# required = true

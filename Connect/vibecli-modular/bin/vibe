@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+
+/**
+ * VibeCLI - Modular CLI Entry Point
+ * 
+ * This is the main entry point for VibeCLI that loads the modular architecture.
+ * It dynamically loads modules based on command-line arguments and configuration.
+ */
+
+import { program } from 'commander';
+import { createRequire } from 'module';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load core module
+const coreModule = await import('../core/dist/index.js');
+
+// Initialize CLI
+program
+  .name('vibe')
+  .description('VibeCLI - Modular CLI Framework')
+  .version('1.0.0');
+
+// Register core commands
+coreModule.registerCommands(program);
+
+// Dynamic module loading
+const modules = [
+  { name: 'publishing', path: '../publishing/dist/index.js', alias: 'pub' },
+  { name: 'tui-go-react', path: '../tui-go-react/dist/index.js', alias: 'tui' },
+  { name: 'grid-gui-surfaces', path: '../grid-gui-surfaces/dist/index.js', alias: 'grid' },
+  { name: 'server', path: '../server/dist/index.js', alias: 'server' },
+  { name: 'utility', path: '../utility/dist/index.js', alias: 'util' },
+  { name: 'dev', path: '../dev/dist/index.js', alias: 'dev' }
+];
+
+// Load optional modules based on arguments
+for (const module of modules) {
+  try {
+    const modulePath = path.resolve(__dirname, module.path);
+    const mod = await import(modulePath);
+    
+    // Check if module should be loaded based on arguments
+    const shouldLoad = process.argv.some(arg => 
+      arg === module.name || 
+      arg === module.alias ||
+      arg.startsWith(`${module.name}:`) ||
+      arg.startsWith(`${module.alias}:`)
+    );
+    
+    if (shouldLoad) {
+      mod.registerCommands(program);
+      console.log(`✅ Loaded module: ${module.name}`);
+    }
+  } catch (error) {
+    // Module not found or not needed - silent fail for optional modules
+    if (process.env.DEBUG) {
+      console.debug(`Module ${module.name} not loaded:`, error.message);
+    }
+  }
+}
+
+// Parse arguments and execute
+try {
+  program.parse(process.argv);
+} catch (error) {
+  console.error('❌ Error:', error.message);
+  process.exit(1);
+}
+
+// If no command specified, show help
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+}
