@@ -1,0 +1,21 @@
+{
+  "environment": "staging",
+  "port": 3001,
+  "log_level": "debug",
+  "rate_limits": {
+    "enabled": true,
+    "limits": {
+      "mistral": 5000,
+      "vibe": 1000,
+      "deepseek": 2000
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "max_patterns": 1000
+  },
+  "security": {
+    "require_auth": false,
+    "api_keys": []
+  }
+}

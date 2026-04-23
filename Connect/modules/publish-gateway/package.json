@@ -1,0 +1,11 @@
+{
+  "name": "@udos/publish-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "description": "GitHub Pages / sync publishing — port from uDosGo packages/publishing",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

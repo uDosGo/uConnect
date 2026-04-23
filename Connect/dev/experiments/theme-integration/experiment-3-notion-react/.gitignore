@@ -1,0 +1,4 @@
+# Local Vite lab (see README) — never commit
+notion-react-lab/
+node_modules/
+dist/

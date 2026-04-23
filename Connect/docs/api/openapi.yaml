@@ -1,0 +1,679 @@
+openapi: 3.0.0
+info:
+  title: uDos API
+  version: 1.0.0
+  description: Core API for uDos home network system
+  contact:
+    name: uDos Development Team
+    email: dev@udos.local
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://master.udos.local:8080/api
+    description: Master node (production)
+  - url: http://localhost:8080/api
+    description: Local development
+  - url: http://dev.udos.local:8080/api
+    description: Development environment
+
+paths:
+  /feed/recent:
+    get:
+      tags:
+        - feed
+      summary: Get recent replies
+      description: Retrieve the most recent replies from the feed
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of replies to return
+          required: false
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 1000
+        - name: compartment
+          in: query
+          description: Filter by compartment (project/namespace)
+          required: false
+          schema:
+            type: string
+            example: "project/myapp"
+        - name: since
+          in: query
+          description: Only return replies since this timestamp (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: tags
+          in: query
+          description: Filter by tags (comma-separated)
+          required: false
+          schema:
+            type: string
+            example: "code,approved"
+        - name: user
+          in: query
+          description: Filter by user ID
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplyList'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Rate limited
+          headers:
+            X-RateLimit-Limit:
+              description: Request limit per window
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              description: Remaining requests in current window
+              schema:
+                type: integer
+            X-RateLimit-Reset:
+              description: Unix timestamp when limit resets
+              schema:
+                type: integer
+            Retry-After:
+              description: Seconds to wait before retry
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /feed/thread/{thread_id}:
+    get:
+      tags:
+        - feed
+      summary: Get thread replies
+      description: Retrieve all replies in a specific thread
+      parameters:
+        - name: thread_id
+          in: path
+          description: Thread ID
+          required: true
+          schema:
+            type: string
+            pattern: '^t_[a-zA-Z0-9]+$'
+        - name: format
+          in: query
+          description: Response format
+          required: false
+          schema:
+            type: string
+            enum: [json, tree, compact]
+            default: json
+        - name: depth
+          in: query
+          description: Maximum depth for tree format
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ReplyList'
+                  - $ref: '#/components/schemas/ThreadTree'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ReplyList'
+        '404':
+          description: Thread not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /feed/export:
+    get:
+      tags:
+        - feed
+      summary: Export feed data
+      description: Export replies in various formats
+      parameters:
+        - name: format
+          in: query
+          description: Export format
+          required: true
+          schema:
+            type: string
+            enum: [json, csv, markdown]
+        - name: thread
+          in: query
+          description: Export specific thread
+          required: false
+          schema:
+            type: string
+            pattern: '^t_[a-zA-Z0-9]+$'
+        - name: since
+          in: query
+          description: Export replies since timestamp
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: user
+          in: query
+          description: Export replies by user
+          required: false
+          schema:
+            type: string
+        - name: tags
+          in: query
+          description: Export replies with specific tags
+          required: false
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: Select fields (CSV only)
+          required: false
+          schema:
+            type: string
+            example: "id,timestamp,user_id,prompt"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportResult'
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            text/markdown:
+              schema:
+                type: string
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /feed/import:
+    post:
+      tags:
+        - feed
+      summary: Import feed data
+      description: Import replies from exported data
+      parameters:
+        - name: mode
+          in: query
+          description: Import mode
+          required: false
+          schema:
+            type: string
+            enum: [merge, replace, skip-duplicates, conflict-rename]
+            default: merge
+        - name: dry-run
+          in: query
+          description: Validate without importing
+          required: false
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportData'
+          text/csv:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Import successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResult'
+        '400':
+          description: Invalid data format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict in replace mode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /email/test:
+    post:
+      tags:
+        - admin
+        - email
+      summary: Send test email
+      description: Send a test email to verify configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+                type:
+                  type: string
+                  enum: [conflict_detected, webhook_failed, user_role_changed, daily_summary, system_error]
+                  default: conflict_detected
+                variables:
+                  type: object
+                  description: Template variables
+                  example:
+                    thread_id: "t_example"
+                    conflict_url: "https://udos.local/conflicts/t_example"
+      responses:
+        '200':
+          description: Test email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Email sending failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /email/queue:
+    get:
+      tags:
+        - admin
+        - email
+      summary: View email queue status
+      responses:
+        '200':
+          description: Queue status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pending:
+                    type: integer
+                  processing:
+                    type: integer
+                  failed:
+                    type: integer
+                  dead_letter:
+                    type: integer
+        '500':
+          description: Queue access failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /email/queue/retry:
+    post:
+      tags:
+        - admin
+        - email
+      summary: Retry failed emails
+      responses:
+        '200':
+          description: Retry initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  retried:
+                    type: integer
+                  remaining:
+                    type: integer
+        '500':
+          description: Retry failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /webhooks/{webhook_id}:
+    post:
+      tags:
+        - webhooks
+      summary: Trigger webhook manually
+      parameters:
+        - name: webhook_id
+          in: path
+          description: Webhook ID
+          required: true
+          schema:
+            type: string
+        - name: sync
+          in: query
+          description: Wait for delivery completion
+          required: false
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Webhook payload
+      responses:
+        '200':
+          description: Webhook triggered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queued:
+                    type: boolean
+                  delivery_id:
+                    type: string
+        '202':
+          description: Webhook queued (async)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queued:
+                    type: boolean
+                  delivery_id:
+                    type: string
+        '404':
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Webhook trigger failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /webhooks/queue:
+    get:
+      tags:
+        - webhooks
+      summary: View webhook queue status
+      responses:
+        '200':
+          description: Queue status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pending:
+                    type: integer
+                  processing:
+                    type: integer
+                  failed:
+                    type: integer
+                  dead_letter:
+                    type: integer
+        '500':
+          description: Queue access failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /webhooks/dead-letter:
+    get:
+      tags:
+        - webhooks
+      summary: List dead letter queue items
+      responses:
+        '200':
+          description: Dead letter items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    webhook_id:
+                      type: string
+                    attempts:
+                      type: integer
+                    last_error:
+                      type: string
+                    failed_at:
+                      type: string
+                      format: date-time
+                    reason:
+                      type: string
+        '500':
+          description: Access failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Reply:
+      type: object
+      properties:
+        reply_id:
+          type: string
+          pattern: '^r_[a-zA-Z0-9]+$'
+          example: "r_abc123"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-04-19T10:00:00Z"
+        user_id:
+          type: string
+          example: "alice"
+        thread_id:
+          type: string
+          pattern: '^t_[a-zA-Z0-9]+$'
+          example: "t_xyz789"
+        parent_id:
+          type: string
+          nullable: true
+          pattern: '^r_[a-zA-Z0-9]+$'
+          example: "r_def456"
+        prompt:
+          type: string
+          example: "generate fibonacci function"
+        output:
+          type: string
+          example: "def fib(n): ..."
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["code", "python"]
+        quality_score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+          example: 4.5
+        model:
+          type: string
+          example: "dsc2"
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ReplyList:
+      type: object
+      properties:
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reply'
+        pagination:
+          type: object
+          properties:
+            next:
+              type: string
+              nullable: true
+              format: uri
+              example: "/api/feed/recent?after=r_abc123"
+            total:
+              type: integer
+              example: 1234
+
+    ThreadTree:
+      type: object
+      properties:
+        root:
+          $ref: '#/components/schemas/Reply'
+        children:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              pattern: '^r_[a-zA-Z0-9]+$'
+        max_depth:
+          type: integer
+          example: 3
+
+    ExportResult:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "1"
+        exported_at:
+          type: string
+          format: date-time
+        compartment:
+          type: string
+          example: "project/myapp"
+        count:
+          type: integer
+          example: 1234
+        format:
+          type: string
+          example: "json"
+
+    ImportData:
+      type: object
+      properties:
+        version:
+          type: string
+          example: "1"
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reply'
+
+    ImportResult:
+      type: object
+      properties:
+        imported:
+          type: integer
+          example: 1234
+        skipped:
+          type: integer
+          example: 12
+        conflicts:
+          type: integer
+          example: 3
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              reply_id:
+                type: string
+              error:
+                type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "invalid_parameters"
+        message:
+          type: string
+          example: "The 'limit' parameter must be between 1 and 1000"
+        details:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+          example: "req_abc123"
+
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: session
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+security:
+  - sessionCookie: []
+  - apiKey: []
+
+x-tagGroups:
+  - name: Core
+    tags:
+      - feed
+  - name: Admin
+    tags:
+      - admin
+      - email
+  - name: Integrations
+    tags:
+      - webhooks

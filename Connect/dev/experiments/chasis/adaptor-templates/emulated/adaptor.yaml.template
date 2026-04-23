@@ -1,0 +1,5 @@
+runtime:
+  type: emulated
+  build: "echo emulator setup"
+  start: "echo start emulator"
+  port: 8080

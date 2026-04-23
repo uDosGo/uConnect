@@ -1,0 +1,16 @@
+# dev/tools/markdownify-config.yaml.example
+# Copy to .local/markdownify-config.yaml (vault or machine scope).
+# Runtime bootstrap: bash scripts/bootstrap-markdownify-runtime.sh
+
+markdownify:
+  enabled: true
+  server_path: "./vendor/markdownify-mcp/dist/index.js"
+  uv_path: "/path/to/uv" # Optional; auto-detected when on PATH
+  capabilities:
+    - pdf-to-markdown
+    - image-to-markdown
+    - audio-to-markdown
+    - webpage-to-markdown
+    - docx-to-markdown
+    - xlsx-to-markdown
+    - pptx-to-markdown

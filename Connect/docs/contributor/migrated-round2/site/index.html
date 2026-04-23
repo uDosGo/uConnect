@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title id="site-title">uDOS Library</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <nav class="library-nav" aria-label="Library navigation">
+      <div class="library-nav__inner" id="library-nav"></div>
+    </nav>
+    <header class="hero">
+      <div class="hero__inner">
+        <p class="eyebrow" id="hero-eyebrow">uDOS Library</p>
+        <h1 id="hero-title">Family docs, wiki units, repos, and GitHub activity in one public home.</h1>
+        <p class="lede" id="hero-lede">
+          A central index for the uDOS family. Start with beginner-friendly learning,
+          jump into module docs, or move straight to the repo, issues, pull requests,
+          and contributors.
+        </p>
+        <nav class="hero__actions" id="hero-actions"></nav>
+      </div>
+    </header>
+
+    <main class="page">
+      <section id="library" class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="library-eyebrow">Library</p>
+          <h2 id="library-title">Start from the public knowledge spine</h2>
+        </div>
+        <div class="grid grid--three" id="library-cards"></div>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="tracks-eyebrow">Tracks</p>
+          <h2 id="tracks-title">Follow the family by role and learning path</h2>
+        </div>
+        <div class="grid grid--three" id="track-cards"></div>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="learning-eyebrow">Learning</p>
+          <h2 id="learning-title">Wiki units, courses, and practical reference</h2>
+        </div>
+        <div class="grid grid--two">
+          <article class="card">
+            <h3 id="wiki-card-title">Wiki Units</h3>
+            <p id="wiki-card-body">Module introductions, quick how-tos, demo scripts, and outcome checks.</p>
+            <ul id="wiki-links" class="link-list"></ul>
+          </article>
+          <article class="card">
+            <h3 id="courses-card-title">Courses And Resources</h3>
+            <p id="courses-card-body">Family-level learning paths and public educational material.</p>
+            <ul id="course-links" class="link-list"></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="reference-eyebrow">Reference</p>
+          <h2 id="reference-title">Featured docs and stable module entry points</h2>
+        </div>
+        <div class="grid grid--three" id="reference-cards"></div>
+      </section>
+
+      <section id="repos" class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="repos-eyebrow">Repos</p>
+          <h2 id="repos-title">Browse the family by component</h2>
+        </div>
+        <div class="toolbar">
+          <label class="toolbar__label" for="repo-filter" id="repo-filter-label">Filter</label>
+          <input id="repo-filter" class="toolbar__input" type="search" placeholder="Search repos, docs, wiki, runtime, themes, publish...">
+        </div>
+        <div id="repo-groups"></div>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow" id="github-eyebrow">GitHub</p>
+          <h2 id="github-title">Jump into repos, issues, pulls, and contributors</h2>
+        </div>
+        <div class="grid grid--three" id="github-cards"></div>
+      </section>
+    </main>
+
+    <template id="library-card-template">
+      <article class="card">
+        <p class="card__tag"></p>
+        <h3></h3>
+        <p class="card__body"></p>
+        <a class="card__link" target="_blank" rel="noreferrer">Open</a>
+      </article>
+    </template>
+
+    <template id="repo-card-template">
+      <article class="repo-card">
+        <div class="repo-card__header">
+          <p class="repo-card__name"></p>
+          <p class="repo-card__role"></p>
+        </div>
+        <p class="repo-card__summary"></p>
+        <ul class="repo-card__links"></ul>
+      </article>
+    </template>
+
+    <template id="repo-group-template">
+      <section class="repo-group">
+        <div class="repo-group__header">
+          <h3 class="repo-group__title"></h3>
+          <p class="repo-group__body"></p>
+        </div>
+        <div class="repo-grid"></div>
+      </section>
+    </template>
+
+    <footer class="library-footer">
+      <div class="library-footer__inner">
+        <p class="library-footer__lede" id="footer-lede">Public library pages are generated from checked-in family metadata.</p>
+        <nav class="library-footer__links" aria-label="Library provenance" id="footer-links"></nav>
+      </div>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

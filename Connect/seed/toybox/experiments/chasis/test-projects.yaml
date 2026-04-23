@@ -1,0 +1,15 @@
+test_projects:
+  - name: "simple-node-app"
+    repo: "https://github.com/expressjs/express"
+    runtime: "node"
+    expected: "Hello World on port 3000"
+
+  - name: "static-site"
+    repo: "https://github.com/facebook/create-react-app"
+    runtime: "static"
+    expected: "Build output served"
+
+  - name: "python-api"
+    repo: "https://github.com/tiangolo/fastapi"
+    runtime: "python"
+    expected: "/docs endpoint available"

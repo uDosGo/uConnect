@@ -1,0 +1,29 @@
+/* Retro Terminal Theme */
+:root {
+  --fg: #00ff00;
+  --bg: #000000;
+  --link: #00ffff;
+  --border: #008800;
+}
+
+body {
+  font-family: "Courier New", "ui-monospace", monospace;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+.usxd-grid {
+  border-color: var(--border);
+}
+
+.usxd-cell {
+  font-size: 12px;
+}
+
+.region-content {
+  border-color: var(--border);
+}
+
+header, footer {
+  border-color: var(--border);
+}

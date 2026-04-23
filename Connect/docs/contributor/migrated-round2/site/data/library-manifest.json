@@ -1,0 +1,1034 @@
+{
+  "title": "uDOS Library",
+  "generated_from": "site/data/family-source.json",
+  "hubs": [
+    {
+      "slug": "learning",
+      "title": "Beginner-friendly entry points for the uDOS family.",
+      "eyebrow": "Learning Hub",
+      "url": "./learning.html"
+    },
+    {
+      "slug": "reference",
+      "title": "Stable public docs and module entry points.",
+      "eyebrow": "Reference Hub",
+      "url": "./reference.html"
+    }
+  ],
+  "tracks": [
+    {
+      "slug": "runtime",
+      "title": "The command-centre spine for the uDOS family.",
+      "eyebrow": "Runtime Track",
+      "url": "./runtime.html"
+    },
+    {
+      "slug": "surface",
+      "title": "The browser-facing layer, learning surfaces, and public library path.",
+      "eyebrow": "Surface Track",
+      "url": "./surface.html"
+    },
+    {
+      "slug": "operations",
+      "title": "Optional modules for publishing, CRM, simulation, and registry work.",
+      "eyebrow": "Operations Track",
+      "url": "./operations.html"
+    }
+  ],
+  "references": [
+    {
+      "tag": "v4",
+      "title": "uDosDocs v4 spine",
+      "description": "Public index for reference docs, GitHub Pages pathway, wiki, how-tos, and educational content scaffolding.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/v4/README.md",
+      "link_label": "Open v4 index"
+    },
+    {
+      "tag": "Docs",
+      "title": "Family Learning Path",
+      "description": "High-level module guide for how the family fits together and how to learn it.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/architecture/07_family_learning_path.md",
+      "link_label": "Read Path"
+    },
+    {
+      "tag": "Map",
+      "title": "Family Operator Organisation Map",
+      "description": "Reader-friendly index for host, Wizard, Sonic, first-run, and health docs; links to uDOS-dev canonical detail.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/family-operator-organisation-map.md",
+      "link_label": "Open Map"
+    },
+    {
+      "tag": "Policy",
+      "title": "Repo Local Dev Workspaces",
+      "description": "The canonical rule for docs, @dev, wiki, inbox processing, and compressed planning files.",
+      "url": "https://github.com/fredporter/uDOS-dev/blob/main/docs/repo-local-dev-workspaces.md",
+      "link_label": "Read Policy"
+    },
+    {
+      "tag": "Host",
+      "title": "Ubuntu Command Centre Reference",
+      "description": "Compact family reference for the Ubuntu host split, runtime layers, and service ownership.",
+      "url": "https://github.com/fredporter/uDOS-dev/blob/main/docs/ubuntu-command-centre-reference.md",
+      "link_label": "Read Reference"
+    },
+    {
+      "tag": "Manifest",
+      "title": "Library Manifest",
+      "description": "Human-readable sitemap and machine-readable public index for the library hubs, tracks, and repo groups.",
+      "url": "./manifest.html",
+      "link_label": "Open Manifest"
+    },
+    {
+      "tag": "Publish",
+      "title": "Publishing Architecture",
+      "description": "How family-source.json, generated JSON, the static site, and GitHub Pages fit together.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/publishing-architecture.md",
+      "link_label": "Read Doc"
+    },
+    {
+      "tag": "Git",
+      "title": "Local vs GitHub Docs",
+      "description": "Canonical locations for docs, wiki, and library metadata versus the public shell.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/local-vs-github-docs-boundary.md",
+      "link_label": "Read Doc"
+    },
+    {
+      "tag": "Learn",
+      "title": "Course Hooks & Onboarding",
+      "description": "Ownership of onboarding paths, wiki units, and courses_and_resources in family metadata.",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/course-hooks-and-onboarding.md",
+      "link_label": "Read Doc"
+    }
+  ],
+  "wiki_units": [
+    {
+      "label": "Alpine Basics",
+      "url": "https://github.com/fredporter/uDOS-alpine/blob/main/wiki/unit-01-alpine-basics.md"
+    },
+    {
+      "label": "Core Basics",
+      "url": "https://github.com/fredporter/uDOS-core/blob/main/wiki/unit-01-core-basics.md"
+    },
+    {
+      "label": "Dev Control Plane Basics",
+      "url": "https://github.com/fredporter/uDOS-dev/blob/main/wiki/unit-01-dev-basics.md"
+    },
+    {
+      "label": "Empire Basics",
+      "url": "https://github.com/fredporter/uDOS-empire/blob/main/wiki/unit-01-empire-basics.md"
+    },
+    {
+      "label": "Family Basics",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/wiki/unit-01-family-basics.md"
+    },
+    {
+      "label": "Gameplay Basics",
+      "url": "https://github.com/fredporter/uDOS-gameplay/blob/main/wiki/unit-01-gameplay-basics.md"
+    },
+    {
+      "label": "Grid Basics",
+      "url": "https://github.com/fredporter/uDOS-grid/blob/main/wiki/unit-01-grid-basics.md"
+    },
+    {
+      "label": "Groovebox Basics",
+      "url": "https://github.com/fredporter/uDOS-groovebox/blob/main/wiki/unit-01-groovebox-basics.md"
+    },
+    {
+      "label": "Operator Organisation Map",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/wiki/family-operator-organisation-map.md"
+    },
+    {
+      "label": "Plugin Index Basics",
+      "url": "https://github.com/fredporter/uDOS-plugin-index/blob/main/wiki/unit-01-plugin-index-basics.md"
+    },
+    {
+      "label": "Shell Basics",
+      "url": "https://github.com/fredporter/uDOS-shell/blob/main/wiki/unit-01-shell-basics.md"
+    },
+    {
+      "label": "Surface Basics",
+      "url": "https://github.com/fredporter/uDOS-surface/blob/main/wiki/unit-01-surface-basics.md"
+    },
+    {
+      "label": "Themes Basics",
+      "url": "https://github.com/fredporter/uDOS-themes/blob/main/wiki/unit-01-themes-basics.md"
+    },
+    {
+      "label": "ThinUI Basics",
+      "url": "https://github.com/fredporter/uDOS-thinui/blob/main/wiki/unit-01-thinui-basics.md"
+    },
+    {
+      "label": "Ubuntu Host Basics",
+      "url": "https://github.com/fredporter/uDOS-host/blob/main/wiki/unit-01-ubuntu-host-basics.md"
+    },
+    {
+      "label": "Wizard Basics",
+      "url": "https://github.com/fredporter/uDOS-wizard/blob/main/wiki/unit-01-wizard-basics.md"
+    },
+    {
+      "label": "Workflow Basics",
+      "url": "https://github.com/fredporter/uDOS-workflow/blob/main/wiki/unit-01-workflow-basics.md"
+    },
+    {
+      "label": "Workspace Basics",
+      "url": "https://github.com/fredporter/uDOS-workspace/blob/main/wiki/unit-01-workspace-basics.md"
+    },
+    {
+      "label": "uHOME Basics",
+      "url": "https://github.com/fredporter/uHOME-server/blob/main/wiki/unit-01-uhome-basics.md"
+    }
+  ],
+  "courses_and_resources": [
+    {
+      "label": "Family Learning Path",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/architecture/07_family_learning_path.md"
+    },
+    {
+      "label": "Onboarding",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/onboarding.md"
+    },
+    {
+      "label": "Binders And Publishing",
+      "url": "https://github.com/fredporter/uDOS-docs/blob/main/docs/binders-and-publishing.md"
+    },
+    {
+      "label": "Release Policy",
+      "url": "https://github.com/fredporter/uDOS-dev/blob/main/docs/release-policy.md"
+    },
+    {
+      "label": "uHOME Stream (Family Coordination)",
+      "url": "https://github.com/fredporter/uDOS-dev/blob/main/docs/uhome-stream.md"
+    }
+  ],
+  "github_cards": [
+    {
+      "tag": "GitHub",
+      "title": "All Family Repos",
+      "description": "Browse the public family repositories from one GitHub search view.",
+      "url": "https://github.com/fredporter?tab=repositories&q=uDOS",
+      "link_label": "Browse Repos"
+    },
+    {
+      "tag": "GitHub",
+      "title": "Open Issues",
+      "description": "Jump into active issues across the public family repos.",
+      "url": "https://github.com/issues?q=user%3Afredporter+is%3Aissue+uDOS",
+      "link_label": "Open Issues"
+    },
+    {
+      "tag": "GitHub",
+      "title": "Open Pull Requests",
+      "description": "Check the current pull request flow across the family repos.",
+      "url": "https://github.com/pulls?q=is%3Aopen+user%3Afredporter+uDOS",
+      "link_label": "Open Pulls"
+    }
+  ],
+  "repo_groups": [
+    {
+      "title": "Runtime Spine",
+      "description": "The repos that define the command-centre host, contracts, shell, themes, and operator surfaces.",
+      "repos": [
+        {
+          "name": "uDOS-core",
+          "role": "Contracts and deterministic semantics",
+          "summary": "Canonical runtime contracts, schemas, and offline-first boundary rules.",
+          "keywords": [
+            "runtime",
+            "contracts",
+            "schemas",
+            "offline"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-core"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-core/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-core/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-core/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-core/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-core/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-host",
+          "role": "Always-on host runtime",
+          "summary": "Local services, managed execution, host networking, and runtime command-centre posture.",
+          "keywords": [
+            "ubuntu",
+            "host",
+            "network",
+            "vault",
+            "sync",
+            "budget"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-host"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-host/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-host/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-host/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-host/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-host/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-shell",
+          "role": "Operator shell language and TUI path",
+          "summary": "Shared shell interaction patterns and command-facing runtime surfaces.",
+          "keywords": [
+            "shell",
+            "tui",
+            "commands",
+            "operator"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-shell"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-shell/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-shell/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-shell/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-shell/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-shell/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-thinui",
+          "role": "ThinUI and focused fullscreen surfaces",
+          "summary": "Lightweight UI surfaces for runtime status, guided flows, and low-resource interaction.",
+          "keywords": [
+            "thinui",
+            "ui",
+            "guided",
+            "fullscreen"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-thinui"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-thinui/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-thinui/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-thinui/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-thinui/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-thinui/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-themes",
+          "role": "Cross-surface visual contract",
+          "summary": "Theme packs, tokens, adapters, skins, and render-safe visual primitives.",
+          "keywords": [
+            "themes",
+            "tokens",
+            "skins",
+            "publish",
+            "forms"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-themes"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-themes/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-themes/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-themes/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-themes/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-themes/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-workspace",
+          "role": "Binder-driven browser workspace shell",
+          "summary": "Workspace-facing authoring, publish, task, and compile surfaces.",
+          "keywords": [
+            "workspace",
+            "binder",
+            "browser",
+            "compile",
+            "publish"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-workspace"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-workspace/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-workspace/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-workspace/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-workspace/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-workspace/graphs/contributors"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Surface And Library",
+      "description": "The browser-facing and learning-facing repos that help people navigate the family.",
+      "repos": [
+        {
+          "name": "uDOS-surface",
+          "role": "Surface UI and broker-facing browser layer",
+          "summary": "Browser presentation, Surface UI, and the retained Wizard broker role.",
+          "keywords": [
+            "surface",
+            "browser",
+            "broker",
+            "wizard"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-surface"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-surface/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-surface/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-surface/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-surface/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-surface/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-wizard",
+          "role": "Orchestration and browser operator broker",
+          "summary": "MCP adapters, workflow execution, optional Deer Flow lanes, and dev-time operator HTTP surfaces.",
+          "keywords": [
+            "wizard",
+            "orchestration",
+            "mcp",
+            "workflows",
+            "deerflow"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-wizard"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-wizard/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-wizard/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-wizard/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-wizard/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-wizard/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-docs",
+          "role": "Public library and family knowledge spine",
+          "summary": "Family architecture, onboarding, learning paths, and the public documentation home.",
+          "keywords": [
+            "docs",
+            "library",
+            "knowledge",
+            "learning"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-docs"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-docs/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-docs/tree/main/wiki"
+            },
+            {
+              "label": "Architecture",
+              "url": "https://github.com/fredporter/uDOS-docs/tree/main/architecture"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-docs/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-docs/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-docs/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-dev",
+          "role": "Family coordination and policy",
+          "summary": "Structure rules, release policy, family sweeps, and cross-repo coordination references.",
+          "keywords": [
+            "dev",
+            "policy",
+            "release",
+            "coordination",
+            "sweeps"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-dev"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-dev/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-dev/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-dev/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-dev/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-dev/graphs/contributors"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Optional Modules",
+      "description": "Modules that extend the family once the runtime spine is understood.",
+      "repos": [
+        {
+          "name": "uDOS-empire",
+          "role": "Business operations and outbound workflows",
+          "summary": "CRM, publishing, sync, and external workflow operations on top of the family runtime spine.",
+          "keywords": [
+            "crm",
+            "publishing",
+            "operations",
+            "sync",
+            "business"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-empire"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-empire/tree/codex/v2-3-closeout/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-empire/tree/codex/v2-3-closeout/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-empire/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-empire/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-empire/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-gameplay",
+          "role": "Interactive simulation and gameplay",
+          "summary": "Gameplay-facing patterns, state examples, and optional world or simulation modules.",
+          "keywords": [
+            "gameplay",
+            "simulation",
+            "world",
+            "interactive"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-gameplay"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-gameplay/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-gameplay/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-gameplay/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-gameplay/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-gameplay/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-grid",
+          "role": "Spatial identity and place contracts",
+          "summary": "Grid identity, place-aware contracts, and optional spatial references for downstream modules.",
+          "keywords": [
+            "grid",
+            "spatial",
+            "place",
+            "mapping"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-grid"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-grid/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-grid/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-grid/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-grid/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-grid/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uDOS-plugin-index",
+          "role": "Plugin manifest and registry contracts",
+          "summary": "Plugin metadata, compatibility descriptors, and optional registry-facing contracts.",
+          "keywords": [
+            "plugins",
+            "registry",
+            "manifest",
+            "contracts"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uDOS-plugin-index"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uDOS-plugin-index/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uDOS-plugin-index/tree/main/wiki"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uDOS-plugin-index/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uDOS-plugin-index/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uDOS-plugin-index/graphs/contributors"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "uHOME Stream",
+      "description": "Household media, kiosk thin UI, LAN server, Matter contracts, and mobile remotes. Cross-family coordination lives in uDOS-dev (uhome-stream).",
+      "repos": [
+        {
+          "name": "uHOME-server",
+          "role": "Household server and thin surfaces",
+          "summary": "Media, automation presentation, LAN services, and curated library surfaces.",
+          "keywords": [
+            "uhome",
+            "server",
+            "media",
+            "kiosk",
+            "lan",
+            "jellyfin",
+            "home assistant"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uHOME-server"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/wiki"
+            },
+            {
+              "label": "Learning",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/learning"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uHOME-server/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uHOME-server/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uHOME-server/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uHOME-client",
+          "role": "Session and control-plane client",
+          "summary": "Adapter and session flows for integrated and standalone uHOME modes.",
+          "keywords": [
+            "uhome",
+            "client",
+            "session",
+            "launcher"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uHOME-client"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uHOME-client/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uHOME-client/tree/main/wiki"
+            },
+            {
+              "label": "Learning",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/learning"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uHOME-client/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uHOME-client/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uHOME-client/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uHOME-matter",
+          "role": "Matter and Home Assistant contracts",
+          "summary": "Bridge contracts, extension handoff, and adapter assets for automation.",
+          "keywords": [
+            "uhome",
+            "matter",
+            "home assistant",
+            "bridge"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uHOME-matter"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uHOME-matter/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uHOME-matter/tree/main/wiki"
+            },
+            {
+              "label": "Learning",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/learning"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uHOME-matter/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uHOME-matter/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uHOME-matter/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uHOME-app-android",
+          "role": "Android remote and control app",
+          "summary": "Mobile control surface for the uHOME household role.",
+          "keywords": [
+            "uhome",
+            "android",
+            "mobile"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uHOME-app-android"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uHOME-app-android/tree/main/docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uHOME-app-android/tree/main/wiki"
+            },
+            {
+              "label": "Learning",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/learning"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uHOME-app-android/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uHOME-app-android/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uHOME-app-android/graphs/contributors"
+            }
+          ]
+        },
+        {
+          "name": "uHOME-app-ios",
+          "role": "iOS remote and control app",
+          "summary": "Mobile control surface for the uHOME household role.",
+          "keywords": [
+            "uhome",
+            "ios",
+            "mobile"
+          ],
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/fredporter/uHOME-app-ios"
+            },
+            {
+              "label": "Docs",
+              "url": "https://github.com/fredporter/uHOME-app-ios/tree/main/Docs"
+            },
+            {
+              "label": "Wiki",
+              "url": "https://github.com/fredporter/uHOME-app-ios/tree/main/wiki"
+            },
+            {
+              "label": "Learning",
+              "url": "https://github.com/fredporter/uHOME-server/tree/main/learning"
+            },
+            {
+              "label": "Issues",
+              "url": "https://github.com/fredporter/uHOME-app-ios/issues"
+            },
+            {
+              "label": "Pull Requests",
+              "url": "https://github.com/fredporter/uHOME-app-ios/pulls"
+            },
+            {
+              "label": "Contributors",
+              "url": "https://github.com/fredporter/uHOME-app-ios/graphs/contributors"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "library_nav": [
+    {
+      "label": "Library",
+      "url": "./index.html"
+    },
+    {
+      "label": "Learning Hub",
+      "url": "./learning.html"
+    },
+    {
+      "label": "Reference Hub",
+      "url": "./reference.html"
+    },
+    {
+      "label": "Manifest",
+      "url": "./manifest.html"
+    },
+    {
+      "label": "Runtime Track",
+      "url": "./runtime.html"
+    },
+    {
+      "label": "Surface Track",
+      "url": "./surface.html"
+    },
+    {
+      "label": "Operations Track",
+      "url": "./operations.html"
+    }
+  ],
+  "footer": {
+    "lede": "Public library pages are generated from checked-in family metadata.",
+    "links": [
+      {
+        "label": "Library Manifest",
+        "url": "./manifest.html"
+      },
+      {
+        "label": "JSON Manifest",
+        "url": "./data/library-manifest.json"
+      },
+      {
+        "label": "Source Metadata",
+        "url": "https://github.com/fredporter/uDOS-docs/blob/main/site/data/family-source.json"
+      }
+    ]
+  }
+}

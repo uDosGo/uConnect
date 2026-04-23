@@ -1,0 +1,28 @@
+{
+  "mcp-tools": {
+    "github": true,
+    "code_interpreter": true,
+    "web_search": "restricted"
+  },
+  "automation": {
+    "canvas": true,
+    "image_gen": "explicit",
+    "secret_scan": "auto"
+  },
+  "file_handling": {
+    "archival": ".compost",
+    "formats": ["md", "json", "svg", "html", "react", "yaml", "xml"]
+  },
+  "rate_limits": {
+    "notify": true,
+    "custom": true,
+    "github": {
+      "limit": 5000,
+      "interval": "hour"
+    },
+    "web_search": {
+      "limit": 100,
+      "interval": "minute"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom uDos styles */
+@layer components {
+  .btn-primary {
+    @apply bg-udos-primary text-black font-medium py-2 px-4 rounded hover:bg-opacity-90 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-udos-secondary text-white font-medium py-2 px-4 rounded hover:bg-opacity-90 transition-colors;
+  }
+  
+  .card {
+    @apply bg-udos-surface-light border border-udos-border rounded-lg p-4 shadow-sm;
+  }
+  
+  .surface-panel {
+    @apply bg-udos-surface border border-udos-border rounded-lg;
+  }
+}
+
+/* Theme transitions */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}

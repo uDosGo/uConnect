@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>uDos theme experiment — Retro (NES / Bedstead / C64)</title>
+    <link id="theme-sheet" rel="stylesheet" href="" />
+    <style>
+      /* Base shell only — theme CSS layers on top */
+      :root {
+        --udo-gap: 0.75rem;
+        --udo-border: 1px solid #334155;
+        --udo-bg: #0f172a;
+        --udo-fg: #e2e8f0;
+        --udo-muted: #94a3b8;
+        --udo-panel: #1e293b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: var(--udo-bg);
+        color: var(--udo-fg);
+      }
+      .udo-header,
+      .udo-footer {
+        padding: var(--udo-gap) 1rem;
+        border-bottom: var(--udo-border);
+        background: var(--udo-panel);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--udo-gap);
+      }
+      .udo-footer {
+        border-bottom: none;
+        border-top: var(--udo-border);
+      }
+      .udo-shell {
+        display: grid;
+        grid-template-columns: 12rem 1fr 14rem;
+        grid-template-rows: 1fr auto;
+        min-height: calc(100vh - 8rem);
+      }
+      @media (max-width: 900px) {
+        .udo-shell {
+          grid-template-columns: 1fr;
+        }
+        .udo-dock,
+        .udo-notes {
+          display: none;
+        }
+      }
+      .udo-dock,
+      .udo-notes {
+        padding: var(--udo-gap);
+        border-right: var(--udo-border);
+        background: #111827;
+      }
+      .udo-notes {
+        border-right: none;
+        border-left: var(--udo-border);
+      }
+      .udo-centre {
+        padding: 1rem;
+      }
+      .udo-dock nav a {
+        display: block;
+        padding: 0.35rem 0;
+        color: var(--udo-muted);
+        text-decoration: none;
+      }
+      .udo-dock nav a:hover {
+        color: var(--udo-fg);
+      }
+      .udo-card {
+        border: var(--udo-border);
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #111827;
+      }
+      .udo-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      .udo-table th,
+      .udo-table td {
+        border: 1px solid #475569;
+        padding: 0.4rem 0.5rem;
+        text-align: left;
+      }
+      .udo-form label {
+        display: block;
+        margin: 0.5rem 0 0.25rem;
+        font-size: 0.85rem;
+        color: var(--udo-muted);
+      }
+      .udo-form input,
+      .udo-form select {
+        width: 100%;
+        max-width: 24rem;
+        padding: 0.4rem 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #475569;
+        background: #0f172a;
+        color: var(--udo-fg);
+      }
+      .udo-actions {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .udo-btn {
+        padding: 0.45rem 0.9rem;
+        border-radius: 4px;
+        border: 1px solid #64748b;
+        background: #1e293b;
+        color: var(--udo-fg);
+        cursor: pointer;
+        font: inherit;
+      }
+      .udo-btn:hover {
+        background: #334155;
+      }
+      #theme-status {
+        font-size: 0.85rem;
+        color: #fbbf24;
+        max-width: 28rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="udo-header chrome">
+      <strong>Theme lab — Retro</strong>
+      <label>
+        Theme
+        <select id="theme-select" aria-label="Theme">
+          <option value="default">Default (shell only)</option>
+          <option value="nes">NES.css</option>
+          <option value="bedstead">Bedstead (Teletext50)</option>
+          <option value="c64">C64.css</option>
+        </select>
+      </label>
+      <span id="theme-status"></span>
+    </header>
+
+    <div class="udo-shell">
+      <aside class="udo-dock chrome" aria-label="Dock">
+        <nav>
+          <a href="#demo">Demo</a>
+          <a href="#table">Table</a>
+          <a href="#form">Form</a>
+        </nav>
+      </aside>
+
+      <main class="udo-centre" id="demo">
+        <p style="color: var(--udo-muted); margin-top: 0">
+          USXD-style regions: header → dock | centre | notes → footer. Switch themes after cloning
+          <code>vendor/</code> (see README).
+        </p>
+
+        <section class="udo-card">
+          <h2 style="margin: 0 0 0.5rem; font-size: 1.1rem">Buttons</h2>
+          <p class="udo-actions">
+            <button type="button" class="udo-btn nes-btn">Primary</button>
+            <button type="button" class="udo-btn nes-btn is-success">Success</button>
+            <button type="button" class="udo-btn nes-btn is-warning">Warning</button>
+          </p>
+        </section>
+
+        <section class="udo-card" id="table">
+          <h2 style="margin: 0 0 0.5rem; font-size: 1.1rem">Table</h2>
+          <table class="udo-table nes-table is-bordered is-centered">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Shell</td>
+                <td>OK</td>
+              </tr>
+              <tr>
+                <td>Theme sheet</td>
+                <td id="row-theme">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="udo-card" id="form">
+          <h2 style="margin: 0 0 0.5rem; font-size: 1.1rem">Form</h2>
+          <form class="udo-form" onsubmit="event.preventDefault()">
+            <label for="label">Label</label>
+            <input id="label" type="text" placeholder="Sample" class="nes-input" />
+            <label for="sel">Select</label>
+            <select id="sel" class="nes-select">
+              <option>a</option>
+              <option>b</option>
+            </select>
+            <div class="udo-actions">
+              <button type="submit" class="udo-btn nes-btn is-primary">Submit</button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      <aside class="udo-notes chrome" aria-label="Notes">
+        <p style="margin: 0; font-size: 0.85rem; color: var(--udo-muted)">
+          Notes panel — compare readability when Bedstead / C64 fonts load.
+        </p>
+      </aside>
+    </div>
+
+    <footer class="udo-footer chrome">
+      <span>dev/experiments/theme-integration/experiment-1-retro</span>
+      <span style="color: var(--udo-muted); font-size: 0.85rem">Universal Device Operating Surface — theme harness</span>
+    </footer>
+
+    <script>
+      (function () {
+        const THEME_HREFS = {
+          default: "",
+          nes: "vendor/NES.css/css/nes.min.css",
+          bedstead: "vendor/bedstead/Teletext50.css",
+          c64: "vendor/c64css3/css.css",
+        };
+        const NES_CDN = "https://unpkg.com/nes.css@2.3.0/css/nes.min.css";
+        const select = document.getElementById("theme-select");
+        const link = document.getElementById("theme-sheet");
+        const status = document.getElementById("theme-status");
+        const rowTheme = document.getElementById("row-theme");
+
+        function setStatus(msg) {
+          status.textContent = msg;
+          rowTheme.textContent = msg ? "Check" : "OK";
+        }
+
+        function applyTheme(key) {
+          const href = THEME_HREFS[key];
+          setStatus("");
+          if (!href) {
+            link.removeAttribute("href");
+            rowTheme.textContent = "default";
+            return;
+          }
+          link.onload = function () {
+            setStatus("");
+            rowTheme.textContent = key;
+          };
+          link.onerror = function () {
+            if (key === "nes" && href !== NES_CDN) {
+              setStatus("Local NES.css missing; falling back to CDN nes.css@2.3.0.");
+              link.href = NES_CDN;
+              return;
+            }
+            setStatus(
+              "Could not load " +
+                href +
+                ". Clone vendor repos (see README). NES can fall back to CDN.",
+            );
+            rowTheme.textContent = "missing";
+          };
+          link.rel = "stylesheet";
+          link.href = href;
+        }
+
+        select.addEventListener("change", function () {
+          applyTheme(select.value);
+        });
+        applyTheme("default");
+      })();
+    </script>
+  </body>
+</html>
