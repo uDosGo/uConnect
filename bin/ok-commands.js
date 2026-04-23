@@ -112,7 +112,7 @@ class ${toolName.charAt(0).toUpperCase() + toolName.slice(1)} implements OKTool 
     async execute(task: OKTask): Promise<OKResult> {
         // TODO: Implement ${toolName} execution
         return {
-            output: "`${toolName}` tool response",
+            output: "`" + toolName + "` tool response",
             quality: 0.8,
             cost: 0.0,
             metadata: {
