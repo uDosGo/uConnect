@@ -22,7 +22,7 @@ core:
 	cd uCode1 && cargo run -- --status
 
 thinui:
-	cd ThinUI && cargo tauri dev
+	cd ThinUI && npm run dev
 
 dev:
 	@echo "Starting all services..."
