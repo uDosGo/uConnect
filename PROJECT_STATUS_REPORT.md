@@ -13,7 +13,8 @@
 - Organized scripts and documentation into `scripts/` and `docs/`
 - Updated `.gitignore` to track `Vendor/` but ignore `Vendor/.legacy/`
 - Attempted to set up `ThinUI` and `DevStudio` as submodules (remote repos needed)
-- Clarified Vault location options: inside repo, submodule, or external at `~/Code/Vault/`
+- Clarified Vendor location options: inside repo, submodule, or external at `~/Code/Vendor/`
+- Vault remains external at `~/Code/Vault/` (not tracked by Git)
 
 ## ✅ **Completion Status**
 
