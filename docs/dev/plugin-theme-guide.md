@@ -1,0 +1,1 @@
+../ThinUI/PLUGIN_THEME_GUIDE.md
