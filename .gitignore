@@ -2,7 +2,7 @@
 .state/
 Sandbox/
 _deprecated/
-Vendor/
+Vendor/.legacy/
 **/target/
 **/node_modules/
 .DS_Store
