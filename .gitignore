@@ -1,10 +1,12 @@
 .compost/
 .state/
-Vendor/.legacy/
+Sandbox/
+_deprecated/
+Vendor/
 **/target/
 **/node_modules/
 .DS_Store
 *.log
-*.pid
+*.tmp
 .idea/
 .vscode/
