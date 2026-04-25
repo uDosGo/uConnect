@@ -8,5 +8,6 @@ Vendor/.legacy/
 .DS_Store
 *.log
 *.tmp
+*.pid
 .idea/
 .vscode/
