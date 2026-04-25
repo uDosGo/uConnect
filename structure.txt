@@ -1,0 +1,122 @@
+uDosGo Project Structure
+========================
+
+Generated: April 25, 2024
+
+Root Directory: /Users/fredbook/Code/uDosGo/
+
+├── ThinUI/                  # ThinUI Dashboard (Tauri + React)
+│   ├── ARCHITECTURE.md
+│   ├── Cargo.toml
+│   ├── DEMO_SUMMARY.md
+│   ├── DOCUMENTATION.md
+│   ├── INTEGRATION_GUIDE.md
+│   ├── PLUGIN_THEME_GUIDE.md
+│   ├── PROGRESS_SUMMARY.md
+│   ├── RETRO_ANALYSIS.md
+│   ├── RETRO_SPEC.md
+│   ├── launch.sh
+│   ├── package.json
+│   ├── run-thinui.sh
+│   ├── src/                  # React source code
+│   ├── src-tauri/            # Tauri backend
+│   └── ui/                   # UI components
+│
+├── uCode1/                  # Core CLI and Services
+│   ├── Cargo.toml
+│   ├── Cargo.lock
+│   ├── core/               # Core functionality
+│   │   └── src/
+│   ├── mcp/                # Model Context Protocol server
+│   │   └── src/
+│   ├── feed-spool/         # RSS/Atom feed management
+│   │   └── src/
+│   ├── ok-agent/           # OK Intent Assistant
+│   │   └── src/
+│   ├── spatial/            # Geospatial operations
+│   │   └── src/
+│   ├── tui/                # Terminal UI components
+│   │   └── src/
+│   ├── usystem/            # Dynamic command system
+│   │   └── src/
+│   ├── vault-bridge/       # Vault integration
+│   │   └── src/
+│   └── udos-cli/           # Main CLI launcher
+│       └── src/
+│
+├── retro-blitz/             # Retrospective Analysis Tools
+│   ├── analysis/
+│   ├── reports/
+│   └── tools/
+│
+├── retro-core/             # Core Retrospective Tools
+│   ├── frameworks/
+│   ├── templates/
+│   └── utils/
+│
+├── retro-final/            # Final Retrospective
+│   ├── summaries/
+│   └── conclusions/
+│
+├── Connect-archive/        # Connection Archives
+│   ├── @user/
+│   ├── bin/
+│   ├── config/
+│   └── Connect/
+│
+├── Registry/               # Plugin Registry
+│   ├── plugins/
+│   ├── themes/
+│   └── extensions/
+│
+├── Sandbox/                # Testing Environment
+│   ├── experiments/
+│   └── prototypes/
+│
+├── scripts/                # Utility Scripts
+│   ├── build/
+│   ├── deploy/
+│   └── test/
+│
+├── docs/                   # Documentation
+│   ├── ThinUI-PLUGIN-PROMOTION.md
+│   ├── architecture/
+│   ├── guides/
+│   └── reference/
+│
+├── promote-plugin.sh        # Plugin Promotion Script (EXECUTABLE)
+├── health-check.sh         # Health Validation Script (EXECUTABLE)
+├── clean-compost.sh        # Compost Cleanup Script (EXECUTABLE)
+├── project-update.md       # Project Status Update
+├── structure.txt           # This File
+├── README.md
+└── LICENSE
+
+Key Directories:
+--------------
+1. ThinUI/          - Main dashboard application
+2. uCode1/          - Core CLI and services
+3. docs/            - All documentation
+4. scripts/         - Utility and automation scripts
+
+Hidden/Managed Directories:
+--------------------------
+- ~/.udos/          - State database and configuration
+- ~/Code/Vault/     - Vault storage system
+- .compost/         - Deleted files (30-day TTL)
+- .state/           - Working files and caches
+- Vendor/.legacy/   - Prune vendor clones
+
+Build Artifacts (Excluded from tree):
+-----------------------------------
+- target/           - Rust build outputs
+- node_modules/    - Node.js dependencies
+- dist/             - Build distributions
+- .git/             - Git repository
+- .DS_Store         - macOS metadata
+
+Total Directories: 50+
+Total Files: 200+
+Lines of Code: ~20,000+
+
+Last Updated: April 25, 2024

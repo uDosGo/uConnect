@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Working Demo</title>
+    <style>
+        body { background: #1a1a1a; font-family: monospace; padding: 20px; }
+        canvas { background: #000; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        const ctx = document.getElementById('canvas').getContext('2d');
+        
+        // Simple working demo
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, 800, 600);
+        
+        ctx.fillStyle = '#67B6BD';
+        ctx.font = '24px Courier New';
+        ctx.fillText('ThinUI Retro Demo - Working!', 50, 50);
+        
+        // Draw grid
+        for (let y = 0; y < 25; y++) {
+            for (let x = 0; x < 50; x++) {
+                if ((x + y) % 2 === 0) {
+                    ctx.fillStyle = '#67B6BD';
+                } else {
+                    ctx.fillStyle = '#8B3F96';
+                }
+                ctx.fillRect(x * 16, y * 24 + 100, 16, 24);
+            }
+        }
+    </script>
+</body>
+</html>

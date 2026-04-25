@@ -1,0 +1,10 @@
+.compost/
+.state/
+Vendor/.legacy/
+**/target/
+**/node_modules/
+.DS_Store
+*.log
+*.pid
+.idea/
+.vscode/

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Core - Blitz Renderer Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #ff4444;
+            text-align: center;
+        }
+        
+        .controls {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button:hover {
+            background: #444;
+        }
+        
+        button.active {
+            background: #ff4444;
+        }
+        
+        #retro-canvas {
+            background: #000;
+            display: block;
+            margin: 0 auto;
+            border: 4px solid #333;
+            border-radius: 4px;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: #1e1e1e;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Retro Core - Blitz Renderer</h1>
+        
+        <div class="controls">
+            <button id="c64-btn" class="active">C64 Mode</button>
+            <button id="nes-btn">NES Mode</button>
+            <button id="teletext-btn">Teletext Mode</button>
+            <button id="clear-btn">Clear Screen</button>
+            <button id="demo-btn">Run Demo</button>
+        </div>
+        
+        <canvas id="retro-canvas" width="320" height="200"></canvas>
+        
+        <div class="status" id="status">
+            Status: Initializing WASM...
+        </div>
+    </div>
+    
+    <script type="module">
+        import init, { create_c64_renderer, create_nes_renderer, create_teletext_renderer } from './pkg/retro_core.js';
+        
+        let renderer = null;
+        let currentSystem = 'c64';
+        
+        async function initWasm() {
+            document.getElementById('status').textContent = 'Status: Loading WASM...';
+            
+            try {
+                await init();
+                document.getElementById('status').textContent = 'Status: WASM loaded! Creating C64 renderer...';
+                
+                renderer = await create_c64_renderer('retro-canvas');
+                document.getElementById('status').textContent = 'Status: Ready! C64 mode active.';
+                
+                // Set up buttons
+                setupButtons();
+                
+                // Run initial demo
+                runDemo();
+                
+            } catch (error) {
+                document.getElementById('status').textContent = `Error: ${error}`;
+                console.error('Failed to initialize WASM:', error);
+            }
+        }
+        
+        function setupButtons() {
+            document.getElementById('c64-btn').addEventListener('click', async () => {
+                if (currentSystem !== 'c64') {
+                    document.getElementById('status').textContent = 'Status: Switching to C64 mode...';
+                    renderer = await create_c64_renderer('retro-canvas');
+                    currentSystem = 'c64';
+                    
+                    // Update button states
+                    document.getElementById('c64-btn').classList.add('active');
+                    document.getElementById('nes-btn').classList.remove('active');
+                    document.getElementById('teletext-btn').classList.remove('active');
+                    
+                    document.getElementById('status').textContent = 'Status: C64 mode active.';
+                    runDemo();
+                }
+            });
+            
+            document.getElementById('nes-btn').addEventListener('click', async () => {
+                if (currentSystem !== 'nes') {
+                    document.getElementById('status').textContent = 'Status: Switching to NES mode...';
+                    renderer = await create_nes_renderer('retro-canvas');
+                    currentSystem = 'nes';
+                    
+                    // Update button states
+                    document.getElementById('c64-btn').classList.remove('active');
+                    document.getElementById('nes-btn').classList.add('active');
+                    document.getElementById('teletext-btn').classList.remove('active');
+                    
+                    document.getElementById('status').textContent = 'Status: NES mode active.';
+                    runDemo();
+                }
+            });
+            
+            document.getElementById('teletext-btn').addEventListener('click', async () => {
+                if (currentSystem !== 'teletext') {
+                    document.getElementById('status').textContent = 'Status: Switching to Teletext mode...';
+                    renderer = await create_teletext_renderer('retro-canvas');
+                    currentSystem = 'teletext';
+                    
+                    // Update button states
+                    document.getElementById('c64-btn').classList.remove('active');
+                    document.getElementById('nes-btn').classList.remove('active');
+                    document.getElementById('teletext-btn').classList.add('active');
+                    
+                    document.getElementById('status').textContent = 'Status: Teletext mode active.';
+                    runDemo();
+                }
+            });
+            
+            document.getElementById('clear-btn').addEventListener('click', () => {
+                document.getElementById('status').textContent = 'Status: Clearing screen...';
+                // Clear screen by setting all characters to space
+                for (let y = 0; y < 25; y++) {
+                    for (let x = 0; x < 40; x++) {
+                        renderer.set_character(x, y, 0x20, 1); // Space character, white
+                    }
+                }
+                renderer.render_frame();
+                document.getElementById('status').textContent = 'Status: Screen cleared.';
+            });
+            
+            document.getElementById('demo-btn').addEventListener('click', () => {
+                runDemo();
+            });
+        }
+        
+        function runDemo() {
+            document.getElementById('status').textContent = `Status: Running ${currentSystem.toUpperCase()} demo...`;
+            
+            // Clear screen
+            for (let y = 0; y < 25; y++) {
+                for (let x = 0; x < 40; x++) {
+                    renderer.set_character(x, y, 0x20, 1); // Space character, white
+                }
+            }
+            
+            // Draw border
+            for (let x = 0; x < 40; x++) {
+                renderer.set_character(x, 0, 0x20, 2); // Top border
+                renderer.set_character(x, 24, 0x20, 2); // Bottom border
+            }
+            for (let y = 1; y < 24; y++) {
+                renderer.set_character(0, y, 0x20, 2); // Left border
+                renderer.set_character(39, y, 0x20, 2); // Right border
+            }
+            
+            // Draw title
+            const title = currentSystem.toUpperCase() + " RETRO RENDERER";
+            let startX = Math.floor((40 - title.length) / 2);
+            for (let i = 0; i < title.length; i++) {
+                // Simple ASCII characters for now
+                const charCode = title.charCodeAt(i);
+                renderer.set_character(startX + i, 2, charCode, 1);
+            }
+            
+            // Draw some test patterns
+            for (let y = 5; y < 20; y++) {
+                for (let x = 2; x < 38; x++) {
+                    if ((x + y) % 2 === 0) {
+                        renderer.set_character(x, y, 0x41, 3); // 'A' in cyan
+                    } else {
+                        renderer.set_character(x, y, 0x42, 5); // 'B' in purple
+                    }
+                }
+            }
+            
+            // Render the frame
+            renderer.render_frame();
+            
+            document.getElementById('status').textContent = `Status: ${currentSystem.toUpperCase()} demo complete!`;
+        }
+        
+        // Initialize WASM when page loads
+        initWasm();
+    </script>
+</body>
+</html>

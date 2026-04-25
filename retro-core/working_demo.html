@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Retro Demo - Pure JavaScript</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff4444;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        #canvas-container {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        #retro-canvas {
+            background: #000;
+            display: block;
+            margin: 0 auto;
+            border: 4px solid #333;
+            image-rendering: pixelated;
+            width: 960px;
+            height: 600px;
+        }
+        
+        .status {
+            padding: 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+            color: #4caf50;
+        }
+        
+        .controls {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button:hover {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Working Retro Demo</h1>
+        
+        <div class="status" id="status">
+            Status: Pure JavaScript renderer - No WASM needed! 🎉
+        </div>
+        
+        <div class="controls">
+            <button id="c64-btn">C64 Theme</button>
+            <button id="nes-btn">NES Theme</button>
+            <button id="teletext-btn">Teletext Theme</button>
+            <button id="clear-btn">Clear Screen</button>
+            <button id="demo-btn">Run Demo</button>
+        </div>
+        
+        <div id="canvas-container">
+            <canvas id="retro-canvas" width="320" height="200"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        // Pure JavaScript retro renderer - No WASM needed!
+        
+        const canvas = document.getElementById('retro-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Current theme
+        let currentTheme = 'c64';
+        
+        // C64 color palette (NTSC)
+        const c64Colors = [
+            '#000000', '#FFFFFF', '#883932', '#67B6BD',
+            '#8B3F96', '#55A049', '#40318D', '#C8C569',
+            '#8B542C', '#554000', '#B86962', '#6E6E6E',
+            '#969696', '#75CE66', '#6F5E91', '#A9A9A9'
+        ];
+        
+        // NES color palette
+        const nesColors = [
+            '#666666', '#002688', '#1412A7', '#3B00A4',
+            '#5C007E', '#6E0040', '#6C0600', '#561D00',
+            '#333500', '#0B4800', '#005100', '#004F08',
+            '#004747', '#000000', '#000000', '#000000'
+        ];
+        
+        // Teletext color palette
+        const teletextColors = [
+            '#000000', '#FF0000', '#00FF00', '#FFFF00',
+            '#0000FF', '#FF00FF', '#00FFFF', '#FFFFFF'
+        ];
+        
+        // Get current palette
+        function getPalette() {
+            if (currentTheme === 'c64') return c64Colors;
+            if (currentTheme === 'nes') return nesColors;
+            return teletextColors;
+        }
+        
+        // Character size - now 24px (3x larger)
+        const CHAR_WIDTH = 24;
+        const CHAR_HEIGHT = 24;
+        
+        // Simple character definitions (scaled up)
+        function drawChar(x, y, char, colorIndex) {
+            const palette = getPalette();
+            ctx.fillStyle = palette[colorIndex] || '#FFFFFF';
+            
+            // Scale factor for larger characters
+            const scale = 3;
+            
+            // Simple block characters (scaled up)
+            if (char === 32) {
+                // Space - do nothing
+            } else if (char === 65) { // 'A'
+                ctx.fillRect(x + 6*scale, y + 3*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 6*scale, 12*scale, 3*scale);
+                ctx.fillRect(x, y + 9*scale, 18*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 12*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 15*scale, 6*scale, 3*scale);
+            } else if (char === 66) { // 'B'
+                ctx.fillRect(x + 3*scale, y + 3*scale, 12*scale, 3*scale);
+                ctx.fillRect(x, y + 6*scale, 6*scale, 3*scale);
+                ctx.fillRect(x, y + 9*scale, 12*scale, 3*scale);
+                ctx.fillRect(x, y + 12*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 15*scale, 12*scale, 3*scale);
+            } else if (char === 67) { // 'C'
+                ctx.fillRect(x + 6*scale, y + 3*scale, 12*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 6*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 9*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 3*scale, y + 12*scale, 6*scale, 3*scale);
+                ctx.fillRect(x + 6*scale, y + 15*scale, 12*scale, 3*scale);
+            } else {
+                // Default block character (larger)
+                ctx.fillRect(x + 3*scale, y + 9*scale, 18*scale, 6*scale);
+            }
+        }
+        
+        // Clear screen
+        function clearScreen() {
+            ctx.fillStyle = getPalette()[0]; // Background color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Draw border
+        function drawBorder() {
+            const borderColor = currentTheme === 'c64' ? '#67B6BD' : 
+                              currentTheme === 'nes' ? '#002688' : '#FF0000';
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+        }
+        
+        // Draw demo pattern
+        function drawDemo() {
+            clearScreen();
+            drawBorder();
+            
+            // Draw title (using larger spacing)
+            const title = currentTheme.toUpperCase() + " MODE";
+            let startX = Math.floor((25 - title.length) / 2) * CHAR_WIDTH;
+            for (let i = 0; i < title.length; i++) {
+                drawChar(startX + i * CHAR_WIDTH, 2 * CHAR_HEIGHT, title.charCodeAt(i), 1);
+            }
+            
+            // Draw test pattern (fewer characters, larger grid)
+            for (let y = 5; y < 15; y++) {
+                for (let x = 2; x < 23; x++) {
+                    if ((x + y) % 3 === 0) {
+                        drawChar(x * CHAR_WIDTH, y * CHAR_HEIGHT, 65, 3); // 'A'
+                    } else if ((x + y) % 3 === 1) {
+                        drawChar(x * CHAR_WIDTH, y * CHAR_HEIGHT, 66, 5); // 'B'
+                    } else {
+                        drawChar(x * CHAR_WIDTH, y * CHAR_HEIGHT, 67, 7); // 'C'
+                    }
+                }
+            }
+            
+            document.getElementById('status').textContent = 
+                'Status: ' + currentTheme.toUpperCase() + ' demo rendered! 🎉';
+        }
+        
+        // Set up buttons
+        document.getElementById('c64-btn').addEventListener('click', () => {
+            currentTheme = 'c64';
+            drawDemo();
+        });
+        
+        document.getElementById('nes-btn').addEventListener('click', () => {
+            currentTheme = 'nes';
+            drawDemo();
+        });
+        
+        document.getElementById('teletext-btn').addEventListener('click', () => {
+            currentTheme = 'teletext';
+            drawDemo();
+        });
+        
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            clearScreen();
+            drawBorder();
+            document.getElementById('status').textContent = 'Status: Screen cleared.';
+        });
+        
+        document.getElementById('demo-btn').addEventListener('click', () => {
+            drawDemo();
+        });
+        
+        // Initialize
+        drawDemo();
+        
+        // Set pixelated rendering for retro feel
+        ctx.imageSmoothingEnabled = false;
+    </script>
+</body>
+</html>

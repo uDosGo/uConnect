@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Retro Test - No Server Needed</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff4444;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        #canvas-container {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        #retro-canvas {
+            background: #000;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+        
+        .instructions {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .instructions h2 {
+            color: #4a90e2;
+            margin-top: 0;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        .status {
+            padding: 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+        
+        .success {
+            color: #4caf50;
+        }
+        
+        .error {
+            color: #ff5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Simple Retro Test</h1>
+        
+        <div class="instructions">
+            <h2>How to Use This Test</h2>
+            <p><strong>No server required!</strong> Just open this file directly in your browser.</p>
+            
+            <h3>What This Tests</h3>
+            <ul>
+                <li>✅ Basic canvas rendering</li>
+                <li>✅ Character grid system (40×25)</li>
+                <li>✅ Color palette system</li>
+                <li>✅ Simple character drawing</li>
+            </ul>
+            
+            <h3>If You See a Blank Screen</h3>
+            <ul>
+                <li>1. Check browser console (F12) for errors</li>
+                <li>2. Make sure JavaScript is enabled</li>
+                <li>3. Try a different browser (Chrome/Firefox recommended)</li>
+                <li>4. The WASM module needs to load (check status below)</li>
+            </ul>
+        </div>
+        
+        <div class="status" id="status">
+            Status: Waiting to load WASM module...
+        </div>
+        
+        <div id="canvas-container">
+            <canvas id="retro-canvas" width="320" height="200"></canvas>
+        </div>
+        
+        <div class="instructions">
+            <h2>Troubleshooting</h2>
+            
+            <h3>Common Issues</h3>
+            <ul>
+                <li><strong>WASM failed to load:</strong> Check browser console for CORS errors. Try serving with <code>python3 -m http.server 8000</code></li>
+                <li><strong>Blank canvas:</strong> The WASM module might not have initialized. Check status above.</li>
+                <li><strong>Slow performance:</strong> This is expected in debug mode. Build with <code>--release</code> for production.</li>
+            </ul>
+            
+            <h3>Next Steps</h3>
+            <ol>
+                <li>Get this simple test working first</li>
+                <li>Then try the full test.html with system switching</li>
+                <li>Finally integrate with ThinUI</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script type="module">
+        // Simple fallback renderer using pure JavaScript
+        // This will work even if WASM fails to load
+        
+        document.getElementById('status').textContent = 'Status: Using JavaScript fallback renderer...';
+        document.getElementById('status').className = 'status success';
+        
+        const canvas = document.getElementById('retro-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // C64 colors
+        const colors = [
+            '#000000', '#FFFFFF', '#883932', '#67B6BD',
+            '#8B3F96', '#55A049', '#40318D', '#C8C569',
+            '#8B542C', '#554000', '#B86962', '#6E6E6E',
+            '#969696', '#75CE66', '#6F5E91', '#A9A9A9'
+        ];
+        
+        // Simple PETSCII-like font (A and B for demo)
+        function drawChar(ctx, x, y, char, color) {
+            ctx.fillStyle = colors[color] || '#FFFFFF';
+            
+            if (char === 65) { // 'A'
+                ctx.fillRect(x + 2, y + 1, 2, 1);
+                ctx.fillRect(x + 1, y + 2, 4, 1);
+                ctx.fillRect(x, y + 3, 6, 1);
+                ctx.fillRect(x + 1, y + 4, 2, 1);
+                ctx.fillRect(x + 1, y + 5, 2, 1);
+            } else if (char === 66) { // 'B'
+                ctx.fillRect(x + 1, y + 1, 4, 1);
+                ctx.fillRect(x, y + 2, 2, 1);
+                ctx.fillRect(x, y + 3, 4, 1);
+                ctx.fillRect(x, y + 4, 2, 1);
+                ctx.fillRect(x + 1, y + 5, 4, 1);
+            } else {
+                // Draw a block for other characters
+                ctx.fillRect(x + 1, y + 3, 4, 2);
+            }
+        }
+        
+        // Draw demo pattern
+        function drawDemo() {
+            // Clear canvas
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw border
+            ctx.strokeStyle = '#67B6BD';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+            
+            // Draw title
+            const title = "SIMPLE TEST";
+            let startX = Math.floor((40 - title.length) / 2) * 8;
+            for (let i = 0; i < title.length; i++) {
+                drawChar(ctx, startX + i * 8, 2 * 8, title.charCodeAt(i), 1);
+            }
+            
+            // Draw test pattern
+            for (let y = 5; y < 20; y++) {
+                for (let x = 2; x < 38; x++) {
+                    if ((x + y) % 2 === 0) {
+                        drawChar(ctx, x * 8, y * 8, 65, 3); // 'A' in cyan
+                    } else {
+                        drawChar(ctx, x * 8, y * 8, 66, 5); // 'B' in purple
+                    }
+                }
+            }
+            
+            document.getElementById('status').textContent = 'Status: Demo rendered successfully! (JavaScript fallback)';
+        }
+        
+        // Try to load WASM, fall back to JS if it fails
+        async function tryWasm() {
+            try {
+                document.getElementById('status').textContent = 'Status: Attempting to load WASM...';
+                
+                // Try to import WASM module
+                const wasm = await import('./pkg/retro_core.js');
+                await wasm.default();
+                
+                document.getElementById('status').textContent = 'Status: WASM loaded! Creating renderer...';
+                
+                const renderer = await wasm.create_c64_renderer('retro-canvas');
+                
+                // Draw demo using WASM
+                for (let y = 0; y < 25; y++) {
+                    for (let x = 0; x < 40; x++) {
+                        if ((x + y) % 2 === 0) {
+                            renderer.set_character(x, y, 65, 3); // 'A' in cyan
+                        } else {
+                            renderer.set_character(x, y, 66, 5); // 'B' in purple
+                        }
+                    }
+                }
+                
+                renderer.render_frame();
+                document.getElementById('status').textContent = 'Status: WASM renderer working! 🎉';
+                document.getElementById('status').className = 'status success';
+                
+            } catch (error) {
+                console.warn('WASM failed to load, using JavaScript fallback:', error);
+                drawDemo();
+            }
+        }
+        
+        // Start with fallback, then try WASM
+        drawDemo();
+        setTimeout(tryWasm, 1000); // Try WASM after 1 second
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThinUI – uDos Renderer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div data-tauri-drag-region class="titlebar" id="titlebar">
+        <div class="titlebar-logo">
+            <span class="logo">⎔</span>
+            <span class="title">ThinUI</span>
+        </div>
+        <div class="titlebar-controls">
+            <button id="minimize-btn" class="titlebar-btn" aria-label="Minimize">─</button>
+            <button id="maximize-btn" class="titlebar-btn" aria-label="Maximize">□</button>
+            <button id="close-btn" class="titlebar-btn close" aria-label="Close">✕</button>
+        </div>
+    </div>
+    <div class="connection-status" id="connection-status">
+        <span class="status-dot disconnected"></span>
+        <span id="status-text">Disconnected</span>
+        <button id="connect-btn" class="connect-btn">Connect</button>
+    </div>
+    <main id="app" class="app-container">
+        <div class="loading">Loading dashboard...</div>
+    </main>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
