@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { mcpClient } from '../mcpClient';
 
 const SystemStatus: React.FC = () => {
   const [status, setStatus] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    // Mock system status check
     const checkStatus = async () => {
       try {
-        // In a real implementation, this would call the MCP server
-        const mockStatus = {
-          'Vault': 'Connected',
-          'MCP Server': 'Running',
-          'Plugins': '2 loaded',
-        };
-        setStatus(mockStatus);
+        setLoading(true);
+        setError(null);
+        
+        // Call MCP tool to get system status
+        const response = await mcpClient.callMcpTool<Record<string, string>>('system_status', {});
+        
+        if (response.success && response.data) {
+          setStatus(response.data);
+        } else {
+          setError(response.error || 'Failed to get system status');
+        }
       } catch (error) {
         console.error('Failed to check system status:', error);
+        setError(error instanceof Error ? error.message : 'Unknown error');
       } finally {
         setLoading(false);
       }
@@ -29,16 +35,30 @@ const SystemStatus: React.FC = () => {
     return <div>Checking system status...</div>;
   }
   
+  if (error) {
+    return (
+      <div className="system-status">
+        <h2>System Status</h2>
+        <div className="error">⚠️ {error}</div>
+        <button onClick={checkStatus}>Retry</button>
+      </div>
+    );
+  }
+  
   return (
     <div className="system-status">
       <h2>System Status</h2>
-      <ul>
-        {Object.entries(status).map(([key, value]) => (
-          <li key={key}>
-            <strong>{key}:</strong> {value}
-          </li>
-        ))}
-      </ul>
+      {Object.keys(status).length === 0 ? (
+        <div className="no-status">No status information available</div>
+      ) : (
+        <ul>
+          {Object.entries(status).map(([key, value]) => (
+            <li key={key}>
+              <strong>{key}:</strong> {value}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

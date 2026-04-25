@@ -116,6 +116,133 @@ body {
   border-bottom: none;
 }
 
+.error {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.no-plugins, .no-status {
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #3a7bc8;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.success {
+  color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.preview-section {
+  margin-top: 2rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 2rem;
+}
+
+.preview-actions {
+  margin-bottom: 1rem;
+}
+
+.logs {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.logs pre {
+  white-space: pre-wrap;
+  margin: 0;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.cron-help {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: var(--color-surface);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.cron-help ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.cron-help li {
+  padding: 0.25rem 0;
+}
+
+.cron-help code {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
