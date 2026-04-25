@@ -6,6 +6,14 @@
 
 **uDos** is a unified development operating system that integrates code, content, and collaboration into a single coherent workflow. The project aims to provide a modern alternative to traditional IDEs and development environments.
 
+**Repository Structure Update (April 25, 2024):**
+- Restructured repository to consolidate core components
+- Moved `Connect-archive` and `retro-blitz` to `_deprecated/` (gitignored)
+- Consolidated `uCode2`, `uCode3`, and `uCode4` into `Sandbox/experiments/` (gitignored)
+- Organized scripts and documentation into `scripts/` and `docs/`
+- Updated `.gitignore` to track `Vendor/` but ignore `Vendor/.legacy/`
+- Attempted to set up `ThinUI` and `DevStudio` as submodules (remote repos needed)
+
 ## ✅ **Completion Status**
 
 ### **Step 1: Submodule Home Repository - COMPLETE** 🎉

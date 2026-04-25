@@ -44,11 +44,6 @@ Root Directory: /Users/fredbook/Code/uDosGo/
 │   └── udos-cli/           # Main CLI launcher
 │       └── src/
 │
-├── retro-blitz/             # Retrospective Analysis Tools
-│   ├── analysis/
-│   ├── reports/
-│   └── tools/
-│
 ├── retro-core/             # Core Retrospective Tools
 │   ├── frameworks/
 │   ├── templates/
@@ -58,25 +53,20 @@ Root Directory: /Users/fredbook/Code/uDosGo/
 │   ├── summaries/
 │   └── conclusions/
 │
-├── Connect-archive/        # Connection Archives
-│   ├── @user/
-│   ├── bin/
-│   ├── config/
-│   └── Connect/
-│
 ├── Registry/               # Plugin Registry
 │   ├── plugins/
 │   ├── themes/
 │   └── extensions/
 │
-├── Sandbox/                # Testing Environment
+├── Sandbox/                # Testing Environment (gitignored)
 │   ├── experiments/
 │   └── prototypes/
 │
 ├── scripts/                # Utility Scripts
-│   ├── build/
-│   ├── deploy/
-│   └── test/
+│   ├── clean-compost.sh
+│   ├── health-check.sh
+│   ├── promote-plugin.sh
+│   └── README.md
 │
 ├── docs/                   # Documentation
 │   ├── ThinUI-PLUGIN-PROMOTION.md
@@ -84,13 +74,23 @@ Root Directory: /Users/fredbook/Code/uDosGo/
 │   ├── guides/
 │   └── reference/
 │
-├── promote-plugin.sh        # Plugin Promotion Script (EXECUTABLE)
-├── health-check.sh         # Health Validation Script (EXECUTABLE)
-├── clean-compost.sh        # Compost Cleanup Script (EXECUTABLE)
-├── project-update.md       # Project Status Update
-├── structure.txt           # This File
+├── Vendor/                # Vendor Code (tracked, except .legacy)
+│   └── .legacy/            # Legacy vendor code (gitignored)
+│
+├── _deprecated/            # Archived Directories (gitignored)
+│   ├── Connect-archive/
+│   └── retro-blitz/
+│
 ├── README.md
-└── LICENSE
+├── structure.txt           # This File
+├── PROJECT_STATUS_REPORT.md
+├── STEP_2_SUMMARY.md
+├── ROADMAP_UI_UX.md
+├── MIGRATION_COMPLETE.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── Makefile
+└── .gitignore
 
 Key Directories:
 --------------
@@ -98,14 +98,16 @@ Key Directories:
 2. uCode1/          - Core CLI and services
 3. docs/            - All documentation
 4. scripts/         - Utility and automation scripts
+5. Vendor/          - Vendor code (tracked, except .legacy)
 
 Hidden/Managed Directories:
 --------------------------
 - ~/.udos/          - State database and configuration
-- ~/Code/Vault/     - Vault storage system
+- ~/Code/Vault/     - Vault storage system (always external, not tracked)
 - .compost/         - Deleted files (30-day TTL)
 - .state/           - Working files and caches
-- Vendor/.legacy/   - Prune vendor clones
+- Sandbox/          - Testing environment (gitignored)
+- _deprecated/      - Archived directories (gitignored)
 
 Build Artifacts (Excluded from tree):
 -----------------------------------
@@ -115,7 +117,11 @@ Build Artifacts (Excluded from tree):
 - .git/             - Git repository
 - .DS_Store         - macOS metadata
 
-Total Directories: 50+
+Vault Notes:
+-----------
+The Vault folder is always located at `~/Code/Vault/` (external to the repo). It is not tracked by Git and serves as a local-only storage system for sensitive or large files.
+
+Total Directories: 40+
 Total Files: 200+
 Lines of Code: ~20,000+
 
