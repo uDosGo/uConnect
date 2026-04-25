@@ -34,4 +34,4 @@ clean:
 	find . -name "node_modules" -type d -prune -exec rm -rf {} \;
 
 doctor:
-	cd uCode1 && cargo run -- doctor
+	cd uCode1/udos-cli && cargo run -- doctor
