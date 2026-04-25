@@ -153,9 +153,14 @@ Created comprehensive specification (`docs/specs/VAULT_INTELLIGENCE.md`) coverin
    - ThinUI integration
    - Permission system
 
-### **Vault Location**
+### **Vault Location Options**
 
-The Vault folder is always located at `~/Code/Vault/` (external to the repo). It is not tracked by Git and serves as a local-only storage system for sensitive or large files.
+The Vault folder can be configured in three ways:
+1. **Inside the repo root** (e.g., `uDosGo/Vault/`) - Useful for forking new work with an audit trail
+2. **As a submodule** (e.g., `git submodule add <vault-repo> Vault`) - Allows sharing across projects
+3. **Completely outside any repo** (e.g., `~/Code/Vault/`) - Local-only, not tracked by Git
+
+**Current Configuration:** Vault is located at `~/Code/Vault/` (external to the repo).
 
 ### **Implementation Roadmap**
 

@@ -103,7 +103,7 @@ Key Directories:
 Hidden/Managed Directories:
 --------------------------
 - ~/.udos/          - State database and configuration
-- ~/Code/Vault/     - Vault storage system (always external, not tracked)
+- ~/Code/Vault/     - Vault storage system (can be inside repo, submodule, or external)
 - .compost/         - Deleted files (30-day TTL)
 - .state/           - Working files and caches
 - Sandbox/          - Testing environment (gitignored)
@@ -119,7 +119,12 @@ Build Artifacts (Excluded from tree):
 
 Vault Notes:
 -----------
-The Vault folder is always located at `~/Code/Vault/` (external to the repo). It is not tracked by Git and serves as a local-only storage system for sensitive or large files.
+The Vault folder can be configured in three ways:
+1. **Inside the repo root** (e.g., `uDosGo/Vault/`) - Useful for forking new work with an audit trail
+2. **As a submodule** (e.g., `git submodule add <vault-repo> Vault`) - Allows sharing across projects
+3. **Completely outside any repo** (e.g., `~/Code/Vault/`) - Local-only, not tracked by Git
+
+**Current Configuration:** Vault is located at `~/Code/Vault/` (external to the repo).
 
 Total Directories: 40+
 Total Files: 200+
