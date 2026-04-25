@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { mcpClient } from '../mcpClient';
+import { runDoctor } from '../mcpClient';
 
 const SystemStatus: React.FC = () => {
   const [status, setStatus] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Call MCP tool to get system status
-        const response = await mcpClient.callMcpTool<Record<string, string>>('system_status', {});
-        
-        if (response.success && response.data) {
-          setStatus(response.data);
-        } else {
-          setError(response.error || 'Failed to get system status');
-        }
-      } catch (error) {
-        console.error('Failed to check system status:', error);
-        setError(error instanceof Error ? error.message : 'Unknown error');
-      } finally {
-        setLoading(false);
+  const checkStatus = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Call MCP tool to get system status
+      const data = await runDoctor();
+      
+      if (data && typeof data === 'object') {
+        setStatus(data);
+      } else {
+        setError('Failed to get system status: invalid data format');
       }
-    };
-    
+    } catch (error) {
+      console.error('Failed to check system status:', error);
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     checkStatus();
   }, []);
   

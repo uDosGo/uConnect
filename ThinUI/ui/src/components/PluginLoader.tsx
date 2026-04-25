@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { mcpClient } from '../mcpClient';
+import { listRegistry } from '../mcpClient';
 
 interface Plugin {
   id: string;
@@ -13,28 +13,28 @@ const PluginLoader: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  useEffect(() => {
-    const loadPlugins = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Call MCP tool to get plugins
-        const response = await mcpClient.callMcpTool<Plugin[]>('plugin_list', {});
-        
-        if (response.success && response.data) {
-          setPlugins(response.data);
-        } else {
-          setError(response.error || 'Failed to load plugins');
-        }
-      } catch (error) {
-        console.error('Failed to load plugins:', error);
-        setError(error instanceof Error ? error.message : 'Unknown error');
-      } finally {
-        setLoading(false);
+  const loadPlugins = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Call MCP tool to get plugins
+      const data = await listRegistry();
+      
+      if (Array.isArray(data)) {
+        setPlugins(data);
+      } else {
+        setError('Failed to load plugins: invalid data format');
       }
-    };
-    
+    } catch (error) {
+      console.error('Failed to load plugins:', error);
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     loadPlugins();
   }, []);
   

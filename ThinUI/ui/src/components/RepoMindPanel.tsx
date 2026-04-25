@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { mcpClient } from '../mcpClient';
+import { indexCopernicus, discoverRepo } from '../mcpClient';
 
 const RepoMindPanel: React.FC = () => {
   const [repoUrl, setRepoUrl] = useState('');
-  const [indexPath, setIndexPath] = useState('~/Code/Vault/indexes');
   const [loadingIndex, setLoadingIndex] = useState(false);
   const [loadingDiscover, setLoadingDiscover] = useState(false);
   const [indexResult, setIndexResult] = useState<{ success: boolean; message?: string; indexPath?: string; error?: string } | null>(null);
@@ -15,12 +14,11 @@ const RepoMindPanel: React.FC = () => {
     setIndexResult(null);
 
     try {
-      const response = await mcpClient.createCopernicusIndex(repoUrl, indexPath);
+      const data = await indexCopernicus(repoUrl);
       setIndexResult({
-        success: response.success,
-        message: response.success ? 'Index created successfully!' : response.error,
-        indexPath: response.data?.indexPath,
-        error: response.success ? undefined : response.error,
+        success: true,
+        message: 'Index created successfully!',
+        indexPath: data.indexPath,
       });
     } catch (error) {
       setIndexResult({
@@ -38,11 +36,10 @@ const RepoMindPanel: React.FC = () => {
     setDiscoverResult(null);
 
     try {
-      const response = await mcpClient.discoverRepo(repoUrl);
+      const data = await discoverRepo(repoUrl);
       setDiscoverResult({
-        success: response.success,
-        logs: response.data?.logs,
-        error: response.success ? undefined : response.error,
+        success: true,
+        logs: data.logs,
       });
     } catch (error) {
       setDiscoverResult({
@@ -67,17 +64,6 @@ const RepoMindPanel: React.FC = () => {
           onChange={(e) => setRepoUrl(e.target.value)}
           placeholder="https://github.com/uDosGo/test-repo.git"
           required
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="indexPath">Index Path:</label>
-        <input
-          type="text"
-          id="indexPath"
-          value={indexPath}
-          onChange={(e) => setIndexPath(e.target.value)}
-          placeholder="~/Code/Vault/indexes"
         />
       </div>
 

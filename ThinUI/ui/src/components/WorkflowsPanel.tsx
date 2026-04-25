@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { mcpClient } from '../mcpClient';
+import { createAgenticWorkflow } from '../mcpClient';
 
 const WorkflowsPanel: React.FC = () => {
   const [repo, setRepo] = useState('');
-  const [workflowName, setWorkflowName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message?: string; error?: string } | null>(null);
@@ -14,11 +13,10 @@ const WorkflowsPanel: React.FC = () => {
     setResult(null);
 
     try {
-      const response = await mcpClient.createAgenticWorkflow(repo, workflowName, description);
+      const data = await createAgenticWorkflow(description, repo);
       setResult({
-        success: response.success,
-        message: response.success ? 'Workflow created successfully!' : response.error,
-        error: response.success ? undefined : response.error,
+        success: true,
+        message: 'Workflow created successfully!',
       });
     } catch (error) {
       setResult({
@@ -42,18 +40,6 @@ const WorkflowsPanel: React.FC = () => {
             value={repo}
             onChange={(e) => setRepo(e.target.value)}
             placeholder="e.g., uDosGo/test-repo"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="workflowName">Workflow Name:</label>
-          <input
-            type="text"
-            id="workflowName"
-            value={workflowName}
-            onChange={(e) => setWorkflowName(e.target.value)}
-            placeholder="e.g., deploy-production"
             required
           />
         </div>

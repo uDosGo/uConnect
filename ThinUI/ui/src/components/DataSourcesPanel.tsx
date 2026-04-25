@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { mcpClient } from '../mcpClient';
+import { scheduleFlatData } from '../mcpClient';
 
 const DataSourcesPanel: React.FC = () => {
-  const [repo, setRepo] = useState('');
-  const [url, setUrl] = useState('');
+  const [source, setSource] = useState('');
   const [schedule, setSchedule] = useState('0 0 * * *'); // Default: daily at midnight
-  const [destination, setDestination] = useState('data/');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message?: string; error?: string } | null>(null);
 
@@ -15,11 +13,10 @@ const DataSourcesPanel: React.FC = () => {
     setResult(null);
 
     try {
-      const response = await mcpClient.scheduleFlatData(repo, url, schedule, destination);
+      const data = await scheduleFlatData(source, schedule);
       setResult({
-        success: response.success,
-        message: response.success ? 'Data source scheduled successfully!' : response.error,
-        error: response.success ? undefined : response.error,
+        success: true,
+        message: 'Data source scheduled successfully!',
       });
     } catch (error) {
       setResult({
@@ -36,24 +33,12 @@ const DataSourcesPanel: React.FC = () => {
       <h2>Schedule Flat Data</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="repo">Repository (owner/repo):</label>
-          <input
-            type="text"
-            id="repo"
-            value={repo}
-            onChange={(e) => setRepo(e.target.value)}
-            placeholder="e.g., uDosGo/test-repo"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="url">Data URL:</label>
+          <label htmlFor="source">Data Source URL:</label>
           <input
             type="url"
-            id="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            id="source"
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
             placeholder="https://example.com/data.json"
             required
           />
@@ -67,18 +52,6 @@ const DataSourcesPanel: React.FC = () => {
             value={schedule}
             onChange={(e) => setSchedule(e.target.value)}
             placeholder="0 0 * * * (daily at midnight)"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="destination">Destination Path:</label>
-          <input
-            type="text"
-            id="destination"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            placeholder="data/"
             required
           />
         </div>

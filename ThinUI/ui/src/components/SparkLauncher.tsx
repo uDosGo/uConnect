@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { mcpClient } from '../mcpClient';
+import { sparkLaunch } from '../mcpClient';
 
 const SparkLauncher: React.FC = () => {
   const [prompt, setPrompt] = useState('');
@@ -14,11 +14,11 @@ const SparkLauncher: React.FC = () => {
     setPreviewUrl('');
 
     try {
-      const response = await mcpClient.launchSpark(prompt);
-      if (response.success && response.data?.previewUrl) {
-        setPreviewUrl(response.data.previewUrl);
+      const data = await sparkLaunch(prompt);
+      if (data && data.previewUrl) {
+        setPreviewUrl(data.previewUrl);
       } else {
-        setError(response.error || 'Failed to launch Spark app');
+        setError('Failed to launch Spark app: invalid response');
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
