@@ -22,6 +22,7 @@
 - [ ] Verifying MCP socket connection
 - [ ] Implementing proper plugin discovery system
 - [ ] Documenting Snack & Relic Specification
+- [ ] Documenting uCode1 128-Character ANSI Set + Emoji Overlays + Word Aliases
 
 ### 📌 Upcoming
 - [ ] Add comprehensive logging system
@@ -94,6 +95,12 @@
 - [ ] Extend `.udx` parser to support Cell mapping
 - [ ] Modify feed spool archiving to use Cells
 - [ ] Add Cube storage format for SnackBox packing
+
+### Lexicon & Character System
+- [ ] Implement 128-Character ANSI Set
+- [ ] Add Emoji Overlays for each slot
+- [ ] Add Word Aliases for each slot
+- [ ] Implement rendering priority (emoji > word > teletext > ANSI)
 
 ---
 
