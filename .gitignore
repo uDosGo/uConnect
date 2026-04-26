@@ -1,15 +1,32 @@
+# Runtime data
+.local/
+.config/
+
+# Tool symlinks
+Vendor/
+Tools/*
+
+# Build artifacts
+*.log
+target/
+dist/
+node_modules/
+.DS_Store
+
+# IDE files
+.idea/
+.vscode/
+
+# Legacy
 .compost/
 .state/
 Sandbox/
 _deprecated/
 Vendor/.legacy/
+
+# Rust/Cargo
 **/target/
 **/node_modules/
-.DS_Store
-*.log
+
+# JavaScript
 *.tmp
-*.pid
-.idea/
-.vscode/
-Vendor/
-Tools/*
