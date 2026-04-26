@@ -109,6 +109,11 @@
 - [ ] Add Yarnspinner Lexicon Lookup
 - [ ] Add CLI commands for Lexicon & Yarnspinner
 
+### uCode1 to uCode2 Progression
+- [ ] Document uCode1 to uCode2 progression
+- [ ] Plan uCode2 implementation
+- [ ] Update roadmap for uCode2
+
 ---
 
 ## Phase 5: Testing & Documentation (Month 13-15)
