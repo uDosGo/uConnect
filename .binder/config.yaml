@@ -1,0 +1,9 @@
+version: 1
+name: uDosGo Master Binder
+type: binder
+master: true
+state_path: .state/
+legacy_path: .legacy/
+snacks_path: .state/snacks/
+
+sub_binders: []
