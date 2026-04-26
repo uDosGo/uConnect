@@ -102,6 +102,13 @@
 - [ ] Add Word Aliases for each slot
 - [ ] Implement rendering priority (emoji > word > teletext > ANSI)
 
+### Lexicon + Yarnspinner Integration
+- [ ] Implement Command Slots (0-31)
+- [ ] Implement Snack Slots (32-63)
+- [ ] Implement Alias Slots (96-127)
+- [ ] Add Yarnspinner Lexicon Lookup
+- [ ] Add CLI commands for Lexicon & Yarnspinner
+
 ---
 
 ## Phase 5: Testing & Documentation (Month 13-15)
