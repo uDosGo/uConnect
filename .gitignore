@@ -11,3 +11,5 @@ Vendor/.legacy/
 *.pid
 .idea/
 .vscode/
+Vendor/
+Tools/*
