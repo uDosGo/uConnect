@@ -30,3 +30,9 @@ Vendor/.legacy/
 
 # JavaScript
 *.tmp
+target/
+**/target/
+target/
+**/target/
+target/
+**/target/
