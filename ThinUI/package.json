@@ -1,27 +1,25 @@
 {
   "name": "thinui",
-  "private": true,
   "version": "0.1.0",
-  "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "node scripts/start-dev.cjs",
-    "vite": "vite",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "tauri": "tauri",
-    "stop": "node scripts/stop-dev.cjs"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tauri-apps/api": "^2.10.1",
+    "nes.css": "^2.2.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.0.0",
-    "@tauri-apps/cli": "^2.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.2.0",
-    "typescript": "^5.0.2",
-    "vite": "^5.0.0"
+    "@tailwindcss/postcss": "^4.2.4",
+    "@tauri-apps/cli": "^2.10.1",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^4.2.4",
+    "vite": "^5.2.0"
   }
 }

@@ -1,137 +1,199 @@
-uDosGo Project Structure
-========================
+# uDos Ecosystem - Current Structure (April 2024)
 
-Generated: April 25, 2024
+## 🌐 High-Level Overview
 
-Root Directory: /Users/fredbook/Code/uDosGo/
+The uDos ecosystem has been completely restructured into a modular, extensible platform
+with clear separation of concerns between core platform, tools, and development framework.
 
-├── ThinUI/                  # ThinUI Dashboard (Tauri + React)
-│   ├── ARCHITECTURE.md
-│   ├── Cargo.toml
-│   ├── DEMO_SUMMARY.md
-│   ├── DOCUMENTATION.md
-│   ├── INTEGRATION_GUIDE.md
-│   ├── PLUGIN_THEME_GUIDE.md
-│   ├── PROGRESS_SUMMARY.md
-│   ├── RETRO_ANALYSIS.md
-│   ├── RETRO_SPEC.md
-│   ├── launch.sh
-│   ├── package.json
-│   ├── run-thinui.sh
-│   ├── src/                  # React source code
-│   ├── src-tauri/            # Tauri backend
-│   └── ui/                   # UI components
+## 📁 Directory Structure
+
+```
+~/Code/
+├── DevStudio/              # 🎛️ Development Framework
+│   ├── vibe-skills/        # Development tools (bash-doctor, build-guide, etc.)
+│   ├── config.yaml         # Global configuration
+│   ├── config.json        # Tool configuration
+│   └── docs/               # Development documentation
 │
-├── uCode1/                  # Core CLI and Services
-│   ├── Cargo.toml
-│   ├── Cargo.lock
-│   ├── core/               # Core functionality
-│   │   └── src/
-│   ├── mcp/                # Model Context Protocol server
-│   │   └── src/
-│   ├── feed-spool/         # RSS/Atom feed management
-│   │   └── src/
-│   ├── ok-agent/           # OK Intent Assistant
-│   │   └── src/
-│   ├── spatial/            # Geospatial operations
-│   │   └── src/
-│   ├── tui/                # Terminal UI components
-│   │   └── src/
-│   ├── usystem/            # Dynamic command system
-│   │   └── src/
-│   ├── vault-bridge/       # Vault integration
-│   │   └── src/
-│   └── udos-cli/           # Main CLI launcher
-│       └── src/
+├── OkAgentDigital/         # 🧰 Tools & Applications
+│   ├── ThinUI/             # 🖥️ UI Shell (standalone Tauri app)
+│   │   ├── src/            # Svelte/React components
+│   │   ├── src-tauri/      # Tauri backend
+│   │   └── compiled/       # Pre-built binaries
+│   │
+│   ├── Hivemind/           # 🧠 Collaborative Intelligence
+│   │   ├── core/           # Core engine
+│   │   └── vibe-skills/    # Hivemind-specific skills
+│   │
+│   ├── Re3Engine/          # 🤖 Reasoning Engine
+│   │   ├── core/           # LLM integration
+│   │   └── vibe-skills/    # Re3Engine skills
+│   │
+│   └── PublishLane/        # 📦 Publishing Pipeline
+│       ├── core/           # Build system
+│       └── vibe-skills/    # Publishing skills
 │
-├── retro-core/             # Core Retrospective Tools
-│   ├── frameworks/
-│   ├── templates/
-│   └── utils/
-│
-├── retro-final/            # Final Retrospective
-│   ├── summaries/
-│   └── conclusions/
-│
-├── Registry/               # Plugin Registry
-│   ├── plugins/
-│   ├── themes/
-│   └── extensions/
-│
-├── Sandbox/                # Testing Environment (gitignored)
-│   ├── experiments/
-│   └── prototypes/
-│
-├── scripts/                # Utility Scripts
-│   ├── clean-compost.sh
-│   ├── health-check.sh
-│   ├── promote-plugin.sh
-│   └── README.md
-│
-├── docs/                   # Documentation
-│   ├── ThinUI-PLUGIN-PROMOTION.md
-│   ├── architecture/
-│   ├── guides/
-│   └── reference/
-│
-├── Vendor/                # Vendor Code (tracked, except .legacy)
-│   └── .legacy/            # Legacy vendor code (gitignored)
-│
-├── _deprecated/            # Archived Directories (gitignored)
-│   ├── Connect-archive/
-│   └── retro-blitz/
-│
-├── README.md
-├── structure.txt           # This File
-├── PROJECT_STATUS_REPORT.md
-├── STEP_2_SUMMARY.md
-├── ROADMAP_UI_UX.md
-├── MIGRATION_COMPLETE.md
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── Makefile
-└── .gitignore
+└── uDosGo/                # 🏗️ Core Platform
+    ├── uCode1/              # Core logic (Rust)
+    │   ├── rust-skills/      # Performance-critical Rust skills
+    │   │   ├── theme-switcher/  # UI theme management
+    │   │   └── snack-launcher/  # Container management
+    │   │
+    │   └── vibe-skills/     # Script-based skills
+    │       ├── system/        # System-level automation
+    │       │   └── backup-manager/ # Backup operations
+    │       └── user/          # User-facing scripts
+    │
+    ├── orchestrator/       # 🎯 Central coordination
+    │   ├── mcp-router/      # Route MCP messages
+    │   ├── skill-coordinator/ # Manage skill execution
+    │   └── event-bus/       # Event-driven architecture
+    │
+    ├── ThinUI/ -> ../../OkAgentDigital/ThinUI  # 🔗 External reference
+    ├── docs/                # 📚 Comprehensive documentation
+    ├── scripts/            # 🛠️ Utility scripts
+    └── .vibe/               # 🎛️ Vibe CLI configuration
 
-Key Directories:
---------------
-1. ThinUI/          - Main dashboard application
-2. uCode1/          - Core CLI and services
-3. docs/            - All documentation
-4. scripts/         - Utility and automation scripts
-5. Vendor/          - Vendor code (tracked, except .legacy)
+~/Vault/                  # 🗃️ User Data
+└── .vibe/                # User skills
+    ├── skills/            # Personal productivity skills
+    │   ├── note-taker/     # Note taking
+    │   ├── vault-tidy/     # Vault organization
+    │   └── skill-manager.sh # Skill discovery/execution
+    │
+    └── logs/             # Execution logs
+```
 
-Hidden/Managed Directories:
---------------------------
-- ~/.udos/          - State database and configuration
-- ~/Code/Vault/     - Vault storage system (can be inside repo, submodule, or external)
-- .compost/         - Deleted files (30-day TTL)
-- .state/           - Working files and caches
-- Sandbox/          - Testing environment (gitignored)
-- _deprecated/      - Archived directories (gitignored)
+## 🔧 Key Components
 
-Build Artifacts (Excluded from tree):
------------------------------------
-- target/           - Rust build outputs
-- node_modules/    - Node.js dependencies
-- dist/             - Build distributions
-- .git/             - Git repository
-- .DS_Store         - macOS metadata
+### 1. uDosGo (Core Platform)
+- **Purpose**: Core business logic, skill execution, MCP server
+- **Language**: Rust
+- **Skills**: Rust skills (performance) + Vibe skills (flexibility)
+- **Integration**: References external tools via symlinks
 
-Vendor Notes:
------------
-The Vendor folder can be configured in three ways:
-1. **Inside the repo root** (e.g., `uDosGo/Vendor/`) - Useful for forking new work with an audit trail
-2. **As a submodule** (e.g., `git submodule add <vendor-repo> Vendor`) - Allows sharing across projects
-3. **Completely outside any repo** (e.g., `~/Code/Vendor/`) - Local-only, not tracked by Git
+### 2. OkAgentDigital (Tools)
+- **Purpose**: Standalone applications that integrate with uDosGo
+- **Tools**: ThinUI, Hivemind, Re3Engine, PublishLane
+- **Integration**: MCP sockets for communication
+- **Development**: Independent lifecycle and versioning
 
-**Current Configuration:** Vendor is located at `uDosGo/Vendor/` (inside the repo, tracked by Git except for `Vendor/.legacy/`).
+### 3. DevStudio (Development)
+- **Purpose**: Development tools and global configuration
+- **Skills**: Development-focused skills (bash-doctor, build-guide)
+- **Configuration**: Global settings for all components
 
-Vault Notes:
------------
-The Vault folder is always located at `~/Code/Vault/` (external to the repo). It is not tracked by Git and serves as a local-only storage system for sensitive or large files.
+### 4. User Skills (Personal)
+- **Purpose**: Personal productivity and automation
+- **Location**: `~/Vault/.vibe/skills/`
+- **Examples**: note-taker, vault-tidy, data-indexer
 
-Total Directories: 40+
-Total Files: 200+
-Lines of Code: ~20,000+
+## 🔄 Communication Flow
 
-Last Updated: April 25, 2024
+```
+ThinUI → MCP → Orchestrator → uCode1 → Skills
+          ← ←           ← ←
+```
+
+All components communicate via **MCP (Message Control Protocol)** using Unix sockets:
+- Core: `~/Code/Vault/.uds/mcp.sock`
+- Re3Engine: `~/.uds/re3engine.sock`
+- Orchestrator: `~/Code/Vault/.uds/orchestrator.sock`
+
+## 📊 Skill Types
+
+| Type | Location | Purpose | Example |
+|------|----------|---------|---------|
+| **Rust Skills** | `uCode1/rust-skills/` | Performance-critical | `theme-switcher` |
+| **Vibe Skills** | `uCode1/vibe-skills/` | Script-based tasks | `backup-manager` |
+| **User Skills** | `~/Vault/.vibe/skills/` | Personal workflows | `note-taker` |
+| **Tool Skills** | `OkAgentDigital/*/vibe-skills/` | Tool-specific | `hivemind-analyze` |
+
+## 🚀 Development Workflow
+
+### Adding New Tools
+1. Create repository in OkAgentDigital organization
+2. Implement MCP interface for communication
+3. Add tool-specific skills in `vibe-skills/`
+4. Reference from uDosGo as external dependency
+5. Document integration points
+
+### Building Components
+```bash
+# Core platform
+cd ~/Code/uDosGo
+cargo build --release
+
+# ThinUI
+cd ~/Code/OkAgentDigital/ThinUI
+npm run tauri build
+
+# All tools
+cd ~/Code/OkAgentDigital/Hivemind
+cargo build --release
+```
+
+## 📦 Configuration Files
+
+### Global Configuration
+```yaml
+# ~/Code/DevStudio/config.yaml
+global:
+  mcp_sockets:
+    core: "~/Code/Vault/.uds/mcp.sock"
+    re3engine: "~/.uds/re3engine.sock"
+    orchestrator: "~/Code/Vault/.uds/orchestrator.sock"
+```
+
+### Project Configuration
+```yaml
+# ~/Code/uDosGo/udos-config.yaml
+tools:
+  thinui:
+    type: external
+    path: "../OkAgentDigital/ThinUI"
+  hivemind:
+    type: external
+    path: "../OkAgentDigital/Hivemind"
+```
+
+## 🎯 Benefits
+
+1. **Independent Development**: Tools can evolve separately
+2. **Clear Boundaries**: UI, logic, and tools separated
+3. **Technology Flexibility**: Best tool for each job
+4. **Distribution Options**: Tools can be distributed independently
+5. **Scalability**: Easy to add new tools
+6. **Maintainability**: Clear separation of concerns
+
+## 📚 Documentation
+
+- `ECOSYSTEM_SUMMARY.md` - Complete ecosystem overview
+- `MASTER_ARCHITECTURE_GUIDE.md` - Master architecture guide
+- `ARCHITECTURE_V2.md` - New architecture design
+- `THINUI_SETUP_GUIDE.md` - ThinUI setup instructions
+- `RUST_VS_VIBE_SKILLS.md` - Skill type comparison
+
+## 🔮 Future Roadmap
+
+### Short-term
+- Complete CI/CD for all tools
+- Unified skill marketplace
+- Cross-tool skill discovery
+- Tool version compatibility matrix
+
+### Medium-term
+- Plugin system for tools
+- Unified authentication
+- Performance monitoring
+- Tool health checks
+
+### Long-term
+- AI-powered tool recommendations
+- Automated tool updates
+- Cloud sync for tools
+- Enterprise features
+
+---
+Generated: April 2024
+Last Updated: $(date +%Y-%m-%d)

@@ -4,14 +4,18 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: './',
-  root: 'ui',  // Set the root directory to 'ui'
-  build: {
-    outDir: '../dist',  // Output to parent dist directory
-    emptyOutDir: true,
-  },
+  clearScreen: false,
   server: {
-    port: 4687,
+    port: 1420,
     strictPort: true,
+  },
+  envPrefix: ['VITE_'],
+  css: {
+    postcss: {
+      plugins: [
+        require('@tailwindcss/postcss')({ config: './tailwind.config.js' }),
+        require('autoprefixer'),
+      ],
+    },
   },
 })

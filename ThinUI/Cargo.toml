@@ -1,24 +1,29 @@
 [package]
 name = "thinui"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+authors = ["uDos Team <team@udos.io>"]
+description = "Lightweight GUI renderer for uDos core"
+license = "MIT"
+repository = "https://github.com/OkAgentDigital/ThinUI"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+name = "thinui"
+path = "src/lib.rs"
 
 [dependencies]
-wasm-bindgen = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-thiserror = "1.0"
 log = "0.4"
+env_logger = "0.11"
+tokio = { version = "1", features = ["full", "net"] }
+tauri = { version = "2.0" }
+chrono = "0.4"
+thiserror = "1.0"
 
-[dependencies.web-sys]
-version = "0.3.95"
-features = ["Window", "HtmlCanvasElement", "CanvasRenderingContext2d"]
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
 
-[profile.release]
-opt-level = "s"
-lto = true
-
-
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

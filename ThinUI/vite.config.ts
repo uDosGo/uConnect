@@ -15,8 +15,9 @@ export default defineConfig({
     sourcemap: !!process.env.TAURI_DEBUG,
   },
   server: {
-    port: 1425,
+    port: 1420,
     strictPort: true,
+    host: 'localhost'
   },
   envPrefix: ['VITE_', 'TAURI_'],
   resolve: {

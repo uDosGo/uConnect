@@ -1,23 +1,72 @@
 #!/bin/bash
+# ThinUI Launch Script
+# Handles port configuration and provides visible progress
 
-# Simple ThinUI Launcher - Uses port 7846 to avoid conflicts
+set -e
 
-echo "🧹 Cleaning up any existing processes..."
-killall node 2>/dev/null || true
-killall cargo 2>/dev/null || true
-sleep 1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-echo "📂 Changing to ThinUI directory..."
-cd ~/Code/uDosGo/ThinUI || { echo "Failed to change directory"; exit 1; }
+# Function to show progress spinner
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf "  [%c] %s" "$spinstr" "$2"
+        local spinstr=$temp"${spinstr%?}"
+        sleep $delay
+        printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+    done
+    printf "  [✓] %s\n" "$2"
+}
 
-echo "🚀 Starting ThinUI on port 7846..."
-echo "   Vite will serve on: http://localhost:7846"
-echo "   Tauri window should appear shortly..."
+echo "🚀 Launching ThinUI..."
+echo ""
+
+# Step 1: Check if dependencies are installed
+echo "Step 1/4: Checking dependencies..."
+npm list @tauri-apps/cli > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "  ⚠ Tauri CLI not found. Installing..."
+    npm install --save-dev @tauri-apps/cli &
+    spinner $! "Installing Tauri CLI"
+else
+    echo "  [✓] Dependencies verified"
+fi
+echo ""
+
+# Step 2: Update Tauri configuration
+echo "Step 2/4: Configuring Tauri..."
+if grep -q "7846" src-tauri/tauri.conf.json; then
+    echo "  Updating devUrl to port 1420..."
+    sed -i '' 's/"devUrl": "http:\/\/localhost:7846"/"devUrl": "http:\/\/localhost:1420"/' src-tauri/tauri.conf.json
+    echo "  [✓] Tauri configuration updated"
+else
+    echo "  [✓] Tauri already configured for port 1420"
+fi
+echo ""
+
+# Step 3: Start React dev server
+echo "Step 3/4: Starting React dev server..."
+npm run dev > /tmp/thinui-dev.log 2>&1 &
+DEV_PID=$!
+sleep 3
+
+# Check if dev server started successfully
+if ps -p $DEV_PID > /dev/null; then
+    echo "  [✓] React dev server running on port 1420"
+else
+    echo "  [✗] Failed to start React dev server"
+    cat /tmp/thinui-dev.log
+    exit 1
+fi
+echo ""
+
+# Step 4: Launch Tauri
+echo "Step 4/4: Launching Tauri application..."
+npm run tauri dev
 
 echo ""
-echo "If you see a blank window, wait 10-15 seconds for Vite to compile."
-echo "If it still doesn't work, check the browser console for errors."
-echo ""
-
-# Run in foreground so we can see errors
-cargo tauri dev
+echo "🎉 ThinUI launched successfully!"

@@ -1,9 +1,9 @@
 [package]
-name = "app"
+name = "thinui"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
+description = "ThinUI - uDosGo Thin Client"
+authors = ["Fred Book <fred@book.com>"]
+license = "MIT"
 repository = ""
 edition = "2021"
 rust-version = "1.77.2"
@@ -11,7 +11,7 @@ rust-version = "1.77.2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "app_lib"
+name = "thinui_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -20,7 +20,4 @@ tauri-build = { version = "2.5.6", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-log = "0.4"
 tauri = { version = "2.10.3", features = [] }
-tauri-plugin-log = "2"
-shellexpand = "3.1"
