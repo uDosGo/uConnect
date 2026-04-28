@@ -1,0 +1,21 @@
+[package]
+name = "rustui"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ucode1-vault-bridge = { path = "../../uCode1/vault-bridge" }
+ucode1-ok-agent = { path = "../../uCode1/ok-agent" }
+
+# TUI framework
+ratatui = "0.26"
+crossterm = "0.27"
+
+# Async support
+tokio = { version = "1", features = ["full"] }
+
+# Logging
+log = "0.4"
+
+[dev-dependencies]
+tempfile = "3.10"

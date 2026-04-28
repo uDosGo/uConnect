@@ -1,0 +1,13 @@
+[package]
+name = "udos-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["uDos Team"]
+description = "uDos Core Library - Central components for the uDos platform"
+license = "MIT"
+
+[dependencies]
+# Standard library dependencies
+
+[dev-dependencies]
+# Development dependencies

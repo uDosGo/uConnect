@@ -1,0 +1,29 @@
+[package]
+name = "ceefax-thinui"
+version = "0.1.0"
+edition = "2021"
+authors = ["OkAgentDigital"]
+description = "High-performance teletext rendering engine for ThinUI"
+license = "MIT"
+
+[lib]
+name = "ceefax_thinui"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Graphics
+image = "0.24"
+imageproc = "0.23"
+rgb = "0.8"
+
+# Teletext-specific
+bitflags = "2.0"
+
+# FFI for Python bindings
+pyo3 = { version = "0.20", features = ["extension-module"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
