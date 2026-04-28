@@ -364,6 +364,13 @@
   - [x] TerminalUI high-level application class
   - [x] Cross-platform support (Unix/Windows)
   - [x] RenderConfig for customizable rendering
+- [x] Create CLI commands for Binder and USXD
+  - [x] binder_cli.py with 11 commands (list, show, create, validate, extract, pack, search, tree, info, export, import)
+  - [x] usxd_cli.py with 10 commands (list, show, create, validate, parse, render, map, export, import)
+  - [x] Grid subcommands (parse, render, to-usxd, interactive)
+  - [x] ASCII grid integration in CLI
+  - [x] Component mapping CLI support
+  - [x] Multiple output formats (JSON, YAML, HTML)
 
 ### ThinUI Integration
 - [ ] Add ASCII grid rendering in ThinUI
