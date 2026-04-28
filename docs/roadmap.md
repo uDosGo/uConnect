@@ -103,6 +103,58 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### BBC BASIC Integration Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    BBC BASIC Integration Layer                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │                Matrix Brandy Interpreter               │    │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │    │
+│  │  │  C Core     │  │ VDU Router  │  │ Python      │     │    │
+│  │  │ (Embedded)  │  │ (Redirect)  │  │ Wrapper     │     │    │
+│  │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘     │    │
+│  │         │                │                │             │    │
+│  │         └────────────────┼────────────────┘             │    │
+│  │                          │                              │    │
+│  │                    ┌─────▼─────┐                        │    │
+│  │                    │ LENS Hooks │ ← Variable inspection │    │
+│  │                    │ (Capture)  │   for game state       │    │
+│  │                    └─────┬─────┘                        │    │
+│  │                          │                              │    │
+│  │                    ┌─────▼─────┐                        │    │
+│  │                    │ SKIN Hooks │ ← Visual reskinning   │    │
+│  │                    │ (Reskin)   │   to uCode formats     │    │
+│  │                    └─────┬─────┘                        │    │
+│  └──────────────────────────┼──────────────────────────────┘    │
+│                             │                                    │
+│  ┌──────────────────────────┼──────────────────────────────┐    │
+│  │                    ┌─────▼─────┐                         │    │
+│  │                    │  ThinUI   │                         │    │
+│  │                    │  Renderer │                         │    │
+│  │                    └─────┬─────┘                         │    │
+│  │                          │                               │    │
+│  │         ┌────────────────┼────────────────┐             │    │
+│  │         │                │                │             │    │
+│  │    ┌────▼────┐      ┌─────▼─────┐    ┌─────▼─────┐       │    │
+│  │    │Teletext │      │  USXD    │    │Grid/Layer│       │    │
+│  │    │ 128chr  │      │ Portable │    │  Mapper  │       │    │
+│  │    │ Output  │      │  Layout  │    │          │       │    │
+│  │    └─────────┘      └──────────┘    └──────────┘       │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │              SNACKPACK: Classic Adventures              │    │
+│  │  • ACS - Adventure Construction Set                     │    │
+│  │  • Eamon - Dungeon Designer                             │    │
+│  │  • NetHack - (via tty pipe)                             │    │
+│  │  • Apple Panic - (uCode3 lane)                          │    │
+│  └─────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ### Snack Implementation
 - [x] Create Snack schema and validator
 - [x] Implement Snack execution engine
@@ -116,6 +168,18 @@
 - [x] Add CLI commands: `relic list/show/create/validate/unpack/run/test`
 
 ### Gameplay & Code Emulation System
+
+#### BBC BASIC Integration (uCode1 Core)
+- [ ] Research and select BBC BASIC interpreter (Matrix Brandy)
+- [ ] Fork and modify Matrix Brandy for embedding
+- [ ] Create Python ctypes wrapper for BBC BASIC
+- [ ] Implement basic VDU output redirection
+- [ ] Test with simple BBC BASIC programs
+- [ ] Add variable inspection API for LENS
+- [ ] Implement VDU graphics to ThinUI mapping
+- [ ] Create BBC BASIC library system (SPRITELIB, SOUNDLIB)
+- [ ] Add MCP control protocol integration
+- [ ] Implement Spool export for game state
 
 #### LENS Layer (Looking Into the Game)
 - [ ] Design LENS architecture for memory data extraction
