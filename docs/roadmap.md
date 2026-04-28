@@ -33,12 +33,14 @@
 
 ### 🚧 In Progress
 - [x] **Theme Deployment**: bbcbasic and nesdash default surfaces created
-- [ ] Testing ThinUI with improved error handling
+- [x] **Testing ThinUI with improved error handling**: Fixed GridRenderer stdin handling, all 73 tests passing
 - [ ] Verifying MCP socket connection
 - [ ] Implementing proper plugin discovery system
 - [ ] Documenting Snack & Relic Specification (Python version)
 - [ ] Documenting uCode1 128-Character ANSI Set + Emoji Overlays + Word Aliases
 - [ ] Performance benchmarking: Python vs Rust implementations
+
+**Active Sprint:** [Sprint #6 - MCP Integration & Plugin System](./../SPRINT_PLAN.md)
 
 ### 📌 Upcoming
 - [ ] Add comprehensive logging system
