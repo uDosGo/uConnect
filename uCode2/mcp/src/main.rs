@@ -5,7 +5,7 @@
 
 use std::env;
 use log::{info, error};
-use ucode1_mcp::McpServer;
+use ucode2_mcp::McpServer;
 
 #[tokio::main]
 async fn main() {

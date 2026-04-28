@@ -56,8 +56,8 @@ pub enum McpResponse {
 
 pub struct McpServer {
     socket_path: PathBuf,
-    vault: Arc<Mutex<ucode1_vault_bridge::Vault>>,
-    ok_agent: Arc<Mutex<ucode1_ok_agent::OkAgent>>,
+    vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
+    ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
     running: Arc<Mutex<bool>>,
 }
 
@@ -67,8 +67,8 @@ impl McpServer {
         
         McpServer {
             socket_path,
-            vault: Arc::new(Mutex::new(ucode1_vault_bridge::Vault::new(vault_path, vault_path))),
-            ok_agent: Arc::new(Mutex::new(ucode1_ok_agent::OkAgent::new())),
+            vault: Arc::new(Mutex::new(ucode2_vault_bridge::Vault::new(vault_path, vault_path))),
+            ok_agent: Arc::new(Mutex::new(ucode2_ok_agent::OkAgent::new())),
             running: Arc::new(Mutex::new(false)),
         }
     }
@@ -144,8 +144,8 @@ impl McpServer {
 
     fn handle_connection(
         stream: UnixStream,
-        vault: Arc<Mutex<ucode1_vault_bridge::Vault>>,
-        ok_agent: Arc<Mutex<ucode1_ok_agent::OkAgent>>,
+        vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
+        ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
         running: Arc<Mutex<bool>>,
     ) -> std::io::Result<()> {
         let mut reader = BufReader::new(stream.try_clone()?);

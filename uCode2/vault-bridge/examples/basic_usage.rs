@@ -1,5 +1,5 @@
 // Example demonstrating the SQLite-based vault system
-use ucode1_vault_bridge::Vault;
+use ucode2_vault_bridge::Vault;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create a temporary directory for the example
