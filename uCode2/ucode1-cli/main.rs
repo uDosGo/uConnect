@@ -8,7 +8,7 @@ use ucode2_ok_agent::{OkAgent, Intent};
 use ucode2_mcp::McpServer;
 use ucode2_spatial::{SpatialPoint, MapManager};
 use ucode2_usystem::USystem;
-use rustui;
+// use rustui;  // Temporarily disabled - move to uCode2/tui later
 
 use geo::Point;
 
@@ -318,9 +318,10 @@ async fn main() {
             println!("Press 'q' to quit, '?' for help");
             
             // Run the TUI
-            if let Err(e) = rustui::run_tui(&vault_path).await {
-                eprintln!("TUI error: {}", e);
-            }
+            // if let Err(e) = rustui::run_tui(&vault_path).await {
+            //     eprintln!("TUI error: {}", e);
+            // }
+            eprintln!("TUI mode temporarily disabled - use ThinUI instead");
         }
     }
 
@@ -565,10 +566,11 @@ fn handle_thinui_build_command() {
 async fn handle_tui_command(vault_path: &str) {
     println!("Launching TUI...");
     
-    match rustui::run_tui(vault_path).await {
-        Ok(_) => println!("TUI exited normally"),
-        Err(e) => eprintln!("TUI error: {}", e),
-    }
+    // match rustui::run_tui(vault_path).await {
+    //     Ok(_) => println!("TUI exited normally"),
+    //     Err(e) => eprintln!("TUI error: {}", e),
+    // }
+    eprintln!("TUI mode temporarily disabled - use ThinUI instead");
 }
 
 /// Handle the help command using uSystem
