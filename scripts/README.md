@@ -130,7 +130,7 @@ This directory contains utility scripts for managing the uDos ecosystem.
 
 All scripts log to:
 - Console (stdout/stderr)
-- Feed spool (`~/Code/Vault/.uds/state/feed_spool/replies.jsonl`)
+- Feed spool (`~/Code/Vault/.local/state/feed_spool/replies.jsonl`)
 
 ## Development
 
@@ -164,7 +164,7 @@ done
 echo "Script executed successfully"
 
 # Log to feed spool
-echo '{"type":"move","action":"script.name","result":"success"}' >> ~/Code/Vault/.uds/state/feed_spool/replies.jsonl
+echo '{"type":"move","action":"script.name","result":"success"}' >> ~/Code/Vault/.local/state/feed_spool/replies.jsonl
 ```
 
 ## Best Practices

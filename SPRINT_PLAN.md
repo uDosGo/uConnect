@@ -32,7 +32,7 @@
 
 #### 1. MCP Socket Connection Verification
 - [ ] Test MCP server startup with `cargo run`
-- [ ] Verify Unix socket creation at `~/vault/.uds/mcp.sock`
+- [ ] Verify Unix socket creation at `~/vault/.local/mcp.sock`
 - [ ] Test MCP client connection using netcat or custom test script
 - [ ] Implement simple MCP tool call test (vault_read, vault_write)
 - [ ] Document MCP testing procedure

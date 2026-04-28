@@ -80,7 +80,7 @@ udos --dev note create test.md
 ```
 
 This isolates:
-- Logs to `~/.uds/dev/`
+- Logs to `~/.local/dev/`
 - State from production
 - Safe experimentation
 
@@ -152,13 +152,13 @@ cd ~/Code/uDosGo
 
 ```bash
 # Development logs
-cat ~/.uds/dev/*.log
+cat ~/.local/dev/*.log
 
 # Production logs
-cat ~/.uds/*.log
+cat ~/.local/*.log
 
 # Feed spool (all events)
-tail -f ~/Code/Vault/.uds/state/feed_spool/replies.jsonl
+tail -f ~/Code/Vault/.local/state/feed_spool/replies.jsonl
 ```
 
 ### Common Issues
@@ -172,7 +172,7 @@ udos daemon status
 udos daemon start
 
 # Test connection
-echo '{"Ping": null}' | nc -U ~/.uds/mcp.sock
+echo '{"Ping": null}' | nc -U ~/.local/mcp.sock
 ```
 
 **Issue: Plugin not loading**
@@ -233,7 +233,7 @@ rustup update
 
 ```bash
 # Fix socket permissions
-chmod 777 ~/.uds/mcp.sock
+chmod 777 ~/.local/mcp.sock
 
 # Fix directory permissions
 chmod -R 755 ~/Code/Vault

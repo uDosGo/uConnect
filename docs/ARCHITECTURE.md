@@ -104,7 +104,7 @@ A log of all system events:
 - **Move Log**: User actions (audit trail)
 - **Code Log**: System events (debugging)
 
-**Location**: `~/Code/Vault/.uds/feed.json`
+**Location**: `~/Code/Vault/.local/feed.json`
 
 ### Story Format
 

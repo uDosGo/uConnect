@@ -70,7 +70,7 @@ uDos implements a dual logging system designed for clarity, auditability, and pe
 
 Both log types are stored in the **Feed Spool** as structured entries:
 
-**Location:** `~/Code/Vault/.uds/state/feed_spool/replies.jsonl`
+**Location:** `~/Code/Vault/.local/state/feed_spool/replies.jsonl`
 
 **Benefits:**
 - Queryable with `udos feed search --tag <type>`
@@ -100,7 +100,7 @@ Only the hash is stored, protecting privacy while enabling verification.
 ## Development Mode Isolation
 
 When `--dev` flag is used:
-- Logs go to `~/.uds/dev/`
+- Logs go to `~/.local/dev/`
 - State isolated from production
 - Safe experimentation environment
 
@@ -233,7 +233,7 @@ graph LR
 
 2. **Monitor logs:**
    ```bash
-   tail -f ~/Code/Vault/.uds/state/feed_spool/replies.jsonl
+   tail -f ~/Code/Vault/.local/state/feed_spool/replies.jsonl
    ```
 
 3. **Clean regularly:**
@@ -269,7 +269,7 @@ udos daemon status
 udos daemon restart
 
 # Verify feed spool exists
-ls -la ~/Code/Vault/.uds/state/feed_spool/
+ls -la ~/Code/Vault/.local/state/feed_spool/
 ```
 
 ### High Log Volume

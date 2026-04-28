@@ -37,7 +37,7 @@ Use `--dev` flag with any `udos` command to isolate logs and state:
 udos --dev note create test.md
 ```
 
-Dev logs go to `~/.uds/dev/` and are never synced remotely.
+Dev logs go to `~/.local/dev/` and are never synced remotely.
 
 ## Logging
 
