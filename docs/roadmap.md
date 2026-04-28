@@ -155,11 +155,61 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+### CeefaxThinUI Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     CeefaxThinUI (Tauri App)                    │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │                    Frontend (WebView)                    │    │
+│  │  • Canvas 2D Mode 7 renderer (JS)                       │    │
+│  │  • Teletext page navigation (3-digit codes)             │    │
+│  │  • Subtitle / reveal / flash animation                  │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                              ▲                                   │
+│                              │ IPC (Tauri events)                │
+│                              ▼                                   │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │              Backend (Rust Core)                         │    │
+│  ├─────────────────────────────────────────────────────────┤    │
+│  │  • Teletext page store (HashMap<u16, Page>)             │    │
+│  │  • Mode 7 character decoder                             │    │
+│  │  • Level 1.5 enhancement (basic graphics)               │    │
+│  │  • Feed consumer (live updates)                         │    │
+│  │  • Spool importer/exporter (JSON/Binary)                │    │
+│  │  • MCP command handler                                   │    │
+│  │  • CLI parser (clap)                                    │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                              ▲                                   │
+│                              │                                   │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │              uDOS Integration Layer                      │    │
+│  │  • Subscribe to uDOS Feed (e.g., "teletext/output")     │    │
+│  │  • Emit Spool snapshots to uDOS                         │    │
+│  │  • Respond to MCP commands (NEXT, SUB, INDEX, REVEAL)   │    │
+│  │  • Bridge BBC BASIC VDU codes → Teletext pages          │    │
+│  └─────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ### Snack Implementation
 - [x] Create Snack schema and validator
 - [x] Implement Snack execution engine
 - [x] Add Snack dependency resolution
 - [x] Add CLI commands: `snack list/show/create/validate/run/test`
+
+### CeefaxThinUI Implementation (Teletext Renderer)
+- [ ] Research and document teletext specifications
+- [ ] Create Rust core with teletext page structure
+- [ ] Implement Mode 7 rendering with 64 colors
+- [ ] Add VDU command processing for BBC BASIC
+- [ ] Build Tauri app with Canvas renderer
+- [ ] Implement CLI interface with export options
+- [ ] Add Feed subscription for live teletext
+- [ ] Implement Spool import/export functionality
+- [ ] Add MCP command protocol integration
+- [ ] Create BBC BASIC bridge for VDU output
 
 ### Relic Implementation
 - [x] Create Relic binary format
