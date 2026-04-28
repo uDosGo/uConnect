@@ -343,7 +343,16 @@
   - [x] Auto component detection
   - [x] JSON serialization/deserialization
   - [x] Structured data conversion
-- [ ] Add component mapping support
+- [x] Add component mapping support
+  - [x] ComponentMapper class with rule-based mapping
+  - [x] ComponentType enum (BUTTON, TEXT, INPUT, etc.)
+  - [x] ThinUIProperties for rendering configuration
+  - [x] Automatic character-to-component mapping
+  - [x] Box drawing to border style mapping
+  - [x] Teletext to style mapping
+  - [x] Multiple layout formats (grid, teletext, HTML)
+  - [x] Hierarchical component tree generation
+  - [x] Custom mapping rules with priority
 - [ ] Implement grid rendering in TUI
 
 ### ThinUI Integration
