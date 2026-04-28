@@ -4,7 +4,7 @@
 
 **Version**: 1.0.0 (Pre-Alpha)
 **Last Updated**: 2026-04-26
-**Current Focus**: Python core migration, stabilizing architecture
+**Current Focus**: Python core migration, ASCII grid parser implementation, stabilizing architecture
 
 ### Core Version Boundaries
 
@@ -300,10 +300,14 @@
 ## Phase 3: Binder & MDX Runtime (Month 7-9)
 
 ### Binder Implementation
-- [ ] Create Binder structure and configuration
-- [ ] Implement sub-binder inheritance
-- [ ] Add Binder state management
-- [ ] Implement Binder registry
+- [x] Create Binder structure and configuration
+- [x] Implement sub-binder inheritance
+- [x] Add Binder state management
+- [x] Implement Binder registry
+- [x] Add Binder serialization/deserialization
+- [x] Implement Binder integrity verification
+- [ ] Create Binder CLI commands
+- [ ] Implement Binder dependency resolution
 
 ### MDX Runtime
 - [ ] Support `<Snack>` shortcode in MDX files
@@ -322,8 +326,23 @@
 ## Phase 4: USXD/OBF & ASCII Grid Parser (Month 10-12)
 
 ### USXD/OBF Implementation
-- [ ] Create USXD/OBF format specification
-- [ ] Implement ASCII grid parser
+- [x] Create USXD/OBF format specification
+- [x] Implement USXD document structure
+- [x] Add USXD section management
+- [x] Create USXD registry system
+- [x] Add USXD serialization/deserialization
+- [x] Implement USXD integrity verification
+- [x] Add USXD format converters (JSON/YAML)
+- [x] Implement ASCII grid parser
+  - [x] Simple ASCII grid parsing
+  - [x] Box drawing character support
+  - [x] Teletext block character support
+  - [x] Markdown table parsing
+  - [x] CSV parsing
+  - [x] Component detection and parsing
+  - [x] Auto component detection
+  - [x] JSON serialization/deserialization
+  - [x] Structured data conversion
 - [ ] Add component mapping support
 - [ ] Implement grid rendering in TUI
 
