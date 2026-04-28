@@ -3,8 +3,8 @@
 ## Current Status
 
 **Version**: 1.0.0 (Pre-Alpha)
-**Last Updated**: 2026-04-26
-**Current Focus**: Python core migration, ASCII grid parser implementation, stabilizing architecture
+**Last Updated**: 2026-04-29
+**Current Focus**: Python core migration, ASCII grid parser implementation, stabilizing architecture, theme system deployment
 
 ### Core Version Boundaries
 
@@ -27,8 +27,12 @@
 - [x] **Python Core Migration**: Successfully converted Rust core to Python for uCode1
 - [x] **uCode3 Creation**: Migrated Rust core to dedicated uCode3 package
 - [x] **Version Boundaries**: Established clear Python/Rust core separation
+- [x] **Theme System**: Created default surfaces (bbcbasic, nesdash)
+- [x] **bbcbasic**: BBC BASIC terminal surface with C64 styling
+- [x] **nesdash**: NES.css dashboard/menu surface for uCode1
 
 ### 🚧 In Progress
+- [x] **Theme Deployment**: bbcbasic and nesdash default surfaces created
 - [ ] Testing ThinUI with improved error handling
 - [ ] Verifying MCP socket connection
 - [ ] Implementing proper plugin discovery system
