@@ -1,0 +1,33 @@
+[package]
+name = "ucode1-cli"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "ucode1"
+path = "main.rs"
+
+[dependencies]
+# uCode2 crates
+ucode2-core = { path = "../core" }
+ucode2-mcp = { path = "../mcp" }
+ucode2-vault-bridge = { path = "../vault-bridge" }
+ucode2-ok-agent = { path = "../ok-agent" }
+ucode2-spatial = { path = "../spatial" }
+ucode2-feed-spool = { path = "../feed-spool" }
+ucode2-usystem = { path = "../usystem" }
+ucode2-grid-core = { path = "../grid-core" }
+
+# External dependencies
+clap = { version = "4.0", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+env_logger = "0.11"
+shellexpand = "3.1"
+geo = "0.27"
+rustui = { path = "../../OkAgentDigital/RusTui" }
+
+[features]
+default = []

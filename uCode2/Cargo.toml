@@ -5,6 +5,10 @@ members = [
     "vault-bridge",
     "ok-agent",
     "grid-core",
+    "spatial",
+    "feed-spool",
+    "usystem",
+    "ucode1-cli",
 ]
 resolver = "2"
 

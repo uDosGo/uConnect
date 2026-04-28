@@ -3,11 +3,11 @@ use std::path::Path;
 use std::fs;
 use std::collections::HashMap;
 use std::io::Write;
-use ucode1_vault_bridge::Vault;
-use ucode1_ok_agent::{OkAgent, Intent};
-use ucode1_mcp::McpServer;
-use ucode1_spatial::{SpatialPoint, MapManager};
-use ucode1_usystem::USystem;
+use ucode2_vault_bridge::Vault;
+use ucode2_ok_agent::{OkAgent, Intent};
+use ucode2_mcp::McpServer;
+use ucode2_spatial::{SpatialPoint, MapManager};
+use ucode2_usystem::USystem;
 use rustui;
 
 use geo::Point;
@@ -18,10 +18,10 @@ mod modes;
 use modes::AppMode;
 
 mod mcp;
-use ucode1_mcp::tools::*;
-use ucode1_mcp::tools::spark_launch::{SparkLaunchInput, SparkLaunchOutput};
-use ucode1_mcp::tools::agentic_workflow_create::{AgenticWorkflowCreateInput, AgenticWorkflowCreateOutput};
-use ucode1_mcp::tools::system_status::{SystemStatusInput, SystemStatusOutput};
+use ucode2_mcp::tools::*;
+use ucode2_mcp::tools::spark_launch::{SparkLaunchInput, SparkLaunchOutput};
+use ucode2_mcp::tools::agentic_workflow_create::{AgenticWorkflowCreateInput, AgenticWorkflowCreateOutput};
+use ucode2_mcp::tools::system_status::{SystemStatusInput, SystemStatusOutput};
 
 #[tokio::main]
 async fn main() {
@@ -599,7 +599,7 @@ fn handle_help_markdown_command(usystem: &USystem) {
 }
 
 async fn handle_feed_command(matches: &clap::ArgMatches, vault_path: &str) {
-    let spool = ucode1_feed_spool::FeedSpool::new(vault_path);
+    let spool = ucode2_feed_spool::FeedSpool::new(vault_path);
     spool.ensure_directory().unwrap_or_else(|e| {
         eprintln!("Failed to create feeds directory: {}", e);
     });

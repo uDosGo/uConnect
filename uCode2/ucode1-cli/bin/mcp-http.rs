@@ -1,4 +1,4 @@
-// uCode1/src/bin/mcp-http.rs
+// uCode2/src_ucode1/bin/mcp-http.rs
 // HTTP wrapper for MCP tools using axum
 
 use axum::{
@@ -13,14 +13,14 @@ use std::net::SocketAddr;
 use log::error;
 
 // Import your existing MCP tools directly
-use ucode1_mcp::tools::spark_launch::{spark_launch, SparkLaunchInput};
-use ucode1_mcp::tools::agentic_workflow_create::{agentic_workflow_create, AgenticWorkflowCreateInput};
-use ucode1_mcp::tools::flat_data_schedule::{flat_data_schedule, FlatDataScheduleInput};
-use ucode1_mcp::tools::copernicus_index::{copernicus_index, CopernicusIndexInput};
-use ucode1_mcp::tools::discover_repo::{discover_repo, DiscoverRepoInput};
-use ucode1_mcp::tools::system_status::{system_status, SystemStatusInput};
-use ucode1_mcp::tools::plugin_list::plugin_list;
-use ucode1_mcp::tools::vault_tools::{
+use ucode2_mcp::tools::spark_launch::{spark_launch, SparkLaunchInput};
+use ucode2_mcp::tools::agentic_workflow_create::{agentic_workflow_create, AgenticWorkflowCreateInput};
+use ucode2_mcp::tools::flat_data_schedule::{flat_data_schedule, FlatDataScheduleInput};
+use ucode2_mcp::tools::copernicus_index::{copernicus_index, CopernicusIndexInput};
+use ucode2_mcp::tools::discover_repo::{discover_repo, DiscoverRepoInput};
+use ucode2_mcp::tools::system_status::{system_status, SystemStatusInput};
+use ucode2_mcp::tools::plugin_list::plugin_list;
+use ucode2_mcp::tools::vault_tools::{
     vault_read, vault_write, vault_list, vault_search, vault_delete, vault_metadata,
     VaultReadInput, VaultWriteInput, VaultListInput, VaultSearchInput, VaultDeleteInput, VaultMetadataInput
 };
