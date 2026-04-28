@@ -1,0 +1,27 @@
+[package]
+name = "ucode2-core"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "ucode2_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ucode2-core"
+path = "src/main.rs"
+
+[dependencies]
+# Workspace dependencies
+clap = { workspace = true }
+serde = { workspace = true }
+serde_yaml = { workspace = true }
+serde_json = { workspace = true }
+
+# Direct dependencies
+ucode2-grid-core = { path = "../grid-core" }
+base64 = "0.22.1"
+byteorder = "1.5.0"
+
+[features]
+default = []
