@@ -1,32 +1,54 @@
-# uDos Documentation
+# uDos Go – Home Repository
 
-Public documentation for the uDos platform.
+This repository contains **all uDos components as submodules**. Use it to clone the entire ecosystem.
 
-## Structure
-
-```
-docs/
-├── user-guide/       # End-user documentation
-├── developer-guide/  # Developer documentation
-├── api-reference/    # API documentation
-├── tutorials/        # Step-by-step tutorials
-└── architecture/     # System architecture
-```
-
-## Building Documentation
+## Quick Start
 
 ```bash
-# Build for GitHub Pages
-./scripts/build-docs.sh
-
-# Serve locally for testing
-./scripts/serve-docs.sh
+git clone --recursive git@github.com:uDosGo/home-repo.git ~/Code/uDosGo
+cd ~/Code/uDosGo
+make doctor          # verify environment
+make build           # compile everything
+make dev             # start core + ThinUI + Re3Chat
 ```
 
-## Publishing
+## Directory Structure
 
-Documentation is automatically published to GitHub Pages from the `docs/` directory.
+- `uCode1/` – Core CLI, MCP server, feed spool (production)
+- `uCode2/` – Web publishing (future)
+- `ThinUI/` – Graphical dashboard (Tauri + Blitz)
+- `SonicExpress/` – Packaging & installer (new)
+- `DevStudio/` – Internal dev tooling (private submodule)
+- `Registry/` – Promoted plugins/themes
+- `Sandbox/` – Local experiments (ignored)
+- `docs/` – Shared documentation
 
-## Contributing
+## Updating
 
-See `CONTRIBUTING.md` in the main repository.
+```bash
+make update
+```
+
+## Development Mode
+
+Use `--dev` flag with any `udos` command to isolate logs and state:
+
+```bash
+udos --dev note create test.md
+```
+
+Dev logs go to `~/.uds/dev/` and are never synced remotely.
+
+## Logging
+
+Every command execution is recorded in the feed spool (`replies.jsonl`). Agents can query:
+
+```bash
+udos feed search --tag event,command
+```
+
+See `docs/logging.md` for schema.
+
+## License
+
+MIT (unless otherwise noted in submodules)
