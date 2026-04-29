@@ -2,7 +2,7 @@
 """
 MCP Socket Connection Test Script
 
-This script tests the uCode1 MCP server by:
+This script tests the uCode2 MCP server by:
 1. Starting the MCP server
 2. Connecting to the Unix socket
 3. Sending test requests
@@ -24,9 +24,10 @@ YELLOW = '\033[93m'
 BLUE = '\033[94m'
 RESET = '\033[0m'
 
-MCP_SERVER_BIN = "/Users/fredbook/Code/uDosGo/uCode1/target/debug/mcp-server"
-SOCKET_PATH = "/Users/fredbook/vault/.local/mcp.sock"
-VAULT_PATH = "/Users/fredbook/vault"
+# Updated: MCP server is now in uCode2
+MCP_SERVER_BIN = "/Users/fredbook/Code/uDosGo/uCode2/target/debug/mcp-server"
+SOCKET_PATH = "~/.local/mcp.sock"  # Relative to home directory
+VAULT_PATH = "~/vault"
 
 def log(message, color=RESET):
     """Log a message with color"""
@@ -278,7 +279,7 @@ def test_shutdown():
 def main():
     """Run all MCP connection tests"""
     print("=" * 60)
-    print("uCode1 MCP Server Connection Test Suite")
+    print("uCode2 MCP Server Connection Test Suite")
     print("=" * 60)
     
     # Test 0: Check if socket already exists
