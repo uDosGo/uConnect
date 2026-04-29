@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ucode1-vault-bridge = { path = "../../uCode1/vault-bridge" }
-ucode1-ok-agent = { path = "../../uCode1/ok-agent" }
+ucode2-vault-bridge = { path = "../../uCode2/vault-bridge" }
+ucode2-ok-agent = { path = "../../uCode2/ok-agent" }
 
 # TUI framework
 ratatui = "0.26"

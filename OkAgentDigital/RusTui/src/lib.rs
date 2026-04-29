@@ -1,4 +1,4 @@
-// TUI - Terminal User Interface for uCode1
+// TUI - Terminal User Interface for uCode2
 // Grid/teletext renderer with block graphics
 
 use ratatui::{
@@ -50,7 +50,7 @@ impl AppState {
     }
 
     pub async fn load_notes(&mut self) {
-        let mut vault = ucode1_vault_bridge::Vault::new(&self.vault_path, &self.vault_path);
+        let mut vault = ucode2_vault_bridge::Vault::new(&self.vault_path, &self.vault_path);
         match vault.list_notes() {
             Ok(notes) => {
                 self.notes = notes;
@@ -62,7 +62,7 @@ impl AppState {
     }
 
     pub async fn load_note_content(&mut self, note_name: &str) {
-        let mut vault = ucode1_vault_bridge::Vault::new(&self.vault_path, &self.vault_path);
+        let mut vault = ucode2_vault_bridge::Vault::new(&self.vault_path, &self.vault_path);
         match vault.read_note(note_name) {
             Ok(note) => {
                 self.note_content = note.content;
