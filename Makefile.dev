@@ -1,0 +1,104 @@
+# Makefile.dev - Development Makefile for uCode1/uCode2 Architecture
+# Provides common commands for the new separated architecture
+
+.PHONY: help build test check clean run docs
+
+# Colors
+GREEN := \033[0;32m
+YELLOW := \033[1;33m
+BLUE := \033[0;34m
+NC := \033[0m
+
+# =============================================================================
+# HELP
+# =============================================================================
+help: ## Show this help message
+	@echo "uCode1/uCode2 Development Makefile"
+	@echo "=================================="
+	@echo ""
+	@echo "Usage: make -f Makefile.dev [target]"
+	@echo ""
+	@echo "$(BLUE)uCode1 (Python) Targets:$(NC)"
+	@echo "  test-py           Run all Python tests"
+	@echo "  test-py-quick     Run Python tests (skip slow)"
+	@echo "  clean-py          Clean Python artifacts"
+	@echo "  runDemo           Run MCP integration demo"
+	@echo ""
+	@echo "$(BLUE)uCode2 (Rust) Targets:$(NC)"
+	@echo "  build-ucode2      Build uCode2 workspace"
+	@echo "  start-mcp         Start MCP server"
+	@echo "  check-ucode2      Check uCode2 workspace"
+	@echo "  clean-ucode2      Clean uCode2 artifacts"
+	@echo ""
+	@echo "$(BLUE)Both:$(NC)"
+	@echo "  build            Build uCode2"
+	@echo "  test             Test everything"
+	@echo "  check            Check everything"
+	@echo "  clean            Clean everything"
+	@echo "  run              Start MCP + run demo"
+
+# =============================================================================
+# uCODE1 (PYTHON) TARGETS
+# =============================================================================
+
+test-py: ## Run all Python tests
+	@echo "$(BLUE)Running Python tests...$(NC)"
+	cd uCode1 && python3 -m pytest tests/ test_*.py -v
+
+test-py-quick: ## Run Python tests (skip slow ones)
+	@echo "$(BLUE)Running Python tests (quick)...$(NC)"
+	cd uCode1 && python3 -m pytest tests/ test_*.py -v --ignore=tests/test_usxd_pipeline.py
+
+clean-py: ## Clean Python artifacts
+	@echo "$(YELLOW)Cleaning Python artifacts...$(NC)"
+	cd uCode1 && find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	cd uCode1 && rm -rf .pytest_cache 2>/dev/null || true
+	@echo "$(GREEN)Cleaned Python artifacts$(NC)"
+
+runDemo: ## Run MCP integration demo
+	@echo "$(BLUE)Running MCP Integration Demo...$(NC)"
+	cd uCode1 && python3 examples/mcp_integration.py
+
+# =============================================================================
+# uCODE2 (RUST) TARGETS
+# =============================================================================
+
+build-ucode2: ## Build uCode2 workspace
+	@echo "$(BLUE)Building uCode2 workspace...$(NC)"
+	cd uCode2 && cargo build --workspace
+	@echo "$(GREEN)uCode2 build complete$(NC)"
+
+start-mcp: ## Start MCP server
+	@echo "$(BLUE)Starting uCode2 MCP server...$(NC)"
+	@echo "Socket: ~/.local/mcp.sock"
+	@echo "Press Ctrl+C to stop"
+	cd uCode2 && cargo run --package ucode2-mcp
+
+check-ucode2: ## Check uCode2 workspace (no build)
+	@echo "$(BLUE)Checking uCode2 workspace...$(NC)"
+	cd uCode2 && cargo check --workspace
+	@echo "$(GREEN)uCode2 check complete$(NC)"
+
+clean-ucode2: ## Clean uCode2 build artifacts
+	@echo "$(YELLOW)Cleaning uCode2 artifacts...$(NC)"
+	cd uCode2 && cargo clean
+	@echo "$(GREEN)Cleaned uCode2 artifacts$(NC)"
+
+# =============================================================================
+# COMBINED TARGETS
+# =============================================================================
+
+build: build-ucode2 ## Build all
+
+test: test-py build-ucode2 ## Run all tests
+	@echo "$(BLUE)Running Rust tests...$(NC)"
+	cd uCode2 && cargo test --workspace
+
+check: check-ucode2 test-py-quick ## Check all (no build)
+
+clean: clean-py clean-ucode2 ## Clean all
+
+run: start-mcp ## Start MCP + run demo
+	@echo ""
+	@echo "In another terminal, run:"
+	@echo "  make -f Makefile.dev runDemo"
