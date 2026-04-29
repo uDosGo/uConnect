@@ -2,6 +2,7 @@
 
 # uDosGo Launcher - Main Script
 # Installs dependencies, self-heals, and launches ucode1 CLI in Rust TUI mode
+# Note: ucode1 CLI is implemented in uCode2 Rust workspace
 
 set -e
 
@@ -226,6 +227,7 @@ build_ucode() {
 # Main execution
 main() {
     echo "${BLUE}=== uDosGo Launcher ===${NC}"
+    echo "${YELLOW}Note: ucode1 CLI is implemented in uCode2 Rust workspace${NC}"
     echo ""
     
     # Create log file

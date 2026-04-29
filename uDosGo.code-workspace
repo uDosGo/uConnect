@@ -1,0 +1,48 @@
+{
+  "folders": [
+    {
+      "path": "/Users/fredbook/Code/uDosGo",
+      "name": "uDosGo"
+    },
+    {
+      "path": "/Users/fredbook/Code/DevStudio",
+      "name": "DevStudio"
+    },
+    {
+      "path": "/Users/fredbook/Code/OkAgentDigital",
+      "name": "OkAgentDigital"
+    },
+    {
+      "path": "/Users/fredbook/Code/Projects",
+      "name": "Projects"
+    },
+    {
+      "path": "/Users/fredbook/Code/Sandbox",
+      "name": "Sandbox"
+    },
+    {
+      "path": "/Users/fredbook/Code/Toybox",
+      "name": "Toybox"
+    },
+    {
+      "path": "/Users/fredbook/Code/Vendor",
+      "name": "Vendor"
+    },
+    {
+      "path": "/Users/fredbook/Code/Apps",
+      "name": "Apps"
+    },
+    {
+      "path": "/Users/fredbook/Code/Vault",
+      "name": "Vault"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.git": false,
+      "**/node_modules": true,
+      "**/.DS_Store": true
+    },
+    "makefile.configureOnOpen": false
+  }
+}
