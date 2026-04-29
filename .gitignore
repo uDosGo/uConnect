@@ -37,5 +37,13 @@ target/
 target/
 **/target/
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+*.egg-info/
+
 # Local data
 .local/
