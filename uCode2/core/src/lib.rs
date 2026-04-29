@@ -1,6 +1,6 @@
-//! uCode1 Core Library
+//! uCode2 Core Library
 //!
-//! Core functionality for the uCode1 platform
+//! Core functionality for the uCode2 platform
 
 pub mod snack;
 pub mod relic;
