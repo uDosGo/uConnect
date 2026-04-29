@@ -1,0 +1,21 @@
+/* Dark skin — GitHub-dark inspired */
+.hivemind-skin-dark {
+  --bg: #0d1117;
+  --fg: #c9d1d9;
+  --accent: #58a6ff;
+  --font: system-ui, sans-serif;
+  --border: #30363d;
+}
+.hivemind-skin-dark .msg-user {
+  background: #1f6feb;
+  color: #fff;
+}
+.hivemind-skin-dark .msg-agent {
+  background: #161b22;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+}
+.hivemind-skin-dark .tool-call {
+  border-color: #58a6ff;
+  background: #0d1117;
+}

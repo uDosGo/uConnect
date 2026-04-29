@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SURFACES = [
-  { id: 'notionish',   label: 'Notionish',    type: 'editor',   desc: 'Rich text / database editor' },
-  { id: 'milkdown',    label: 'Milkdown',     type: 'editor',   desc: 'Markdown editor' },
-  { id: 'bbcbasic',    label: 'BBC BASIC',    type: 'terminal', desc: 'C64-style terminal' },
-  { id: 'nesdash',     label: 'NES Dashboard',type: 'dashboard',desc: 'Retro NES.css dashboard' },
-  { id: 'ceefax',      label: 'Ceefax',       type: 'teletext', desc: 'Teletext page viewer' },
-  { id: 'retro',       label: 'Retro',        type: 'mix',      desc: 'Retro mixed surface' },
+  { id: 'notionish',     label: 'Notionish',       type: 'editor',    desc: 'Rich text / database editor' },
+  { id: 'milkdown',      label: 'Milkdown',        type: 'editor',    desc: 'Markdown editor' },
+  { id: 'hivemind-chat', label: 'Hivemind Chat',   type: 'chat',      desc: 'Multi-agent chat console' },
+  { id: 're3engine',     label: 'Re3Engine',       type: 'reasoning', desc: 'Deep reasoning & planning' },
+  { id: 'bbcbasic',      label: 'BBC BASIC',       type: 'terminal',  desc: 'C64-style terminal' },
+  { id: 'nesdash',       label: 'NES Dashboard',   type: 'dashboard', desc: 'Retro NES.css dashboard' },
+  { id: 'ceefax',        label: 'Ceefax',          type: 'teletext',  desc: 'Teletext page viewer' },
+  { id: 'retro',         label: 'Retro',           type: 'mix',       desc: 'Retro mixed surface' },
 ];
 
 function App() {
@@ -93,6 +95,18 @@ function SurfaceFrame({ surface }) {
   const base = import.meta.env.BASE_URL || '/';
 
   switch (surface) {
+    case 'hivemind-chat': {
+      const HivemindChat = React.lazy(() => import('./surfaces/hivemind-chat/HivemindChat'));
+      return <React.Suspense fallback={<LoadingSurface label="Hivemind Chat" />}>
+        <HivemindChat />
+      </React.Suspense>;
+    }
+    case 're3engine': {
+      const Re3EnginePanel = React.lazy(() => import('./surfaces/devstudio/re3engine/Re3EnginePanel'));
+      return <React.Suspense fallback={<LoadingSurface label="Re3Engine" />}>
+        <Re3EnginePanel />
+      </React.Suspense>;
+    }
     case 'notionish':
       return <iframe src={`${base}notionish/`} style={{ width: '100%', height: '100%', border: 'none' }} title="Notionish" />;
     case 'milkdown':
@@ -128,6 +142,15 @@ function SurfaceFrame({ surface }) {
     default:
       return <div style={{ padding: 40, textAlign: 'center', color: '#606070' }}>Select a surface</div>;
   }
+}
+
+function LoadingSurface({ label }) {
+  return (
+    <div style={{ padding: 40, textAlign: 'center', color: '#606070', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ fontSize: 32, marginBottom: 12 }}>⏳</div>
+      <div>Loading {label}...</div>
+    </div>
+  );
 }
 
 function IframePreview({ path, label }) {
