@@ -286,8 +286,59 @@ mapping:
 |---------|-------|----------|--------|---------|-------------|--------------|-----|-----|------------|
 | **uCode1** | 128 | 32 | 32 | 32 | ❌ | ❌ | Static | ASCII | Local |
 | **uCode2** | 256 | 64 | 64 | 64 | ✅ | ✅ | Dynamic | Tailwind+React | GitHub Pages |
-| **uCode3** | 512 | 128 | 128 | 128 | ✅ (native) | ✅ (full) | AI‑generated | Spatial | Decentralised |
-| **uCode4** | 1024 | 256 | 256 | 256 | ✅ (orchestrated) | ✅ (metaverse) | Immersive | 3D | Interdimensional |
+| **uCode3** | 512 | 128 | 128 | 128 | ✅ (native) | ✅ (full) | AI‑generated | Spatial | Decentralised / Console |
+| **uCode4** | 1024 | 256 | 256 | 256 | ✅ (orchestrated) | ✅ (metaverse) | Immersive | 3D Voxel | Interdimensional / VR |
+
+---
+
+## uCode3: Console / Tablet / Touch (512 Slots)
+
+uCode3 bridges uCode2's grid layers to uCode4's 3D space. It introduces **console-mode rendering**, **game controller input**, and **tablet touch surfaces**.
+
+### New Commands (Slots 64–127)
+
+| Slot | Machine | Human | Emoji | Description |
+|------|---------|-------|-------|-------------|
+| 64 | `udos:console` | Console | 🎮 | "Launch console mode" |
+| 65 | `udos:layback` | Layback | 🛋️ | "Enter layback computing mode" |
+| 66 | `udos:controller` | Controller | 🕹️ | "Configure game controller" |
+| 67 | `udos:spatial-nav` | SpatialNav | 🧭 | "Navigate spatial map" |
+| 68 | `udos:teleport` | Teleport | 🌐 | "Jump to grid coordinate" |
+| 69 | `udos:voice` | Voice | 🎤 | "Voice command input" |
+| 70 | `udos:gesture` | Gesture | ✋ | "Gesture control input" |
+| 71–127 | (reserved) | – | – | "Future console commands" |
+
+### Layback Computing
+
+The game controller becomes the primary input device:
+- **D-pad**: Navigate grid rows/columns
+- **A/B/X/Y**: Activate, back, context, quick-launch
+- **L1/R1**: Layer up/down
+- **L2/R2**: Zoom out/in on spatial view
+- **Start/Select**: Menu, map toggle
+
+---
+
+## uCode4: Interdimensional / 3D (1024 Slots)
+
+uCode4 adds true 3D rendering, volumetric spatial indexing, and immersive input.
+
+### Slot Architecture
+
+```
+┌───────────┬─────────────────────┬───────────────────────────────┐
+│ Slots     │ Type                │ Purpose                       │
+├───────────┼─────────────────────┼───────────────────────────────┤
+│ 0–127     │ Commands            │ Core + extended (from uCode3) │
+│ 128–255   │ Snacks              │ Executable containers         │
+│ 256–383   │ Visual (ANSI/Emoji) │ 3D-optimised visual overlays  │
+│ 384–511   │ Aliases             │ Pointers to 0–255             │
+│ 512–639   │ Spatial objects     │ 3D models, voxels, volumes    │
+│ 640–767   │ Animation channels  │ Motion sequences, timelines   │
+│ 768–895   │ Sound / Audio       │ 3D spatial audio sources      │
+│ 896–1023  │ Reserved            │ Future expansion              │
+└───────────┴─────────────────────┴───────────────────────────────┘
+```
 
 ---
 

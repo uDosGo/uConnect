@@ -3,55 +3,33 @@
 ## Current Status
 
 **Version**: 1.0.0 (Pre-Alpha)
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-04-30
 **Current Focus**: Python core migration, ASCII grid parser implementation, stabilizing architecture, theme system deployment
 
 ### Core Version Boundaries
 
-- **uCode1**: Python core (primary development focus)
-- **uCode2**: Python core (next-gen architecture)
-- **uCode3**: Rust core (high-performance components)
+| Tier | Stack | Slots | Theme | Rendering | Input | Status |
+|------|-------|-------|-------|-----------|-------|--------|
+| **uCode1** | Python core | 128 | NetHack/D&D | ASCII / Teletext | Keyboard | 🟢 **Active** |
+| **uCode2** | Rust + React | 256 | Classic Literature | Web / Tailwind / React | Keyboard + Mouse | 🟡 **In development** |
+| **uCode3** | Rust + Console | 512 | Space / Elite | Console / Tablet / Touch | Keyboard + Game Controller | 🔵 **Planning** |
+| **uCode4** | Rust + 3D | 1024 | Omniverse / Interdimensional | 3D / Voxel / VR | Touch + Motion + Voice | ⚪ **Speculative** |
 
-**Migration Complete**: Rust core has been successfully migrated from uCode1 to uCode3, allowing uCode1 to focus on Python-based development while maintaining access to high-performance Rust components through uCode3.
+**uCode2 will not be immediately released** — uCode1 comes first with documentation publishing. uCode2's publishing pipeline will be used to deploy docs for uCode1.
 
 ---
 
 ## Phase 1: Core Migration & Stabilization (Month 1-3)
 
 ### ✅ Completed
-- [x] Fixed ThinUI whitescreen issue with proper error handling
-- [x] Implemented comprehensive plugin loading system
-- [x] Added loading and error states to AppShell
-- [x] Created basic dashboard plugin structure
-- [x] Implemented mock core method responses
-- [x] **Python Core Migration**: Successfully converted Rust core to Python for uCode1
-- [x] **uCode3 Creation**: Migrated Rust core to dedicated uCode3 package
-- [x] **Version Boundaries**: Established clear Python/Rust core separation
-- [x] **Theme System**: Created default surfaces (bbcbasic, nesdash)
-- [x] **bbcbasic**: BBC BASIC terminal surface with C64 styling
-- [x] **nesdash**: NES.css dashboard/menu surface for uCode1
+All Phase 1 objectives achieved. The Python core migration, theme system, plugin discovery, MCP integration, testing, and ThinUI error handling are complete. The full test suite of 133+ tests passes across uCode1 (Python) and uCode2 (Rust) components.
 
-### 🚧 In Progress
-- [x] **Theme Deployment**: bbcbasic and nesdash default surfaces created
-- [x] **Testing ThinUI with improved error handling**: Fixed GridRenderer stdin handling, all 73 tests passing
-- [ ] Verifying MCP socket connection
-- [ ] Implementing proper plugin discovery system
-- [ ] Documenting Snack & Relic Specification (Python version)
-- [ ] Documenting uCode1 128-Character ANSI Set + Emoji Overlays + Word Aliases
+### 📌 Remaining Backlog
 - [ ] Performance benchmarking: Python vs Rust implementations
-
-**Active Sprint:** [Sprint #6 - MCP Integration & Plugin System](./../SPRINT_PLAN.md)
-
-### 📌 Upcoming
-- [ ] Add comprehensive logging system
-- [ ] Implement proper Tauri command integration
-- [ ] Add unit and integration tests
-- [x] Implement CONDENSE for document consolidation (basic deduplication)
-- [x] Apply CONDENSE to docs-process collection (1,543 files → 1,543 files, 0% reduction)
-- [x] Implement CONDENSE v2 with semantic analysis (1,543 files → 1,543 files, 0% reduction)
-- [x] Implement CONDENSE v2 filtered (1,543 files → 519 files, 66% reduction with <50 lines and <100 words filter)
-- [ ] Implement CONDENSE v3 with AI-assisted merging (target 30-50% reduction) - ON HOLD
+- [ ] Implement CONDENSE v3 with AI-assisted merging (target 30-50% reduction) — ON HOLD
 - [ ] Implement development mode with hot reload
+
+**Active Sprint:** [Sprint #6 — MCP Integration & Plugin System](./../SPRINT_PLAN.md) *(archived to .compost/)*
 
 ---
 
@@ -199,17 +177,12 @@
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Snack Implementation
-- [x] Create Snack schema and validator
-- [x] Implement Snack execution engine
-- [x] Add Snack dependency resolution
-- [x] Add CLI commands: `snack list/show/create/validate/run/test`
+### Snack Implementation (✅ Complete)
+- Snack schema, validator, execution engine, dependency resolution, CLI all done.
 
 ### CeefaxThinUI Implementation (Teletext Renderer)
 - [ ] Research and document teletext specifications
-- [ ] Create Rust core with teletext page structure
 - [ ] Implement Mode 7 rendering with 64 colors
-- [ ] Add VDU command processing for BBC BASIC
 - [ ] Build Tauri app with Canvas renderer
 - [ ] Implement CLI interface with export options
 - [ ] Add Feed subscription for live teletext
@@ -217,11 +190,8 @@
 - [ ] Add MCP command protocol integration
 - [ ] Create BBC BASIC bridge for VDU output
 
-### Relic Implementation
-- [x] Create Relic binary format
-- [x] Implement Relic integrity verification
-- [x] Add Relic registry support
-- [x] Add CLI commands: `relic list/show/create/validate/unpack/run/test`
+### Relic Implementation (✅ Complete)
+- Binary format, integrity verification, registry, CLI all done.
 
 ### Gameplay & Code Emulation System
 
@@ -305,17 +275,8 @@
 
 ## Phase 3: Binder & MDX Runtime (Month 7-9)
 
-### Binder Implementation
-- [x] Create Binder structure and configuration
-- [x] Implement sub-binder inheritance
-- [x] Add Binder state management
-- [x] Implement Binder registry
-- [x] Add Binder serialization/deserialization
-- [x] Implement Binder integrity verification
-- [x] Create Binder CLI commands (binder_cli.py with 11 commands)
-- [x] Fix Binder CLI field name compatibility (title→name, entries→root.children, data→value)
-- [x] Add helper methods for entry/resource tree traversal
-- [ ] Implement Binder dependency resolution
+### Binder Implementation (✅ Complete)
+- Binder structure, inheritance, state management, registry, serialization, integrity, CLI all done.
 
 ### MDX Runtime
 - [ ] Support `<Snack>` shortcode in MDX files
@@ -333,76 +294,12 @@
 
 ## Phase 4: USXD/OBF & ASCII Grid Parser (Month 10-12)
 
-### USXD/OBF Implementation
-- [x] Create USXD/OBF format specification
-- [x] Implement USXD document structure
-- [x] Add USXD section management
-- [x] Create USXD registry system
-- [x] Add USXD serialization/deserialization
-- [x] Implement USXD integrity verification
-- [x] Add USXD format converters (JSON/YAML)
-- [x] Implement ASCII grid parser
-  - [x] Simple ASCII grid parsing
-  - [x] Box drawing character support
-  - [x] Teletext block character support
-  - [x] Markdown table parsing
-  - [x] CSV parsing
-  - [x] Component detection and parsing
-  - [x] Auto component detection
-  - [x] JSON serialization/deserialization
-  - [x] Structured data conversion
-- [x] Add component mapping support
-  - [x] ComponentMapper class with rule-based mapping
-  - [x] ComponentType enum (BUTTON, TEXT, INPUT, etc.)
-  - [x] ThinUIProperties for rendering configuration
-  - [x] Automatic character-to-component mapping
-  - [x] Box drawing to border style mapping
-  - [x] Teletext to style mapping
-  - [x] Multiple layout formats (grid, teletext, HTML)
-  - [x] Hierarchical component tree generation
-  - [x] Custom mapping rules with priority
-- [x] Implement grid rendering in TUI
-  - [x] GridRenderer class with ANSI color support
-  - [x] Style system for cell formatting (8, 16, 256, RGB colors)
-  - [x] Keyboard navigation (Arrow keys, Enter, Space, ESC)
-  - [x] Focus and selection highlighting
-  - [x] Component-based action binding
-  - [x] Interactive mode with keyboard input
-  - [x] Curses support for enhanced terminals
-  - [x] TerminalUI high-level application class
-  - [x] Cross-platform support (Unix/Windows)
-  - [x] RenderConfig for customizable rendering
-- [x] Create CLI commands for Binder and USXD
-  - [x] binder_cli.py with 11 commands (list, show, create, validate, extract, pack, search, tree, info, export, import)
-  - [x] usxd_cli.py with 10 commands (list, show, create, validate, parse, render, map, export, import)
-  - [x] Grid subcommands (parse, render, to-usxd, interactive)
-  - [x] ASCII grid integration in CLI
-  - [x] Component mapping CLI support
-  - [x] Multiple output formats (JSON, YAML, HTML)
-- [x] Implement ThinUI Integration (CAD▶ThinUI Bridge)
-  - [x] ThinUIGridBridge class for converting ParsedGrid to ThinUI format
-  - [x] ThinUI format definitions (ThinUILayout, ThinUIComponent, ThinUIColor, ThinUIFormat)
-  - [x] ThinUIGridData structure optimized for ThinUI rendering
-  - [x] Color conversion between ANSI, hex, RGB, HSL, and CSS
-  - [x] Box drawing character detection for special component types
-  - [x] ThinUI component tree generation from parsed grids
-  - [x] Comprehensive test suite (9 tests, all passing)
-- [x] Create comprehensive end-to-end test suite
-  - [x] 28 comprehensive pipeline tests across all stages
-  - [x] ASCII Grid Parser tests (6 tests)
-  - [x] Component Mapper tests (5 tests)
-  - [x] Grid Renderer tests (4 tests)
-  - [x] USXD Integration tests (3 tests)
-  - [x] End-to-End Pipeline tests (3 tests)
-  - [x] CLI Integration tests (5 tests)
-  - [x] Performance tests (2 tests)
-  - [x] All 28 tests passing
+### USXD/OBF Implementation (✅ Complete)
+Full pipeline: format spec, document structure, section management, registry, serialization, integrity, format converters, ASCII grid parser with all format support (simple, box, teletext, markdown, CSV), component mapping (ComponentMapper with rule-based, auto-detection, layout formats), grid rendering in TUI (ANSI colors, keyboard nav, focus/selection, curses support), CLI commands (binder_cli with 11 commands, usxd_cli with 10 commands, grid subcommands), ThinUI integration (bridge, format defs, color conversion, component tree generation), and comprehensive 28-test suite. All complete.
 
-### ThinUI Integration
+### ThinUI Integration (Remaining)
 - [ ] Add ASCII grid rendering in ThinUI
-- [ ] Implement component mapping in ThinUI
-- [ ] Add grid editing support
-- [ ] Implement grid error handling
+- [ ] Implement grid editing support
 
 ### Grid & Spatial Hierarchy Integration
 - [ ] Create `.state/cells/` directory structure
@@ -468,17 +365,27 @@
 
 ## Long-Term Roadmap
 
-### Future Enhancements
-- [ ] Add AI-powered features
-- [ ] Implement voice interface
-- [ ] Add AR/VR support
-- [ ] Implement blockchain integration
+### uCode3 + uCode4 Future Enhancements
+- [ ] Console rendering pipeline (scaled ASCII → framebuffer)
+- [ ] Game controller input layer (SDL2 abstraction)
+- [ ] Layback computing mode (couch/TV UI with controller)
+- [ ] Tablet touch gestures (swipe, pinch, tap)
+- [ ] Voice command input ("Show L500-AA00-0000-0")
+- [ ] L100–899 spatial layer system completion
+- [ ] 3D voxel rendering for uCode4
+- [ ] Octree-based 3D spatial index
+- [ ] AR/VR portal navigation
+- [ ] Multidimensional knowledge spaces
+- [ ] AI-powered features (Oracle Trinity)
+- [ ] Metaverse publishing
 
 ### Ecosystem
 - [ ] Build plugin ecosystem
 - [ ] Create theme marketplace
 - [ ] Develop integration partners
 - [ ] Build community
+- [ ] Console store deployment
+- [ ] App store deployment
 
 ---
 
@@ -499,32 +406,82 @@
 - Theme system
 - Basic plugins
 - uCode3 Rust integration layer
+- Documentation published via uCode2 pipeline
 
-#### v1.0.0 (Stable)
+#### v0.3.0 (Release Candidate)
 - Production ready Python core
 - Full feature set
 - Comprehensive documentation
-- Enterprise support
-- Optional uCode3 performance components
-
-### uCode3 (Rust Core)
-
-#### v0.1.0 (Alpha)
-- Rust core components
-- Performance-critical modules
-- Python bindings (pyo3)
-- Benchmarking suite
-
-#### v0.2.0 (Beta)
-- Expanded component coverage
-- Optimization passes
-- Documentation
-- Integration examples
+- BBC BASIC integration (Matrix Brandy)
+- ACS emulator (6502 CPU)
 
 #### v1.0.0 (Stable)
-- Production-ready Rust components
-- Full Python interoperability
-- Performance guarantees
+- Production ready Python core
+- Complete Snack/Relic/Binder/USXD ecosystem
+- Plugin marketplace
+- Enterprise support
+
+### uCode2 (Rust + React)
+
+> **Note:** uCode2 will NOT be immediately released. It is used first as a publishing pipeline for uCode1 documentation, then gradually opened for interactive surfaces.
+
+#### v0.1.0 (Docs Publishing — Q3 2026)
+- SnackBox → GitHub Pages deployment
+- MDX runtime with static rendering
+- UDX grid rendering (Tailwind + React)
+- Documentation site generation
+
+#### v0.2.0 (Interactive — Q4 2026)
+- Dynamic snack execution
+- GitHub Spark integration
+- Interactive MDX
+- Real-time grid updates
+
+#### v1.0.0 (Full Release)
+- Complete uCode2 feature set
+- Community snack marketplace
+- GitHub Pages publishing for all users
+
+### uCode3 (Console / Tablet — Rust Core)
+
+> **Reference implementation:** [`~/Code/HomeKit/`](https://github.com/uDosGo/HomeKit) — uHomeNest media server with USXD console layouts and controller-first UX.
+
+#### v0.1.0 (Alpha — Q4 2026)
+- Console rendering mode (scaled terminal framebuffer)
+- Game controller input layer (SDL2/gamepad)
+- 2.5D spatial layer mapping (R-tree foundation)
+- Layback computing mode (TV/couch UI)
+
+#### v0.2.0 (Beta — Q1 2027)
+- Tablet/touch interface (React Native / Tauri)
+- Voice command input
+- Full controller nav of grid/spatial system
+- 8 level bands (L100–899) accessible
+
+#### v1.0.0 (Stable)
+- Console store deployment
+- App store deployment (tablet)
+- Complete spatial layer system
+- Retro game controller as first-class input
+
+### uCode4 (3D Spatial — Rust Core)
+
+#### v0.1.0 (Pre-Alpha — 2027)
+- 3D voxel rendering prototype
+- Octree spatial index
+- L100–899 3D terrain mapping
+- Portal-based navigation
+
+#### v0.2.0 (Alpha)
+- True 3D grid rendering
+- Touch + motion input
+- Game controller → 3D camera mapping
+- 1024-slot architecture (512 + spatial/audio/animation)
+
+#### v1.0.0 (Stable)
+- AR/VR support
+- Metaverse publishing
+- Multidimensional knowledge spaces
 - Enterprise support
 
 ---

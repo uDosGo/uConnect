@@ -5,18 +5,19 @@
 uDosGo is organized into **three runtime tiers** with clear separation of concerns:
 
 ```
-┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
-│       uCode1             │     │       uCode2             │     │       uCode3             │
-│   (Pure Python Core)     │◄───►│   (Rust + React)        │◄───►│    (Extended Rust)       │
-└─────────────────────────┘  MCP  └─────────────────────────┘  MCP  └─────────────────────────┘
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐     ┌────────────────────┐
+│       uCode1             │     │       uCode2             │     │       uCode3             │     │      uCode4         │
+│   (Pure Python Core)     │◄───►│   (Rust + React)        │◄───►│  (Console/Tablet/Touch)  │◄───►│  (3D Spatial/VR)   │
+└─────────────────────────┘  MCP └─────────────────────────┘  MCP └─────────────────────────┘  MCP └────────────────────┘
                                           │
                                           ▼
-                              ~/.local/mcp.sock (Unix Domain Socket)
+                              ~/.local/share/udos/mcp/core.sock (Unix Domain Socket)
 ```
 
 - **uCode1**: Pure Python, zero Rust dependencies. Contains core business logic, CLI tools, and static HTML surfaces.
 - **uCode2**: Rust core + React/Vue rich UI surfaces. Provides MCP server for uCode1 communication.
-- **uCode3**: Extended Rust components (optional, for advanced features).
+- **uCode3**: Console/tablet runtime with game controller input. Reference impl: `~/Code/HomeKit/`.
+- **uCode4**: 3D spatial / VR runtime. 1024-slot architecture. *(Planning phase)*
 
 ## Quick Start
 
@@ -89,7 +90,7 @@ make -f Makefile.dev runDemo
 uCode1/
 ├── core_py/                           # Python core modules
 │   ├── snack/                         # Snack system
-│   ├── relic/                         # Relic system  
+│   ├── relic/                         # Relic system
 │   ├── binder/                        # Binder system
 │   ├── usxd/                          # USXD/CEETEX pipeline
 │   ├── thinui/                        # ThinUI integration (Python)
@@ -224,15 +225,15 @@ from core_py.mcp_client import McpClient, test_connection
 # Check if server is available
 if test_connection():
     client = McpClient()  # Connects to ~/.local/mcp.sock
-    
+
     # Read a note
     response = client.read_note("my-note")
     print(response.note_content)
-    
+
     # List vault contents
     response = client.vault_list("/")
     print(response.vault_list)
-    
+
     client.close()
 ```
 

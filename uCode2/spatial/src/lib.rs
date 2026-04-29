@@ -1,9 +1,9 @@
 // Spatial Index - 2D vector index and maps for uCode1
 
-use std::collections::HashMap;
 use geo::Point;
-use rstar::{RTree, AABB, PointDistance, RTreeObject};
-use serde::{Serialize, Deserialize};
+use rstar::{AABB, PointDistance, RTree, RTreeObject};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct SerializablePoint {
@@ -36,7 +36,7 @@ pub struct SpatialPoint {
 
 mod serializable_point {
     use super::*;
-    use serde::{Serializer, Deserializer};
+    use serde::{Deserializer, Serializer};
 
     pub fn serialize<S>(point: &Point<f64>, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -89,13 +89,17 @@ impl SpatialIndex {
     pub fn nearest_points(&self, point: &Point<f64>, radius: f64) -> Vec<&SpatialPoint> {
         let center = [point.x(), point.y()];
         let _aabb = AABB::from_point(center);
-        
-        self.rtree
-            .locate_within_distance(center, radius)
-            .collect()
+
+        self.rtree.locate_within_distance(center, radius).collect()
     }
 
-    pub fn points_in_bounds(&self, min_x: f64, min_y: f64, max_x: f64, max_y: f64) -> Vec<&SpatialPoint> {
+    pub fn points_in_bounds(
+        &self,
+        min_x: f64,
+        min_y: f64,
+        max_x: f64,
+        max_y: f64,
+    ) -> Vec<&SpatialPoint> {
         let aabb = AABB::from_corners([min_x, min_y], [max_x, max_y]);
         self.rtree.locate_in_envelope(&aabb).collect()
     }
@@ -114,11 +118,11 @@ impl SpatialIndex {
     pub fn load_from_file(&mut self, path: &str) -> std::io::Result<()> {
         let json = std::fs::read_to_string(path)?;
         let points: Vec<SpatialPoint> = serde_json::from_str(&json)?;
-        
+
         for point in points {
             self.add_point(point);
         }
-        
+
         Ok(())
     }
 }
@@ -161,7 +165,7 @@ impl MapManager {
             new_layer.points.push(point.clone());
             self.layers.insert(layer_name.to_string(), new_layer);
         }
-        
+
         self.spatial_index.add_point(point);
     }
 
@@ -171,13 +175,13 @@ impl MapManager {
 
     pub fn save_to_directory(&self, dir_path: &str) -> std::io::Result<()> {
         std::fs::create_dir_all(dir_path)?;
-        
+
         for (layer_name, layer) in &self.layers {
             let layer_path = format!("{}/{}.json", dir_path, layer_name);
             let json = serde_json::to_string(layer)?;
             std::fs::write(layer_path, json)?;
         }
-        
+
         Ok(())
     }
 
@@ -201,8 +205,60 @@ impl MapManager {
                 }
             }
         }
-        
+
         Ok(())
+    }
+
+    /// Calculate the distance between two points in the same layer
+    pub fn distance_between(&self, layer_name: &str, id1: &str, id2: &str) -> Option<f64> {
+        let layer = self.layers.get(layer_name)?;
+        let p1 = layer.points.iter().find(|p| p.id == id1)?;
+        let p2 = layer.points.iter().find(|p| p.id == id2)?;
+        let dx = p1.point.x() - p2.point.x();
+        let dy = p1.point.y() - p2.point.y();
+        Some((dx * dx + dy * dy).sqrt())
+    }
+
+    /// Get the bounding box of all points in a layer
+    pub fn layer_bounds(&self, layer_name: &str) -> Option<(f64, f64, f64, f64)> {
+        let layer = self.layers.get(layer_name)?;
+        if layer.points.is_empty() {
+            return None;
+        }
+        let mut min_x = f64::MAX;
+        let mut min_y = f64::MAX;
+        let mut max_x = f64::MIN;
+        let mut max_y = f64::MIN;
+        for p in &layer.points {
+            let x = p.point.x();
+            let y = p.point.y();
+            if x < min_x {
+                min_x = x;
+            }
+            if y < min_y {
+                min_y = y;
+            }
+            if x > max_x {
+                max_x = x;
+            }
+            if y > max_y {
+                max_y = y;
+            }
+        }
+        Some((min_x, min_y, max_x, max_y))
+    }
+
+    /// Count points in a layer
+    pub fn layer_point_count(&self, layer_name: &str) -> usize {
+        self.layers
+            .get(layer_name)
+            .map(|l| l.points.len())
+            .unwrap_or(0)
+    }
+
+    /// List all layer names
+    pub fn layer_names(&self) -> Vec<String> {
+        self.layers.keys().cloned().collect()
     }
 }
 
@@ -213,25 +269,25 @@ mod tests {
     #[test]
     fn test_spatial_index() {
         let mut index = SpatialIndex::new();
-        
+
         let point1 = SpatialPoint {
             id: "p1".to_string(),
             point: Point::new(0.0, 0.0),
             properties: HashMap::new(),
         };
-        
+
         let point2 = SpatialPoint {
             id: "p2".to_string(),
             point: Point::new(1.0, 1.0),
             properties: HashMap::new(),
         };
-        
+
         index.add_point(point1.clone());
         index.add_point(point2.clone());
-        
+
         let query_point = Point::new(0.1, 0.1);
         let nearest = index.nearest_points(&query_point, 0.5);
-        
+
         assert_eq!(nearest.len(), 1);
         assert_eq!(nearest[0].id, "p1");
     }
@@ -239,41 +295,110 @@ mod tests {
     #[test]
     fn test_map_manager() {
         let mut manager = MapManager::new();
-        
+
         let point = SpatialPoint {
             id: "test".to_string(),
             point: Point::new(10.0, 20.0),
             properties: HashMap::new(),
         };
-        
+
         manager.add_point_to_layer("locations", point.clone());
-        
+
         assert!(manager.get_layer("locations").is_some());
         let nearest = manager.nearest_points(&Point::new(10.1, 20.1), 1.0);
         assert_eq!(nearest.len(), 1);
     }
 
     #[test]
+    fn test_layer_bounds() {
+        let mut manager = MapManager::new();
+        for i in 0..5 {
+            manager.add_point_to_layer(
+                "grid",
+                SpatialPoint {
+                    id: format!("p{}", i),
+                    point: Point::new(i as f64, i as f64),
+                    properties: HashMap::new(),
+                },
+            );
+        }
+        let bounds = manager.layer_bounds("grid").unwrap();
+        assert_eq!(bounds, (0.0, 0.0, 4.0, 4.0));
+        assert_eq!(manager.layer_point_count("grid"), 5);
+    }
+
+    #[test]
+    fn test_distance() {
+        let mut manager = MapManager::new();
+        manager.add_point_to_layer(
+            "cities",
+            SpatialPoint {
+                id: "a".into(),
+                point: Point::new(0.0, 0.0),
+                properties: HashMap::new(),
+            },
+        );
+        manager.add_point_to_layer(
+            "cities",
+            SpatialPoint {
+                id: "b".into(),
+                point: Point::new(3.0, 4.0),
+                properties: HashMap::new(),
+            },
+        );
+        let dist = manager.distance_between("cities", "a", "b").unwrap();
+        assert!((dist - 5.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn test_layer_names() {
+        let mut manager = MapManager::new();
+        manager.add_point_to_layer(
+            "alpha",
+            SpatialPoint {
+                id: "1".into(),
+                point: Point::new(0.0, 0.0),
+                properties: HashMap::new(),
+            },
+        );
+        manager.add_point_to_layer(
+            "beta",
+            SpatialPoint {
+                id: "2".into(),
+                point: Point::new(1.0, 1.0),
+                properties: HashMap::new(),
+            },
+        );
+        let names = manager.layer_names();
+        assert!(names.contains(&"alpha".to_string()));
+        assert!(names.contains(&"beta".to_string()));
+    }
+
+    #[test]
     fn test_save_load() {
         use tempfile::tempdir;
-        
+
         let dir = tempdir().unwrap();
         let dir_path = dir.path();
-        
+
         let mut manager = MapManager::new();
-        
+
         let point = SpatialPoint {
             id: "save_test".to_string(),
             point: Point::new(5.0, 5.0),
             properties: HashMap::new(),
         };
-        
+
         manager.add_point_to_layer("test_layer", point);
-        manager.save_to_directory(dir_path.to_str().unwrap()).unwrap();
-        
+        manager
+            .save_to_directory(dir_path.to_str().unwrap())
+            .unwrap();
+
         let mut new_manager = MapManager::new();
-        new_manager.load_from_directory(dir_path.to_str().unwrap()).unwrap();
-        
+        new_manager
+            .load_from_directory(dir_path.to_str().unwrap())
+            .unwrap();
+
         assert!(new_manager.get_layer("test_layer").is_some());
     }
 }

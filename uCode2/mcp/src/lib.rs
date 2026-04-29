@@ -1,21 +1,21 @@
 // MCP Server - Model Context Protocol for uCode1
 // Provides local API access to vault for OK agent and other tools
 
+use log::{debug, error, info};
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::io::{BufRead, BufReader, BufWriter, Write};
+use std::os::unix::net::{UnixListener, UnixStream};
 use std::path::PathBuf;
 use std::sync::Arc;
-use tokio::sync::Mutex;
-use serde::{Serialize, Deserialize};
-use log::{info, error, debug};
-use std::fs;
-use std::os::unix::net::{UnixListener, UnixStream};
-use std::io::{Write, BufRead, BufReader, BufWriter};
 use std::thread;
+use tokio::sync::Mutex;
 
 pub mod tools;
 
 pub use ucode2_core;
-pub use ucode2_vault_bridge;
 pub use ucode2_ok_agent;
+pub use ucode2_vault_bridge;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum McpRequest {
@@ -38,24 +38,59 @@ pub enum McpRequest {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum McpResponse {
-    Success { data: serde_json::Value },
-    Error { message: String },
-    Notes { list: Vec<String> },
-    NoteContent { name: String, content: String },
-    Intent { intent: String, confidence: f32, parameters: std::collections::HashMap<String, String> },
-    StatusInfo { version: String, mode: String, vault_path: String },
+    Success {
+        data: serde_json::Value,
+    },
+    Error {
+        message: String,
+    },
+    Notes {
+        list: Vec<String>,
+    },
+    NoteContent {
+        name: String,
+        content: String,
+    },
+    Intent {
+        intent: String,
+        confidence: f32,
+        parameters: std::collections::HashMap<String, String>,
+    },
+    StatusInfo {
+        version: String,
+        mode: String,
+        vault_path: String,
+    },
     Pong,
     Acknowledged,
     // Vault responses
-    VaultContent { path: String, content: String },
-    VaultList { path: String, items: Vec<String> },
-    VaultSearchResults { query: String, results: Vec<String> },
-    VaultMetadata { path: String, size: u64, modified: String, tags: Vec<String> },
-    VaultWatchEvent { event: String, path: String },
+    VaultContent {
+        path: String,
+        content: String,
+    },
+    VaultList {
+        path: String,
+        items: Vec<String>,
+    },
+    VaultSearchResults {
+        query: String,
+        results: Vec<String>,
+    },
+    VaultMetadata {
+        path: String,
+        size: u64,
+        modified: String,
+        tags: Vec<String>,
+    },
+    VaultWatchEvent {
+        event: String,
+        path: String,
+    },
 }
 
 pub struct McpServer {
     socket_path: PathBuf,
+    vault_path: String,
     vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
     ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
     running: Arc<Mutex<bool>>,
@@ -64,16 +99,18 @@ pub struct McpServer {
 impl McpServer {
     pub fn new(vault_path: &str) -> Self {
         // XDG Base Directory: ~/.local/share/udos/mcp/core.sock
-        let data_home = std::env::var("XDG_DATA_HOME")
-            .unwrap_or_else(|_| {
-                let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
-                format!("{home}/.local/share")
-            });
+        let data_home = std::env::var("XDG_DATA_HOME").unwrap_or_else(|_| {
+            let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
+            format!("{home}/.local/share")
+        });
         let socket_path = PathBuf::from(&data_home).join("udos/mcp/core.sock");
-        
+
         McpServer {
             socket_path,
-            vault: Arc::new(Mutex::new(ucode2_vault_bridge::Vault::new(vault_path, vault_path))),
+            vault_path: vault_path.to_string(),
+            vault: Arc::new(Mutex::new(ucode2_vault_bridge::Vault::new(
+                vault_path, vault_path,
+            ))),
             ok_agent: Arc::new(Mutex::new(ucode2_ok_agent::OkAgent::new())),
             running: Arc::new(Mutex::new(false)),
         }
@@ -84,14 +121,14 @@ impl McpServer {
         if self.socket_path.exists() {
             fs::remove_file(&self.socket_path)?;
         }
-        
+
         // Create .local directory if it doesn't exist
         if let Some(parent) = self.socket_path.parent() {
             fs::create_dir_all(parent)?;
         }
-        
+
         let listener = UnixListener::bind(&self.socket_path)?;
-        
+
         // Set restrictive permissions (owner only)
         #[cfg(unix)]
         {
@@ -102,30 +139,34 @@ impl McpServer {
                 fs::set_permissions(&self.socket_path, permissions)?;
             }
         }
-        
+
         *self.running.lock().await = true;
         info!("MCP server started on {}", self.socket_path.display());
-        
+
         // Accept connections in a separate thread to avoid blocking
         let running = self.running.clone();
         let vault = self.vault.clone();
         let ok_agent = self.ok_agent.clone();
-        
+        let vault_path = self.vault_path.clone();
+
         thread::spawn(move || {
             for stream in listener.incoming() {
                 if !*running.blocking_lock() {
                     break;
                 }
-                
+
                 match stream {
                     Ok(stream) => {
                         let vault = vault.clone();
                         let ok_agent = ok_agent.clone();
                         let running = running.clone();
-                        
+                        let vault_path = vault_path.clone();
+
                         // Handle each connection in a separate thread
                         thread::spawn(move || {
-                            if let Err(e) = Self::handle_connection(stream, vault, ok_agent, running) {
+                            if let Err(e) = Self::handle_connection(
+                                stream, vault_path, vault, ok_agent, running,
+                            ) {
                                 error!("Connection error: {}", e);
                             }
                         });
@@ -137,7 +178,7 @@ impl McpServer {
                 }
             }
         });
-        
+
         Ok(())
     }
 
@@ -150,22 +191,23 @@ impl McpServer {
 
     fn handle_connection(
         stream: UnixStream,
+        vault_path: String,
         vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
         ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
         running: Arc<Mutex<bool>>,
     ) -> std::io::Result<()> {
         let mut reader = BufReader::new(stream.try_clone()?);
         let mut writer = BufWriter::new(stream);
-        
+
         let mut buffer = String::new();
         reader.read_line(&mut buffer)?;
-        
+
         if buffer.trim().is_empty() {
             return Ok(());
         }
-        
+
         debug!("Received MCP request: {}", buffer.trim());
-        
+
         let request: McpRequest = match serde_json::from_str(&buffer.trim()) {
             Ok(req) => req,
             Err(e) => {
@@ -179,13 +221,15 @@ impl McpServer {
                 return Ok(());
             }
         };
-        
+
         let response = match request {
             McpRequest::ListNotes => {
                 let vault = vault.blocking_lock();
                 match vault.list_notes() {
                     Ok(notes) => McpResponse::Notes { list: notes },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::ReadNote { name } => {
@@ -195,19 +239,21 @@ impl McpServer {
                         name: note.title,
                         content: note.content,
                     },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::SearchNotes { query } => {
                 let vault = vault.blocking_lock();
                 match vault.list_notes() {
                     Ok(notes) => {
-                        let results = notes.into_iter()
-                            .filter(|n| n.contains(&query))
-                            .collect();
+                        let results = notes.into_iter().filter(|n| n.contains(&query)).collect();
                         McpResponse::Notes { list: results }
                     }
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::ClassifyIntent { text } => {
@@ -223,16 +269,14 @@ impl McpServer {
                     },
                 }
             }
-            McpRequest::Status => {
-                McpResponse::StatusInfo {
-                    version: "0.1.0".to_string(),
-                    mode: "user".to_string(),
-                    vault_path: "~/.local/mcp.sock".to_string(),
-                }
-            }
-            McpRequest::Ping => {
-                McpResponse::Success { data: serde_json::json!({"result": "pong"}) }
-            }
+            McpRequest::Status => McpResponse::StatusInfo {
+                version: "0.1.0".to_string(),
+                mode: "user".to_string(),
+                vault_path: vault_path.clone(),
+            },
+            McpRequest::Ping => McpResponse::Success {
+                data: serde_json::json!({"result": "pong"}),
+            },
             McpRequest::Shutdown => {
                 *running.blocking_lock() = false;
                 McpResponse::Acknowledged
@@ -245,35 +289,49 @@ impl McpServer {
                         path: note.title,
                         content: note.content,
                     },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultWrite { path, content } => {
                 let vault = vault.blocking_lock();
                 match vault.write_note(&path, &content) {
-                    Ok(_) => McpResponse::Success { data: serde_json::json!({"message": "File written successfully"}) },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Ok(_) => McpResponse::Success {
+                        data: serde_json::json!({"message": "File written successfully"}),
+                    },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultList { path } => {
                 let vault = vault.blocking_lock();
                 match vault.list_notes_in_directory(&path) {
                     Ok(items) => McpResponse::VaultList { path, items },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultSearch { query } => {
                 let vault = vault.blocking_lock();
                 match vault.search_notes(&query) {
                     Ok(results) => McpResponse::VaultSearchResults { query, results },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultDelete { path } => {
                 let vault = vault.blocking_lock();
                 match vault.delete_note(&path) {
-                    Ok(_) => McpResponse::Success { data: serde_json::json!({"message": "File deleted successfully"}) },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Ok(_) => McpResponse::Success {
+                        data: serde_json::json!({"message": "File deleted successfully"}),
+                    },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultMetadata { path } => {
@@ -285,19 +343,23 @@ impl McpServer {
                         modified: metadata.modified,
                         tags: metadata.tags,
                     },
-                    Err(e) => McpResponse::Error { message: e.to_string() },
+                    Err(e) => McpResponse::Error {
+                        message: e.to_string(),
+                    },
                 }
             }
             McpRequest::VaultWatch { path } => {
                 // Watch functionality would require async handling
-                McpResponse::Error { message: "Watch not implemented yet".to_string() }
+                McpResponse::Error {
+                    message: "Watch not implemented yet".to_string(),
+                }
             }
         };
-        
+
         let response_str = serde_json::to_string(&response).unwrap() + "\n";
         writer.write_all(response_str.as_bytes())?;
         writer.flush()?;
-        
+
         Ok(())
     }
 
@@ -310,23 +372,30 @@ impl McpServer {
 mod tests {
     use super::*;
     use tempfile::tempdir;
-    use std::path::Path;
 
     #[test]
     fn test_mcp_server_creation() {
         let dir = tempdir().unwrap();
         let vault_path = dir.path().to_str().unwrap();
-        
+
         let server = McpServer::new(vault_path);
-        assert!(server.socket_path.ends_with(".local/mcp.sock"));
+        assert!(
+            server.socket_path.ends_with("udos/mcp/core.sock"),
+            "Expected path ending in udos/mcp/core.sock, got: {:?}",
+            server.socket_path
+        );
     }
 
     #[test]
     fn test_socket_path() {
         let dir = tempdir().unwrap();
         let vault_path = dir.path().to_str().unwrap();
-        
+
         let server = McpServer::new(vault_path);
-        assert!(server.socket_path.ends_with(".local/mcp.sock"));
+        assert!(
+            server.socket_path.ends_with("udos/mcp/core.sock"),
+            "Expected path ending in udos/mcp/core.sock, got: {:?}",
+            server.socket_path
+        );
     }
 }

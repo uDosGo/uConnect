@@ -22,6 +22,8 @@ help: ## Show this help message
 	@echo "  test-py           Run all Python tests"
 	@echo "  test-py-quick     Run Python tests (skip slow)"
 	@echo "  clean-py          Clean Python artifacts"
+	@echo "  cli               Run unified ucode CLI"
+	@echo "  cli-help          Show ucode CLI help"
 	@echo "  runDemo           Run MCP integration demo"
 	@echo ""
 	@echo "$(BLUE)uCode2 (Rust) Targets:$(NC)"
@@ -29,10 +31,18 @@ help: ## Show this help message
 	@echo "  start-mcp         Start MCP server"
 	@echo "  check-ucode2      Check uCode2 workspace"
 	@echo "  clean-ucode2      Clean uCode2 artifacts"
+	@echo "  build-tui         Build TUI binary"
+	@echo "  build-thinui      Build ThinUI surface shell"
+	@echo "  start-thinui      Start ThinUI dev server"
+	@echo "  start-thinui-tauri Start ThinUI Tauri app"
+	@echo "  test-spatial      Run spatial ops tests"
+	@echo "  test-tui          Run TUI tests"
+	@echo "  test-mcp          Run MCP tests"
 	@echo ""
-	@echo "$(BLUE)Both:$(NC)"
+	@echo "$(BLUE)Combined:$(NC)"
 	@echo "  build            Build uCode2"
 	@echo "  test             Test everything"
+	@echo "  test-rust        Run Rust component tests"
 	@echo "  check            Check everything"
 	@echo "  clean            Clean everything"
 	@echo "  run              Start MCP + run demo"
@@ -70,7 +80,7 @@ build-ucode2: ## Build uCode2 workspace
 
 start-mcp: ## Start MCP server
 	@echo "$(BLUE)Starting uCode2 MCP server...$(NC)"
-	@echo "Socket: ~/.local/mcp.sock"
+	@echo "Socket: ~/.local/share/udos/mcp/core.sock"
 	@echo "Press Ctrl+C to stop"
 	cd uCode2 && cargo run --package ucode2-mcp
 
@@ -84,15 +94,60 @@ clean-ucode2: ## Clean uCode2 build artifacts
 	cd uCode2 && cargo clean
 	@echo "$(GREEN)Cleaned uCode2 artifacts$(NC)"
 
+build-tui: ## Build the TUI binary
+	@echo "$(BLUE)Building uCode2 TUI...$(NC)"
+	cd uCode2 && cargo build --package ucode2-tui
+	@echo "$(GREEN)TUI build complete$(NC)"
+
+build-thinui: ## Build ThinUI surface shell (npm + Tauri)
+	@echo "$(BLUE)Building ThinUI surface shell...$(NC)"
+	cd uCode2/ThinUI && npm install && npm run build
+	@echo "$(GREEN)ThinUI build complete$(NC)"
+
+start-thinui: ## Start ThinUI dev server
+	@echo "$(BLUE)Starting ThinUI dev server on port 4687...$(NC)"
+	cd uCode2/ThinUI && npm run dev
+
+start-thinui-tauri: ## Start ThinUI Tauri app
+	@echo "$(BLUE)Starting ThinUI Tauri app...$(NC)"
+	cd uCode2/ThinUI && cargo tauri dev
+
+test-spatial: ## Run spatial ops tests
+	@echo "$(BLUE)Running spatial tests...$(NC)"
+	cd uCode2 && cargo test --package ucode2-spatial
+	@echo "$(GREEN)Spatial tests complete$(NC)"
+
+test-tui: ## Run TUI tests
+	@echo "$(BLUE)Running TUI tests...$(NC)"
+	cd uCode2 && cargo test --package ucode2-tui
+	@echo "$(GREEN)TUI tests complete$(NC)"
+
+test-mcp: ## Run MCP tests
+	@echo "$(BLUE)Running MCP tests...$(NC)"
+	cd uCode2 && cargo test --package ucode2-mcp
+	@echo "$(GREEN)MCP tests complete$(NC)"
+
+# =============================================================================
+# uCODE1 (PYTHON) UNIFIED CLI TARGET
+# =============================================================================
+
+cli: ## Run the unified ucode CLI
+	cd uCode1 && python3 ucode $(filter-out $@,$(MAKECMDGOALS))
+
+cli-help: ## Show ucode CLI help
+	cd uCode1 && python3 ucode --help
+
 # =============================================================================
 # COMBINED TARGETS
 # =============================================================================
 
-build: build-ucode2 ## Build all
+build: build-ucode2 ## Build all Rust
 
 test: test-py build-ucode2 ## Run all tests
 	@echo "$(BLUE)Running Rust tests...$(NC)"
 	cd uCode2 && cargo test --workspace
+
+test-rust: test-spatial test-tui test-mcp ## Run Rust component tests
 
 check: check-ucode2 test-py-quick ## Check all (no build)
 

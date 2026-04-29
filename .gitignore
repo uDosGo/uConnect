@@ -18,7 +18,6 @@ node_modules/
 .vscode/
 
 # Legacy
-.compost/
 .state/
 Sandbox/
 _deprecated/
@@ -32,10 +31,6 @@ Vendor/.legacy/
 *.tmp
 target/
 **/target/
-target/
-**/target/
-target/
-**/target/
 
 # Python
 __pycache__/
@@ -43,6 +38,7 @@ __pycache__/
 *.pyo
 *.pyd
 .venv/
+*.egg-info/
 *.egg-info/
 
 # Local data
