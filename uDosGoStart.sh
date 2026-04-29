@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # uDosGo Launcher - Main Script
-# Installs dependencies, self-heals, and launches uCode1 in Rust TUI mode
+# Installs dependencies, self-heals, and launches ucode1 CLI in Rust TUI mode
 
 set -e
 
 # Configuration
 REPO_DIR="/Users/fredbook/Code/uDosGo"
-UCODE_DIR="$REPO_DIR/uCode1"
+UCODE_DIR="$REPO_DIR/uCode2"
 LOG_FILE="$REPO_DIR/uDosGo_install.log"
 TIMEOUT_SECONDS=300
 MAX_RETRIES=3
@@ -184,31 +184,31 @@ self_heal() {
     
     # Check if repository exists
     if [ ! -d "$UCODE_DIR" ]; then
-        echo "${RED}uCode1 directory not found. Cloning repository...${NC}"
+        echo "${RED}uCode2 directory not found. Cloning repository...${NC}"
         git clone https://github.com/uDosGo/Connect.git "$UCODE_DIR" >> "$LOG_FILE" 2>&1
     fi
     
     # Check if Cargo.toml exists
     if [ ! -f "$UCODE_DIR/Cargo.toml" ]; then
-        echo "${RED}Cargo.toml not found. Repository may be corrupted.${NC}"
+        echo "${RED}Cargo.toml not found in uCode2. Repository may be corrupted.${NC}"
         exit 1
     fi
     
     echo "${GREEN}Self-heal checks passed${NC}"
 }
 
-# Build uCode1 with timeout and retry
+# Build uCode2 with timeout and retry
 build_ucode() {
     local retry_count=0
     local success=false
     
     while [ $retry_count -lt $MAX_RETRIES ] && [ "$success" = false ]; do
-        echo "${BLUE}Building uCode1 (Attempt $((retry_count + 1)) of $MAX_RETRIES)...${NC}"
+        echo "${BLUE}Building uCode2 (Attempt $((retry_count + 1)) of $MAX_RETRIES)...${NC}"
         
         # Use timeout wrapper for build process
         if execute_with_timeout "cd \"$UCODE_DIR\" && cargo build --release >> \"$LOG_FILE\" 2>&1" 600; then
             success=true
-            echo "${GREEN}uCode1 built successfully${NC}"
+            echo "${GREEN}uCode2 built successfully${NC}"
         else
             retry_count=$((retry_count + 1))
             echo "${RED}Build failed or timed out. Retrying...${NC}"
@@ -217,7 +217,7 @@ build_ucode() {
     done
     
     if [ "$success" = false ]; then
-        echo "${RED}Failed to build uCode1 after $MAX_RETRIES attempts${NC}"
+        echo "${RED}Failed to build uCode2 after $MAX_RETRIES attempts${NC}"
         echo "${YELLOW}Check $LOG_FILE for details${NC}"
         exit 1
     fi
@@ -246,14 +246,14 @@ main() {
     build_ucode
     
     # Launch uCode1 in Rust TUI mode
-    echo "${BLUE}Launching uCode1 in Rust TUI mode...${NC}"
+    echo "${BLUE}Launching ucode1 in Rust TUI mode...${NC}"
     cd "$UCODE_DIR"
     
     # Show progress bar for 3 seconds before launching
     progress_bar 3
     
     # Launch with TUI mode
-    cargo run --bin uCode1 -- --tui
+    cargo run --bin ucode1 -- --tui
 }
 
 # Execute main function with error handling
