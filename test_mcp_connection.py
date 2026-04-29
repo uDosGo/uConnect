@@ -26,8 +26,8 @@ RESET = '\033[0m'
 
 # Updated: MCP server is now in uCode2
 MCP_SERVER_BIN = "/Users/fredbook/Code/uDosGo/uCode2/target/debug/mcp-server"
-SOCKET_PATH = "~/.local/mcp.sock"  # Relative to home directory
-VAULT_PATH = "~/vault"
+SOCKET_PATH = os.path.expanduser("~/.local/mcp.sock")  # Absolute path
+VAULT_PATH = os.path.expanduser("~/vault")
 
 def log(message, color=RESET):
     """Log a message with color"""

@@ -63,7 +63,9 @@ pub struct McpServer {
 
 impl McpServer {
     pub fn new(vault_path: &str) -> Self {
-        let socket_path = PathBuf::from(vault_path).join(".local/mcp.sock");
+        // Use ~/.local/mcp.sock as per specification
+        let home_dir = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
+        let socket_path = PathBuf::from(&home_dir).join(".local/mcp.sock");
         
         McpServer {
             socket_path,
@@ -221,7 +223,7 @@ impl McpServer {
                 McpResponse::StatusInfo {
                     version: "0.1.0".to_string(),
                     mode: "user".to_string(),
-                    vault_path: ".local/mcp.sock".to_string(),
+                    vault_path: "~/.local/mcp.sock".to_string(),
                 }
             }
             McpRequest::Ping => {

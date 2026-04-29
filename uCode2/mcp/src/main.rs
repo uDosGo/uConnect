@@ -25,8 +25,9 @@ async fn main() {
         }
     };
     
-    info!("Starting uCode1 MCP Server");
+    info!("Starting uCode2 MCP Server");
     info!("Vault path: {}", vault_path);
+    info!("Socket path: ~/.local/mcp.sock");
     
     let mut server = McpServer::new(&vault_path);
     
