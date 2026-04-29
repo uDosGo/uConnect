@@ -9,6 +9,7 @@ members = [
     "feed-spool",
     "usystem",
     "ucode1-cli",
+    "tui",
 ]
 resolver = "2"
 

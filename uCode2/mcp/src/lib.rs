@@ -63,9 +63,13 @@ pub struct McpServer {
 
 impl McpServer {
     pub fn new(vault_path: &str) -> Self {
-        // Use ~/.local/mcp.sock as per specification
-        let home_dir = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
-        let socket_path = PathBuf::from(&home_dir).join(".local/mcp.sock");
+        // XDG Base Directory: ~/.local/share/udos/mcp/core.sock
+        let data_home = std::env::var("XDG_DATA_HOME")
+            .unwrap_or_else(|_| {
+                let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
+                format!("{home}/.local/share")
+            });
+        let socket_path = PathBuf::from(&data_home).join("udos/mcp/core.sock");
         
         McpServer {
             socket_path,
