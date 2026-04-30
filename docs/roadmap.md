@@ -356,9 +356,12 @@ Full pipeline: format spec, document structure, section management, registry, se
 ## Phase 6: Deployment & Release (Month 16-18)
 
 ### Deployment
-- [ ] Implement CI/CD pipeline for Python core
-- [ ] Add automated builds for uCode1 (Python) and uCode3 (Rust)
-- [ ] Implement release management for both versions
+- [x] CI/CD pipeline for Python core + uCode2 Rust + ThinUI (GitHub Actions)
+     Python: multi-version (3.10-3.13), ruff lint, pytest, coverage
+     Rust: cargo build/test/clippy/fmt on uCode2 workspace
+     ThinUI: npm ci + npm run build
+     Release: Python wheel + Rust binaries on tagged releases
+- [x] Release management: `make release VERSION=x.y.z` bumps version, tags, pushes
 - [ ] Add update notifications with version compatibility checks
 - [ ] Create hybrid build system (Python + Rust components)
 

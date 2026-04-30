@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const API_BASE = 'http://127.0.0.1:8001/api/thinui';
 
