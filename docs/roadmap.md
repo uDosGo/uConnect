@@ -345,11 +345,11 @@ Full pipeline: format spec, document structure, section management, registry, se
      Narrator (20), Lexicon (16), Character (28), MDX (15), Cell (38)
 - [ ] Add additional end-to-end tests for remaining systems
 
-### Documentation
-- [ ] Complete API documentation
-- [ ] Add developer guides
-- [ ] Create user manual
-- [ ] Add troubleshooting guide
+### Documentation (✅ Complete)
+- [x] API reference (`docs/api-reference.md`) — all Python modules, CLI entry points, HTTP endpoints
+- [x] Developer guide (`docs/dev-guide.md`) — architecture, how to add commands/surfaces/snacks/cells, testing, CI/CD
+- [x] User manual (`docs/user-guide.md`) — all CLI commands with examples, common workflows, configuration
+- [x] Troubleshooting guide (`docs/troubleshooting.md`) — CLI, tests, ThinUI, Monodraw, cells, MDX, vault, env, build, CI
 
 ---
 
