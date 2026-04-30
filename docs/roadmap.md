@@ -298,8 +298,9 @@ All Phase 1 objectives achieved. The Python core migration, theme system, plugin
 ### USXD/OBF Implementation (✅ Complete)
 Full pipeline: format spec, document structure, section management, registry, serialization, integrity, format converters, ASCII grid parser with all format support (simple, box, teletext, markdown, CSV), component mapping (ComponentMapper with rule-based, auto-detection, layout formats), grid rendering in TUI (ANSI colors, keyboard nav, focus/selection, curses support), CLI commands (binder_cli with 11 commands, usxd_cli with 10 commands, grid subcommands), ThinUI integration (bridge, format defs, color conversion, component tree generation), and comprehensive 28-test suite. All complete.
 
-### ThinUI Integration (Remaining)
-- [ ] Add ASCII grid rendering in ThinUI
+### ThinUI Integration (✅ Complete)
+- [x] Add ASCII grid rendering in ThinUI (React Grid Viewer surface)
+     `ucode thinui api` starts Flask API, Grid Viewer surface in ThinUI
 - [x] Implement grid editing via Monodraw.app integration
      `ucode grid edit`, `ucode grid monodraw import|export|install`
 - [x] Decluttered VS Code workspace: distraction-free 2-column layout

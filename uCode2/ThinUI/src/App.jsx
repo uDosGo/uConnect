@@ -7,6 +7,7 @@ const SURFACES = [
   { id: 're3engine',     label: 'Re3Engine',       type: 'reasoning', desc: 'Deep reasoning & planning' },
   { id: 'bbcbasic',      label: 'BBC BASIC',       type: 'terminal',  desc: 'C64-style terminal' },
   { id: 'nesdash',       label: 'NES Dashboard',   type: 'dashboard', desc: 'Retro NES.css dashboard' },
+  { id: 'grid-viewer',   label: 'Grid Viewer',     type: 'grid',      desc: 'ASCII grid parser & renderer' },
   { id: 'ceefax',        label: 'Ceefax',          type: 'teletext',  desc: 'Teletext page viewer' },
   { id: 'retro',         label: 'Retro',           type: 'mix',       desc: 'Retro mixed surface' },
 ];
@@ -105,6 +106,12 @@ function SurfaceFrame({ surface }) {
       const Re3EnginePanel = React.lazy(() => import('./surfaces/devstudio/re3engine/Re3EnginePanel'));
       return <React.Suspense fallback={<LoadingSurface label="Re3Engine" />}>
         <Re3EnginePanel />
+      </React.Suspense>;
+    }
+    case 'grid-viewer': {
+      const GridViewer = React.lazy(() => import('./surfaces/grid-viewer/GridViewer'));
+      return <React.Suspense fallback={<LoadingSurface label="Grid Viewer" />}>
+        <GridViewer />
       </React.Suspense>;
     }
     case 'notionish':
