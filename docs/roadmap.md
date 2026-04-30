@@ -338,7 +338,8 @@ Full pipeline: format spec, document structure, section management, registry, se
 ### Testing
 - [x] Implement comprehensive end-to-end test suite for USXD pipeline (28 tests)
 - [x] Add unit tests for Snack & Relic system (13 tests)
-- [ ] Add integration tests for Binder & MDX runtime
+- [x] Adding 117 integration tests across all systems
+     Narrator (20), Lexicon (16), Character (28), MDX (15), Cell (38)
 - [ ] Add additional end-to-end tests for remaining systems
 
 ### Documentation
