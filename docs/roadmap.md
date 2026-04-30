@@ -312,18 +312,18 @@ Full pipeline: format spec, document structure, section management, registry, se
 - [ ] Modify feed spool archiving to use Cells
 - [ ] Add Cube storage format for SnackBox packing
 
-### Lexicon & Character System
-- [ ] Implement 128-Character ANSI Set
-- [ ] Add Emoji Overlays for each slot
-- [ ] Add Word Aliases for each slot
-- [ ] Implement rendering priority (emoji > word > teletext > ANSI)
+### Lexicon & Character System (✅ Complete)
+- [x] Implement 128-Character ANSI Set
+- [x] Add Emoji Overlays for each slot
+- [x] Add Word Aliases for each slot
+- [x] Implement rendering priority (emoji > word > teletext > ANSI)
 
-### Lexicon + Yarnspinner Integration
-- [ ] Implement Command Slots (0-31)
-- [ ] Implement Snack Slots (32-63)
-- [ ] Implement Alias Slots (96-127)
-- [ ] Add Yarnspinner Lexicon Lookup
-- [ ] Add CLI commands for Lexicon & Yarnspinner
+### Lexicon + Character System Integration (✅ Complete)
+- [x] Implement Command Slots (0-31)
+- [x] Implement Snack Slots (32-63)
+- [x] Implement Alias Slots (96-127)
+- [x] Add Lexicon Lookup to Character System
+- [x] Add CLI commands: `ucode character list|show|render|assign|alias|emoji`
 
 ### Architecture Evolution
 - [ ] Document Python/Rust core architecture
