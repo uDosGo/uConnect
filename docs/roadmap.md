@@ -311,7 +311,8 @@ Full pipeline: format spec, document structure, section management, registry, se
 - [x] Add Cube storage format for SnackBox packing (create|add|remove|show)
 - [x] Extend `.udx`/USXD parser with Cell mapping
      `usxd cell archive|restore|link|show`
-- [ ] Modify feed spool archiving to use Cells
+- [x] Modify feed spool archiving to use Cells
+     `ucode feed archive|list|report`
 
 ### Lexicon & Character System (✅ Complete)
 - [x] Implement 128-Character ANSI Set
