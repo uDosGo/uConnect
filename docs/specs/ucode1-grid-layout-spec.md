@@ -1,8 +1,8 @@
 # uCode1 Grid & Layout Specification
 
-**Version:** 1.0 (Final)  
-**Status:** LOCKED  
-**Last Updated:** 2026-04-30  
+**Version:** 1.0 (Final)
+**Status:** LOCKED
+**Last Updated:** 2026-04-30
 **Supersedes:** UDO_FORMAT.md, ucode1-128-char-spec.md, UDX_FORMAT.md, display.css conventions
 
 ---
@@ -135,19 +135,46 @@ Else → show ANSI base character
 
 ## 3. Display System
 
-### 3.1 Scaling Formula
+### 3.1 Three Scaling Modes
 
-The display system (`udos-widgets.js`) scales the grid to fill 80% of the viewport:
+Each surface uses a different scaling strategy:
+
+#### Mode A: BBC BASIC — Locked Viewport Grid (Proportional)
+
+The grid has a **fixed number of columns × rows** (e.g. 40×24). The font size scales proportionally to make the grid fill 80% of the viewport. The grid dimensions never change — only the font scales.
 
 ```
 targetW = viewport_width  * 0.8
 targetH = viewport_height * 0.8
-
 fontFromW = targetW / (cols * char_aspect_ratio)
 fontFromH = targetH / rows
 fontSize  = min(fontFromW, fontFromH)
-fontSize  = max(fontSize, 5)  // never smaller than 5px
 ```
+
+Used by: BBC BASIC terminal surface.
+
+#### Mode B: NES Dashboard — Fluid Layout (Responsive)
+
+No fixed grid. Uses CSS flexbox/grid with block-style components that fill available space. Font size is adjustable via A+/A- controls but doesn't change the layout structure — components reflow naturally.
+
+Used by: NES Dashboard surface.
+
+#### Mode C: Ceefax Teletext — Full Window, Dynamic Grid (Fit-to-Window)
+
+Fills the **entire window** (100vw × 100vh). The font size is **fixed** (user-adjustable via A+/A-). The grid dimensions (cols × rows) are calculated dynamically to fit the current window at the current font size:
+
+```
+fontSize  = user-set (default 25px for Teletext50)
+cols      = Math.floor(viewport_width  / (fontSize * CHAR_ASPECT))
+rows      = Math.floor(viewport_height / fontSize) - chromeRows
+```
+
+- `CHAR_ASPECT` = 0.60 for Teletext50
+- `chromeRows` = 6 (header + sub-header + ticker + fasttext + nav + footer)
+- Font +/- adjusts font size and recalculates grid dimensions
+- Content clips at the calculated grid boundary
+
+Used by: Ceefax teletext surface.
 
 ### 3.2 Font Aspect Ratios
 
@@ -205,8 +232,8 @@ JSON-based block layout format for teletext-inspired interfaces.
 }
 ```
 
-**Block types:** text, metric, activity, health  
-**Grid:** 12-column layout via `span` property  
+**Block types:** text, metric, activity, health
+**Grid:** 12-column layout via `span` property
 **Storage:** `~/Code/Vault/.udo/`
 
 ### 4.2 UDX (Universal Document eXchange)
