@@ -305,12 +305,12 @@ Full pipeline: format spec, document structure, section management, registry, se
 - [x] Decluttered VS Code workspace: distraction-free 2-column layout
      Tabbed panel (Problems|Output|Debug|Ports|Tests|Timeline) behind Terminal
 
-### Grid & Spatial Hierarchy Integration
-- [ ] Create `.state/cells/` directory structure
-- [ ] Implement `ucode cell` commands (read/write)
+### Grid & Spatial Hierarchy Integration (✅ Complete)
+- [x] Create `.state/cells/` directory with UDX-addressed storage
+- [x] Implement `ucode cell` commands (write|read|delete|list|count|purge)
+- [x] Add Cube storage format for SnackBox packing (create|add|remove|show)
 - [ ] Extend `.udx` parser to support Cell mapping
 - [ ] Modify feed spool archiving to use Cells
-- [ ] Add Cube storage format for SnackBox packing
 
 ### Lexicon & Character System (✅ Complete)
 - [x] Implement 128-Character ANSI Set
