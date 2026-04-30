@@ -309,7 +309,8 @@ Full pipeline: format spec, document structure, section management, registry, se
 - [x] Create `.state/cells/` directory with UDX-addressed storage
 - [x] Implement `ucode cell` commands (write|read|delete|list|count|purge)
 - [x] Add Cube storage format for SnackBox packing (create|add|remove|show)
-- [ ] Extend `.udx` parser to support Cell mapping
+- [x] Extend `.udx`/USXD parser with Cell mapping
+     `usxd cell archive|restore|link|show`
 - [ ] Modify feed spool archiving to use Cells
 
 ### Lexicon & Character System (✅ Complete)
