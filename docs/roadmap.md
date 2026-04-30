@@ -278,11 +278,12 @@ All Phase 1 objectives achieved. The Python core migration, theme system, plugin
 ### Binder Implementation (✅ Complete)
 - Binder structure, inheritance, state management, registry, serialization, integrity, CLI all done.
 
-### MDX Runtime
-- [ ] Support `<Snack>` shortcode in MDX files
-- [ ] Implement Snack resolution and execution
-- [ ] Add Snack output rendering
-- [ ] Implement Snack error handling
+### MDX Runtime (✅ Complete)
+- [x] Support `<Snack>` shortcode in MDX files
+- [x] Implement Snack resolution and execution
+- [x] Add Snack output rendering (text, JSON, HTML)
+- [x] Implement Snack error handling with fallback blocks
+     `ucode mdx process|render|list --snack-dir <dir>`
 
 ### Story Format
 - [ ] Add `save_binder` action to Story format
@@ -299,7 +300,10 @@ Full pipeline: format spec, document structure, section management, registry, se
 
 ### ThinUI Integration (Remaining)
 - [ ] Add ASCII grid rendering in ThinUI
-- [ ] Implement grid editing support
+- [x] Implement grid editing via Monodraw.app integration
+     `ucode grid edit`, `ucode grid monodraw import|export|install`
+- [x] Decluttered VS Code workspace: distraction-free 2-column layout
+     Tabbed panel (Problems|Output|Debug|Ports|Tests|Timeline) behind Terminal
 
 ### Grid & Spatial Hierarchy Integration
 - [ ] Create `.state/cells/` directory structure
