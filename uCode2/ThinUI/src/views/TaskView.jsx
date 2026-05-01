@@ -43,7 +43,7 @@ export default function TaskView() {
       <div className="taskview-table-view">
         <div className="taskview-table-bar">
           <div className="taskview-mode-switch">
-            <button className={`mode-btn${viewMode === 'board' ? ' active' : ''}`} onClick={() => setViewMode('board')}>Kanban</button>
+            <button className={`mode-btn${viewMode === 'board' ? ' active' : ''}`} onClick={() => setViewMode('board')}>Cardview</button>
             <button className={`mode-btn${viewMode === 'table' ? ' active' : ''}`} onClick={() => setViewMode('table')}>Table</button>
           </div>
           <span className="taskview-count">{tasks.length} items</span>
@@ -75,7 +75,7 @@ export default function TaskView() {
     <div className="taskview">
       <div className="taskview-mode-bar">
         <div className="taskview-mode-switch">
-          <button className={`mode-btn${viewMode === 'board' ? ' active' : ''}`} onClick={() => setViewMode('board')}>Kanban</button>
+          <button className={`mode-btn${viewMode === 'board' ? ' active' : ''}`} onClick={() => setViewMode('board')}>Cardview</button>
           <button className={`mode-btn${viewMode === 'table' ? ' active' : ''}`} onClick={() => setViewMode('table')}>Table</button>
         </div>
         <span className="taskview-count">{tasks.length} items</span>

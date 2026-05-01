@@ -5,7 +5,7 @@ import Reader from './views/Reader';
 import TaskView from './views/TaskView';
 
 const SURFACES = [
-  { id: 'taskview', label: 'TaskView',    type: 'Kanban',   desc: 'Notionish task board', icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z' },
+  { id: 'taskview', label: 'TaskView',    type: 'Cardview',   desc: 'Notionish task board', icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z' },
   { id: 'docview',  label: 'DocView',     type: 'Editor',   desc: 'Typo-style Markdown', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8' },
   { id: 'reader',   label: 'Reader',      type: 'Prose',    desc: 'Distraction-free read', icon: 'M4 6h16M4 12h16M4 18h12' },
 ];
