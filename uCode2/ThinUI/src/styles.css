@@ -10,6 +10,16 @@
     --gw-bg-tertiary: #374151;
     --gw-bg-hover: #4b5563;
 
+    /* ── Notionish design tokens ── */
+    --nc-bg-primary: rgb(25, 25, 25);
+    --nc-bg-card: rgb(47, 47, 47);
+    --nc-bg-secondary: rgb(37, 37, 37);
+    --nc-bg-section: rgb(28, 28, 28);
+    --nc-bg-hover: rgb(55, 55, 55);
+    --nc-text: rgba(255, 255, 255, 0.81);
+    --nc-text-secondary: rgb(127, 127, 127);
+    --nc-text-empty: rgba(255, 255, 255, 0.282);
+
     /* ── Accent ── */
     --gw-accent: #3b82f6;
     --gw-accent-hover: #2563eb;
@@ -45,19 +55,37 @@
     --gw-sidebar-width: 240px;
     --gw-navbar-height: 34px;
     --gw-titlebar-height: 0px;
+
+    /* ── Notionish responsive font scale (Gift Wrapper level 2) ── */
+    --gw-font-xs: 0.7rem;
+    --gw-font-sm: 0.8rem;
+    --gw-font-base: 0.9rem;
+    --gw-font-lg: 1rem;
+    --gw-font-xl: 1.15rem;
+    --gw-font-2xl: 1.35rem;
 }
 
-/* ── Light mode ── */
-html:not(.dark) {
-    --gw-bg-primary: #ffffff;
-    --gw-bg-secondary: #f9fafb;
-    --gw-bg-tertiary: #f3f4f6;
-    --gw-bg-hover: #e5e7eb;
-    --gw-accent: #2563eb;
-    --gw-accent-hover: #1d4ed8;
-    --gw-accent-light: #3b82f6;
-    --gw-accent-subtle: rgba(37, 99, 235, 0.1);
-    --gw-text: #111827;
+@media (min-width: 640px) {
+    :root {
+        --gw-font-xs: 0.75rem;
+        --gw-font-sm: 0.85rem;
+        --gw-font-base: 1rem;
+        --gw-font-lg: 1.1rem;
+        --gw-font-xl: 1.25rem;
+        --gw-font-2xl: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    :root {
+        --gw-font-xs: 0.8rem;
+        --gw-font-sm: 0.9rem;
+        --gw-font-base: 1.05rem;
+        --gw-font-lg: 1.2rem;
+        --gw-font-xl: 1.35rem;
+        --gw-font-2xl: 1.6rem;
+    }
+}
     --gw-text-heading: #030712;
     --gw-text-body: #374151;
     --gw-text-muted: #6b7280;
@@ -959,6 +987,378 @@ body {
     font-size: 0.85rem;
     line-height: 1.3;
     overflow: auto;
+}
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — Mode Switch Bar
+   ═══════════════════════════════════════════ */
+
+.taskview-mode-bar,
+.taskview-table-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--nc-bg-section);
+    border-bottom: 1px solid var(--gw-border);
+}
+
+.taskview-mode-switch {
+    display: flex;
+    gap: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--nc-text-secondary);
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+}
+
+.mode-btn.active {
+    background: rgba(255,255,255,0.12);
+    color: var(--gw-text);
+}
+
+.mode-btn:hover:not(.active) { color: var(--gw-text); }
+
+.taskview-count {
+    margin-left: auto;
+    font-size: 0.7rem;
+    color: var(--gw-text-disabled);
+}
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — Table View
+   ═══════════════════════════════════════════ */
+
+.taskview-table-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.notion-table {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px;
+}
+
+.notion-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 0.8fr 0.8fr 1fr;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gw-border);
+    position: sticky;
+    top: 0;
+    background: var(--nc-bg-section);
+    z-index: 1;
+}
+
+.nt-col {
+    font-size: 0.75rem;
+    color: var(--nc-text-secondary);
+}
+
+.nt-col-title {
+    font-weight: 500;
+    color: var(--gw-text);
+}
+
+.notion-table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 0.8fr 0.8fr 1fr;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gw-border);
+    cursor: pointer;
+    transition: background 0.1s;
+    align-items: center;
+}
+
+.notion-table-row:hover {
+    background: var(--nc-bg-hover);
+}
+
+.status-tag {
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — Task Sidebar (Property Editor)
+   ═══════════════════════════════════════════ */
+
+.task-sidebar {
+    width: 320px;
+    min-width: 320px;
+    background: var(--nc-bg-secondary);
+    border-left: 1px solid var(--gw-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.task-sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--gw-border);
+}
+
+.task-sidebar-title {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--gw-text-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    outline: none;
+}
+
+.task-sidebar-close {
+    background: transparent;
+    border: none;
+    color: var(--nc-text-secondary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+}
+
+.task-sidebar-close:hover { background: var(--nc-bg-hover); }
+
+.task-sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+/* ── Notionish Property Rows ── */
+
+.prop-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+    padding: 4px 0;
+}
+
+.prop-label {
+    font-size: 0.75rem;
+    color: var(--nc-text-secondary);
+}
+
+.prop-select {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--gw-text);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.prop-select:hover { background: var(--nc-bg-hover); border-color: var(--gw-border); }
+.prop-select:focus { border-color: var(--gw-accent); outline: none; }
+
+.prop-input {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--gw-text);
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+}
+
+.prop-input:hover { background: var(--nc-bg-hover); border-color: var(--gw-border); }
+.prop-input:focus { border-color: var(--gw-accent); outline: none; }
+
+.prop-section {
+    margin-top: 20px;
+}
+
+.prop-textarea {
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--gw-text-body);
+    padding: 8px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    resize: vertical;
+    margin-top: 6px;
+}
+
+.prop-textarea:hover { background: var(--nc-bg-hover); border-color: var(--gw-border); }
+.prop-textarea:focus { border-color: var(--gw-accent); outline: none; }
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — DocView File Browser
+   ═══════════════════════════════════════════ */
+
+.docview-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.docview-files {
+    width: 180px;
+    min-width: 180px;
+    background: var(--nc-bg-section);
+    border-right: 1px solid var(--gw-border);
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.docview-files-header {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--nc-text-secondary);
+    padding: 6px 14px 8px;
+}
+
+.docview-file {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--gw-text-muted);
+    transition: background 0.1s;
+}
+
+.docview-file:hover { background: var(--nc-bg-hover); color: var(--gw-text); }
+.docview-file.active { background: var(--nc-bg-hover); color: var(--gw-text); }
+
+.docview-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--nc-bg-section);
+    border-bottom: 1px solid var(--gw-border);
+}
+
+.tb-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--nc-text-secondary);
+    cursor: pointer;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: background 0.15s;
+}
+
+.tb-btn:hover { background: var(--nc-bg-hover); color: var(--gw-text); }
+.tb-btn.active { background: rgba(255,255,255,0.08); color: var(--gw-text); }
+
+.tb-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--gw-border);
+    margin: 0 2px;
+}
+
+.docview-name {
+    font-size: 0.75rem;
+    color: var(--gw-text-muted);
+    font-weight: 500;
+}
+
+.docview-words {
+    font-size: 0.7rem;
+    color: var(--nc-text-secondary);
+}
+
+.docview-panels {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.docview-panels.preview-only .docview-preview { width: 100%; }
+
+.docview-editor {
+    width: 50%;
+    border-right: 1px solid var(--gw-border);
+    display: flex;
+}
+
+.docview-textarea {
+    width: 100%;
+    height: 100%;
+    background: var(--nc-bg-primary);
+    color: var(--gw-text-body);
+    border: none;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+}
+
+.docview-preview {
+    width: 50%;
+    overflow-y: auto;
+    padding: 16px 24px;
+}
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — Prose Checkbox Tasks
+   ═══════════════════════════════════════════ */
+
+.task-todo { list-style: none; color: var(--gw-text-muted); }
+.task-done { list-style: none; color: var(--gw-text-disabled); text-decoration: line-through; }
+
+/* ═══════════════════════════════════════════
+   NOTIONISH — Kanban Card Enhancements
+   ═══════════════════════════════════════════ */
+
+.kanban-priority { font-size: 0.75rem; }
+.kanban-due { font-size: 0.65rem; color: var(--nc-text-secondary); }
+.kanban-assignee { font-size: 0.65rem; color: var(--nc-text-secondary); margin-left: auto; }
+
+.kanban-card {
+    background: var(--nc-bg-card);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    cursor: grab;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.kanban-card:hover {
+    border-color: var(--gw-border-light);
+    box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px, rgb(15 15 15 / 10%) 0px 2px 4px;
+}
+
+.kanban-card.selected {
+    border-color: var(--gw-accent);
+    box-shadow: 0 0 0 1px var(--gw-accent);
 }
 
 

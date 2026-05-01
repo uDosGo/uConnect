@@ -1,36 +1,37 @@
 import { useState } from 'react';
 
-const SAMPLE_MD = `# Welcome to DocView
+const DOCS = [
+  { id: 'welcome', name: 'Welcome.md', content: `# Welcome to DocView
 
-This is the **Typo-style** Markdown editor.
+This is the **Notionish-style** Markdown editor with live preview.
 
-## Features
+## Getting Started
 
-- Live preview as you type
-- Split-panel layout
-- Responsive prose typography
+- **Bold** and *italic* text
+- Inline \`code\` blocks
+- Lists and tables
 
-### Code Example
+### Features
 
-\`\`\`javascript
-function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-\`\`\`
+| Feature | Status |
+| :--- | :---: |
+| Split panel | ✅ |
+| Live preview | ✅ |
+| File browser | ✅ |
 
-### Blockquote
+> Write your docs here.
+` },
+  { id: 'tasks', name: 'Tasks.md', content: `# Task Dashboard
 
-> The quick brown fox jumps over the lazy dog.
+## Current Sprint
 
-| Left | Center | Right |
-| :--- | :---: | ---: |
-| 1    | 2     | 3     |
-
-- [ ] Task item
-- [x] Done item
-
-[Link to uDos](https://udos.dev)
-`;
+- [x] Gift Wrapper rebrand
+- [ ] Vault integration
+- [ ] Kanban drag-drop
+- [ ] DocView editor
+- [ ] Reader prose layout
+` },
+];
 
 function renderMarkdown(md) {
   let html = md
@@ -40,46 +41,62 @@ function renderMarkdown(md) {
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/^- \[x\] (.+)$/gm, '<li class="task-done">☑ $1</li>')
+    .replace(/^- \[ \] (.+)$/gm, '<li class="task-todo">◻ $1</li>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
-    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
-    .replace(/\n{2,}/g, '</p><p>')
-    .replace(/<li>.+<\/li>/g, m => `<ul>${m}</ul>`)
-    .replace(/<blockquote>.+<\/blockquote>/g, m => m);
-  html = html.replace(/^(.+)$/gm, (m) => {
-    if (m.startsWith('<')) return m;
-    return `<p>${m}</p>`;
-  });
+    .replace(/\|(.+)\|/g, (m) => {
+      if (m.includes('---')) return '';
+      return '<tr><td>' + m.split('|').filter(Boolean).map(c => c.trim()).join('</td><td>') + '</td></tr>';
+    })
+    .replace(/\n{2,}/g, '</p><p>');
+  html = html.replace(/^(.+)$/gm, (m) => m.startsWith('<') ? m : `<p>${m}</p>`);
   return `<div class="prose-content">${html}</div>`;
 }
 
 export default function DocView() {
-  const [md, setMd] = useState(SAMPLE_MD);
+  const [docs] = useState(DOCS);
+  const [currentDoc, setCurrentDoc] = useState(DOCS[0]);
+  const [md, setMd] = useState(DOCS[0].content);
   const [sideBySide, setSideBySide] = useState(true);
+  const [showFiles, setShowFiles] = useState(true);
+
+  const switchDoc = (doc) => {
+    setCurrentDoc(doc);
+    setMd(doc.content);
+  };
 
   return (
     <div className="docview">
       <div className="docview-toolbar">
-        <div className="docview-toolbar-left">
-          <button className={`tb-btn${sideBySide ? ' active' : ''}`} onClick={() => setSideBySide(true)} title="Split view">⊞</button>
-          <button className={`tb-btn${!sideBySide ? ' active' : ''}`} onClick={() => setSideBySide(false)} title="Preview only">⊟</button>
-        </div>
-        <span className="docview-wordcount">{md.split(/\s+/).filter(Boolean).length} words</span>
-        <span className="docview-filename">untitled.md</span>
+        <button className={`tb-btn${showFiles ? ' active' : ''}`} onClick={() => setShowFiles(!showFiles)} title="Files">📁</button>
+        <span className="tb-divider" />
+        <button className={`tb-btn${sideBySide ? ' active' : ''}`} onClick={() => setSideBySide(true)} title="Split">⊞</button>
+        <button className={`tb-btn${!sideBySide ? ' active' : ''}`} onClick={() => setSideBySide(false)} title="Preview">⊟</button>
+        <span className="tb-divider" />
+        <span className="docview-name">{currentDoc.name}</span>
+        <div style={{ flex: 1 }} />
+        <span className="docview-words">{md.split(/\s+/).filter(Boolean).length} words</span>
       </div>
-      <div className={`docview-panels${sideBySide ? '' : ' preview-only'}`}>
-        {sideBySide && (
-          <div className="docview-editor">
-            <textarea
-              className="docview-textarea"
-              value={md}
-              onChange={e => setMd(e.target.value)}
-              placeholder="Write Markdown here..."
-              spellCheck={false}
-            />
+      <div className="docview-body">
+        {showFiles && (
+          <div className="docview-files">
+            <div className="docview-files-header">Files</div>
+            {docs.map(d => (
+              <div key={d.id} className={`docview-file${currentDoc.id === d.id ? ' active' : ''}`} onClick={() => switchDoc(d)}>
+                📄 {d.name}
+              </div>
+            ))}
           </div>
         )}
-        <div className="docview-preview" dangerouslySetInnerHTML={{ __html: renderMarkdown(md) }} />
+        <div className={`docview-panels${!sideBySide ? ' preview-only' : ''}${showFiles ? ' with-files' : ''}`}>
+          {sideBySide && (
+            <div className="docview-editor">
+              <textarea className="docview-textarea" value={md} onChange={e => setMd(e.target.value)} placeholder="Write Markdown..." spellCheck={false} />
+            </div>
+          )}
+          <div className="docview-preview" dangerouslySetInnerHTML={{ __html: renderMarkdown(md) }} />
+        </div>
       </div>
     </div>
   );
