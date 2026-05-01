@@ -21,9 +21,12 @@
     body{
       background:#fff;color:#111;
       font-family:'Press Start 2P',cursive;
-      font-size:clamp(16px, 2vw, 26px);
+      font-size:18px;
       line-height:1.6;padding:1.5em;min-height:100vh
     }
+    @media(min-width:768px){ body{font-size:20px} }
+    @media(min-width:1024px){ body{font-size:22px} }
+    @media(min-width:1536px){ body{font-size:24px} }
     .container{max-width:960px;margin:0 auto}
 
     /* Header */
