@@ -1,18 +1,21 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { sendMessage, checkMCP } from '../../mcpBridge';
 
 /**
  * Re3Engine Panel — AI assistant surface powered by @assistant-ui/react.
- * Streaming chat with markdown rendering, styled for Gift Wrapper.
+ * Uses MCP backend when available, simulated responses as fallback.
  */
 
 function Re3EngineChat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [mcpOnline, setMcpOnline] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to bottom on new messages
+  useEffect(() => { checkMCP().then(setMcpOnline); }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -26,27 +29,14 @@ function Re3EngineChat() {
     setInput('');
     setIsStreaming(true);
 
-    // Add an assistant placeholder
     const assistantId = Date.now().toString();
     setMessages(prev => [...prev, { role: 'assistant', content: '', id: assistantId }]);
 
-    // Simulated streaming response (in production, connect to MCP backend)
-    const response = `I've analyzed your request: "${userMsg.content}"
+    const response = await sendMessage('re3engine', userMsg.content);
 
-Here's my reasoning:
-
-1. **Parsing the request** — Understanding the key requirements and constraints.
-2. **Identifying dependencies** — Checking available tools and resources.
-3. **Formulating a plan** — Breaking the task into actionable steps.
-4. **Generating solution** — Producing the final result.
-
-> *This surface uses @assistant-ui/react for runtime state management.*
-> *Connect a ChatModelAdapter to enable real LLM inference.*`;
-
-    // Stream character by character
     let displayed = '';
     for (let i = 0; i < response.length; i++) {
-      await new Promise(r => setTimeout(r, 10));
+      await new Promise(r => setTimeout(r, 8));
       displayed += response[i];
       setMessages(prev => prev.map(m =>
         m.id === assistantId ? { ...m, content: displayed } : m
@@ -71,7 +61,9 @@ Here's my reasoning:
         color: 'var(--gw-text-heading)',
       }}>
         <span>🤖 Re3Engine — AI Assistant</span>
-        <span style={{ fontSize: 11, color: 'var(--gw-text-muted)' }}>@assistant-ui/react</span>
+        <span style={{ fontSize: 11, color: mcpOnline ? 'var(--gw-success)' : 'var(--gw-text-muted)' }}>
+          {mcpOnline ? '● MCP Online' : '○ Simulated'}
+        </span>
       </div>
 
       {/* Messages */}

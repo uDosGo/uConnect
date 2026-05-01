@@ -1,16 +1,20 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { sendMessage, checkMCP } from '../mcpBridge';
 
 /**
  * Hivemind Chat — Multi-agent orchestration surface.
- * Uses @assistant-ui/react runtime, styled for Gift Wrapper.
+ * Uses MCP backend when available, simulated responses as fallback.
  */
 
 function HivemindChatInner() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [mcpOnline, setMcpOnline] = useState(false);
   const messagesEndRef = useRef(null);
+
+  useEffect(() => { checkMCP().then(setMcpOnline); }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -28,23 +32,11 @@ function HivemindChatInner() {
     const assistantId = Date.now().toString();
     setMessages(prev => [...prev, { role: 'assistant', content: '', id: assistantId }]);
 
-    const response = `I'll orchestrate this across my available agents.
-
-**Request received:** "${userMsg.content}"
-
-**Agents engaged:**
-1. OK Agent — Parsing requirements
-2. Code Assistant — Preparing solution
-3. Vault Searcher — Retrieving context
-
-✓ Task orchestration complete. All agents have reported back.
-
-> *Hivemind coordinates multiple AI agents via MCP.*
-> *Connect a backend to enable real agent dispatch.*`;
+    const response = await sendMessage('hivemind', userMsg.content);
 
     let displayed = '';
     for (let i = 0; i < response.length; i++) {
-      await new Promise(r => setTimeout(r, 10));
+      await new Promise(r => setTimeout(r, 8));
       displayed += response[i];
       setMessages(prev => prev.map(m =>
         m.id === assistantId ? { ...m, content: displayed } : m
@@ -68,7 +60,9 @@ function HivemindChatInner() {
         color: 'var(--gw-text-heading)',
       }}>
         <span>🧠 Hivemind — Multi-Agent Chat</span>
-        <span style={{ fontSize: 11, color: 'var(--gw-text-muted)' }}>@assistant-ui/react</span>
+        <span style={{ fontSize: 11, color: mcpOnline ? 'var(--gw-success)' : 'var(--gw-text-muted)' }}>
+          {mcpOnline ? '● MCP Online' : '○ Simulated'}
+        </span>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
