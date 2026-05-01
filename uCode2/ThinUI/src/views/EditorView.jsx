@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const DOCS = [
   { id: 'welcome', name: 'Welcome.md', content: `# Welcome to DocView
