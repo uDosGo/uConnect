@@ -1,23 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import './styles.css';
+import DocView from './views/DocView';
+import Reader from './views/Reader';
+import TaskView from './views/TaskView';
 
 const SURFACES = [
-  { id: 'notionish',     label: 'Notionish',       type: 'editor',    desc: 'Rich text / database editor' },
-  { id: 'milkdown',      label: 'Milkdown',        type: 'editor',    desc: 'Markdown editor' },
-  { id: 'hivemind-chat', label: 'Hivemind Chat',   type: 'chat',      desc: 'Multi-agent chat console' },
-  { id: 're3engine',     label: 'Re3Engine',       type: 'reasoning', desc: 'Deep reasoning & planning' },
-  { id: 'bbcbasic',      label: 'BBC BASIC',       type: 'terminal',  desc: 'C64-style terminal' },
-  { id: 'nesdash',       label: 'NES Dashboard',   type: 'dashboard', desc: 'Retro NES.css dashboard' },
-  { id: 'grid-viewer',   label: 'Grid Viewer',     type: 'grid',      desc: 'ASCII grid parser & renderer' },
-  { id: 'ceefax',        label: 'Ceefax',          type: 'teletext',  desc: 'Teletext page viewer' },
-  { id: 'retro',         label: 'Retro',           type: 'mix',       desc: 'Retro mixed surface' },
+  { id: 'taskview', label: 'TaskView',    type: 'Kanban',   desc: 'Notionish task board', icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z' },
+  { id: 'docview',  label: 'DocView',     type: 'Editor',   desc: 'Typo-style Markdown', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8' },
+  { id: 'reader',   label: 'Reader',      type: 'Prose',    desc: 'Distraction-free read', icon: 'M4 6h16M4 12h16M4 18h12' },
 ];
 
+// Prevent nesting: if we're inside an iframe, render nothing (avoids shell-in-shell)
+function isInsideIframe() {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
 function App() {
-  const [currentSurface, setCurrentSurface] = useState('notionish');
+  const [currentSurface, setCurrentSurface] = useState('taskview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [systemInfo, setSystemInfo] = useState(null);
 
+  // If we're inside an iframe, render a blank surface to prevent nesting
+  if (isInsideIframe()) {
+    return null;
+  }
+
   useEffect(() => {
-    // Try Tauri API, fall back to static info
     try {
       const { invoke } = window.__TAURI__?.tauri || {};
       if (invoke) {
@@ -29,62 +41,76 @@ function App() {
     }
   }, []);
 
+  const closeSidebar = () => setSidebarOpen(false);
+
   const surface = SURFACES.find(s => s.id === currentSurface) || SURFACES[0];
 
+  const surfaceIcons = Object.fromEntries(SURFACES.map(s => [s.id, s.icon]));
+
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-      {/* Sidebar */}
-      <nav style={{
-        width: 220, background: '#16213e', padding: '12px',
-        display: 'flex', flexDirection: 'column', gap: '4px',
-        borderRight: '1px solid #0f3460', overflowY: 'auto'
-      }}>
-        <h2 style={{ color: '#e94560', fontSize: 14, margin: '0 0 12px 0', textTransform: 'uppercase', letterSpacing: 1 }}>
-          ⚡ ThinUI
-        </h2>
-        {SURFACES.map(s => (
-          <button key={s.id} onClick={() => setCurrentSurface(s.id)}
-            style={{
-              padding: '10px 12px', border: 'none', borderRadius: 6, cursor: 'pointer',
-              textAlign: 'left', fontSize: 13,
-              background: currentSurface === s.id ? '#0f3460' : 'transparent',
-              color: currentSurface === s.id ? '#e94560' : '#a0a0b0',
-              fontWeight: currentSurface === s.id ? 600 : 400,
-            }}
-            onMouseEnter={e => e.target.style.background = '#1a1a3e'}
-            onMouseLeave={e => e.target.style.background = currentSurface === s.id ? '#0f3460' : 'transparent'}
-          >
-            <div style={{ fontWeight: 600 }}>{s.label}</div>
-            <div style={{ fontSize: 11, color: '#707080' }}>{s.desc}</div>
+    <div className="shell-layout">
+      {/* Overlay backdrop */}
+      <div className={`gw-sidebar-overlay${sidebarOpen ? ' open' : ''}`} onClick={closeSidebar} />
+
+      {/* Floating Sidebar (right) */}
+      <aside className={`gw-sidebar${sidebarOpen ? ' open' : ''}`}>
+        <div className="sidebar-brand">
+          <svg className="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
+            <path d="M20 12v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/>
+            <path d="M4 8h16v4H4z"/>
+            <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <path d="M12 8v10"/>
+            <path d="M8 13h8"/>
+          </svg>
+          <span className="sidebar-title">Wrapper</span>
+          <button className="sidebar-close-btn" onClick={closeSidebar} title="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
           </button>
-        ))}
-        <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px solid #0f3460', fontSize: 11, color: '#505060' }}>
-          {systemInfo && (
-            <>
-              <div>v{systemInfo.version}</div>
-              <div>Socket: {systemInfo.mcp_socket}</div>
-            </>
-          )}
         </div>
-      </nav>
 
-      {/* Surface Area */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {/* Surface toolbar */}
-        <div style={{
-          padding: '8px 16px', background: '#16213e',
-          borderBottom: '1px solid #0f3460',
-          display: 'flex', alignItems: 'center', gap: 12, fontSize: 13
-        }}>
-          <span style={{ color: '#e94560', fontWeight: 600 }}>{surface.label}</span>
-          <span style={{ color: '#606070' }}>•</span>
-          <span style={{ color: '#808090' }}>{surface.type}</span>
+        <div className="sidebar-menu">
+          {SURFACES.map(s => (
+            <button
+              key={s.id}
+              className={`sidebar-item${currentSurface === s.id ? ' active' : ''}`}
+              onClick={() => { setCurrentSurface(s.id); closeSidebar(); }}
+            >
+              <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d={surfaceIcons[s.id] || 'M12 2L2 7l10 5 10-5-10-5z'}/>
+              </svg>
+              <div>
+                <div className="sidebar-item-label">{s.label}</div>
+                <div className="sidebar-item-desc">{s.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="sidebar-footer">
+          <span>{systemInfo ? `v${systemInfo.version}` : ''}</span>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="gw-content">
+        {/* Surface bar — minimal Typo-style */}
+        <div className="surface-bar">
+          <span className="surface-bar-label">{surface.label}</span>
+          <span className="surface-bar-divider">•</span>
+          <span className="surface-bar-type">{surface.type}</span>
           <div style={{ flex: 1 }} />
-          <span style={{ color: '#505060', fontSize: 11 }}>{systemInfo?.mcp_socket || ''}</span>
+          <span className="surface-bar-socket">{surface.desc}</span>
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)} title="Open surfaces">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 12h18M3 6h18M3 18h18"/>
+            </svg>
+          </button>
         </div>
 
-        {/* Surface iframe / content area */}
-        <div style={{ flex: 1, overflow: 'auto', background: '#1a1a2e' }}>
+        {/* Surface frame */}
+        <div className="surface-frame">
           <SurfaceFrame surface={currentSurface} />
         </div>
       </main>
@@ -93,93 +119,16 @@ function App() {
 }
 
 function SurfaceFrame({ surface }) {
-  const base = import.meta.env.BASE_URL || '/';
-
   switch (surface) {
-    case 'hivemind-chat': {
-      const HivemindChat = React.lazy(() => import('./surfaces/hivemind-chat/HivemindChat'));
-      return <React.Suspense fallback={<LoadingSurface label="Hivemind Chat" />}>
-        <HivemindChat />
-      </React.Suspense>;
-    }
-    case 're3engine': {
-      const Re3EnginePanel = React.lazy(() => import('./surfaces/devstudio/re3engine/Re3EnginePanel'));
-      return <React.Suspense fallback={<LoadingSurface label="Re3Engine" />}>
-        <Re3EnginePanel />
-      </React.Suspense>;
-    }
-    case 'grid-viewer': {
-      const GridViewer = React.lazy(() => import('./surfaces/grid-viewer/GridViewer'));
-      return <React.Suspense fallback={<LoadingSurface label="Grid Viewer" />}>
-        <GridViewer />
-      </React.Suspense>;
-    }
-    case 'notionish':
-      return <iframe src={`${base}notionish/`} style={{ width: '100%', height: '100%', border: 'none' }} title="Notionish" />;
-    case 'milkdown':
-      return <iframe src={`${base}milkdown/`} style={{ width: '100%', height: '100%', border: 'none' }} title="Milkdown" />;
-    case 'bbcbasic':
-      return <IframePreview path="themes/bbcbasic/index.html" label="BBC BASIC Terminal" />;
-    case 'nesdash':
-      return <IframePreview path="themes/nesdash/index.html" label="NES Dashboard" />;
-    case 'ceefax':
-      return (
-        <div style={{ padding: 20, fontFamily: 'monospace' }}>
-          <h3 style={{ color: '#e94560' }}>Ceefax Teletext</h3>
-          <pre style={{ background: '#000', color: '#0ff', padding: 16, borderRadius: 8, fontSize: 14, lineHeight: 1.3 }}>
-{`┌──────────────────────────────────────────┐
-│  uDos Ceefax  PAGE 101                    │
-│                                          │
-│  Welcome to uCode2 Teletext              │
-│                                          │
-│  1. System Dashboard                     │
-│  2. Vault Notes                          │
-│  3. Snack Runner                         │
-│  4. Spatial Map                          │
-│  5. Settings                             │
-│                                          │
-│  ─────────────────────────────────────  │
-│  SELECT PAGE: [101] NEWS: OK             │
-└──────────────────────────────────────────┘`}
-          </pre>
-        </div>
-      );
-    case 'retro':
-      return <IframePreview path="themes/retro/index.html" label="Retro Surface" />;
+    case 'taskview':
+      return <TaskView />;
+    case 'docview':
+      return <DocView />;
+    case 'reader':
+      return <Reader />;
     default:
-      return <div style={{ padding: 40, textAlign: 'center', color: '#606070' }}>Select a surface</div>;
+      return <div className="surface-loading"><span className="spinner">🎁</span><span>Select a surface</span></div>;
   }
-}
-
-function LoadingSurface({ label }) {
-  return (
-    <div style={{ padding: 40, textAlign: 'center', color: '#606070', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ fontSize: 32, marginBottom: 12 }}>⏳</div>
-      <div>Loading {label}...</div>
-    </div>
-  );
-}
-
-function IframePreview({ path, label }) {
-  // Serve from uCode1/themes via Vite proxy or absolute path
-  // In dev mode, Vite proxies /ucef1/ to ../uCode1 (configure in vite.config.js)
-  const themeUrl = `/ucef1/themes/${path}`;
-  const [loadError, setLoadError] = useState(false);
-
-  return loadError ? (
-    <div style={{ padding: 20, fontFamily: 'monospace', color: '#e94560' }}>
-      <h4 style={{ margin: '0 0 8px 0' }}>{label}</h4>
-      <p>Theme not loaded. Ensure themes are served (run from uCode1 directory or configure Vite proxy).</p>
-      <p style={{ fontSize: 12, color: '#808090' }}>Expected at: <code>{themeUrl}</code></p>
-    </div>
-  ) : (
-    <iframe
-      src={themeUrl}
-      style={{ width: '100%', height: '100%', border: 'none' }}
-      title={label}
-      onError={() => setLoadError(true)}
-    />
-  );
 }
 
 export default App;

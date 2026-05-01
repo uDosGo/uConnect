@@ -1,17 +1,21 @@
-import React, { useEffect, useMemo } from 'react';
-import styled from 'styled-components';
-import ViewsNav from './Views/ViewsNav';
-import DatabaseContent from './DatabaseTypes/DatabaseContent';
+import { useEffect, useMemo } from 'react';
 import { Outlet, useMatch, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import DatabaseContent from './DatabaseTypes/DatabaseContent';
 import { applyFilters } from './Views/Filter/filterHelpers';
 import sortFunction from './Views/Sort/sortHelpers';
+import ViewsNav from './Views/ViewsNav';
 
 const MainContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: fit-content;
-  padding: 0 96px;
+  padding: 0 max(8px, calc((100vw - 800px) / 2));
   overflow: hidden;
+
+  @media (max-width: 640px) {
+    padding: 0 6px;
+  }
 `;
 
 const RootLayout = ({

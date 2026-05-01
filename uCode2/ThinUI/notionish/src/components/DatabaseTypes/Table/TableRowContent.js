@@ -1,38 +1,57 @@
-import { mdiPageLayoutSidebarRight, mdiDrag } from '@mdi/js';
+import { mdiDrag, mdiPageLayoutSidebarRight } from '@mdi/js';
 import Icon from '@mdi/react';
-import React, { useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
-import propertyData from '../../utils/helpers/propertyHelpers';
-import NameProperty from '../../Properties/NameProperty';
+import { useRef, useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { Link } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import NameProperty from '../../Properties/NameProperty';
+import propertyData from '../../utils/helpers/propertyHelpers';
 
 const ContainerDiv = styled.div`
-  width: calc(100vw - 50px);
-  margin-left: -50px;
+  width: calc(100% - 30px);
+  margin-left: -30px;
   display: flex;
   align-items: center;
+
+  @media (max-width: 640px) {
+    width: 100%;
+    margin-left: 0;
+  }
+
   &:before {
     height: 35px;
     position: absolute;
-    width: 50px;
+    width: 30px;
     content: ' ';
     display: block;
+
+    @media (max-width: 640px) {
+      display: none;
+    }
   }
   &:after {
     position: absolute;
     right: 0;
     height: 35px;
-    width: 50px;
+    width: 30px;
     content: ' ';
     display: block;
+
+    @media (max-width: 640px) {
+      display: none;
+    }
   }
 `;
 
 export const sharedRow = css`
-  margin-left: 50px;
+  margin-left: 30px;
   display: flex;
-  width: calc(100% - 50px);
+  width: calc(100% - 30px);
+
+  @media (max-width: 640px) {
+    margin-left: 0;
+    width: 100%;
+  }
   background: rgb(25, 25, 25);
   min-height: 33px;
   width: 100%;

@@ -3,11 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ThinUI — uDos Surface Shell</title>
-    <style>
-      body { margin: 0; font-family: system-ui, sans-serif; background: #1a1a2e; color: #e0e0e0; }
-      #root { min-height: 100vh; }
-    </style>
+    <title>ThinUI — Gift Wrapper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        var theme = localStorage.getItem('gw-theme') || 'dark';
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+        var fs = parseInt(localStorage.getItem('gw-font-size')) || 2;
+        document.documentElement.setAttribute('data-font-size', String(fs));
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

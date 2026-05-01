@@ -1,150 +1,51 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import { auth } from '../firebase';
-import {
-  FacebookAuthProvider,
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
-import Icon from '@mdi/react';
-import { mdiGoogle, mdiGithub, mdiFacebook } from '@mdi/js';
-import { hoverStyle } from '../context/theme';
-import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: 0px 108px;
-  padding: 60px 0px 20px;
-  align-items: end;
-`;
-
-const Header = styled.h1`
-  display: flex;
-  margin-bottom: 20px;
-  justify-content: end;
-  flex-direction: column;
-`;
-
-const LoginContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  justify-content: start;
-  height: 100%;
-`;
-
-const LoginText = styled.h3`
-  font-weight: 300;
-  font-size: 14px;
-`;
-
-const LoginIcons = styled.div`
-  display: flex;
-  gap: 8px;
   justify-content: center;
-`;
+  align-items: center;
+  margin: 0 max(12px, calc((100vw - 900px) / 2));
+  padding: 12px 0px 6px;
 
-const StyledButton = styled.button`
-  color: var(--main-font-color);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  height: 1.5rem;
-  padding: 1px;
-  width: 1.5rem;
-  background-color: var(--section-background-color);
-  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px,
-    rgb(15 15 15 / 10%) 0px 2px 4px;
-  &:hover {
-    ${hoverStyle}
+  @media (max-width: 640px) {
+    padding: 8px 0px 4px;
+    margin: 0 12px;
   }
 `;
 
-const StyledPopupIcon = styled(Icon)`
-  margin: auto;
-`;
-
-const ErrorDiv = styled.div`
-  height: 18px;
+const ModeSwitch = styled.div`
   display: flex;
-  justify-content: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 3px;
 `;
 
-const Error = styled.p`
-  font-size: 12px;
-  display: flex;
-  padding: 0px 4px;
-  width: fit-content;
+const ModeBtn = styled.button`
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  background: ${p => p.$active ? 'rgba(255,255,255,0.12)' : 'transparent'};
+  color: ${p => p.$active ? 'inherit' : 'rgba(255,255,255,0.5)'};
+  transition: all 0.15s;
+  &:hover { color: inherit; }
+
+  @media (max-width: 640px) {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
 `;
 
-const LogOutButton = styled.button`
-  font: inherit;
-  font-weight: 300;
-  text-decoration: underline;
-  background-color: transparent;
-  border: inherit;
-  color: var(--main-font-color);
-`;
-
-const Nav = ({ user }) => {
-  const [isErrorMessage, setIsErrorMessage] = useState();
-
-  const signOutUser = async () => {
-    await signOut(auth);
-    setIsErrorMessage(false);
-  };
-
-  const trySignInPopup = async (provider) => {
-    try {
-      return await signInWithPopup(auth, provider);
-    } catch {
-      setIsErrorMessage(true);
-    }
-  };
-
-  const loginGoogle = async () => trySignInPopup(new GoogleAuthProvider());
-  const loginGithub = async () => trySignInPopup(new GithubAuthProvider());
-  const loginFacebook = async () => trySignInPopup(new FacebookAuthProvider());
-
+const Nav = ({ mode, onModeChange }) => {
   return (
     <Container>
-      <Link to={'/'}>
-        <Header>Notion Todo Clone</Header>
-      </Link>
-      <LoginContainer>
-        {user ? (
-          <>
-            <LoginText>Welcome, {user.displayName || user.email}</LoginText>
-            <LogOutButton onClick={signOutUser}>Sign Out</LogOutButton>
-          </>
-        ) : (
-          <>
-            <LoginText>Login to save your data</LoginText>
-            <LoginIcons>
-              <StyledButton onClick={loginGoogle}>
-                <StyledPopupIcon path={mdiGoogle} size={0.9} />
-              </StyledButton>
-              <StyledButton onClick={loginGithub}>
-                <StyledPopupIcon path={mdiGithub} size={0.95} />
-              </StyledButton>
-              <StyledButton onClick={loginFacebook}>
-                <StyledPopupIcon path={mdiFacebook} size={0.95} />
-              </StyledButton>
-            </LoginIcons>
-            <ErrorDiv>
-              {isErrorMessage && (
-                <Error>
-                  'There was an error signing in. Please try again or use a
-                  different method.'
-                </Error>
-              )}
-            </ErrorDiv>
-          </>
-        )}
-      </LoginContainer>
+      <ModeSwitch>
+        <ModeBtn $active={mode === 'tasks'} onClick={() => onModeChange('tasks')}>📋 Tasks</ModeBtn>
+        <ModeBtn $active={mode === 'docs'} onClick={() => onModeChange('docs')}>📄 Docs</ModeBtn>
+      </ModeSwitch>
     </Container>
   );
 };

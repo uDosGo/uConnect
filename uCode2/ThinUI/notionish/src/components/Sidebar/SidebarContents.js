@@ -1,20 +1,20 @@
-import React, { useContext, useMemo } from 'react';
-import styled from 'styled-components';
-import PropertyLabel from '../Properties/Labels/PropertyLabel';
+import { mdiCheckboxBlankOutline, mdiCheckboxOutline } from '@mdi/js';
 import Icon from '@mdi/react';
-import { mdiCheckboxOutline, mdiCheckboxBlankOutline } from '@mdi/js';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { useContext, useMemo } from 'react';
+import styled from 'styled-components';
+import { DatabaseContext } from '../../context/context';
+import { hoverStyle } from '../../context/theme';
+import PropertyLabel from '../Properties/Labels/PropertyLabel';
+import NameProperty from '../Properties/NameProperty';
 import NotesProperty from '../Properties/NotesProperty';
 import propertyData, {
-  unhoverableTypes,
+    unhoverableTypes,
 } from '../utils/helpers/propertyHelpers';
-import NameProperty from '../Properties/NameProperty';
-import { hoverStyle } from '../../context/theme';
-import { DatabaseContext } from '../../context/context';
-import { doc, deleteDoc } from 'firebase/firestore';
 import AddNewPropertySidebar from './AddNewPropertySidebar';
 
 const PropertiesContainer = styled.div`
-  padding: 32px 48px 0 48px;
+  padding: clamp(12px, 4vw, 48px) clamp(12px, 4vw, 48px) 0;
   height: 100%;
   display: flex;
   flex-direction: column;
