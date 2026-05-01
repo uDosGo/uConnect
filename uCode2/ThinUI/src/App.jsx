@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import GridEditor from './grid-editor/GridEditor';
 import VaultBrowser from './views/vault/VaultBrowser';
+import BinderView from './views/binder/BinderView';
 import './styles.css';
 import EditorView from './views/EditorView';
 import Reader from './views/Reader';
@@ -17,6 +18,7 @@ const GIFTS = [
   // Tool Gifts
   { id: 'gridedit',label: 'Grid Editor',type: 'Tool',    desc: 'Cell & layer grid edit', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z', gift: true },
   { id: 'vault',   label: 'Vault',    type: 'Browse',  desc: 'File browser & editor', icon: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z', gift: true },
+  { id: 'binder',  label: 'Binder',   type: 'Data',    desc: 'Table & board views',  icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', gift: true },
   // uCode1 Gifts
   { id: 'terminal',label: 'Terminal',type: 'Mode 1',   desc: 'BBC-style console', icon: 'M4 17V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12M4 17h16M8 21h8M12 17v4', gift: true },
   { id: 'dashboard',label: 'Dashboard',type: 'Mode 2',desc: 'NES-style panels',  icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', gift: true },
@@ -149,6 +151,8 @@ function SurfaceFrame({ surface }) {
       return <GridEditor />;
     case 'vault':
       return <VaultBrowser />;
+    case 'binder':
+      return <BinderView />;
     case 'terminal':
       return <GiftIFrame path="/themes/bbcbasic/index.html" />;
     case 'dashboard':
