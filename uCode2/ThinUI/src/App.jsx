@@ -1,4 +1,5 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
+import GridEditor from './grid-editor/GridEditor';
 import './styles.css';
 import EditorView from './views/EditorView';
 import Reader from './views/Reader';
@@ -13,7 +14,7 @@ const GIFTS = [
   { id: 'hivemind',label: 'Hivemind',type: 'Chat',     desc: 'Multi-agent chat', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', gift: true },
   { id: 're3',     label: 'Re3Engine',type: 'Reasoning',desc: 'AI deep reasoning', icon: 'M9 3v2M15 3v2M5 7h14M5 19h14M5 7v12M19 7v12', gift: true },
   // Tool Gifts
-  { id: 'grid',    label: 'Grid',     type: 'Tool',     desc: 'ASCII grid parser', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z', gift: true },
+  { id: 'gridedit',label: 'Grid Editor',type: 'Tool',    desc: 'Cell & layer grid edit', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z', gift: true },
   // uCode1 Gifts
   { id: 'terminal',label: 'Terminal',type: 'Mode 1',   desc: 'BBC-style console', icon: 'M4 17V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12M4 17h16M8 21h8M12 17v4', gift: true },
   { id: 'dashboard',label: 'Dashboard',type: 'Mode 2',desc: 'NES-style panels',  icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', gift: true },
@@ -142,6 +143,8 @@ function SurfaceFrame({ surface }) {
       return <LazyGift fallback="Re3Engine" loader={() => import('./surfaces/devstudio/re3engine/Re3EnginePanel')} />;
     case 'grid':
       return <LazyGift fallback="Grid Viewer" loader={() => import('./surfaces/grid-viewer/GridViewer')} />;
+    case 'gridedit':
+      return <GridEditor />;
     case 'terminal':
       return <GiftIFrame path="/themes/bbcbasic/index.html" />;
     case 'dashboard':
