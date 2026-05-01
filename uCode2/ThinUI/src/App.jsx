@@ -15,7 +15,6 @@ const GIFTS = [
   // Chat Gifts
   { id: 'hivemind',label: 'Hivemind',type: 'Chat',     desc: 'Multi-agent chat', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', gift: true },
   { id: 're3',     label: 'Re3Engine',type: 'Reasoning',desc: 'AI deep reasoning', icon: 'M9 3v2M15 3v2M5 7h14M5 19h14M5 7v12M19 7v12', gift: true },
-  // Tool Gifts
   { id: 'gridedit',label: 'Grid Editor',type: 'Tool',    desc: 'Cell & layer grid edit', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z', gift: true },
   { id: 'vault',   label: 'Vault',    type: 'Browse',  desc: 'File browser & editor', icon: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z', gift: true },
   { id: 'binder',  label: 'Binder',   type: 'Data',    desc: 'Table & board views',  icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', gift: true },
@@ -145,8 +144,6 @@ function SurfaceFrame({ surface }) {
       return <LazyGift fallback="Hivemind Chat" loader={() => import('./surfaces/hivemind-chat/HivemindChat')} />;
     case 're3':
       return <LazyGift fallback="Re3Engine" loader={() => import('./surfaces/devstudio/re3engine/Re3EnginePanel')} />;
-    case 'grid':
-      return <LazyGift fallback="Grid Viewer" loader={() => import('./surfaces/grid-viewer/GridViewer')} />;
     case 'gridedit':
       return <GridEditor />;
     case 'vault':

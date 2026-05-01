@@ -253,7 +253,16 @@
           else if (cmd === 'NEW')    addOutput('NEW PROGRAM CLEARED');
           else if (cmd === 'HELP')   addOutput('COMMANDS: LOAD RUN LIST NEW HELP CLS CITIES SIZE');
           else if (cmd === 'CLS')    { contentBuffer = []; cascadeBuffer(); }
+          else if (cmd === 'MCP')    { fetch('/api/mcp/ping', {method:'POST'}).then(r=>r.json()).then(d=>addOutput('MCP: ONLINE '+(d.session_id||'')).catch(()=>addOutput('MCP: OFFLINE')); }
           else if (cmd === 'CITIES') addOutput('SEED POD: CITY-INDEX-001 83 CITIES 17 TIMEZONES LOCAL: SYDNEY MELBOURNE BRISBANE');
+          else if (cmd.indexOf('OK ') === 0) {
+            var agentQuery = cmd.substring(3);
+            addOutput('OK AGENT: PROCESSING...');
+            fetch('/api/mcp/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({agent:'hivemind', message:agentQuery}) })
+              .then(function(r){ return r.json(); })
+              .then(function(d){ addOutput('OK AGENT: '+ (d.response||'DONE')); })
+              .catch(function(){ addOutput('OK AGENT: SIMULATED — MCP backend not connected.'); });
+          }
           else if (cmd.indexOf('SIZE') === 0) {
             var parts = cmd.split(' ');
             if (parts.length === 2 && VIEWPORTS[parts[1]]) {
