@@ -9,6 +9,9 @@ const GIFTS = [
   { id: 'lists',   label: 'Lists',   type: 'Cardview', desc: 'Tasks & items',  icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', gift: true },
   { id: 'editor',  label: 'Editor',  type: 'Markdown', desc: 'Write & preview', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8', gift: true },
   { id: 'reader',  label: 'Reader',  type: 'Prose',    desc: 'Distraction-free', icon: 'M4 6h16M4 12h16M4 18h12', gift: true },
+  // Chat Gifts
+  { id: 'hivemind',label: 'Hivemind',type: 'Chat',     desc: 'Multi-agent chat', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', gift: true },
+  { id: 're3',     label: 'Re3Engine',type: 'Reasoning',desc: 'AI deep reasoning', icon: 'M9 3v2M15 3v2M5 7h14M5 19h14M5 7v12M19 7v12', gift: true },
   // uCode1 Gifts
   { id: 'terminal',label: 'Terminal',type: 'Mode 1',   desc: 'BBC-style console', icon: 'M4 17V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12M4 17h16M8 21h8M12 17v4', gift: true },
   { id: 'dashboard',label: 'Dashboard',type: 'Mode 2',desc: 'NES-style panels',  icon: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z', gift: true },
@@ -131,45 +134,39 @@ function SurfaceFrame({ surface }) {
       return <EditorView />;
     case 'reader':
       return <Reader />;
+    case 'hivemind':
+      return <LazyGift fallback="Hivemind Chat" loader={() => import('./surfaces/hivemind-chat/HivemindChat')} />;
+    case 're3':
+      return <LazyGift fallback="Re3Engine" loader={() => import('./surfaces/devstudio/re3engine/Re3EnginePanel')} />;
     case 'terminal':
-      return <TerminalGift />;
+      return <GiftIFrame path="/themes/bbcbasic/index.html" />;
     case 'dashboard':
-      return <DashboardGift />;
+      return <GiftIFrame path="/themes/nesdash/index.html" />;
     case 'teletext':
-      return <TeletextGift />;
+      return <GiftIFrame path="/themes/ceefax/index.html" />;
     default:
       return <div className="surface-loading"><span className="spinner">🎁</span><span>Select a Gift</span></div>;
   }
 }
 
-/* ─── uCode1 Gifts (iframed theme pages) ─── */
+function LazyGift({ fallback, loader }) {
+  const Component = lazy(loader);
+  return (
+    <Suspense fallback={
+      <div className="surface-loading"><span className="spinner">⏳</span><span>Loading {fallback}…</span></div>
+    }>
+      <Component />
+    </Suspense>
+  );
+}
 
 function GiftIFrame({ path }) {
   const [error, setError] = useState(false);
   return error ? (
-    <div className="gift-error">
-      <span>Failed to load {path}</span>
-    </div>
+    <div className="gift-error"><span>Failed to load {path}</span></div>
   ) : (
-    <iframe
-      src={path}
-      className="gift-iframe"
-      title={path}
-      onError={() => setError(true)}
-    />
+    <iframe src={path} className="gift-iframe" title={path} onError={() => setError(true)} />
   );
-}
-
-function TerminalGift() {
-  return <GiftIFrame path="/themes/bbcbasic/index.html" />;
-}
-
-function DashboardGift() {
-  return <GiftIFrame path="/themes/nesdash/index.html" />;
-}
-
-function TeletextGift() {
-  return <GiftIFrame path="/themes/ceefax/index.html" />;
 }
 
 export default App;
