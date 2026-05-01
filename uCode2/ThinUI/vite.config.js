@@ -88,6 +88,10 @@ function vaultApi() {
           res.writeHead(404); res.end('Not found');
           return;
         }
+        if (fs.statSync(safePath).isDirectory()) {
+          res.writeHead(400); res.end('Is a directory');
+          return;
+        }
         const content = fs.readFileSync(safePath, 'utf-8');
         res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
         res.end(content);

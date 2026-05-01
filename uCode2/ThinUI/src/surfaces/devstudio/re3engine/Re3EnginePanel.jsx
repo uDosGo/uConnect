@@ -1,6 +1,6 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { sendMessage, checkMCP } from '../../mcpBridge';
+import { checkMCP, sendMessage } from '../../mcpBridge';
 
 /**
  * Re3Engine Panel — AI assistant surface powered by @assistant-ui/react.

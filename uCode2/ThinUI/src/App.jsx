@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import GridEditor from './grid-editor/GridEditor';
-import VaultBrowser from './views/vault/VaultBrowser';
-import BinderView from './views/binder/BinderView';
 import './styles.css';
+import BinderView from './views/binder/BinderView';
 import EditorView from './views/EditorView';
 import Reader from './views/Reader';
 import TaskView from './views/TaskView';
+import VaultBrowser from './views/vault/VaultBrowser';
 
 // ─── Gift Registry ───
 const GIFTS = [

@@ -1,6 +1,6 @@
 import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { sendMessage, checkMCP } from '../mcpBridge';
+import { checkMCP, sendMessage } from '../mcpBridge';
 
 /**
  * Hivemind Chat — Multi-agent orchestration surface.

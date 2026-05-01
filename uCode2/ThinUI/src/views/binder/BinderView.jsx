@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SAMPLE = [
   { id: '1', name: 'Setup Gift Wrapper',   status: 'Done',       priority: 'High',   assignee: 'Alice', due: '2026-05-01' },
