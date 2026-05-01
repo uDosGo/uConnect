@@ -37,6 +37,24 @@ export default function CellEditor() {
 
   const currentFont = GRID_CONSTANTS.FONTS.find(f => f.id === activeFont);
 
+  // Click a cell to paint it with the selected slot
+  const paintCell = (y, x) => {
+    const slot = SLOTS[selectedSlot];
+    setGrid(prev => {
+      const next = prev.map(r => [...r]);
+      next[y][x] = { slot: selectedSlot, char: slot.char, emoji: slot.emoji };
+      return next;
+    });
+  };
+
+  // Fill entire grid with a character
+  const fillGrid = (slot) => {
+    const s = SLOTS[slot];
+    setGrid(Array.from({ length: 25 }, () =>
+      Array.from({ length: 40 }, () => ({ slot, char: s.char, emoji: s.emoji }))
+    ));
+  };
+
   // Render the 40×25 editing grid
   const renderGrid = () => (
     <div className="ce-grid" style={{ fontFamily: `var(--font-${activeFont})` }}>
@@ -46,7 +64,7 @@ export default function CellEditor() {
             <div
               key={x}
               className={`ce-cell${selectedSlot === cell.slot ? ' active' : ''}`}
-              onClick={() => setSelectedSlot(cell.slot)}
+              onClick={() => paintCell(y, x)}
               title={`(${x},${y}) slot ${cell.slot} ${cell.char}`}
             >
               {cell.emoji || cell.char}
@@ -99,6 +117,8 @@ export default function CellEditor() {
           <button className={`ce-view-btn${viewMode === 'catalog' ? ' active' : ''}`} onClick={() => setViewMode('catalog')}>Catalog</button>
         </div>
         <span className="ce-font-mode">Mode {currentFont.mode}</span>
+        <button className="ce-action-btn" onClick={() => fillGrid(selectedSlot)} title="Fill grid with selected char">Fill</button>
+        <button className="ce-action-btn" onClick={() => fillGrid(32)} title="Clear grid">Clear</button>
       </div>
 
       {/* Main area */}

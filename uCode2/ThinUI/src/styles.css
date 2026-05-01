@@ -1533,6 +1533,12 @@ body {
 .ce-font-mode, .lc-mode {
     margin-left: auto; font-size: 0.6rem; color: var(--gw-text-disabled);
 }
+.ce-action-btn {
+    padding: 2px 8px; font-size: 0.6rem; font-family: var(--font-sans);
+    background: var(--nc-bg-section); color: var(--gw-text-muted);
+    border: 1px solid var(--gw-border); border-radius: 3px; cursor: pointer;
+}
+.ce-action-btn:hover { background: var(--nc-bg-hover); color: var(--gw-text); }
 
 .ce-main {
     flex: 1; display: flex; overflow: hidden;
