@@ -1381,4 +1381,55 @@ body {
     box-shadow: 0 0 0 1px var(--gw-accent);
 }
 
+/* ═══════════════════════════════════════════
+   DOCVIEW — Format Bar & Prose Styling
+   ═══════════════════════════════════════════ */
 
+.docview-format-bar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 10px;
+    background: var(--nc-bg-section);
+    border-bottom: 1px solid var(--gw-border);
+}
+
+.fmt-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--nc-text-secondary);
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+
+.fmt-btn:hover { background: var(--nc-bg-hover); color: var(--gw-text); }
+
+/* ── DocView Prose (Tailwind Prose-style) ── */
+
+.doc-prose {
+    line-height: 1.75;
+    max-width: 65ch;
+}
+
+.doc-prose h1 { font-size: 1.75rem; font-weight: 700; color: var(--gw-text-heading); margin-bottom: 0.5em; letter-spacing: -0.02em; }
+.doc-prose h2 { font-size: 1.35rem; font-weight: 600; color: var(--gw-text-heading); margin-top: 1.75em; margin-bottom: 0.5em; }
+.doc-prose h3 { font-size: 1.1rem; font-weight: 600; color: var(--gw-text-heading); margin-top: 1.5em; margin-bottom: 0.5em; }
+.doc-prose p { margin-bottom: 1.25em; }
+.doc-prose strong { color: var(--gw-text); font-weight: 600; }
+.doc-prose em { font-style: italic; }
+.doc-prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; background: var(--nc-bg-hover); padding: 2px 6px; border-radius: 3px; }
+.doc-prose pre { background: var(--nc-bg-section); padding: 14px; border-radius: var(--radius-sm); overflow-x: auto; margin-bottom: 1.25em; font-size: 0.8rem; line-height: 1.4; }
+.doc-prose pre code { background: none; padding: 0; }
+.doc-prose ul { margin-bottom: 1.25em; padding-left: 1.5em; }
+.doc-prose li { margin-bottom: 0.35em; }
+.doc-prose blockquote { border-left: 3px solid var(--gw-accent); padding-left: 1.25em; color: var(--gw-text-muted); margin-bottom: 1.25em; font-style: italic; }
+.doc-prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.25em; font-size: 0.85rem; }
+.doc-prose th, .doc-prose td { border: 1px solid var(--gw-border); padding: 6px 12px; text-align: left; }
+.doc-prose th { background: var(--nc-bg-section); color: var(--gw-text-heading); font-weight: 600; }
+.doc-prose .task-done { list-style: none; color: var(--gw-text-disabled); text-decoration: line-through; }
+.doc-prose .task-todo { list-style: none; color: var(--gw-text-muted); }
