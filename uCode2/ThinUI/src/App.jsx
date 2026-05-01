@@ -142,87 +142,34 @@ function SurfaceFrame({ surface }) {
   }
 }
 
-/* ─── uCode1 Gifts ─── */
+/* ─── uCode1 Gifts (iframed theme pages) ─── */
+
+function GiftIFrame({ path }) {
+  const [error, setError] = useState(false);
+  return error ? (
+    <div className="gift-error">
+      <span>Failed to load {path}</span>
+    </div>
+  ) : (
+    <iframe
+      src={path}
+      className="gift-iframe"
+      title={path}
+      onError={() => setError(true)}
+    />
+  );
+}
 
 function TerminalGift() {
-  return (
-    <div className="gift-terminal">
-      <pre>{`┌──────────────────────────────────────┐
-│  uCode1 Terminal  MODE 1             │
-│                                      │
-│  BBC BASIC (C)1982 Acorn             │
-│                                      │
-│  >READY.                             │
-│  >10 PRINT "Hello, Gift Wrapper!"    │
-│  >20 GOTO 10                         │
-│  >RUN                                │
-│  Hello, Gift Wrapper!                │
-│  Hello, Gift Wrapper!                │
-│  Hello, Gift Wrapper!                │
-│  BREAK                               │
-│  >_                                  │
-│                                      │
-│  ───────────────────────────────     │
-│  [80x24] LINE 24  COL 40             │
-└──────────────────────────────────────┘`}</pre>
-    </div>
-  );
+  return <GiftIFrame path="/themes/bbcbasic/index.html" />;
 }
 
 function DashboardGift() {
-  return (
-    <div className="gift-dashboard">
-      <div className="dash-grid">
-        <div className="dash-tile dash-tile-wide">
-          <div className="dash-label">System</div>
-          <div className="dash-value">Gift Wrapper v0.1.0</div>
-        </div>
-        <div className="dash-tile">
-          <div className="dash-label">CPU</div>
-          <div className="dash-value">42%</div>
-        </div>
-        <div className="dash-tile">
-          <div className="dash-label">MEM</div>
-          <div className="dash-value">1.2G</div>
-        </div>
-        <div className="dash-tile dash-tile-wide">
-          <div className="dash-label">Vault</div>
-          <div className="dash-value">12 items</div>
-        </div>
-        <div className="dash-tile">
-          <div className="dash-label">Tasks</div>
-          <div className="dash-value">7</div>
-        </div>
-        <div className="dash-tile">
-          <div className="dash-label">Docs</div>
-          <div className="dash-value">3</div>
-        </div>
-      </div>
-    </div>
-  );
+  return <GiftIFrame path="/themes/nesdash/index.html" />;
 }
 
 function TeletextGift() {
-  return (
-    <div className="gift-teletext">
-      <pre>{`┌──────────────────────────────────────────┐
-│  uCode1 Ceefax  PAGE 101  MODE 3        │
-│                                          │
-│           WELCOME TO GIFT WRAPPER        │
-│                                          │
-│  1.  Lists        — Task manager         │
-│  2.  Editor       — Markdown writer      │
-│  3.  Reader       — Prose view           │
-│  4.  Terminal     — BBC BASIC console    │
-│  5.  Dashboard    — System overview      │
-│  6.  Vault Browser - File explorer       │
-│  7.  Settings     - Preferences          │
-│                                          │
-│  ─────────────────────────────────────  │
-│  SELECT PAGE: [101]  NEWS: OK            │
-└──────────────────────────────────────────┘`}</pre>
-    </div>
-  );
+  return <GiftIFrame path="/themes/ceefax/index.html" />;
 }
 
 export default App;
