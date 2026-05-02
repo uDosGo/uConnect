@@ -48,8 +48,8 @@
     "workbench.editor.showTabs": "multiple",
     "workbench.editor.wrapTabs": true,
     "workbench.sideBar.location": "left",
-    "workbench.activityBar.location": "default",
-    "workbench.statusBar.visible": true,
+    "workbench.activityBar.location": "hidden",
+    "workbench.statusBar.visible": false,
     "workbench.startupEditor": "none",
     "workbench.iconTheme": "vs-seti",
 

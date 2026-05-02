@@ -1,0 +1,38 @@
+{
+    "folders": [
+        {
+            "path": "/Users/fredbook/Code/uDosGo"
+        },
+        {
+            "path": "/Users/fredbook/Code/OkAgentDigital"
+        },
+        {
+            "path": "/Users/fredbook/Code/DevStudio"
+        },
+        {
+            "path": "/Users/fredbook/Code/Apps"
+        },
+        {
+            "path": "/Users/fredbook/Vault"
+        }
+    ],
+    "settings": {
+        "workbench.panel.defaultLocation": "right",
+        "workbench.sideBar.location": "left",
+        "workbench.statusBar.visible": false,
+        "workbench.editor.showTabs": "single",
+        "continue.view": {
+            "position": "left",
+            "size": 0.5
+        },
+        "terminal.integrated.defaultLocation": "panel",
+        "workbench.activityBar.location": "hidden",
+        "workbench.view.terminal.enabled": false,
+        "workbench.panel.opensMaximized": "never"
+    },
+    "extensions": {
+        "recommendations": [
+            "continue.continue"
+        ]
+    }
+}
