@@ -1,0 +1,23 @@
+{
+  "missionControl": {
+    "enabled": true,
+    "inbox": {
+      "sources": ["github", "sentry", "snyk", "ci"]
+    },
+    "checks": {
+      "autoRun": true,
+      "onPullRequest": true,
+      "onPush": ["main", "dev"]
+    },
+    "notifications": {
+      "slack": false,
+      "email": false
+    }
+  },
+  "project": {
+    "name": "uDosGo",
+    "description": "uDosGo – AI-native development ecosystem",
+    "language": "python, rust, typescript",
+    "defaultBranch": "main"
+  }
+}
