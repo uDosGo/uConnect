@@ -2,7 +2,6 @@ use clap::{Arg, Command};
 use std::path::Path;
 use std::fs;
 use std::collections::HashMap;
-use std::io::Write;
 use ucode2_vault_bridge::Vault;
 use ucode2_ok_agent::{OkAgent, Intent};
 use ucode2_mcp::McpServer;
@@ -19,9 +18,9 @@ use modes::AppMode;
 
 mod mcp;
 use ucode2_mcp::tools::*;
-use ucode2_mcp::tools::spark_launch::{SparkLaunchInput, SparkLaunchOutput};
-use ucode2_mcp::tools::agentic_workflow_create::{AgenticWorkflowCreateInput, AgenticWorkflowCreateOutput};
-use ucode2_mcp::tools::system_status::{SystemStatusInput, SystemStatusOutput};
+use ucode2_mcp::tools::spark_launch::SparkLaunchInput;
+use ucode2_mcp::tools::agentic_workflow_create::AgenticWorkflowCreateInput;
+use ucode2_mcp::tools::system_status::SystemStatusInput;
 
 #[tokio::main]
 async fn main() {
@@ -401,7 +400,7 @@ async fn main() {
                 }
             }
             Some(("copernicus-index", copernicus_matches)) => {
-                let repo = copernicus_matches.get_one::<String>("repo").unwrap();
+                let _repo = copernicus_matches.get_one::<String>("repo").unwrap();
                 let query = copernicus_matches.get_one::<String>("query").unwrap();
                 let input = CopernicusIndexInput {
                     query: query.to_string(),
@@ -563,7 +562,7 @@ fn handle_thinui_build_command() {
     println!("   {}/src-tauri/target/release/bundle/", expanded_thinui_dir);
 }
 
-async fn handle_tui_command(vault_path: &str) {
+async fn handle_tui_command(_vault_path: &str) {
     println!("Launching TUI...");
     
     // match rustui::run_tui(vault_path).await {

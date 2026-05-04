@@ -1,6 +1,6 @@
 //! USXD grid operations
 
-use super::{UsxdDocument, UsxdCell};
+use super::UsxdDocument;
 use std::collections::HashMap;
 
 /// Grid operations for USXD documents

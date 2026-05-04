@@ -4,7 +4,7 @@
 use ratatui::{
     prelude::*,
     style::{Color, Modifier, Style},
-    widgets::{Block, Borders, Gauge, List, ListItem, Paragraph, Wrap},
+    widgets::{Block, Borders, Gauge, List, ListItem, Paragraph},
 };
 use std::time::Instant;
 

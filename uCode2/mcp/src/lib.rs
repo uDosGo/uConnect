@@ -348,7 +348,7 @@ impl McpServer {
                     },
                 }
             }
-            McpRequest::VaultWatch { path } => {
+            McpRequest::VaultWatch { path: _ } => {
                 // Watch functionality would require async handling
                 McpResponse::Error {
                     message: "Watch not implemented yet".to_string(),

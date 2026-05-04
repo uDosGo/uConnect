@@ -1,7 +1,6 @@
 //! USXD parser implementation
 
 use super::{UsxdDocument, UsxdCell, UsxdComponent};
-use std::collections::HashMap;
 
 /// Parse a simple ASCII grid into a USXD document
 pub fn parse_ascii_grid(title: &str, grid: &[&str]) -> UsxdDocument {

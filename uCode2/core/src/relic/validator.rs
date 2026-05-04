@@ -1,6 +1,6 @@
 //! Relic validator implementation
 
-use super::{Relic, RelicInput, RelicOutput};
+use super::Relic;
 use super::schema::{validate_relic_schema, RelicSchema, RelicInputSchema, RelicOutputSchema};
 use std::path::PathBuf;
 

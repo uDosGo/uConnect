@@ -3,7 +3,6 @@
 //! Provides read/write/search capabilities for the user's vault
 
 use serde::{Serialize, Deserialize};
-use serde_json::{json, Value};
 use std::path::{PathBuf, Path};
 use std::fs;
 use std::env;

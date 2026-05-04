@@ -4,7 +4,6 @@
 //! based on the uDos specifications.
 
 use serde::{Serialize, Deserialize};
-use serde_json::json;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DiscoverRepoInput {
