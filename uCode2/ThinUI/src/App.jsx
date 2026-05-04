@@ -12,6 +12,7 @@ const GIFTS = [
   { id: 'lists',   label: 'Lists',   type: 'Cardview', desc: 'Tasks & items',  icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', gift: true },
   { id: 'editor',  label: 'Editor',  type: 'Markdown', desc: 'Write & preview', icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8', gift: true },
   { id: 'reader',  label: 'Reader',  type: 'Prose',    desc: 'Distraction-free', icon: 'M4 6h16M4 12h16M4 18h12', gift: true },
+  { id: 'kanban',  label: 'Kanban',   type: 'Board',    desc: 'Task board',      icon: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', gift: true },
   // Chat Gifts
   { id: 'hivemind',label: 'Hivemind',type: 'Chat',     desc: 'Multi-agent chat', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', gift: true },
   { id: 're3',     label: 'Re3Engine',type: 'Reasoning',desc: 'AI deep reasoning', icon: 'M9 3v2M15 3v2M5 7h14M5 19h14M5 7v12M19 7v12', gift: true },
@@ -44,15 +45,30 @@ function App() {
   }
 
   useEffect(() => {
-    try {
-      const { invoke } = window.__TAURI__?.tauri || {};
-      if (invoke) {
-        invoke('get_system_info').then(setSystemInfo);
-      }
-    } catch {}
-    if (!systemInfo) {
-      setSystemInfo({ version: '0.1.0', surface: currentSurface, vault_path: '~/Code/Vault', mcp_socket: '~/.local/share/udos/mcp/core.sock' });
-    }
+    const fetchSystemInfo = async () => {
+      try {
+        const res = await fetch('/api/mcp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            method: 'tools/call',
+            params: { name: 'udos_service_status', arguments: {} },
+            id: 'sysinfo'
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.result) {
+            setSystemInfo({ version: '0.1.0-prod', status: data.result.content[0].text });
+            return;
+          }
+        }
+      } catch {}
+      // Fallback
+      setSystemInfo({ version: '0.1.0-dev', status: 'Services offline' });
+    };
+    fetchSystemInfo();
   }, []);
 
   const closeSidebar = () => setSidebarOpen(false);
@@ -103,7 +119,7 @@ function App() {
         </div>
 
         <div className="sidebar-footer">
-          <span>{systemInfo ? `v${systemInfo.version}` : ''}</span>
+          <span>{systemInfo ? `v${systemInfo.version} — ${systemInfo.status}` : ''}</span>
         </div>
       </aside>
 
@@ -140,6 +156,8 @@ function SurfaceFrame({ surface }) {
       return <EditorView />;
     case 'reader':
       return <Reader />;
+    case 'kanban':
+      return <LazyGift fallback="Kanban Board" loader={() => import('./surfaces/kanban/KanbanSurface')} />;
     case 'hivemind':
       return <LazyGift fallback="Hivemind Chat" loader={() => import('./surfaces/hivemind-chat/HivemindChat')} />;
     case 're3':

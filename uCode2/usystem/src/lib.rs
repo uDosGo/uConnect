@@ -1038,7 +1038,7 @@ ucode1 note create "My Workflow" "# My Custom Process..."
 ucode1 note create "Project/Setup" "# Project setup steps..."
 
 # 4. Backup your customizations
-git add ~/Code/Vault
+git add $UDOS_VAULT
 ```
 
 ## Indexing Vault Documents

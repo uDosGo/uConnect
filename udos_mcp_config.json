@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "udos-gateway": {
+      "command": "curl",
+      "args": [
+        "-s",
+        "-X",
+        "POST",
+        "http://localhost:30000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-d",
+        "{\"method\": \"tools/call\", \"params\": {\"name\": \"orchestrate\", \"arguments\": {\"task\": \"{{prompt}}\"}}, \"id\": 1}"
+      ],
+      "env": {},
+      "label": "uDos Hivemind Gateway"
+    }
+  }
+}

@@ -7,30 +7,43 @@ const MCP_API = '/api/mcp';
 
 let sessionId = null;
 
-async function mcpFetch(endpoint, body = {}) {
+async function mcpFetch(method, params = {}) {
   try {
-    const res = await fetch(`${MCP_API}/${endpoint}`, {
+    const res = await fetch(MCP_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: sessionId, ...body }),
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: method,
+        params: params,
+        id: Date.now()
+      }),
     });
     if (!res.ok) return null;
     const data = await res.json();
-    if (data.session_id) sessionId = data.session_id;
-    return data;
+    return data.result || data.error || null;
   } catch {
     return null;
   }
 }
 
 export async function checkMCP() {
-  const res = await mcpFetch('ping');
+  const res = await mcpFetch('tools/list');
   return res !== null;
 }
 
 export async function sendMessage(agent, message) {
-  const res = await mcpFetch('chat', { agent, message });
-  if (res?.response) return res.response;
+  // Use 'tools/call' with the appropriate tool name
+  // The gateway maps 'chat' to Re3 and we'll use 'orchestrate' for Hivemind if needed,
+  // but for now let's use the tool names as defined in router.rs
+  const toolName = agent === 'hivemind' ? 'orchestrate' : 'chat';
+  const args = agent === 'hivemind' ? { task: message } : { message: message };
+
+  const res = await mcpFetch('tools/call', { name: toolName, arguments: args });
+  
+  if (res?.content?.[0]?.text) {
+    return res.content[0].text;
+  }
 
   // Fallback: simulated response
   const simResponses = {

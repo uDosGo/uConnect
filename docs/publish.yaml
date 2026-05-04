@@ -11,7 +11,7 @@ targets:
     
   - name: "docs-vault"
     type: "vault_sync"
-    path: "~/Code/Vault/docs"
+    path: "$UDOS_VAULT/docs"
     format: "markdown"
     include: ["*.md", "*.pdf"]
     exclude: ["*.dev.md", ".DS_Store"]

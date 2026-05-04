@@ -100,8 +100,8 @@ function mcpApi() {
 export default defineConfig({
   plugins: [
     react(),
-    vaultApi(),
-    mcpApi(),
+    // vaultApi(), // Use Rust Gateway instead
+    // mcpApi(),   // Use Rust Gateway instead
   ],
   root: '.',
   build: {
@@ -111,6 +111,13 @@ export default defineConfig({
   server: {
     port: 4687,
     strictPort: false,
+    proxy: {
+      '/api/mcp': {
+        target: 'http://localhost:30000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/mcp/, '/mcp'),
+      },
+    },
   },
 });
 

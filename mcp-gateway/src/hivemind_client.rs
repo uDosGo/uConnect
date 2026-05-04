@@ -18,18 +18,53 @@ impl HivemindClient {
         }
     }
 
-    pub async fn call(&self, tool: &str, args: &Value) -> Result<String, String> {
+    pub async fn orchestrate(&self, task: &str) -> Result<String, String> {
         let url = format!("{}/mcp", self.endpoint);
-        
         let request = json!({
-            "jsonrpc": "2.0",
-            "method": "tools/call",
-            "params": {
-                "name": tool,
-                "arguments": args
-            },
-            "id": 1
+            "Orchestrate": {
+                "task": task
+            }
         });
+
+        match self.client
+            .post(&url)
+            .json(&request)
+            .send()
+            .await {
+                Ok(resp) => {
+                    match resp.json::<Value>().await {
+                        Ok(json) => {
+                            if let Some(success) = json.get("Success") {
+                                if let Some(data) = success.get("data") {
+                                    if data.is_string() {
+                                        Ok(data.as_str().unwrap().to_string())
+                                    } else {
+                                        Ok(data.to_string())
+                                    }
+                                } else {
+                                    Ok(success.to_string())
+                                }
+                            } else if let Some(error) = json.get("Error") {
+                                Err(error.get("message").and_then(|m| m.as_str()).unwrap_or("Unknown error").to_string())
+                            } else {
+                                Ok(json.to_string())
+                            }
+                        }
+                        Err(e) => Err(format!("Failed to parse response: {}", e)),
+                    }
+                }
+                Err(e) => Err(format!("Hivemind request failed: {}", e)),
+            }
+    }
+
+    pub async fn call(&self, _tool: &str, args: &Value) -> Result<String, String> {
+        // Hivemind also supports direct tool calls via TaskTool method in its server.rs
+        let url = format!("{}/mcp", self.endpoint);
+        let request = json!({
+            "TaskTool": args
+        });
+        // Note: The Hivemind server expects {"TaskTool": params} where params is the Tool enum
+        // This might need adjustment based on the actual TaskTool enum structure
         
         match self.client
             .post(&url)
@@ -39,9 +74,9 @@ impl HivemindClient {
                 Ok(resp) => {
                     match resp.json::<Value>().await {
                         Ok(json) => {
-                            if let Some(result) = json.get("result") {
-                                Ok(result.to_string())
-                            } else if let Some(error) = json.get("error") {
+                            if let Some(success) = json.get("Success") {
+                                Ok(success.to_string())
+                            } else if let Some(error) = json.get("Error") {
                                 Err(error.to_string())
                             } else {
                                 Ok(json.to_string())

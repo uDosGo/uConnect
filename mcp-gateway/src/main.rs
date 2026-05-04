@@ -5,15 +5,19 @@ use axum::{Json, Router, routing::post};
 use serde_json::{json, Value};
 use std::net::SocketAddr;
 use std::env;
+use std::sync::Arc;
 use log::{info, error};
 
 mod re3_client;
 mod hivemind_client;
+mod python_host;
+mod xcode_host;
 mod vault;
 mod router;
-
 use re3_client::Re3Client;
 use hivemind_client::HivemindClient;
+use python_host::PythonHost;
+use xcode_host::XcodeHost;
 use router::ToolRouter;
 
 #[tokio::main]
@@ -35,13 +39,22 @@ async fn main() {
     
     let re3_client = Re3Client::new(&re3_endpoint);
     let hivemind_client = HivemindClient::new(&hivemind_endpoint);
-    
+    let python_host = Arc::new(PythonHost::new());
+    let xcode_host = Arc::new(XcodeHost::new());
+
     // Create tool router
-    let tool_router = ToolRouter::new(re3_client, hivemind_client);
-    
+    let tool_router = ToolRouter::new(
+        re3_client, 
+        hivemind_client.clone(), 
+        (*python_host).clone(),
+        (*xcode_host).clone()
+    );
+
     // Build the router
     let app = Router::new()
-        .route("/mcp", post(move |json: Json<Value>| handle_mcp_request(json, tool_router.clone())))
+        .route("/mcp", post(move |json: Json<Value>| handle_mcp_request(json, tool_router.clone(), python_host.clone(), xcode_host.clone())))
+        .route("/v1/chat/completions", post(move |json: Json<Value>| handle_chat_completions(json, hivemind_client.clone())))
+        .route("/v1/models", axum::routing::get(handle_models))
         .route("/health", axum::routing::get(health_check));
     
     info!("MCP Gateway ready at http://{}", addr);
@@ -55,19 +68,36 @@ async fn main() {
 async fn handle_mcp_request(
     Json(req): Json<Value>,
     tool_router: ToolRouter,
+    python: Arc<PythonHost>,
+    xcode: Arc<XcodeHost>,
 ) -> Json<Value> {
     info!("Received MCP request: {:?}", req);
-    
+
     let method = req.get("method").and_then(|m| m.as_str()).unwrap_or("");
     let id = req.get("id").cloned();
-    
+
     match method {
         "tools/list" => {
-            let tools = list_all_tools();
-            Json(json!({ 
-                "jsonrpc": "2.0", 
-                "id": id, 
-                "result": { "tools": tools } 
+            let mut tools = list_all_tools();
+            
+            // Add Python tools dynamically
+            if let Ok(py_tools) = python.list_tools().await {
+                for tool in py_tools {
+                    tools.push(tool);
+                }
+            }
+
+            // Add Xcode tools dynamically
+            if let Ok(xcode_tools) = xcode.list_tools().await {
+                for tool in xcode_tools {
+                    tools.push(tool);
+                }
+            }
+
+            Json(json!({
+                "jsonrpc": "2.0",
+                "id": id,
+                "result": { "tools": tools }
             }))
         }
         "tools/call" => {
@@ -122,6 +152,77 @@ async fn health_check() -> Json<Value> {
     }))
 }
 
+async fn handle_chat_completions(
+    Json(req): Json<Value>,
+    hivemind: HivemindClient,
+) -> Json<Value> {
+    let messages = req["messages"].as_array().unwrap();
+    let last_message = messages.last().unwrap()["content"].as_str().unwrap_or("");
+    
+    // Check if the user wants reasoning or orchestration explicitly
+    let model = req.get("model").and_then(|m| m.as_str()).unwrap_or("hivemind-v1");
+    
+    info!("Processing chat completion for model {}: {}", model, last_message);
+
+    // If model is hivemind or it's a complex multi-step request, route to Hivemind
+    let result = if model == "hivemind-v1" || last_message.contains("plan") || last_message.contains("orchestrate") {
+        hivemind.orchestrate(last_message).await
+    } else {
+        // Default to Hivemind for all chat completions in the gateway to minimize API calls
+        hivemind.orchestrate(last_message).await
+    };
+
+    match result {
+        Ok(result) => {
+            Json(json!({
+                "id": format!("hive-{}", chrono::Utc::now().timestamp()),
+                "object": "chat.completion",
+                "created": chrono::Utc::now().timestamp(),
+                "model": "hivemind-v1",
+                "choices": [
+                    {
+                        "index": 0,
+                        "message": {
+                            "role": "assistant",
+                            "content": result
+                        },
+                        "finish_reason": "stop"
+                    }
+                ],
+                "usage": {
+                    "prompt_tokens": 0,
+                    "completion_tokens": 0,
+                    "total_tokens": 0
+                }
+            }))
+        }
+        Err(e) => {
+            error!("Orchestration failed: {}", e);
+            Json(json!({
+                "error": {
+                    "message": e,
+                    "type": "orchestration_error",
+                    "code": 500
+                }
+            }))
+        }
+    }
+}
+
+async fn handle_models() -> Json<Value> {
+    Json(json!({
+        "object": "list",
+        "data": [
+            {
+                "id": "hivemind-v1",
+                "object": "model",
+                "created": 1677610602,
+                "owned_by": "uDos"
+            }
+        ]
+    }))
+}
+
 fn list_all_tools() -> Vec<Value> {
     vec![
         // Reasoning tools (Re3Engine)
@@ -146,6 +247,10 @@ fn list_all_tools() -> Vec<Value> {
         // Dev tools
         tool_def("code_generate", "Generate code based on specifications"),
         tool_def("test_run", "Run tests and return results"),
+
+        // Service management tools
+        tool_def("udos_service_control", "Start, stop, or restart uDos services"),
+        tool_def("udos_service_status", "Get status of all uDos services"),
     ]
 }
 

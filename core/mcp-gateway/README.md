@@ -9,6 +9,17 @@ A production-ready Rust server that provides a **single MCP endpoint** for all u
 - JSON-RPC 2.0 compatible
 - CORS-enabled for web clients
 
+### ✅ Local-First Orchestration (Maximize Hivemind)
+To minimize external API calls, the gateway is configured to prioritize local engines:
+- **Chat Completions**: All requests to `/v1/chat/completions` are routed to Hivemind by default.
+- **Orchestration Preference**: Tools like `orchestrate`, `task_decompose`, and `plan` are mapped directly to local Hivemind/Re3Engine instances.
+- **Model Name**: Use `hivemind-v1` in your LLM client configuration to ensure local routing.
+
+### ✅ Integration with IDEs (MCP)
+You can use the provided `udos_mcp_config.json` to add the gateway as a tool source in your IDE (e.g., RustRover, Cursor, Claude Desktop).
+- **Endpoint**: `http://localhost:30000/mcp`
+- **Primary Tool**: `orchestrate` (for complex reasoning)
+
 ### ✅ Tool Categories
 
 | Category | Tools | Engine | Status |

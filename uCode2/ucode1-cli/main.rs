@@ -242,7 +242,7 @@ async fn main() {
     }
     
     // Basic vault integration
-    let vault_path = "~/Code/Vault".to_string();
+    let vault_path = "$UDOS_VAULT".to_string();
     let expanded_vault_path = shellexpand::tilde(&vault_path).to_string();
     
     println!("Vault location: {}", expanded_vault_path);
@@ -464,7 +464,7 @@ async fn main() {
 fn handle_thinui_run_command(theme: &str, port: &str) {
     println!("🚀 Running ThinUI with theme '{}' on port {}...", theme, port);
     
-    let thinui_dir = Path::new("~/Code/OkAgentDigital/ThinUI");
+    let thinui_dir = Path::new("$UDOS_THINUI");
     let expanded_thinui_dir = shellexpand::tilde(thinui_dir.to_str().unwrap()).to_string();
     
     if !Path::new(&expanded_thinui_dir).exists() {
@@ -548,7 +548,7 @@ fn handle_thinui_list_themes_command() {
 fn handle_thinui_build_command() {
     println!("🔨 Building ThinUI for production...");
     
-    let thinui_dir = Path::new("~/Code/OkAgentDigital/ThinUI");
+    let thinui_dir = Path::new("$UDOS_THINUI");
     let expanded_thinui_dir = shellexpand::tilde(thinui_dir.to_str().unwrap()).to_string();
     
     if !Path::new(&expanded_thinui_dir).exists() {
@@ -714,7 +714,7 @@ fn handle_map_command(matches: &clap::ArgMatches) {
             let id = add_matches.get_one::<String>("id").unwrap();
             
             let mut manager = MapManager::new();
-            let maps_dir = "~/Code/Vault/maps";
+            let maps_dir = "$UDOS_VAULT/maps";
             
             // Load existing maps if any
             let expanded_maps_dir = shellexpand::tilde(maps_dir).to_string();
@@ -745,7 +745,7 @@ fn handle_map_command(matches: &clap::ArgMatches) {
             let radius: f64 = near_matches.get_one::<String>("radius").unwrap().parse().unwrap();
             
             let mut manager = MapManager::new();
-            let maps_dir = "~/Code/Vault/maps";
+            let maps_dir = "$UDOS_VAULT/maps";
             let expanded_maps_dir = shellexpand::tilde(maps_dir).to_string();
             
             if Path::new(&expanded_maps_dir).exists() {
