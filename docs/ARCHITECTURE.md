@@ -1,10 +1,22 @@
-# uDos Architecture Overview
+# uDos Architecture
 
-## Introduction
+## Overview
 
-uDos is a **unified development operating system** that integrates code, content, and collaboration into a single coherent workflow. This document describes the high-level architecture of the system.
+uDos is a modular, vault-native development platform designed for knowledge management and productivity.
 
 ## Core Components
+
+### Vault-Native Architecture
+- **Vault Structure**: Follows Obsidian-like vault structure
+- **Templates**: Reusable templates for content creation
+- **Modules**: Independent functional units
+
+### Development Stack
+- **Frontend**: Vue.js 3
+- **Backend**: Node.js with TypeScript
+- **Build**: npm workspaces
+- **Testing**: Jest, ESLint
+- **CI/CD**: GitHub Actions
 
 ### 1. uCode1 (Core CLI)
 
@@ -117,38 +129,16 @@ A structured format for interactive narratives:
 
 ## Development Workflow
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/uDosGo/uDosGo.git
-   ```
+1. **Local Development**: Use `npm run dev` for local development
+2. **Testing**: Run `npm test` for unit tests
+3. **Building**: `npm run build` for production builds
+4. **Deployment**: Automated via GitHub Actions
 
-2. **Build the project**:
-   ```bash
-   make build
-   ```
+## Integration Points
 
-3. **Start the development server**:
-   ```bash
-   make dev
-   ```
-
-4. **Run health checks**:
-   ```bash
-   make doctor
-   ```
-
-## Configuration
-
-Configuration is managed through:
-- **Environment Variables**: `UDOS_DEV_MODE`, `VAULT_PATH`, etc.
-- **Config Files**: `~/.udos/config.toml`
-- **Trusted Folders**: `~/.udos/trusted_folders.toml`
-
-## Security
-
-- **Vault Encryption**: Notes and sensitive data are encrypted
-- **MCP Authentication**: Token-based authentication
-- **Trusted Folders**: Only trusted directories can execute scripts
+- **VibeCLI**: Configuration validation
+- **uDos Feed**: Notification system
+- **Webhooks**: External integrations
 
 ## Roadmap
 
@@ -171,6 +161,13 @@ Configuration is managed through:
 - GitHub services
 - Cloud storage
 - Collaboration features
+
+## Future Directions
+
+- Enhanced modularization
+- Improved template system
+- Better CI/CD integration
+- Expanded testing coverage
 
 ## Conclusion
 

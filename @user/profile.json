@@ -1,0 +1,27 @@
+{
+  "user": {
+    "name": "Ghost",
+    "email": null,
+    "role": "ghost",
+    "user_id": "ghost_7d99f4d9-4d3",
+    "date_of_birth": "2026-04-19",
+    "is_registered": false
+  },
+  "install": {
+    "install_id": "ins_329f10c3-86d",
+    "install_type": "ghost",
+    "first_install_at": "2026-04-19T12:41:21.968Z",
+    "timezone": "Australia/Brisbane",
+    "timezone_city": "Brisbane",
+    "grid_code": null
+  },
+  "preferences": {
+    "editor": "cursor",
+    "language": "typescript"
+  },
+  "device": {
+    "type": "master",
+    "name": "Mac.net"
+  },
+  "version": 2
+}

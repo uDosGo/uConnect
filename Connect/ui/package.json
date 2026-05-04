@@ -1,0 +1,47 @@
+{
+  "name": "@udos/views",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-source Vue views for uDos (vault, tasks, contacts, workflows, dashboard, chat)",
+  "exports": {
+    ".": "./src/views/index.ts",
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.5.0",
+    "cssnano": "^7.1.5",
+    "eslint": "^10.2.1",
+    "postcss": "^8.4.38",
+    "prettier": "^3.8.3",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.3",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:prod": "vite build --config vite.prod.config.ts",
+    "preview": "vite preview",
+    "preview:prod": "vite preview --port 4000",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "analyze": "vite build --config vite.prod.config.ts && vite-bundle-visualizer",
+    "lint": "eslint . --ext .vue,.ts",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@milkdown/core": "^7.20.0",
+    "@milkdown/preset-commonmark": "^7.20.0",
+    "@milkdown/theme-nord": "^7.20.0",
+    "@milkdown/vue": "^7.20.0",
+    "@tailwindcss/forms": "^0.5.11",
+    "vue-router": "^4.6.4"
+  }
+}

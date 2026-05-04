@@ -1,0 +1,31 @@
+{
+  "dev_mode": {
+    "enabled": false,
+    "password_protected": false,
+    "dev_password": "",
+    "ui_settings": {
+      "show_mcp_tools_editor": false,
+      "show_rate_limits_panel": false,
+      "show_mistral_dev_chat": false,
+      "show_webhook_config": false,
+      "show_advanced_sections": false,
+      "dev_mode_badge": false
+    },
+    "dangerous_actions": {
+      "require_confirmation": true,
+      "log_actions": true
+    }
+  },
+  "mistral_chat": {
+    "general_chat": {
+      "system_prompt": "You are a helpful assistant for uDosConnect.",
+      "model": "mistral",
+      "context_window": 4096
+    },
+    "dev_chat": {
+      "system_prompt": "You are a dev assistant for uDosConnect with access to advanced tools.",
+      "model": "mistral",
+      "context_window": 8192
+    }
+  }
+}

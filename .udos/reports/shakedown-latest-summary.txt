@@ -1,0 +1,13 @@
+uDos Shakedown Report - 2026-04-19T05:34:59.103Z
+========================================
+System: uDosConnect
+Version: 1.0.0-va1
+Environment: darwin/arm64
+Total Tests: 15
+Passed: 14
+Failed: 1
+Self-Healed: 1
+Pass Rate: 93%
+Duration: 2451ms
+
+Detailed report: .udos/reports/shakedown-2026-04-19T05-34-59-099Z.json

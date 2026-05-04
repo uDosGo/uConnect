@@ -1,0 +1,35 @@
+# Code Generation Agent Configuration
+# Cycle 1, Round 3: Core Integration Layer
+
+name: codegen
+type: dsc2
+model: mistral-large-latest
+description: "AI-powered code generation with safety checks"
+
+capabilities:
+  - generate
+  - complete
+  - insert
+  - refine
+
+safety:
+  require_review: true
+  max_output_lines: 200
+  banned_patterns:
+    - "eval("
+    - "exec("
+    - "rm -rf"
+    - "process.exit"
+    - "require('child_process')"
+  hallucination_check: true
+  max_retries: 3
+
+output:
+  format: code
+  save_to: "src/generated/"
+  language: typescript
+
+context:
+  max_tokens: 4096
+  temperature: 0.2
+  top_p: 0.95

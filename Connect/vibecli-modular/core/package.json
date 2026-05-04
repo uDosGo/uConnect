@@ -1,0 +1,33 @@
+{
+  "name": "@vibecli/core",
+  "version": "1.0.0",
+  "description": "VibeCLI Core Module - Content and Data Management",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && esbuild dist/index.js --minify --outfile=dist/index.min.js",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vibecli/shared-utils": "1.0.0",
+    "@vibecli/types": "1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0",
+    "esbuild": "^0.19.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["vibecli", "core", "cli", "modular"],
+  "author": "VibeCLI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vibecli/vibecli.git"
+  }
+}

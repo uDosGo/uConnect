@@ -1,0 +1,141 @@
+# Quality-Based Routing Rules for uDosConnect
+# Version: 1.0
+# Date: 2026-04-18
+# Purpose: Implement quality-based routing between DSC2 and DeepSeek-V3
+
+# Rule: Monitor DSC2 Quality and Fallback
+RULE quality_based_routing {
+    MONITOR dsc2_generate.quality_score;
+    MONITOR dsc2_complete.quality_score;
+    MONITOR dsc2_insert.quality_score;
+    MONITOR dsc2_refactor.quality_score;
+    
+    IF quality_score < 0.7 AND quality_score >= 0.5:
+        ACTION fallback_to deepseek_v3_with_thinking;
+        LOG "Low quality, using V3 reasoning";
+        METRICS {
+            fallback_reason: "low_quality",
+            original_score: quality_score
+        }
+    
+    IF quality_score < 0.5:
+        ACTION fallback_to gemini_flash;
+        LOG "Very low quality, switching provider";
+        METRICS {
+            fallback_reason: "very_low_quality",
+            original_score: quality_score
+        }
+    
+    IF quality_score < 0.3:
+        ACTION fallback_to copilot_free;
+        LOG "Critical quality issue, using Copilot";
+        METRICS {
+            fallback_reason: "critical_quality",
+            original_score: quality_score
+        }
+}
+
+# Rule: Quality Score Calculation
+RULE calculate_quality_score {
+    TRIGGER on any dsc2_* call completion;
+    
+    ACTION calculate_quality {
+        FACTORS {
+            syntax_validity: 0.4,
+            logical_correctness: 0.3,
+            completeness: 0.2,
+            style_consistency: 0.1
+        }
+        
+        METHOD self_evaluation_with_cheap_model;
+        MODEL gemini_flash;  # Cheap model for quality evaluation
+        
+        THRESHOLDS {
+            excellent: 0.9,
+            good: 0.7,
+            fair: 0.5,
+            poor: 0.3,
+            critical: 0.1
+        }
+    }
+    
+    LOG_TO vault/logs/quality_scores.ndjson;
+    METRICS {
+        quality_score: true,
+        evaluation_cost: true,
+        evaluation_time: true
+    }
+}
+
+# Rule: Quality Feedback Loop
+RULE quality_feedback_loop {
+    TRIGGER on user_rejects_suggestion or user_manual_fix;
+    
+    ACTION recalculate_quality {
+        USE user_fix_as_reference: true;
+        COMPARE original_vs_fixed: true;
+    }
+    
+    ACTION adjust_quality_thresholds {
+        IF user_rejected:
+            DECREASE threshold_by: 0.05;
+        IF user_accepted:
+            INCREASE threshold_by: 0.02;
+    }
+    
+    LOG_TO vault/logs/quality_feedback.ndjson;
+}
+
+# Rule: Provider Performance Tracking
+RULE provider_performance_tracking {
+    TRIGGER on any model_call_completion;
+    
+    TRACK_BY_PROVIDER {
+        dsc2: { success_rate: 0.0, avg_quality: 0.0, avg_latency: 0 }
+        deepseek_v3: { success_rate: 0.0, avg_quality: 0.0, avg_latency: 0 }
+        gemini_flash: { success_rate: 0.0, avg_quality: 0.0, avg_latency: 0 }
+        copilot_free: { success_rate: 0.0, avg_quality: 0.0, avg_latency: 0 }
+    }
+    
+    UPDATE_ON_CALL {
+        success_rate: moving_average(100),
+        avg_quality: moving_average(100),
+        avg_latency: moving_average(100)
+    }
+    
+    LOG_TO vault/logs/provider_performance.ndjson;
+    DASHBOARD provider_performance;
+}
+
+# Rule: Adaptive Routing Based on Performance
+RULE adaptive_routing {
+    TRIGGER on provider_performance_update;
+    
+    IF dsc2.avg_quality < 0.65 AND deepseek_v3.avg_quality > 0.75:
+        ACTION route_code_tasks_to deepseek_v3;
+        LOG "Temporarily routing code tasks to V3 due to DSC2 quality drop";
+        TIMEOUT 3600;  # Re-evaluate in 1 hour
+    
+    IF dsc2.avg_latency > 5000 AND gemini_flash.avg_latency < 2000:
+        ACTION route_high_priority_to gemini_flash;
+        LOG "Routing high-priority tasks to Gemini due to DSC2 latency";
+        TIMEOUT 1800;  # Re-evaluate in 30 minutes
+}
+
+# Rule: User Preference Learning
+RULE user_preference_learning {
+    TRIGGER on user_accepts_suggestion or user_rejects_suggestion;
+    
+    LEARN_PREFERENCES {
+        preferred_provider: string,
+        preferred_style: string,
+        common_patterns: string[]
+    }
+    
+    ADAPT_ROUTING {
+        IF user_prefers provider X for task type Y:
+            ROUTE task_type_Y to provider X;
+    }
+    
+    LOG_TO vault/logs/user_preferences.ndjson;
+}

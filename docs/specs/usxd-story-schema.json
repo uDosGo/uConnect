@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://udos.dev/specs/usxd-story-schema.json",
+  "title": "uDos USXD Story Envelope",
+  "description": "Schema for application/vnd.usxd.story envelopes (v0.2.0-alpha.1).",
+  "type": "object",
+  "required": ["open_box", "story"],
+  "additionalProperties": true,
+  "properties": {
+    "open_box": {
+      "type": "object",
+      "required": ["id", "type", "usxd_version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "application/vnd.usxd.story" },
+        "usxd_version": {
+          "type": "string",
+          "pattern": "^v0\\.2\\.0-alpha\\.[0-9]+$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "story": {
+      "type": "object",
+      "required": ["title", "steps", "navigation"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "id": { "type": "string" },
+              "type": {
+                "enum": [
+                  "presentation",
+                  "input",
+                  "single_choice",
+                  "multi_choice",
+                  "stars",
+                  "scale"
+                ]
+              },
+              "title": { "type": "string" },
+              "label": { "type": "string" },
+              "content": { "type": "string" },
+              "field": { "enum": ["text", "textarea"] },
+              "placeholder": { "type": "string" },
+              "required": { "type": "boolean" },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["value", "label"],
+                  "properties": {
+                    "value": { "type": "string" },
+                    "label": { "type": "string" },
+                    "selected": { "type": "boolean" },
+                    "default": { "type": "boolean" }
+                  },
+                  "additionalProperties": true
+                }
+              },
+              "min": { "type": "integer" },
+              "max": { "type": "integer" },
+              "value": { "type": "integer" },
+              "labels": { "type": "array", "items": { "type": "string" } },
+              "next_action": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "navigation": {
+          "type": "object",
+          "required": ["back", "cancel", "progress", "enter_to_continue"],
+          "properties": {
+            "back": { "type": "boolean" },
+            "cancel": { "type": "boolean" },
+            "progress": { "enum": ["visible", "hidden"] },
+            "enter_to_continue": { "const": true }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
+

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "udos-local": {
+      "command": "cargo",
+      "args": ["run", "--manifest-path", "core-rs/Cargo.toml", "--", "mcp", "start"],
+      "cwd": "<repo-root>",
+      "env": {
+        "UDOS_MARKDOWNIFY_CONFIG": "<repo-root>/.local/markdownify-config.yaml"
+      }
+    }
+  }
+}

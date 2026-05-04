@@ -1,0 +1,48 @@
+# uDos Round 3 Milestones
+# Cycle 1, Round 3: Core Integration Layer
+
+milestones:
+  - version: "0.5.0"
+    date: "2026-04-30"
+    description: "WP Integration & REST API Foundation"
+    tasks:
+      - "WP MySQL connector implementation"
+      - "User synchronization engine"
+      - "Permission mapping system"
+      - "Basic REST API endpoints"
+      - "Webhook listener foundation"
+    status: "in-progress"
+
+  - version: "0.6.0"
+    date: "2026-05-15"
+    description: "Real-time Sync & Admin UI"
+    tasks:
+      - "Real-time synchronization via webhooks"
+      - "Conflict resolution UI"
+      - "Bidirectional sync (uDos → WP)"
+      - "Admin dashboard for user management"
+      - "Caching layer for performance"
+    status: "planned"
+
+  - version: "0.7.0"
+    date: "2026-05-30"
+    description: "Vector DB & Advanced Features"
+    tasks:
+      - "Vector DB integration (SQLite-vec)"
+      - "Semantic search across feeds"
+      - "Hybrid cron system (WP + systemd)"
+      - "Real-time updates via WebSocket"
+      - "Performance optimization"
+    status: "planned"
+
+major:
+  - version: "2.0.0"
+    date: "2026-06-15"
+    description: "Production-Ready Platform"
+    tasks:
+      - "Multi-site support"
+      - "Enterprise authentication"
+      - "Advanced analytics"
+      - "Full documentation"
+      - "Production deployment guides"
+    status: "planned"

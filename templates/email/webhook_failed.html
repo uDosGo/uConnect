@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webhook Delivery Failed</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .header { background-color: #f8d7da; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .error { background-color: #f8d7da; padding: 15px; border-left: 4px solid #dc3545; }
+        .details { background-color: #f8f9fa; padding: 15px; border-radius: 4px; }
+        .footer { margin-top: 20px; font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>⚠️ Webhook Delivery Failed</h2>
+    </div>
+    
+    <div class="content">
+        <p>Hello Administrator,</p>
+        
+        <p>A webhook delivery has failed after multiple retry attempts.</p>
+        
+        <div class="error">
+            <h3>Failed Webhook</h3>
+            <p><strong>Webhook:</strong> {{webhook_name}}</p>
+            <p><strong>Endpoint:</strong> {{webhook_url}}</p>
+            <p><strong>Failed at:</strong> {{timestamp}}</p>
+        </div>
+        
+        <div class="details">
+            <h3>Error Details</h3>
+            <p><strong>Error:</strong> {{error}}</p>
+            <p><strong>Attempts:</strong> {{attempts}}</p>
+            
+            <h4>Payload Summary:</h4>
+            <div style="background: #e9ecef; padding: 10px; border-radius: 4px;">
+                <pre>{{payload_summary}}</pre>
+            </div>
+        </div>
+        
+        <p>This webhook has been moved to the dead letter queue. You can:</p>
+        <ul>
+            <li>Retry the delivery manually</li>
+            <li>Investigate the endpoint issue</li>
+            <li>Update the webhook configuration</li>
+        </ul>
+        
+        <div class="footer">
+            <p>This is an automated message from uDos. Please do not reply directly to this email.</p>
+            <p>uDos System | {{timestamp}}</p>
+        </div>
+    </div>
+</body>
+</html>

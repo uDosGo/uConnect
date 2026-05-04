@@ -105,7 +105,18 @@ jobs:
       run: cd uCode2/ThinUI && npm run build
       continue-on-error: true
 
-  # ── Release (on tags) ─────────────────────────────────────────────────────
+  # ── Node.js Lint (from dev branch) ────────────────────────────────────────
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run lint
+
+  # ── Release (on tags) ────────────────────────────────────────────────────-
   release:
     name: Create Release
     needs: [python, rust]

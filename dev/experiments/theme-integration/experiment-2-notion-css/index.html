@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>uDos theme experiment — notion.css</title>
+    <link id="notion-sheet" rel="stylesheet" href="" />
+    <style>
+      :root {
+        --udo-gap: 0.75rem;
+        --udo-border: 1px solid #334155;
+        --udo-bg: #0f172a;
+        --udo-fg: #e2e8f0;
+        --udo-muted: #94a3b8;
+        --udo-panel: #1e293b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: var(--udo-bg);
+        color: var(--udo-fg);
+      }
+      .udo-header,
+      .udo-footer {
+        padding: var(--udo-gap) 1rem;
+        border-bottom: var(--udo-border);
+        background: var(--udo-panel);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--udo-gap);
+      }
+      .udo-footer {
+        border-bottom: none;
+        border-top: var(--udo-border);
+      }
+      .udo-shell {
+        display: grid;
+        grid-template-columns: 11rem 1fr 13rem;
+        min-height: calc(100vh - 8rem);
+      }
+      @media (max-width: 900px) {
+        .udo-shell {
+          grid-template-columns: 1fr;
+        }
+        .udo-dock,
+        .udo-notes {
+          display: none;
+        }
+      }
+      .udo-dock,
+      .udo-notes {
+        padding: var(--udo-gap);
+        border-right: var(--udo-border);
+        background: #111827;
+        font-size: 0.9rem;
+      }
+      .udo-notes {
+        border-right: none;
+        border-left: var(--udo-border);
+      }
+      .udo-centre {
+        padding: 1rem;
+      }
+      /* Inner “Notion-like” surface: light canvas when Notion.css is on */
+      .notion-view {
+        background: #fff;
+        color: #37352f;
+        border-radius: 8px;
+        padding: 1.25rem;
+        min-height: 60vh;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      .notion-view h2.title {
+        margin-top: 0;
+      }
+      #surface-status {
+        font-size: 0.85rem;
+        color: #fbbf24;
+        max-width: 32rem;
+      }
+      .task-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .task-list li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0;
+        border-bottom: 1px solid #e8e8e8;
+      }
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+      }
+      .gallery .card {
+        border: 1px solid #e3e3e3;
+        border-radius: 6px;
+        padding: 0.75rem;
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="udo-header chrome">
+      <strong>Theme lab — notion.css</strong>
+      <label>
+        Surface
+        <select id="surface-select" aria-label="CSS surface">
+          <option value="default">Default shell only</option>
+          <option value="notion">Notion.css on centre canvas</option>
+        </select>
+      </label>
+      <span id="surface-status"></span>
+    </header>
+
+    <div class="udo-shell">
+      <aside class="udo-dock chrome" aria-label="Dock">
+        <nav style="color: var(--udo-muted)">
+          <div>Nav A</div>
+          <div>Nav B</div>
+        </nav>
+      </aside>
+
+      <main class="udo-centre">
+        <div id="notion-root" class="notion-view">
+          <h2 class="title">Task table</h2>
+          <p class="subtitle">USXD shell outside; Notion.css applies inside this block when enabled.</p>
+
+          <table style="width: 100%; border-collapse: collapse; margin: 1rem 0">
+            <thead>
+              <tr>
+                <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid #e8e8e8">Name</th>
+                <th style="text-align: left; padding: 0.4rem; border-bottom: 1px solid #e8e8e8">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 0.4rem; border-bottom: 1px solid #f0f0f0">Row A</td>
+                <td style="padding: 0.4rem; border-bottom: 1px solid #f0f0f0">Todo</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.4rem; border-bottom: 1px solid #f0f0f0">Row B</td>
+                <td style="padding: 0.4rem; border-bottom: 1px solid #f0f0f0">Done</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 class="title" style="margin-top: 1.5rem">List</h3>
+          <ul class="task-list">
+            <li><input type="checkbox" /> First item</li>
+            <li><input type="checkbox" checked /> Second item</li>
+            <li><input type="checkbox" /> Third item</li>
+          </ul>
+
+          <h3 class="title" style="margin-top: 1.5rem">Cards</h3>
+          <div class="gallery">
+            <div class="card">Card A</div>
+            <div class="card">Card B</div>
+            <div class="card">Card C</div>
+          </div>
+
+          <h3 class="title" style="margin-top: 1.5rem">Form</h3>
+          <form onsubmit="event.preventDefault()">
+            <label class="subtitle" for="t">Title</label><br />
+            <input id="t" type="text" placeholder="Type here" style="width: 100%; max-width: 320px; padding: 6px 8px; margin: 0.25rem 0 0.75rem; border-radius: 4px; border: 1px solid #e0e0e0" />
+            <br />
+            <button type="submit" style="padding: 6px 14px; border-radius: 4px; border: 1px solid #ddd; background: #f7f7f7; cursor: pointer">Save</button>
+          </form>
+        </div>
+      </main>
+
+      <aside class="udo-notes chrome" aria-label="Notes">
+        <p style="margin: 0; color: var(--udo-muted); font-size: 0.85rem">
+          Compare typography inside <code>.notion-view</code> when Notion.css loads. Document conflicts in notes.md.
+        </p>
+      </aside>
+    </div>
+
+    <footer class="udo-footer chrome">
+      <span>dev/experiments/theme-integration/experiment-2-notion-css</span>
+    </footer>
+
+    <script>
+      (function () {
+        const NOTION_HREF = "vendor/notion.css/src/notion.css";
+        const select = document.getElementById("surface-select");
+        const link = document.getElementById("notion-sheet");
+        const status = document.getElementById("surface-status");
+
+        function applySurface(key) {
+          status.textContent = "";
+          if (key === "notion") {
+            link.onload = function () {
+              status.textContent = "";
+            };
+            link.onerror = function () {
+              status.textContent =
+                "Missing " +
+                NOTION_HREF +
+                " — clone repo into vendor/ (see README).";
+            };
+            link.rel = "stylesheet";
+            link.href = NOTION_HREF;
+          } else {
+            link.removeAttribute("href");
+          }
+        }
+
+        select.addEventListener("change", function () {
+          applySurface(select.value);
+        });
+        applySurface("default");
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+# dev/tools/feeds.yaml.example
+# Copy to vault .local/feeds.yaml when feed parser lands (see docs/specs/feeds-and-spool.md).
+
+feeds:
+  - name: "sandbox-versioning"
+    watch: "@sandbox/**/*.md"
+    event: "on_close"
+    action: "compost version {file}"
+    enabled: true
+    a2_ready: true
+
+  - name: "compost-cleanup"
+    watch: "**/.compost/"
+    event: "size > 1GB"
+    action: "compost clean --older-than 30d --priority-binary"
+    enabled: true
+    a2_ready: true

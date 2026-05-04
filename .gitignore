@@ -1,50 +1,132 @@
-# Runtime data
-.local/
-.config/
+# Local machine pointer (written by scripts/bootstrap-family-python.sh)
+.udos-connect-python
+.udos-family-python
 
-# Tool symlinks
-Vendor/
-Tools/*
-
-# Build artifacts
-*.log
-target/
-dist/
-node_modules/
+# macOS / Windows noise
 .DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
 
-# IDE files
+# Editor / IDE
+*.swp
+*.swo
 .idea/
 .vscode/
 
-# Legacy
+# Local workspace overrides (keep *.code-workspace committed)
+*.local.code-workspace
+*.code-workspace.local
+
+# Local override filename patterns (machine-specific)
+*.local.*
+*-local.*
+
+# Scratch (family convention)
+.local/
+# A1 contributor-only scratch under dev/ — see dev/.gitignore (`local/`)
+.compost/*
+!.compost/README.md
+
+# Cursor local cache (large)
+.cursor/cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Logs
+*.log
+
+# Rust / Cargo (workspace: core-rs/)
+core-rs/target/
+
+# Ad-hoc test run artefacts (optional; narrow if these extensions are used for real sources)
+*.test
+*.fail
+
+# A1 TypeScript build artefacts (core, tools, modules)
+node_modules/
+core/dist/
+tools/sonic-express/dist/
+tools/usxd-express/dist/
+modules/vault-manager/dist/
+modules/feed-engine/dist/
+modules/spool-archiver/dist/
+modules/publish-gateway/dist/
+modules/usxd-renderer/dist/
+modules/shared-types/dist/
+modules/shared-utils/dist/
+modules/obf-grid/dist/
+
+# Optional local vendor clones (nested upstream repos; not part of monorepo history)
+vendor/
+
+# Optional toybox experiment clones (see dev/toybox-experiments/README.md)
+dev/toybox-experiments/markdown-runtime/rnmd/
+dev/toybox-experiments/markdown-runtime/marki/
+dev/toybox-experiments/foam/foam/
+
+# Aggressive cleanup exclusions - NEVER COMMIT THESE
+.archive/
+.compost/
+.backup/
+*.log
+*.tmp
+*.swp
+*.bak
+core.*
+.DS_Store
+Thumbs.db
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.output/
+coverage/
+.nyc_output/
+jest-coverage/
+.env
+
+# Runtime data (from HEAD version)
+.Vendor/
+Tools/*
+
+# Build artifacts (from HEAD version)
+target/
+dist/
+*.log
+.DS_Store
+
+# IDE files (from HEAD version)
+.idea/
+.vscode/
+
+# Legacy (from HEAD version)
 .state/
 Sandbox/
 _deprecated/
 Vendor/.legacy/
 
-# Rust/Cargo
+# Rust/Cargo (from HEAD version)
 **/target/
 **/node_modules/
 
-# JavaScript
+# JavaScript (from HEAD version)
 *.tmp
 target/
 **/target/
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.venv/
+# Additional Python (from HEAD version)
 *.egg-info/
 *.egg-info/
 
-# Local data
+# Additional local data (from HEAD version)
 .local/
 
-
-# Added by cargo
-
+# Added by cargo (from HEAD version)
 /target

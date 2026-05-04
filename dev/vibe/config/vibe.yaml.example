@@ -1,0 +1,10 @@
+# Copy to ~/.config/vibe.yaml — VibeCLI / contributor tooling
+# Paths are examples; adjust for your machine.
+
+vibe:
+  version: 1
+  udos_go_root: ~/Code/archive/uDosGo-v4-backup
+  hivemind_vibecli: packages/hivemind/bin/vibecli.mjs
+
+# ok_handler:
+#   routes_file: vault/system/ok-routes.yaml

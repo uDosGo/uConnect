@@ -1,0 +1,22 @@
+{
+  "name": "@udos/ugridcomposer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "uGridComposer — ASCII/ANSI grid editor for uDos surfaces",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "ascii-table": "^0.0.9"
+  }
+}

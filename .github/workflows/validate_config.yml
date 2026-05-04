@@ -1,0 +1,27 @@
+name: Validate VibeCLI Configuration
+
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+    branches: [ main, feature/** ]
+
+jobs:
+  validate:
+    name: Validate Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Validate Configuration
+        run: bash vibecli/validate_config.sh
+
+      - name: Check Examples
+        run: |
+          echo "Checking examples..."
+          ls -la vibecli/examples/
+          echo "✅ Examples folder exists and contains files."

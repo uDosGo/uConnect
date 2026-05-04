@@ -1,0 +1,5 @@
+runtime:
+  type: node
+  build: "npm install"
+  start: "npm start"
+  port: 3000

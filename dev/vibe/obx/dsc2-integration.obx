@@ -1,0 +1,118 @@
+# DSC2 Integration Rules for uDosConnect
+# Version: 1.0
+# Date: 2026-04-18
+# Purpose: Define operational rules for DeepSeek-Coder-V2 (DSC2) integration
+
+# Rule: DSC2 Code Generation
+RULE dsc2_code_generation {
+    TRIGGER on "udo code generate";
+    ACTION call_dsc2_mcp;
+    REQUIRE_APPROVAL false;  # Auto-execute for efficiency
+    LOG_TO vault/logs/dsc2_calls.ndjson;
+    METRICS {
+        tokens_used: true,
+        latency_ms: true,
+        success_rate: true
+    }
+    FALLBACK deepseek_api;   # Fallback to DeepSeek API if DSC2 MCP unavailable
+}
+
+# Rule: DSC2 Code Completion
+RULE dsc2_code_completion {
+    TRIGGER on "udo code complete";
+    ACTION call_dsc2_mcp;
+    REQUIRE_APPROVAL false;
+    LOG_TO vault/logs/dsc2_calls.ndjson;
+    METRICS {
+        tokens_used: true,
+        latency_ms: true
+    }
+    FALLBACK deepseek_api;
+}
+
+# Rule: DSC2 Code Insertion (Fill-in-the-middle)
+RULE dsc2_code_insertion {
+    TRIGGER on "udo code insert";
+    ACTION call_dsc2_mcp;
+    REQUIRE_APPROVAL false;
+    LOG_TO vault/logs/dsc2_calls.ndjson;
+    METRICS {
+        tokens_used: true,
+        latency_ms: true
+    }
+    FALLBACK deepseek_api;
+}
+
+# Rule: DSC2 Code Explanation
+RULE dsc2_code_explanation {
+    TRIGGER on "udo code explain";
+    ACTION call_dsc2_mcp;
+    REQUIRE_APPROVAL false;
+    LOG_TO vault/logs/dsc2_calls.ndjson;
+    METRICS {
+        tokens_used: true,
+        latency_ms: true
+    }
+    FALLBACK deepseek_api;
+}
+
+# Rule: DSC2 Code Refactoring
+RULE dsc2_code_refactoring {
+    TRIGGER on "udo code refactor";
+    ACTION call_dsc2_mcp;
+    REQUIRE_APPROVAL true;   # Require user approval for refactoring changes
+    LOG_TO vault/logs/dsc2_calls.ndjson;
+    METRICS {
+        tokens_used: true,
+        latency_ms: true,
+        acceptance_rate: true
+    }
+    FALLBACK deepseek_api;
+}
+
+# Rule: Development Flow Handshake
+RULE dev_flow_handshake {
+    TRIGGER on "udo file create *.py" or "*.ts" or "*.js" or "*.go" or "*.rs";
+    ACTION suggest_dsc2_generation;
+    PROMPT_USER "Generate initial code for this file using DSC2? [y/N]";
+    LOG_TO vault/logs/dev_flow.ndjson;
+    METRICS {
+        user_acceptance: true,
+        generation_success: true
+    }
+}
+
+# Rule: Auto-fix for Test Failures
+RULE auto_fix_test_failures {
+    TRIGGER on "udo test run" and exit_code != 0;
+    ACTION suggest_dsc2_fix;
+    PROMPT_USER "Attempt to fix test failures using DSC2? [y/N]";
+    MAX_ATTEMPTS 3;
+    LOG_TO vault/logs/test_fixes.ndjson;
+    METRICS {
+        fix_success_rate: true,
+        attempts_per_fix: true
+    }
+}
+
+# Rule: Rate Limiting for DSC2 Calls
+RULE dsc2_rate_limiting {
+    TRIGGER on any dsc2_* call;
+    RATE_LIMIT 10 calls per minute;
+    WARNING "Approaching DSC2 rate limit: {remaining_calls} calls remaining";
+    BLOCK_AT 15 calls per minute;
+    LOG_TO vault/logs/rate_limiting.ndjson;
+}
+
+# Rule: Cost Tracking for DSC2 Usage
+RULE dsc2_cost_tracking {
+    TRIGGER on any dsc2_* call;
+    COST_CALCULATION {
+        input_tokens: 0.000002 per token,
+        output_tokens: 0.000004 per token
+    }
+    MONTHLY_BUDGET 50.00 USD;
+    WARNING_AT 80% of budget;
+    BLOCK_AT 100% of budget;
+    LOG_TO vault/logs/dsc2_costs.ndjson;
+}

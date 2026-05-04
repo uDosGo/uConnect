@@ -1,0 +1,63 @@
+# @toybox/experiments/manifest.yaml (example — copy into vault after layout exists)
+experiments:
+  - name: "rnmd"
+    source: "https://github.com/markuspeitl/rnmd"
+    purpose: "Executable markdown patterns for `udo run`"
+    location: "markdown-runtime/"
+    status: "pending-clone"
+    findings: "markdown-runtime/findings.md"
+    a2_ready: false
+
+  - name: "marki"
+    source: "https://github.com/phillip-england/marki"
+    purpose: "Markdown → HTML with themes; watch mode patterns"
+    location: "markdown-runtime/"
+    status: "pending-clone"
+    findings: "markdown-runtime/findings.md"
+    a2_ready: false
+
+  - name: "foam"
+    source: "https://github.com/foambubble/foam"
+    purpose: "PKM, backlinks, graph — informs vector DB for WordPress"
+    location: "foam/"
+    status: "pending-clone"
+    findings: "foam/findings.md"
+    a3_ready: false
+
+  - name: "docker"
+    source: "N/A (external tool)"
+    purpose: "Container runtime integration patterns"
+    status: "spec-written"
+    spec: "docs/specs/docker-integration.md"
+    a2_ready: true
+
+  - name: "usxd-widget"
+    source: "seed brief"
+    location: "usxd-widget/"
+    purpose: "Interactive widgets in USXD"
+    status: "spec-written"
+    brief: "usxd-widget/BRIEF.md"
+    a2_ready: false
+    a3_ready: false
+
+  - name: "chasis"
+    source: "seed brief"
+    location: "chasis/"
+    purpose: "Full-screen containerized projects"
+    status: "spec-written"
+    brief: "chasis/BRIEF.md"
+    test_projects: "chasis/test-projects.yaml"
+    skin_lens_stub: true
+    a1_prototype: true
+    a2_ready: false
+    a3_ready: false
+
+  - name: "adaptors"
+    source: "seed brief"
+    location: "adaptors/"
+    purpose: "Third-party integration interface"
+    status: "spec-written"
+    brief: "adaptors/BRIEF.md"
+    catalog: "adaptors/manifest.yaml"
+    a2_ready: false
+    a3_ready: false

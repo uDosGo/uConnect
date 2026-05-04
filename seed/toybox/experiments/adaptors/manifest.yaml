@@ -1,0 +1,13 @@
+# Experiment adaptors to validate in @toybox before locking into A2/A3 (see BRIEF.md)
+adaptors:
+  - name: "github"
+    source: "https://api.github.com"
+    purpose: "Sync issues with tasks"
+
+  - name: "wordpress"
+    source: "https://wordpress.org"
+    purpose: "Sync posts with notes (vector DB prep)"
+
+  - name: "docker"
+    source: "local"
+    purpose: "Container logs as USXD widget"

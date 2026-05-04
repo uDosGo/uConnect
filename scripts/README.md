@@ -108,6 +108,96 @@ This directory contains utility scripts for managing the uDos ecosystem.
 - Health checks
 - Test reporting
 
+### 6. `bootstrap-family-python.sh`
+
+**Purpose:** Shared bash helpers for Python env bootstrap, multi-repo checks, and `~/.udos` path conventions used across the family workspace.
+
+**Usage:**
+```bash
+./scripts/bootstrap-family-python.sh
+```
+
+### 7. `validate-courses.sh`
+
+**Purpose:** Ensures each `courses/[0-9][0-9]-*/` folder has a `README.md`.
+
+**Usage:**
+```bash
+./scripts/validate-courses.sh
+```
+
+### 8. `check-workspace-drift.sh`
+
+**Purpose:** Verifies npm workspace resolution and validates `uDos.code-workspace` required folders and path sanity (no machine-specific absolute paths).
+
+**Usage:**
+```bash
+./scripts/check-workspace-drift.sh
+```
+
+### 9. `bootstrap-markdownify-runtime.sh`
+
+**Purpose:** Creates `vendor/markdownify-mcp/.venv` with a pinned upstream MarkItDown build (`Python >=3.10`, prefers `python3.11`) and verifies CLI availability.
+
+**Usage:**
+```bash
+./scripts/bootstrap-markdownify-runtime.sh
+```
+
+### 10. `check-mcp-stdio.sh`
+
+**Purpose:** Starts local `udo mcp start`, runs framed MCP handshake (`initialize`, `tools/list`, `tools/call markdownify.status`), and fails fast if protocol wiring is broken.
+
+**Usage:**
+```bash
+./scripts/check-mcp-stdio.sh
+```
+
+### 11. `check-usxd-go-scaffold.sh`
+
+**Purpose:** Runs `modules/usxd-go` tests, boots `usxd-server`, and verifies `/healthz` + `/api/usxd/state` payload shape.
+
+**Usage:**
+```bash
+./scripts/check-usxd-go-scaffold.sh
+```
+
+### 12. `check-usxd-story.sh`
+
+**Purpose:** Runs `modules/usxd-go/story` tests, executes `examples/story-onboarding`, and validates serialized `application/vnd.usxd.story` envelope/version.
+
+**Usage:**
+```bash
+./scripts/check-usxd-story.sh
+```
+
+### 13. `check-uos.sh`
+
+**Purpose:** Runs `modules/uos` tests and validates `uos launch ... --dry-run` output markers for runtime selection, GPU profile wiring, and passthrough expansion.
+
+**Usage:**
+```bash
+./scripts/check-uos.sh
+```
+
+### 14. `shakedown.sh`
+
+**Purpose:** `dev/TASKS.md`, v4 spec index, course validation, `check-tasks-md.sh` (sparse clones skip absent sibling repos). Optional: `UDOS_SHAKEDOWN_FULL=1` runs `v4-dev/family-health-check.sh` (USXD surfaces when present).
+
+**Usage:**
+```bash
+./scripts/shakedown.sh
+```
+
+### 15. `imported/2026-04-15-uDosDocs/`
+
+**Purpose:** Upstream `run-docs-checks.sh`; merge or wire cautiously (paths assume a full uDosDocs tree).
+
+**Usage:**
+```bash
+./scripts/imported/2026-04-15-uDosDocs/README.md
+```
+
 ## Script Conventions
 
 ### Exit Codes

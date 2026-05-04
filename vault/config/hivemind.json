@@ -1,0 +1,27 @@
+{
+  "dsc2": {
+    "endpoint": "http://localhost:30000/mcp",
+    "use_real_server": false,
+    "timeout_ms": 30000
+  },
+  "cost": {
+    "daily_limit": null,
+    "monthly_limit": 50,
+    "require_approval": true
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_seconds": 3600,
+    "max_size_mb": 100
+  },
+  "quality": {
+    "min_score": 0.7,
+    "fallback_enabled": true
+  },
+  "free_tier": {
+    "prefer_free": true,
+    "apple_intel_enabled": true,
+    "copilot_enabled": true,
+    "gemini_enabled": true
+  }
+}

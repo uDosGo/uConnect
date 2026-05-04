@@ -1,0 +1,19 @@
+# uDosConnect/dev — template-only policy (see README.md)
+
+# Local scratch (never committed)
+local/
+
+# Roadmaps: only index + template ship in remote
+roadmaps/*.md
+!roadmaps/README.md
+!roadmaps/TEMPLATE_roadmap.md
+
+# Features: only index + template ship in remote
+features/*.md
+!features/README.md
+!features/TEMPLATE_feature.md
+!features/network-stubs.md
+
+# Personal note patterns
+*.notes.md
+*.local.md

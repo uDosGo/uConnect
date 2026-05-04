@@ -1,0 +1,33 @@
+/* USXD VA1 default theme — open box, readable */
+:root {
+  color-scheme: light dark;
+  --fg: #1a1a1a;
+  --bg: #fafafa;
+  --link: #0b57d0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e8e8e8;
+    --bg: #121212;
+    --link: #8ab4f8;
+  }
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg);
+  margin: 0;
+}
+.udo-page,
+.udo-index {
+  max-width: 42rem;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+}
+a {
+  color: var(--link);
+}
+code {
+  font-size: 0.95em;
+}

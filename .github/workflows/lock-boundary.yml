@@ -1,0 +1,24 @@
+name: Lock Boundary
+
+on:
+  pull_request:
+    paths:
+      - "core/**"
+      - "docs/specs/**"
+      - "scripts/check-a1-boundary.sh"
+      - ".github/workflows/lock-boundary.yml"
+  push:
+    branches: [main]
+    paths:
+      - "core/**"
+      - "docs/specs/**"
+      - "scripts/check-a1-boundary.sh"
+      - ".github/workflows/lock-boundary.yml"
+
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Boundary lock checks
+        run: bash scripts/check-a1-boundary.sh
