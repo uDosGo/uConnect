@@ -3,7 +3,7 @@ use std::path::Path;
 use std::fs;
 use std::collections::HashMap;
 use ucode2_vault_bridge::Vault;
-use ucode2_ok_agent::{OkAgent, Intent};
+use ucode2_ok_seeker::{OkAgent, Intent};
 use ucode2_mcp::McpServer;
 use ucode2_spatial::{SpatialPoint, MapManager};
 use ucode2_usystem::USystem;

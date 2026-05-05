@@ -14,7 +14,7 @@ use tokio::sync::Mutex;
 pub mod tools;
 
 pub use ucode2_core;
-pub use ucode2_ok_agent;
+pub use ucode2_ok_seeker;
 pub use ucode2_vault_bridge;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -92,7 +92,7 @@ pub struct McpServer {
     socket_path: PathBuf,
     vault_path: String,
     vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
-    ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
+    ok_agent: Arc<Mutex<ucode2_ok_seeker::OkAgent>>,
     running: Arc<Mutex<bool>>,
 }
 
@@ -111,7 +111,7 @@ impl McpServer {
             vault: Arc::new(Mutex::new(ucode2_vault_bridge::Vault::new(
                 vault_path, vault_path,
             ))),
-            ok_agent: Arc::new(Mutex::new(ucode2_ok_agent::OkAgent::new())),
+            ok_agent: Arc::new(Mutex::new(ucode2_ok_seeker::OkAgent::new())),
             running: Arc::new(Mutex::new(false)),
         }
     }
@@ -193,7 +193,7 @@ impl McpServer {
         stream: UnixStream,
         vault_path: String,
         vault: Arc<Mutex<ucode2_vault_bridge::Vault>>,
-        ok_agent: Arc<Mutex<ucode2_ok_agent::OkAgent>>,
+        ok_agent: Arc<Mutex<ucode2_ok_seeker::OkAgent>>,
         running: Arc<Mutex<bool>>,
     ) -> std::io::Result<()> {
         let mut reader = BufReader::new(stream.try_clone()?);

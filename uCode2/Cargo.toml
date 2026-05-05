@@ -3,7 +3,7 @@ members = [
     "core",
     "mcp", 
     "vault-bridge",
-    "ok-agent",
+    "ok-seeker",
     "grid-core",
     "spatial",
     "feed-spool",

@@ -1979,7 +1979,7 @@ dependencies = [
  "ucode2-feed-spool",
  "ucode2-grid-core",
  "ucode2-mcp",
- "ucode2-ok-agent",
+ "ucode2-ok-seeker",
  "ucode2-spatial",
  "ucode2-usystem",
  "ucode2-vault-bridge",
@@ -2036,12 +2036,12 @@ dependencies = [
  "tokio",
  "ucode2-core",
  "ucode2-grid-core",
- "ucode2-ok-agent",
+ "ucode2-ok-seeker",
  "ucode2-vault-bridge",
 ]
 
 [[package]]
-name = "ucode2-ok-agent"
+name = "ucode2-ok-seeker"
 version = "0.1.0"
 dependencies = [
  "ucode2-core",
