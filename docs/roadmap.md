@@ -1,9 +1,12 @@
 # uDos Development Roadmap
 
+> **⚠️ CONSOLIDATED RELEASE SCHEDULE:** The single source of truth for release planning has moved to [`~/Code/DevStudio/RELEASE_SCHEDULE.md`](../~/Code/DevStudio/RELEASE_SCHEDULE.md).  
+> This file is maintained for historical reference and long-term vision. For current priorities, milestones, and plans-vs-actuals, see the consolidated schedule.
+
 ## Current Status
 
-**Version**: 1.0.0 (Pre-Alpha)
-**Last Updated**: 2026-04-30
+**Version**: v1.1.1
+**Last Updated**: 2026-05-05
 **Current Focus**: Python core migration, ASCII grid parser implementation, stabilizing architecture, theme system deployment
 
 ### Core Version Boundaries
@@ -195,17 +198,23 @@ All Phase 1 objectives achieved. The Python core migration, theme system, plugin
 
 ### Gameplay & Code Emulation System
 
-#### BBC BASIC Integration (uCode1 Core)
-- [ ] Research and select BBC BASIC interpreter (Matrix Brandy)
-- [ ] Fork and modify Matrix Brandy for embedding
-- [ ] Create Python ctypes wrapper for BBC BASIC
-- [ ] Implement basic VDU output redirection
-- [ ] Test with simple BBC BASIC programs
-- [ ] Add variable inspection API for LENS
-- [ ] Implement VDU graphics to ThinUI mapping
-- [ ] Create BBC BASIC library system (SPRITELIB, SOUNDLIB)
-- [ ] Add MCP control protocol integration
-- [ ] Implement Spool export for game state
+#### BBC BASIC Integration (uCode1 Core) — ✅ Sprint 1 Complete
+- [x] Research and select BBC BASIC interpreter (Matrix Brandy)
+- [x] Fork and modify Matrix Brandy for embedding
+- [x] Create Python ctypes wrapper for BBC BASIC
+- [x] Implement basic VDU output redirection
+- [x] Test with simple BBC BASIC programs
+- [x] Add variable inspection API for LENS
+- [x] Implement VDU graphics to ThinUI mapping
+- [x] Create BBC BASIC library system (SPRITELIB, SOUNDLIB)
+- [x] Add MCP control protocol integration
+- [x] Implement Spool export for game state
+- [x] Add PROC_*/FN_* extension dispatch for LENS/SKIN/MCP/Spool
+- [x] Implement WHILE/ENDWHILE, CASE/OF/OTHERWISE/ENDCASE
+- [x] Implement ON ERROR / RESUME error handling
+- [x] Implement PROC/FN with parameter passing and LOCAL variables
+- [x] Implement DATA/READ/RESTORE with data pointer
+- [x] Fix RND with proper seeding
 
 #### LENS Layer (Looking Into the Game)
 - [ ] Design LENS architecture for memory data extraction

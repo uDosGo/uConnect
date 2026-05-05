@@ -1,0 +1,24 @@
+name: Release uCode2 RusTui
+on:
+  push:
+    tags:
+      - 'ucode2-rustui-*'
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Rust binary
+        run: cargo build --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rustui-${{ matrix.os }}
+          path: target/release/rustui
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/release/rustui
+          generate_release_notes: true

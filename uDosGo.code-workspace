@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "~/Vault"
+		},
+		{
+			"path": "~/Code/OkAgentDigital"
+		},
+		{
+			"path": "~/Code/DevStudio"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/.venv": true,
+			"**/node_modules": true,
+			"**/target": true
+		},
+		"editor.formatOnSave": true,
+		"editor.rulers": [100, 120],
+		"files.associations": {
+			"*.bbc": "python",
+			"*.snack": "yaml",
+			"*.snackpack": "yaml"
+		},
+		"python.defaultInterpreterPath": "${workspaceFolder}/uCode1/.venv/bin/python",
+		"python.terminal.activateEnvironment": true,
+		"terminal.integrated.defaultLocation": "editor",
+		"workbench.colorTheme": "Default Dark Modern",
+		"workbench.startupEditor": "none",
+		"explorer.compactFolders": false
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"rust-lang.rust-analyzer",
+			"tamasfe.even-better-toml",
+			"yzhang.markdown-all-in-one",
+			"bierner.markdown-mermaid",
+			"redhat.vscode-yaml"
+		]
+	}
+}

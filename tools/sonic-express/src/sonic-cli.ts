@@ -4,7 +4,7 @@
  */
 
 import { Command } from "commander";
-import { runInstall, runUpdate } from "./installer.js";
+import { runInstall, runUpdate, Installer } from "./installer.js";
 import { SessionLauncher } from "./session-launcher.js";
 import { InitLauncher } from "./init-launcher.js";
 import { WebhookHelper } from "./webhook-helper.js";
@@ -302,6 +302,88 @@ export class SonicCLI {
       .action(async () => {
         const helper = new WebhookHelper();
         await helper.stopServer();
+      });
+
+    // Python dependency management (uCode1)
+    this.program
+      .command("python-deps")
+      .description("Install Python dependencies required by uCode1 (e.g. liquidpy)")
+      .option("--check", "Only check which packages are missing, don't install")
+      .action(async (options) => {
+        const installer = new Installer();
+        if (options.check) {
+          const missing = installer.checkPythonDeps();
+          if (missing.length === 0) {
+            console.log(chalk.green("✅ All Python dependencies are installed"));
+          } else {
+            console.log(chalk.yellow(`⚠️  Missing Python packages: ${missing.join(", ")}`));
+            console.log(chalk.blue("💡 Run `sonic python-deps` to install them"));
+          }
+        } else {
+          await installer.installPythonDeps();
+        }
+      });
+
+    // uCode1 setup (Python deps + package install)
+    this.program
+      .command("ucode1")
+      .description("Set up uCode1 (Python dependencies + package install)")
+      .option("--python-only", "Only install Python dependencies, skip package install")
+      .option("--check", "Only check what's missing, don't install")
+      .action(async (options) => {
+        const installer = new Installer();
+        if (options.check) {
+          const missing = installer.checkPythonDeps();
+          if (missing.length === 0) {
+            console.log(chalk.green("✅ uCode1 is fully set up"));
+          } else {
+            console.log(chalk.yellow(`⚠️  Missing Python packages: ${missing.join(", ")}`));
+            console.log(chalk.blue("💡 Run `sonic ucode1` to install them"));
+          }
+        } else if (options.pythonOnly) {
+          await installer.installPythonDeps();
+        } else {
+          await installer.setupUCode1();
+        }
+      });
+
+    // uCode2 setup (Rust build + ThinUI frontend)
+    this.program
+      .command("ucode2")
+      .description("Set up uCode2 (Rust build + ThinUI frontend)")
+      .option("--dev", "Build in debug mode (faster for development)")
+      .option("--rust-only", "Only build Rust workspace, skip ThinUI")
+      .option("--thinui-only", "Only build ThinUI frontend, skip Rust")
+      .option("--tauri", "Also build ThinUI Tauri desktop app")
+      .action(async (options) => {
+        const installer = new Installer();
+        if (options.rustOnly) {
+          await installer.buildUCode2Rust();
+        } else if (options.thinuiOnly) {
+          await installer.installThinUIDeps();
+          await installer.buildThinUI();
+        } else if (options.dev) {
+          await installer.setupUCode2Dev();
+        } else {
+          await installer.setupUCode2();
+        }
+        if (options.tauri) {
+          await installer.buildThinUITauri();
+        }
+      });
+
+    // Full ecosystem setup (uCode1 + uCode2)
+    this.program
+      .command("setup-all")
+      .description("Set up entire uCode ecosystem (uCode1 + uCode2)")
+      .option("--dev", "Build uCode2 in debug mode")
+      .option("--tauri", "Also build ThinUI Tauri desktop app")
+      .action(async (options) => {
+        const installer = new Installer();
+        await installer.setupAll();
+        if (options.tauri) {
+          await installer.buildThinUITauri();
+        }
       });
   }
 

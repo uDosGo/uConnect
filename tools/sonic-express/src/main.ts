@@ -63,6 +63,22 @@ async function main() {
         initLauncher = new InitLauncher();
         await initLauncher.cleanup();
         break;
+      case 'python-deps':
+        installer = new Installer();
+        await installer.installPythonDeps();
+        break;
+      case 'ucode1':
+        installer = new Installer();
+        await installer.setupUCode1();
+        break;
+      case 'ucode2':
+        installer = new Installer();
+        await installer.setupUCode2();
+        break;
+      case 'setup-all':
+        installer = new Installer();
+        await installer.setupAll();
+        break;
       default:
         console.log('📋 uDos Commands:');
         console.log('  install      Run the installer');
@@ -72,6 +88,10 @@ async function main() {
         console.log('  health       Perform a health check');
         console.log('  self-heal    Perform self-healing');
         console.log('  cleanup      Clean up resources');
+        console.log('  python-deps  Install Python deps for uCode1 (liquidpy)');
+        console.log('  ucode1       Set up uCode1 (Python deps + package)');
+        console.log('  ucode2       Set up uCode2 (Rust build + ThinUI)');
+        console.log('  setup-all    Set up entire uCode ecosystem');
         console.log('');
         console.log('📋 Init Launcher Commands:');
         console.log('  init         Initialize and launch uDos');

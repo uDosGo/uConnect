@@ -1,5 +1,8 @@
 # uDosGo/Connect Repository
 
+**Version:** v1.1.1  
+**Status:** Active development — breaking changes expected
+
 This is the **repository folder** for the `udos` system. It is a **Git repository** and contains version-controlled project files.
 
 ## Purpose
@@ -12,9 +15,10 @@ This is the **repository folder** for the `udos` system. It is a **Git repositor
 - `Modules/`: Reusable modules for the `udos` system.
 - `src/`: Source code for the project.
 - `tests/`: Test files for the project.
-- `uCode1/`: Python core — CLIs, grid parser, USXD, snack/relic/binder (Python)
-- `uCode2/`: Rust + React — MCP server, TUI, ThinUI surfaces, spatial (Rust, JS)
-- `uCode4/`: 3D spatial runtime (future)
+- `uCode1/`: Python core — CLIs, grid parser, USXD, snack/relic/binder (Python) — **Priority 1**
+- `uCode2/`: Rust + React — MCP server, TUI, ThinUI surfaces, spatial (Rust, JS) — **Priority 2**
+- `uCode3/`: Console / Tablet — game controller input, layback computing — **Priority 3**
+- `uCode4/`: 3D spatial runtime (future) — **Priority 4**
 - `.compost/`: Archived dev records
 
 ## Best Practices
@@ -32,7 +36,7 @@ cd uCode1 && python3 ucode --help
 cd uCode2 && cargo build --workspace
 
 # Tests
-make -f Makefile.dev test
+make test
 ```
 
 ## Structure
@@ -41,12 +45,14 @@ make -f Makefile.dev test
 |-----------|---------|----------|--------|
 | `uCode1/` | Python core — CLIs, grid parser, USXD, snack/relic/binder | Python | 🟢 Active |
 | `uCode2/` | Rust + React — MCP server, TUI, ThinUI surfaces, spatial | Rust, JS | 🟡 Active |
+| `uCode3/` | Console / Tablet — game controller, layback computing | Rust | 🔵 Planning |
 | `uCode4/` | 3D spatial runtime (future) | — | ⚪ Planning |
 | `.compost/` | Archived dev records | — | 📦 Archive |
 
 ## Docs
 
-- [`docs/roadmap.md`](docs/roadmap.md) — Full development roadmap
+- [`~/Code/DevStudio/RELEASE_SCHEDULE.md`](~/Code/DevStudio/RELEASE_SCHEDULE.md) — **Consolidated release schedule** (single source of truth)
+- [`docs/roadmap.md`](docs/roadmap.md) — Full development roadmap (historical reference)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architecture overview
 - [`docs/specs/`](docs/specs/) — Format specifications (USXD, UDX, progression)
 - [`uCode4/docs/`](uCode4/docs/) — uCode3/4 planning docs
@@ -73,3 +79,4 @@ make -f Makefile.dev test
 
 ## Related
 - For home folder documentation, see `uDosGo/README.md`.
+- For release schedule and priorities, see [`~/Code/DevStudio/RELEASE_SCHEDULE.md`](~/Code/DevStudio/RELEASE_SCHEDULE.md).

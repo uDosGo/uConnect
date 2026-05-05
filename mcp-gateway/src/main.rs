@@ -251,6 +251,10 @@ fn list_all_tools() -> Vec<Value> {
         // Service management tools
         tool_def("udos_service_control", "Start, stop, or restart uDos services"),
         tool_def("udos_service_status", "Get status of all uDos services"),
+
+        // Binder feed tools
+        tool_def("binder_feed", "Get the JSON feed for a binder topic. Args: { binder: '#topic' }"),
+        tool_def("binder_feed_update", "Trigger regeneration of binder JSON feeds. Args: { binder: 'all' | '#topic' }"),
     ]
 }
 
