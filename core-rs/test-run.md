@@ -1,3 +1,0 @@
-```ucode
-PRINT "Hello, world!"
-```
