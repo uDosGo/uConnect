@@ -1,0 +1,60 @@
+# udoui Extensions Market Configuration
+# Version: 1.0.0
+# Last Updated: 2026-05-10
+
+market:
+  name: "udoui Extensions Market"
+  version: "1.0.0"
+  description: "Discover, install, and manage extensions for the uDos ecosystem"
+  catalogUrl: "https://extensions.udoui.dev/catalog"
+  registryPath: "~/.local/share/udoui/extensions"
+  
+  categories:
+    - id: media
+      name: "Media"
+      description: "Media playback, scanning, and library management"
+      icon: "🎬"
+    - id: automation
+      name: "Automation"
+      description: "Home automation, scenes, and routines"
+      icon: "🤖"
+    - id: tv-dvr
+      name: "TV & DVR"
+      description: "Live TV, EPG, and recording"
+      icon: "📺"
+    - id: feed-spool
+      name: "Feed & Spool"
+      description: "RSS, events, and scheduled tasks"
+      icon: "📡"
+    - id: console
+      name: "Console"
+      description: "UI surfaces, launchers, and navigation"
+      icon: "🎮"
+    - id: development
+      name: "Development"
+      description: "Dev tools, editors, and SDKs"
+      icon: "🛠️"
+    - id: system
+      name: "System"
+      description: "System operations, services, and health"
+      icon: "⚙️"
+    - id: themes
+      name: "Themes"
+      description: "Visual themes, presets, and skins"
+      icon: "🎨"
+
+  sources:
+    - name: "uDosGo Official"
+      url: "https://extensions.udoui.dev/catalog"
+      type: "remote"
+      priority: 1
+    - name: "Local Development"
+      url: "file:///Users/fredbook/Code/uDosGo/udoui/extensions/catalog"
+      type: "local"
+      priority: 0
+
+  policies:
+    autoUpdate: false
+    allowThirdParty: true
+    requireSignature: false
+    sandboxed: true

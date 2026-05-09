@@ -1,0 +1,38 @@
+{
+  "name": "homenest-media-scanner",
+  "version": "1.0.0",
+  "type": "service",
+  "displayName": "Media Scanner",
+  "description": "Scans ~/media/ for new files and populates grid cells in the HomeNest spatial grid",
+  "author": "uDosGo",
+  "license": "MIT",
+  "platform": "linux",
+  "homepage": "https://github.com/uDosGo/Connect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uDosGo/Connect.git"
+  },
+  "dependencies": {
+    "uCode3": ">=1.0.0",
+    "ffmpeg": "*",
+    "mpv": "*"
+  },
+  "surfaces": ["homenest"],
+  "tags": ["media", "scanner", "discovery", "grid", "homenest"],
+  "categories": ["media"],
+  "entry": "bin/media-scanner",
+  "config": {
+    "scanInterval": 3600,
+    "mediaDirs": ["~/media/movies", "~/media/tv", "~/media/music", "~/media/home-videos"],
+    "autoConfirm": false,
+    "privacyMode": true,
+    "metadataSources": ["tmdb", "musicbrainz"],
+    "fileWatcher": true
+  },
+  "scripts": {
+    "postInstall": "systemctl --user enable homenest-scanner.timer",
+    "preRemove": "systemctl --user stop homenest-scanner.timer",
+    "healthcheck": "systemctl --user is-active homenest-scanner.service"
+  },
+  "size": "0.5 MB"
+}

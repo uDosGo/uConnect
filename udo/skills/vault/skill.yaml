@@ -1,0 +1,17 @@
+name: vault
+description: Vault operations — sync, backup, restore, verify
+platform: linux
+version: 1.0.0
+commands:
+  - name: status
+    description: Show vault status
+    script: status.sh
+  - name: sync
+    description: Sync vault with remote
+    script: sync.sh
+  - name: backup
+    description: Create vault backup
+    script: backup.sh
+  - name: verify
+    description: Verify vault integrity
+    script: verify.sh

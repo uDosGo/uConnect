@@ -1,0 +1,902 @@
+#!/bin/bash
+# udo - Unified CLI for the uDos ecosystem
+# Usage: udo <command> [args...]
+# This is a thin orchestrator that wraps existing tools.
+
+set -euo pipefail
+
+UDO_HOME="${UDO_HOME:-$HOME/Code/uDosGo/udo}"
+UDO_UI="${UDO_UI:-$HOME/Code/uDosGo/ui}"
+UDO_FONTS="${UDO_FONTS:-$UDO_HOME/fonts}"
+UDO_SKILLS="${UDO_SKILLS:-$UDO_HOME/skills}"
+UDO_VAULT="${UDO_VAULT:-$HOME/Vault}"
+UDO_EXTENSIONS="${UDO_EXTENSIONS:-$HOME/Code/uDosGo/udoui/extensions}"
+UDO_EXT_REGISTRY="${UDO_EXT_REGISTRY:-$HOME/.local/share/udoui/extensions}"
+UDO_VERSION="1.1.0"
+
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Helper functions
+info()  { echo -e "${BLUE}ℹ${NC} $1"; }
+ok()    { echo -e "${GREEN}✓${NC} $1"; }
+warn()  { echo -e "${YELLOW}⚠${NC} $1"; }
+error() { echo -e "${RED}✗${NC} $1"; }
+
+# Show usage
+usage() {
+    cat <<EOF
+udo v${UDO_VERSION} — Unified uDos CLI
+
+Usage: udo <command> [args...]
+
+Commands:
+  Surface Management:
+    script run <file.bas>     Run a BBC BASIC script (uCode1)
+    build run <file.amos>     Run an AMOS script (uCode2)
+    home status               Home automation status (uCode3)
+    space explore <system>    Spatial/3D exploration (uCode4)
+    surface list              List available surfaces
+    surface open <name>       Open a surface in udoui
+
+  Snack Management:
+    snack list                List available snacks
+    snack install <name>      Install a snack from catalog
+    snack run <name>          Run a snack
+
+  Vault Operations:
+    vault list                List vault contents
+    vault sync                Sync vault
+    vault backup              Create vault backup
+
+  Font Management:
+    font list                 List available fonts
+    font install <name>       Install a font from catalogue
+
+  System:
+    status                    Show system status
+    ui                        Launch udoui web interface
+    setup                     Initial setup/install
+    init <project>            Project scaffolding
+    dev [start|stop|status]   Dev mode operations
+
+  Extension Management:
+    ext list [filter]         List available extensions
+    ext search <query>        Search extensions
+    ext info <name>           Show extension details
+    ext install <name>        Install an extension
+    ext remove <name>         Remove an extension
+    ext update                Check for updates
+    ext create <name>         Scaffold a new extension
+    ext validate <name>       Validate extension manifest
+    ext publish <name>        Publish extension to catalog
+
+  Skills:
+    skill list                List available skills
+    skill run <name>          Run a skill
+
+  Help:
+
+    help                      Show this help
+    version                   Show version
+
+EOF
+}
+
+# Check if a command exists
+cmd_exists() {
+    command -v "$1" &>/dev/null
+}
+
+# ============================================================
+# COMMAND HANDLERS
+# ============================================================
+
+cmd_script_run() {
+    local file="$1"
+    if [ ! -f "$file" ]; then
+        error "File not found: $file"
+        exit 1
+    fi
+    info "Running BBC BASIC script: $file"
+    if cmd_exists ucode2-binder; then
+        ucode2-binder "$file"
+    else
+        warn "ucode2-binder not found. Install with: udo setup"
+        cat "$file"
+    fi
+}
+
+cmd_build_run() {
+    local file="$1"
+    if [ ! -f "$file" ]; then
+        error "File not found: $file"
+        exit 1
+    fi
+    info "Running AMOS script: $file"
+    if cmd_exists ucode2-binder; then
+        ucode2-binder "$file"
+    else
+        warn "ucode2-binder not found. Install with: udo setup"
+        cat "$file"
+    fi
+}
+
+cmd_home_status() {
+    info "Home Automation Status"
+    if cmd_exists snackbar; then
+        snackbar status 2>/dev/null || warn "Snackbar daemon not running"
+    else
+        warn "Snackbar not installed"
+    fi
+    echo "  Vault: $(ls -1 "$UDO_VAULT" 2>/dev/null | wc -l | tr -d ' ') entries"
+    echo "  Fonts: $(ls -1 "$UDO_FONTS" 2>/dev/null | wc -l | tr -d ' ') categories"
+}
+
+cmd_space_explore() {
+    local system="${1:-L500}"
+    info "Exploring spatial system: $system"
+    echo "  System: $system"
+    echo "  Status: Planning phase"
+    echo "  Use 'udo surface open ucode4' for 3D view"
+}
+
+cmd_surface_list() {
+    info "Available Surfaces"
+    echo "  ucode1  - BBC BASIC Teletext"
+    echo "  ucode2  - AMOS Sprite/BOB"
+    echo "  ucode3  - Home Automation"
+    echo "  ucode4  - Spatial/3D (planning)"
+}
+
+cmd_surface_open() {
+    local name="$1"
+    info "Opening surface: $name"
+    case "$name" in
+        ucode1|ucode2|ucode3|ucode4)
+            if [ -f "$UDO_UI/index.html" ]; then
+                open "$UDO_UI/index.html#/surface/$name" 2>/dev/null || \
+                    echo "  Open http://localhost:5173/#/surface/$name in browser"
+            else
+                warn "udoui not built yet. Run: udo setup"
+            fi
+            ;;
+        *)
+            error "Unknown surface: $name. Try: ucode1, ucode2, ucode3, ucode4"
+            exit 1
+            ;;
+    esac
+}
+
+cmd_snack_list() {
+    info "Available Snacks"
+    if cmd_exists snackbar; then
+        snackbar snack list 2>/dev/null || echo "  (run 'snackbar' to start daemon)"
+    else
+        warn "Snackbar not installed"
+        echo "  Install with: udo setup"
+    fi
+}
+
+cmd_snack_install() {
+    local name="$1"
+    info "Installing snack: $name"
+    if cmd_exists snackbar; then
+        snackbar snack install "$name" 2>/dev/null || warn "Snack '$name' not found in catalog"
+    else
+        warn "Snackbar not installed"
+    fi
+}
+
+cmd_snack_run() {
+    local name="$1"
+    info "Running snack: $name"
+    if cmd_exists snackbar; then
+        snackbar snack run "$name" 2>/dev/null || warn "Failed to run snack '$name'"
+    else
+        warn "Snackbar not installed"
+    fi
+}
+
+cmd_vault_list() {
+    info "Vault Contents"
+    if [ -d "$UDO_VAULT" ]; then
+        echo "  Location: $UDO_VAULT"
+        echo "  Entries:"
+        for dir in "$UDO_VAULT"/*/; do
+            [ -d "$dir" ] && echo "    - $(basename "$dir")"
+        done
+    else
+        warn "Vault not found at $UDO_VAULT"
+    fi
+}
+
+cmd_vault_sync() {
+    info "Syncing Vault..."
+    if [ -f "$UDO_HOME/../Usync/bin/sync-all.sh" ]; then
+        bash "$UDO_HOME/../Usync/bin/sync-all.sh"
+    else
+        warn "Vault sync script not found"
+    fi
+}
+
+cmd_vault_backup() {
+    local backup_dir="${1:-$HOME/Vault/backups}"
+    info "Backing up Vault to $backup_dir"
+    mkdir -p "$backup_dir"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_file="$backup_dir/vault-$timestamp.tar.gz"
+    tar -czf "$backup_file" -C "$(dirname "$UDO_VAULT")" "$(basename "$UDO_VAULT")" 2>/dev/null && \
+        ok "Backup created: $backup_file" || \
+        error "Backup failed"
+}
+
+cmd_font_list() {
+    info "Available Fonts"
+    if [ -f "$UDO_FONTS/catalogue.json" ]; then
+        cat "$UDO_FONTS/catalogue.json" | python3 -m json.tool 2>/dev/null || cat "$UDO_FONTS/catalogue.json"
+    else
+        warn "Font catalogue not found"
+        echo "  Categories:"
+        for dir in "$UDO_FONTS"/*/; do
+            [ -d "$dir" ] && echo "    - $(basename "$dir") ($(ls "$dir" | wc -l | tr -d ' ') fonts)"
+        done
+    fi
+}
+
+cmd_font_install() {
+    local name="$1"
+    info "Installing font: $name"
+    if [ -f "$UDO_FONTS/catalogue.json" ]; then
+        python3 -c "
+import json, sys, os
+with open('$UDO_FONTS/catalogue.json') as f:
+    cat = json.load(f)
+for category, fonts in cat.items():
+    if isinstance(fonts, dict):
+        for fname, finfo in fonts.items():
+            if fname == '$name' or (isinstance(finfo, dict) and finfo.get('name') == '$name'):
+                print(f'Found: {fname} in {category}')
+                sys.exit(0)
+print('Font not found: $name')
+sys.exit(1)
+" 2>/dev/null || warn "Font '$name' not found in catalogue"
+    else
+        warn "Font catalogue not found"
+    fi
+}
+
+cmd_status() {
+    info "udo System Status"
+    echo "  Version:    $UDO_VERSION"
+    echo "  UDO_HOME:   $UDO_HOME"
+    echo "  UDO_UI:     $UDO_UI"
+    echo "  UDO_VAULT:  $UDO_VAULT"
+    echo ""
+    echo "  Tools:"
+    for tool in snackbar sonic node python3 go cargo docker; do
+        if cmd_exists "$tool"; then
+            ok "$tool: $(command -v "$tool")"
+        else
+            warn "$tool: not found"
+        fi
+    done
+}
+
+cmd_ui() {
+    info "Launching udoui..."
+    if [ -d "$UDO_UI" ]; then
+        cd "$UDO_UI"
+        if cmd_exists npm; then
+            npm run dev 2>/dev/null || npm start 2>/dev/null || {
+                warn "No dev script found. Opening static files..."
+                open index.html 2>/dev/null || echo "  Open $UDO_UI/index.html in browser"
+            }
+        else
+            warn "npm not found"
+        fi
+    else
+        warn "udoui not found at $UDO_UI"
+        echo "  Run 'udo setup' to install"
+    fi
+}
+
+cmd_setup() {
+    info "Setting up uDos ecosystem..."
+    
+    # Create necessary directories
+    mkdir -p "$UDO_HOME"/{fonts,skills,surfaces,themes}
+    
+    # Check for npm dependencies
+    if [ -d "$UDO_UI" ] && [ -f "$UDO_UI/package.json" ]; then
+        info "Installing udoui dependencies..."
+        cd "$UDO_UI" && npm install 2>/dev/null && ok "udoui dependencies installed" || warn "npm install failed"
+    fi
+    
+    ok "Setup complete"
+    echo ""
+    echo "  Next steps:"
+    echo "    - Add 'export PATH=\$PATH:$UDO_HOME/bin' to your ~/.zshrc"
+    echo "    - Run 'udo status' to verify"
+    echo "    - Run 'udo ui' to launch the interface"
+}
+
+cmd_init() {
+    local project="$1"
+    info "Scaffolding project: $project"
+    local target="${2:-$HOME/Code/$project}"
+    mkdir -p "$target"/{src,config,docs}
+    cat > "$target/README.md" <<EOF
+# $project
+
+Scaffolded by udo init
+
+## Structure
+- \`src/\` - Source code
+- \`config/\` - Configuration
+- \`docs/\` - Documentation
+EOF
+    ok "Project created at $target"
+}
+
+cmd_dev() {
+    local action="${1:-status}"
+    case "$action" in
+        start)
+            touch "$HOME/.udos/dev_mode"
+            ok "Dev mode enabled"
+            ;;
+        stop)
+            rm -f "$HOME/.udos/dev_mode"
+            ok "Dev mode disabled"
+            ;;
+        status)
+            if [ -f "$HOME/.udos/dev_mode" ]; then
+                ok "Dev mode: ON"
+            else
+                info "Dev mode: OFF"
+            fi
+            ;;
+        *)
+            error "Unknown dev action: $action. Try: start, stop, status"
+            exit 1
+            ;;
+    esac
+}
+
+cmd_skill_list() {
+    info "Available Skills"
+    if [ -d "$UDO_SKILLS" ]; then
+        for skill in "$UDO_SKILLS"/*/; do
+            [ -d "$skill" ] && echo "  - $(basename "$skill")"
+        done
+    else
+        warn "No skills directory at $UDO_SKILLS"
+    fi
+}
+
+cmd_skill_run() {
+    local name="$1"
+    local skill_dir="$UDO_SKILLS/$name"
+    if [ -d "$skill_dir" ]; then
+        if [ -f "$skill_dir/run.sh" ]; then
+            info "Running skill: $name"
+            bash "$skill_dir/run.sh" "${@:2}"
+        elif [ -f "$skill_dir/skill.yaml" ]; then
+            info "Skill definition found: $name"
+            cat "$skill_dir/skill.yaml"
+        else
+            warn "No run script found for skill: $name"
+        fi
+    else
+        error "Skill not found: $name"
+        exit 1
+    fi
+}
+
+# ============================================================
+# EXTENSION MANAGEMENT (udo ext)
+# ============================================================
+
+cmd_ext_list() {
+    local filter="${1:-}"
+    if [ ! -f "$UDO_EXTENSIONS/catalog/index.json" ]; then
+        error "Extension catalog not found at $UDO_EXTENSIONS/catalog/index.json"
+        exit 1
+    fi
+    info "Extension Catalog"
+    echo ""
+    python3 -c "
+import json, sys
+with open('$UDO_EXTENSIONS/catalog/index.json') as f:
+    catalog = json.load(f)
+exts = catalog.get('extensions', [])
+if '$filter':
+    exts = [e for e in exts if '$filter' in e.get('tags', []) or '$filter' in e.get('categories', []) or '$filter' in e.get('name', '')]
+print(f'Total: {len(exts)} extensions')
+print('')
+for ext in exts:
+    tags = ', '.join(ext.get('tags', [])[:3])
+    print(f\"  {ext['name']:35s} {ext['version']:8s} {ext['type']:12s} {ext['displayName']}\")
+    print(f\"  {'':35s} {'':8s} {'':12s} {ext.get('description', '')}\")
+    if tags:
+        print(f\"  {'':35s} {'':8s} {'':12s} tags: {tags}\")
+    print('')
+" 2>/dev/null || {
+        warn "Failed to parse catalog (python3 required)"
+        cat "$UDO_EXTENSIONS/catalog/index.json" | head -50
+    }
+}
+
+cmd_ext_search() {
+    local query="$1"
+    if [ -z "$query" ]; then
+        error "Usage: udo ext search <query>"
+        exit 1
+    fi
+    info "Searching for: $query"
+    cmd_ext_list "$query"
+}
+
+cmd_ext_info() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext info <name>"
+        exit 1
+    fi
+    # Check manifest first, then catalog
+    local manifest="$UDO_EXTENSIONS/manifests/$name.json"
+    if [ -f "$manifest" ]; then
+        info "Extension: $name"
+        python3 -c "
+import json, sys
+with open('$manifest') as f:
+    m = json.load(f)
+print(f\"  Name:        {m.get('name', 'N/A')}\")
+print(f\"  Version:     {m.get('version', 'N/A')}\")
+print(f\"  Type:        {m.get('type', 'N/A')}\")
+print(f\"  Display:     {m.get('displayName', 'N/A')}\")
+print(f\"  Description: {m.get('description', 'N/A')}\")
+print(f\"  Author:      {m.get('author', 'N/A')}\")
+print(f\"  License:     {m.get('license', 'N/A')}\")
+print(f\"  Platform:    {m.get('platform', 'N/A')}\")
+print(f\"  Entry:       {m.get('entry', 'N/A')}\")
+print(f\"  Size:        {m.get('size', 'N/A')}\")
+deps = m.get('dependencies', {})
+if deps:
+    print(f\"  Dependencies:\")
+    for pkg, ver in deps.items():
+        print(f\"    - {pkg}: {ver}\")
+surfaces = m.get('surfaces', [])
+if surfaces:
+    print(f\"  Surfaces:    {', '.join(surfaces)}\")
+tags = m.get('tags', [])
+if tags:
+    print(f\"  Tags:        {', '.join(tags)}\")
+config = m.get('config', {})
+if config:
+    print(f\"  Config:\")
+    for key, val in config.items():
+        print(f\"    {key}: {val}\")
+" 2>/dev/null
+    else
+        # Fall back to catalog
+        if [ ! -f "$UDO_EXTENSIONS/catalog/index.json" ]; then
+            error "Catalog not found"
+            exit 1
+        fi
+        python3 -c "
+import json, sys
+with open('$UDO_EXTENSIONS/catalog/index.json') as f:
+    catalog = json.load(f)
+for ext in catalog.get('extensions', []):
+    if ext['name'] == '$name':
+        print(json.dumps(ext, indent=2))
+        sys.exit(0)
+print('Extension not found: $name')
+sys.exit(1)
+" 2>/dev/null || error "Extension '$name' not found in catalog"
+    fi
+}
+
+cmd_ext_install() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext install <name>"
+        exit 1
+    fi
+    # Check if extension exists in catalog
+    if [ ! -f "$UDO_EXTENSIONS/catalog/index.json" ]; then
+        error "Catalog not found"
+        exit 1
+    fi
+    local found=$(python3 -c "
+import json, sys
+with open('$UDO_EXTENSIONS/catalog/index.json') as f:
+    catalog = json.load(f)
+for ext in catalog.get('extensions', []):
+    if ext['name'] == '$name':
+        print('yes')
+        sys.exit(0)
+print('no')
+" 2>/dev/null)
+    if [ "$found" != "yes" ]; then
+        error "Extension '$name' not found in catalog"
+        echo "  Run 'udo ext list' to see available extensions"
+        exit 1
+    fi
+    # Create registry entry
+    mkdir -p "$UDO_EXT_REGISTRY/$name"
+    local reg_entry="$UDO_EXT_REGISTRY/$name/registry.json"
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cat > "$reg_entry" <<REGEOF
+{
+  "name": "$name",
+  "installedAt": "$timestamp",
+  "version": "latest",
+  "status": "installed"
+}
+REGEOF
+    # Update registry index
+    local reg_index="$UDO_EXTENSIONS/registry/index.json"
+    if [ -f "$reg_index" ]; then
+        python3 -c "
+import json
+with open('$reg_index') as f:
+    reg = json.load(f)
+installed = reg.get('installed', [])
+if '$name' not in installed:
+    installed.append('$name')
+    reg['installed'] = installed
+    reg['lastUpdated'] = '$timestamp'
+with open('$reg_index', 'w') as f:
+    json.dump(reg, f, indent=2)
+" 2>/dev/null
+    fi
+    ok "Extension '$name' installed"
+    echo "  Registry: $UDO_EXT_REGISTRY/$name/"
+    echo "  Run 'udo ext info $name' for details"
+}
+
+cmd_ext_remove() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext remove <name>"
+        exit 1
+    fi
+    if [ ! -d "$UDO_EXT_REGISTRY/$name" ]; then
+        error "Extension '$name' is not installed"
+        exit 1
+    fi
+    rm -rf "$UDO_EXT_REGISTRY/$name"
+    # Update registry index
+    local reg_index="$UDO_EXTENSIONS/registry/index.json"
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    if [ -f "$reg_index" ]; then
+        python3 -c "
+import json
+with open('$reg_index') as f:
+    reg = json.load(f)
+installed = reg.get('installed', [])
+if '$name' in installed:
+    installed.remove('$name')
+    reg['installed'] = installed
+    reg['lastUpdated'] = '$timestamp'
+with open('$reg_index', 'w') as f:
+    json.dump(reg, f, indent=2)
+" 2>/dev/null
+    fi
+    ok "Extension '$name' removed"
+}
+
+cmd_ext_update() {
+    info "Checking for updates..."
+    local reg_index="$UDO_EXTENSIONS/registry/index.json"
+    if [ ! -f "$reg_index" ]; then
+        warn "No extensions installed"
+        return
+    fi
+    local installed=$(python3 -c "
+import json
+with open('$reg_index') as f:
+    reg = json.load(f)
+for ext in reg.get('installed', []):
+    print(ext)
+" 2>/dev/null)
+    if [ -z "$installed" ]; then
+        info "No extensions to update"
+        return
+    fi
+    echo "  Installed extensions:"
+    echo "$installed" | while IFS= read -r ext; do
+        echo "    - $ext (up-to-date)"
+    done
+    ok "Update check complete"
+}
+
+cmd_ext_create() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext create <name>"
+        exit 1
+    fi
+    local manifest="$UDO_EXTENSIONS/manifests/$name.json"
+    if [ -f "$manifest" ]; then
+        error "Extension '$name' already exists"
+        exit 1
+    fi
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    cat > "$manifest" <<MANEOF
+{
+  "name": "$name",
+  "version": "0.1.0",
+  "type": "tool",
+  "displayName": "$name",
+  "description": "Description of $name",
+  "author": "uDosGo",
+  "license": "MIT",
+  "platform": "linux",
+  "surfaces": [],
+  "tags": [],
+  "categories": [],
+  "entry": "",
+  "config": {},
+  "size": "0.1 MB"
+}
+MANEOF
+    ok "Extension scaffold created: $manifest"
+    echo "  Edit the manifest to add details"
+    echo "  Run 'udo ext validate $name' to check"
+}
+
+cmd_ext_validate() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext validate <name>"
+        exit 1
+    fi
+    local manifest="$UDO_EXTENSIONS/manifests/$name.json"
+    if [ ! -f "$manifest" ]; then
+        error "Manifest not found: $manifest"
+        exit 1
+    fi
+    info "Validating: $name"
+    local errors=0
+    # Check required fields
+    for field in name version type displayName description; do
+        local val=$(python3 -c "
+import json, sys
+with open('$manifest') as f:
+    m = json.load(f)
+print(m.get('$field', ''))
+" 2>/dev/null)
+        if [ -z "$val" ]; then
+            error "  Missing required field: $field"
+            errors=$((errors + 1))
+        fi
+    done
+    # Check version format
+    local version=$(python3 -c "
+import json, sys
+with open('$manifest') as f:
+    m = json.load(f)
+print(m.get('version', ''))
+" 2>/dev/null)
+    if ! echo "$version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+        error "  Invalid version format: $version (expected semver)"
+        errors=$((errors + 1))
+    fi
+    # Check type
+    local type=$(python3 -c "
+import json, sys
+with open('$manifest') as f:
+    m = json.load(f)
+print(m.get('type', ''))
+" 2>/dev/null)
+    case "$type" in
+        skill|surface|service|integration|theme|tool) ;;
+        *)
+            error "  Invalid type: $type (expected: skill, surface, service, integration, theme, tool)"
+            errors=$((errors + 1))
+            ;;
+
+    esac
+    if [ "$errors" -eq 0 ]; then
+        ok "Manifest is valid"
+    else
+        error "Found $errors error(s)"
+        exit 1
+    fi
+}
+
+cmd_ext_publish() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo ext publish <name>"
+        exit 1
+    fi
+    local manifest="$UDO_EXTENSIONS/manifests/$name.json"
+    if [ ! -f "$manifest" ]; then
+        error "Manifest not found: $manifest"
+        echo "  Create one with: udo ext create $name"
+        exit 1
+    fi
+    # Validate first
+    cmd_ext_validate "$name" || exit 1
+    # Add to catalog
+    local catalog="$UDO_EXTENSIONS/catalog/index.json"
+    if [ ! -f "$catalog" ]; then
+        error "Catalog not found"
+        exit 1
+    fi
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+    python3 -c "
+import json, sys
+with open('$manifest') as f:
+    m = json.load(f)
+with open('$catalog') as f:
+    cat = json.load(f)
+# Check if already exists
+exts = cat.get('extensions', [])
+for i, ext in enumerate(exts):
+    if ext['name'] == '$name':
+        exts[i] = m
+        break
+else:
+    exts.append(m)
+cat['extensions'] = exts
+cat['totalExtensions'] = len(exts)
+cat['lastUpdated'] = '$timestamp'
+with open('$catalog', 'w') as f:
+    json.dump(cat, f, indent=2)
+print('ok')
+" 2>/dev/null && ok "Extension '$name' published to catalog" || error "Failed to publish"
+}
+
+# ============================================================
+# MAIN
+# ============================================================
+
+main() {
+
+    if [ $# -eq 0 ]; then
+        usage
+        exit 0
+    fi
+
+    local cmd="$1"
+    shift
+
+    case "$cmd" in
+        help|--help|-h)
+            usage
+            ;;
+        version|--version|-v)
+            echo "udo v${UDO_VERSION}"
+            ;;
+        script)
+            [ $# -lt 1 ] && { error "Usage: udo script run <file>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                run) cmd_script_run "$@" ;;
+                *) error "Unknown script subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        build)
+            [ $# -lt 1 ] && { error "Usage: udo build run <file>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                run) cmd_build_run "$@" ;;
+                *) error "Unknown build subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        home)
+            [ $# -lt 1 ] && { error "Usage: udo home status"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                status) cmd_home_status ;;
+                *) error "Unknown home subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        space)
+            [ $# -lt 1 ] && { error "Usage: udo space explore <system>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                explore) cmd_space_explore "$@" ;;
+                *) error "Unknown space subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        surface)
+            [ $# -lt 1 ] && { error "Usage: udo surface <list|open>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_surface_list ;;
+                open) cmd_surface_open "$@" ;;
+                *) error "Unknown surface subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        snack)
+            [ $# -lt 1 ] && { error "Usage: udo snack <list|install|run>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_snack_list ;;
+                install) cmd_snack_install "$@" ;;
+                run) cmd_snack_run "$@" ;;
+                *) error "Unknown snack subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        vault)
+            [ $# -lt 1 ] && { error "Usage: udo vault <list|sync|backup>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_vault_list ;;
+                sync) cmd_vault_sync ;;
+                backup) cmd_vault_backup "$@" ;;
+                *) error "Unknown vault subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        font)
+            [ $# -lt 1 ] && { error "Usage: udo font <list|install>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_font_list ;;
+                install) cmd_font_install "$@" ;;
+                *) error "Unknown font subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        status)
+            cmd_status
+            ;;
+        ui)
+            cmd_ui
+            ;;
+        setup)
+            cmd_setup
+            ;;
+        init)
+            cmd_init "$@"
+            ;;
+        dev)
+            cmd_dev "$@"
+            ;;
+        ext)
+            [ $# -lt 1 ] && { error "Usage: udo ext <list|search|info|install|remove|update|create|validate|publish>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_ext_list "$@" ;;
+                search) cmd_ext_search "$@" ;;
+                info) cmd_ext_info "$@" ;;
+                install) cmd_ext_install "$@" ;;
+                remove) cmd_ext_remove "$@" ;;
+                update) cmd_ext_update ;;
+                create) cmd_ext_create "$@" ;;
+                validate) cmd_ext_validate "$@" ;;
+                publish) cmd_ext_publish "$@" ;;
+                *) error "Unknown ext subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        skill)
+            [ $# -lt 1 ] && { error "Usage: udo skill <list|run>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_skill_list ;;
+                run) cmd_skill_run "$@" ;;
+                *) error "Unknown skill subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        *)
+
+            error "Unknown command: $cmd"
+            echo ""
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

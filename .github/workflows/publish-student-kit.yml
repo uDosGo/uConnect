@@ -1,0 +1,545 @@
+# Publish Student Kit — Generic GitHub Package
+#
+# Triggered by tags like: student/week1-v1.0, student/week2-v1.0
+# Publishes a versioned .tar.gz "Student Kit" to GitHub Packages.
+#
+# Each kit contains:
+#   - README.md (lesson overview)
+#   - lessons/ (markdown tutorials)
+#   - starter-vault/ (pre-seeded @inbox, @toybox, example notes)
+#   - solutions/ (optional, for verified educators)
+#   - manifest.json (metadata for the udos CLI)
+#
+# Three-lane model:
+#   Public  → Story packs, themes, free lessons
+#   Student → Weekly kits with starter vaults
+#   Dev     → Legacy artifacts, contributor kits
+
+name: Publish Student Kit
+
+on:
+  push:
+    tags: ['student/week*', 'story/*', 'theme/*', 'legacy/*']
+  workflow_dispatch:
+    inputs:
+      week:
+        description: 'Week number (e.g. 1, 2, 3...)'
+        required: true
+        type: number
+      version:
+        description: 'Kit version (e.g. 1.0)'
+        required: false
+        default: '1.0'
+        type: string
+      lane:
+        description: 'Distribution lane'
+        required: true
+        default: 'student'
+        type: choice
+        options:
+          - student
+          - story
+          - theme
+          - legacy
+
+env:
+  CARGO_TERM_COLOR: always
+  REGISTRY: ghcr.io
+  ORG: uDosGo
+
+jobs:
+  # ── Parse Tag ──────────────────────────────────────────────────────────────
+  parse:
+    name: Parse Tag
+    runs-on: ubuntu-latest
+    outputs:
+      lane: ${{ steps.parse.outputs.lane }}
+      week: ${{ steps.parse.outputs.week }}
+      version: ${{ steps.parse.outputs.version }}
+      package_name: ${{ steps.parse.outputs.package_name }}
+
+    steps:
+      - name: Parse tag
+        id: parse
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "Tag: $TAG"
+
+          # Determine lane from tag prefix
+          if [[ "$TAG" == student/week* ]]; then
+            LANE="student"
+            WEEK="${TAG#student/week}"
+            WEEK="${WEEK%%-*}"
+            VERSION="${TAG#*-}"
+            echo "lane=student" >> "$GITHUB_OUTPUT"
+            echo "week=$WEEK" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "package_name=udos-student-week${WEEK}" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" == story/* ]]; then
+            LANE="story"
+            STORY="${TAG#story/}"
+            STORY="${STORY%%-*}"
+            VERSION="${TAG#*-}"
+            echo "lane=story" >> "$GITHUB_OUTPUT"
+            echo "week=$STORY" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "package_name=udos-story-${STORY}" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" == theme/* ]]; then
+            LANE="theme"
+            THEME="${TAG#theme/}"
+            THEME="${THEME%%-*}"
+            VERSION="${TAG#*-}"
+            echo "lane=theme" >> "$GITHUB_OUTPUT"
+            echo "week=$THEME" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "package_name=udos-theme-${THEME}" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" == legacy/* ]]; then
+            LANE="legacy"
+            VER="${TAG#legacy/}"
+            echo "lane=legacy" >> "$GITHUB_OUTPUT"
+            echo "week=$VER" >> "$GITHUB_OUTPUT"
+            echo "version=$VER" >> "$GITHUB_OUTPUT"
+            echo "package_name=udos-legacy-${VER}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Unknown tag format: $TAG"
+            exit 1
+          fi
+
+  # ── Build Student Kit ──────────────────────────────────────────────────────
+  build-student:
+    name: Build Student Kit
+    needs: [parse]
+    if: needs.parse.outputs.lane == 'student'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set kit variables
+        id: kit
+        run: |
+          WEEK="${{ needs.parse.outputs.week }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          PACKAGE="${{ needs.parse.outputs.package_name }}"
+          echo "week=$WEEK" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+          echo "archive=${PACKAGE}-v${VERSION}.tar.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Create kit directory
+        run: |
+          WEEK="${{ steps.kit.outputs.week }}"
+          KIT_DIR="dist/student-kits/week-${WEEK}"
+          mkdir -p "$KIT_DIR/lessons"
+          mkdir -p "$KIT_DIR/starter-vault/@inbox"
+          mkdir -p "$KIT_DIR/starter-vault/@toybox"
+          mkdir -p "$KIT_DIR/starter-vault/@workspace"
+          mkdir -p "$KIT_DIR/solutions"
+
+      - name: Copy course materials
+        run: |
+          WEEK="${{ steps.kit.outputs.week }}"
+          KIT_DIR="dist/student-kits/week-${WEEK}"
+
+          # Find the course directory for this week
+          COURSE_DIR=""
+          for dir in courses/*/; do
+            if [[ -f "${dir}README.md" ]]; then
+              COURSE_DIR="$dir"
+              break
+            fi
+          done
+
+          if [[ -n "$COURSE_DIR" ]]; then
+            echo "Using course: $COURSE_DIR"
+            cp -r "${COURSE_DIR}README.md" "$KIT_DIR/" 2>/dev/null || true
+            cp -r "${COURSE_DIR}lessons/"* "$KIT_DIR/lessons/" 2>/dev/null || true
+          fi
+
+      - name: Generate starter vault
+        run: |
+          WEEK="${{ steps.kit.outputs.week }}"
+          KIT_DIR="dist/student-kits/week-${WEEK}"
+
+          # Create vault config
+          cat > "$KIT_DIR/starter-vault/.udosconfig" << 'VAULTCONFIG'
+          {
+            "version": "1.0",
+            "name": "Student Vault",
+            "theme": "default",
+            "tags": ["learning", "tutorial", "week-${WEEK}"]
+          }
+          VAULTCONFIG
+
+          # Create welcome note
+          cat > "$KIT_DIR/starter-vault/@inbox/welcome.md" << 'WELCOME'
+          ---
+          title: Welcome to uDos!
+          created: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          tags: [welcome, tutorial]
+          ---
+
+          # Welcome to Your uDos Vault! 🎉
+
+          This is your **digital knowledge chest**. Everything you learn and create
+          will be stored here.
+
+          ## Quick Start
+
+          - `[[wiki-link]]` — Link between notes
+          - `#tag` — Organize by category
+          - `@inbox` — Temporary storage
+          - `@toybox` — Playground for experiments
+
+          ## Your First Task
+
+          Try creating a note about something you learned today!
+          WELCOME
+
+          # Create toybox playground
+          cat > "$KIT_DIR/starter-vault/@toybox/playground.md" << 'TOYBOX'
+          ---
+          title: Playground
+          created: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          tags: [toybox, experiment]
+          ---
+
+          # 🧸 Playground
+
+          This is your safe space to experiment. Try things out here
+          before using them in your real notes.
+
+          ## Experiments
+
+          - [ ] Try [[wiki-links]]
+          - [ ] Add some #tags
+          - [ ] Create a task list
+          - [ ] Write a story
+          TOYBOX
+
+      - name: Generate manifest
+        run: |
+          WEEK="${{ steps.kit.outputs.week }}"
+          VERSION="${{ steps.kit.outputs.version }}"
+          PACKAGE="${{ steps.kit.outputs.package_name }}"
+          KIT_DIR="dist/student-kits/week-${WEEK}"
+
+          cat > "$KIT_DIR/manifest.json" << MANIFEST
+          {
+            "package": "${PACKAGE}",
+            "version": "${VERSION}",
+            "week": ${WEEK},
+            "lane": "student",
+            "name": "uDos Student Kit — Week ${WEEK}",
+            "description": "Weekly student kit with starter vault and lessons",
+            "published": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "min_udos_version": "1.0.0",
+            "tags": ["student", "week-${WEEK}", "tutorial"],
+            "contents": {
+              "lessons": "Markdown tutorial files",
+              "starter-vault": "Pre-seeded vault with @inbox, @toybox, @workspace",
+              "solutions": "Educator solutions (restricted access)"
+            }
+          }
+          MANIFEST
+
+      - name: Create archive
+        run: |
+          WEEK="${{ steps.kit.outputs.week }}"
+          PACKAGE="${{ steps.kit.outputs.package }}"
+          VERSION="${{ steps.kit.outputs.version }}"
+          ARCHIVE="${{ steps.kit.outputs.archive }}"
+
+          cd dist/student-kits
+          tar -czf "../../${ARCHIVE}" "week-${WEEK}/"
+          cd ../..
+          echo "Created: ${ARCHIVE}"
+          ls -lh "${ARCHIVE}"
+
+      - name: Upload archive as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.kit.outputs.package }}-v${{ steps.kit.outputs.version }}
+          path: ${{ steps.kit.outputs.archive }}
+
+      - name: Publish to GitHub Packages (Generic)
+        run: |
+          ARCHIVE="${{ steps.kit.outputs.archive }}"
+          PACKAGE="${{ steps.kit.outputs.package }}"
+          VERSION="${{ steps.kit.outputs.version }}"
+
+          # Use GitHub's Package Upload API for generic packages
+          # Generic packages are stored as release assets attached to a tag
+          gh release create "v${PACKAGE}-${VERSION}" \
+            --title "${PACKAGE} v${VERSION}" \
+            --notes "Student Kit for Week ${{ steps.kit.outputs.week }}" \
+            "${ARCHIVE}" \
+            --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Build Story Pack ───────────────────────────────────────────────────────
+  build-story:
+    name: Build Story Pack
+    needs: [parse]
+    if: needs.parse.outputs.lane == 'story'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set pack variables
+        id: pack
+        run: |
+          PACKAGE="${{ needs.parse.outputs.package_name }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "archive=${PACKAGE}-v${VERSION}.tar.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Create story pack
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          PACK_DIR="dist/story-packs/${PACKAGE}"
+          mkdir -p "$PACK_DIR"
+
+          # Look for story files in courses or a dedicated stories directory
+          if [[ -d "stories/${PACKAGE#udos-story-}" ]]; then
+            cp -r "stories/${PACKAGE#udos-story-}/"* "$PACK_DIR/"
+          else
+            # Create a sample story
+            cat > "$PACK_DIR/README.md" << 'STORYREADME'
+            # Interactive Story Pack
+            ## A choose-your-own-adventure that teaches markdown
+            STORYREADME
+          fi
+
+          # Create manifest
+          cat > "$PACK_DIR/manifest.json" << MANIFEST
+          {
+            "package": "${PACKAGE}",
+            "version": "${VERSION}",
+            "lane": "story",
+            "type": "interactive-narrative",
+            "published": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          }
+          MANIFEST
+
+      - name: Create archive
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+
+          cd dist/story-packs
+          tar -czf "../../${ARCHIVE}" "${PACKAGE}/"
+          cd ../..
+          echo "Created: ${ARCHIVE}"
+
+      - name: Publish to GitHub Packages
+        run: |
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+
+          gh release create "v${PACKAGE}-${VERSION}" \
+            --title "${PACKAGE} v${VERSION}" \
+            --notes "Story pack release" \
+            "${ARCHIVE}" \
+            --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Build Theme Pack ───────────────────────────────────────────────────────
+  build-theme:
+    name: Build Theme Pack
+    needs: [parse]
+    if: needs.parse.outputs.lane == 'theme'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set pack variables
+        id: pack
+        run: |
+          PACKAGE="${{ needs.parse.outputs.package_name }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "archive=${PACKAGE}-v${VERSION}.tar.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Create theme pack
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          THEME_NAME="${PACKAGE#udos-theme-}"
+          PACK_DIR="dist/theme-packs/${PACKAGE}"
+          mkdir -p "$PACK_DIR"
+
+          # Look for theme files in themes directory
+          if [[ -d "themes/${THEME_NAME}" ]]; then
+            cp -r "themes/${THEME_NAME}/"* "$PACK_DIR/"
+          else
+            # Create a sample theme structure
+            cat > "$PACK_DIR/theme.json" << THEMEJSON
+            {
+              "name": "${THEME_NAME}",
+              "version": "${VERSION}",
+              "type": "ascii-art",
+              "colors": {
+                "primary": "#00ff00",
+                "secondary": "#ff8800",
+                "background": "#0d1117",
+                "text": "#c9d1d9"
+              }
+            }
+            THEMEJSON
+          fi
+
+          # Create manifest
+          cat > "$PACK_DIR/manifest.json" << MANIFEST
+          {
+            "package": "${PACKAGE}",
+            "version": "${VERSION}",
+            "lane": "theme",
+            "type": "visual-theme",
+            "published": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          }
+          MANIFEST
+
+      - name: Create archive
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+
+          cd dist/theme-packs
+          tar -czf "../../${ARCHIVE}" "${PACKAGE}/"
+          cd ../..
+          echo "Created: ${ARCHIVE}"
+
+      - name: Publish to GitHub Packages
+        run: |
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+
+          gh release create "v${PACKAGE}-${VERSION}" \
+            --title "${PACKAGE} v${VERSION}" \
+            --notes "Theme pack release" \
+            "${ARCHIVE}" \
+            --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Build Legacy Artifact ──────────────────────────────────────────────────
+  build-legacy:
+    name: Build Legacy Artifact
+    needs: [parse]
+    if: needs.parse.outputs.lane == 'legacy'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for legacy snapshots
+
+      - name: Set pack variables
+        id: pack
+        run: |
+          PACKAGE="${{ needs.parse.outputs.package_name }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "archive=${PACKAGE}-v${VERSION}.tar.gz" >> "$GITHUB_OUTPUT"
+
+      - name: Create legacy snapshot
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          PACK_DIR="dist/legacy/${PACKAGE}"
+          mkdir -p "$PACK_DIR"
+
+          # Try to checkout the specific version if it exists as a tag
+          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
+            echo "Creating snapshot from tag v${VERSION}"
+            git archive --format=tar "v${VERSION}" | tar -x -C "$PACK_DIR"
+          else
+            # Create a manifest-only legacy artifact
+            cat > "$PACK_DIR/README.md" << LEGACYREADME
+            # uDos Legacy Artifact v${VERSION}
+            ## Frozen snapshot for historical exploration
+            LEGACYREADME
+          fi
+
+          # Create manifest
+          cat > "$PACK_DIR/manifest.json" << MANIFEST
+          {
+            "package": "${PACKAGE}",
+            "version": "${VERSION}",
+            "lane": "legacy",
+            "type": "historical-snapshot",
+            "published": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "git_ref": "v${VERSION}",
+            "description": "Frozen snapshot of uDos v${VERSION} for educational exploration"
+          }
+          MANIFEST
+
+      - name: Create archive
+        run: |
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+
+          cd dist/legacy
+          tar -czf "../../${ARCHIVE}" "${PACKAGE}/"
+          cd ../..
+          echo "Created: ${ARCHIVE}"
+
+      - name: Publish to GitHub Packages
+        run: |
+          ARCHIVE="${{ steps.pack.outputs.archive }}"
+          PACKAGE="${{ steps.pack.outputs.package }}"
+          VERSION="${{ steps.pack.outputs.version }}"
+
+          gh release create "v${PACKAGE}-${VERSION}" \
+            --title "${PACKAGE} v${VERSION}" \
+            --notes "Legacy artifact — uDos v${VERSION}" \
+            "${ARCHIVE}" \
+            --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Update Package Index ───────────────────────────────────────────────────
+  index:
+    name: Update Package Index
+    needs: [build-student, build-story, build-theme, build-legacy]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate package index
+        run: |
+          mkdir -p dist
+
+          cat > dist/index.json << 'INDEX'
+          {
+            "registry": "ghcr.io/uDosGo",
+            "updated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "packages": []
+          }
+          INDEX
+
+          echo "Package index updated"
+
+      - name: Deploy index to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          destination_dir: packages
+          keep_files: true

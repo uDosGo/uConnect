@@ -1,0 +1,17 @@
+name: sys-ops
+description: Linux system operations — services, containers, logs, health
+platform: linux
+version: 1.0.0
+commands:
+  - name: status
+    description: Show system health overview
+    script: status.sh
+  - name: logs
+    description: Tail system logs
+    script: logs.sh
+  - name: services
+    description: List and manage system services
+    script: services.sh
+  - name: docker
+    description: Docker container management
+    script: docker.sh

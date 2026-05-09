@@ -1,0 +1,203 @@
+{
+  "version": "2.0.0",
+  "name": "udoui Font Catalogue",
+  "description": "Master font manifest for the udoui ecosystem. All fonts extracted from Vendor directory and organized by category.",
+  "generated": "2026-05-10T00:27:00+10:00",
+  "collections": {
+    "retro": {
+      "name": "Retro & Teletext Fonts",
+      "path": "retro/",
+      "description": "Fonts for retro computing aesthetics — teletext, C64, NES, PET",
+      "fonts": [
+        {
+          "name": "Teletext50",
+          "files": ["Teletext50.otf", "teletext50.woff2"],
+          "variants": [
+            "Teletext50-condensed.otf",
+            "Teletext50-extended.otf",
+            "Teletext50-extracondensed.otf",
+            "Teletext50-semicondensed.otf",
+            "Teletext50-ultracondensed.otf"
+          ],
+          "license": "Proprietary (free for use)",
+          "attribution": "Teletext50 by Gid (gid15) — teletext-style pixel font",
+          "tags": ["teletext", "pixel", "retro", "bbc-micro"]
+        },
+        {
+          "name": "PressStart2P",
+          "files": ["press-start-2p.woff2"],
+          "license": "MIT",
+          "attribution": "Press Start 2P by CodeMan38 — NES-inspired pixel font",
+          "tags": ["nes", "pixel", "retro", "gaming"]
+        },
+        {
+          "name": "C64_User_Mono",
+          "files": ["C64_User_Mono_v1.0-STYLE.ttf", "C64_User_Mono_v1.0-STYLE.woff", "C64_User_Mono_v1.0-STYLE.eot"],
+          "license": "Proprietary (free for use)",
+          "attribution": "C64 User Mono — Commodore 64 inspired monospace font",
+          "tags": ["c64", "commodore", "monospace", "retro"]
+        },
+        {
+          "name": "Giana",
+          "files": ["giana.ttf", "giana.woff", "giana.eot"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Giana font — retro gaming inspired",
+          "tags": ["gaming", "retro", "c64"]
+        },
+        {
+          "name": "PetMe",
+          "files": ["PetMe.ttf", "PetMe64.ttf", "PetMe128.ttf"],
+          "variants": [
+            "PetMe2X.ttf",
+            "PetMe2Y.ttf",
+            "PetMe642Y.ttf",
+            "PetMe1282Y.ttf"
+          ],
+          "license": "Free License",
+          "attribution": "PetMe by Style-7 — Commodore PET/C64 inspired font family",
+          "tags": ["pet", "c64", "commodore", "retro", "pixel"]
+        }
+      ]
+    },
+    "modern": {
+      "name": "Modern & Classic Fonts",
+      "path": "modern/",
+      "description": "Modern and classic Mac-inspired fonts for UI and design",
+      "fonts": [
+        {
+          "name": "ChicagoFLF",
+          "files": ["ChicagoFLF.ttf"],
+          "license": "Proprietary (digitized)",
+          "attribution": "ChicagoFLF — Classic Macintosh system font digitized",
+          "tags": ["mac", "classic", "system"]
+        },
+        {
+          "name": "Geneva",
+          "files": ["geneva_9.ttf"],
+          "license": "Proprietary (digitized)",
+          "attribution": "Geneva 9 — Classic Macintosh UI font digitized",
+          "tags": ["mac", "classic", "system"]
+        },
+        {
+          "name": "Monaco",
+          "files": ["monaco.ttf"],
+          "license": "Proprietary (digitized)",
+          "attribution": "Monaco — Classic Macintosh monospace font digitized",
+          "tags": ["mac", "monospace", "classic"]
+        },
+        {
+          "name": "SF-Pro",
+          "files": ["SF-Pro.ttf"],
+          "license": "Proprietary (Apple)",
+          "attribution": "SF Pro — Apple's system font",
+          "tags": ["apple", "sans-serif", "modern"]
+        },
+        {
+          "name": "iowanoldstyle_bold",
+          "files": ["iowanoldstyle_bold.otf"],
+          "license": "Proprietary (Apple)",
+          "attribution": "Iowan Old Style Bold — Apple's serif font",
+          "tags": ["apple", "serif", "classic"]
+        },
+        {
+          "name": "Quicksand",
+          "files": ["Quicksand-VariableFont_wght.ttf"],
+          "license": "OFL (SIL Open Font License)",
+          "attribution": "Quicksand by Andrew Paglinawan — geometric sans-serif",
+          "tags": ["sans-serif", "modern", "geometric"]
+        },
+        {
+          "name": "Athene",
+          "files": ["Athene.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Athene — classic serif font",
+          "tags": ["serif", "classic"]
+        },
+        {
+          "name": "Lexington-Gothic",
+          "files": ["Lexington-Gothic.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Lexington Gothic — gothic sans-serif font",
+          "tags": ["gothic", "sans-serif"]
+        },
+        {
+          "name": "Liverpool",
+          "files": ["Liverpool.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Liverpool — decorative font",
+          "tags": ["decorative"]
+        },
+        {
+          "name": "Los Altos",
+          "files": ["Los Altos.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Los Altos — classic display font",
+          "tags": ["display", "classic"]
+        },
+        {
+          "name": "Parc Place",
+          "files": ["Parc Place.ttf", "Parc Place Legacy.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Parc Place — classic Mac-inspired font",
+          "tags": ["mac", "classic"]
+        },
+        {
+          "name": "pixChicago",
+          "files": ["pixChicago.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "pixChicago — pixelated Chicago font variant",
+          "tags": ["mac", "pixel", "classic"]
+        },
+        {
+          "name": "Sanfrisco",
+          "files": ["Sanfrisco.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Sanfrisco — San Francisco inspired font",
+          "tags": ["sans-serif", "modern"]
+        },
+        {
+          "name": "Torrance",
+          "files": ["Torrance.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Torrance — display font",
+          "tags": ["display"]
+        },
+        {
+          "name": "Valencia",
+          "files": ["Valencia.ttf"],
+          "license": "Proprietary (free for use)",
+          "attribution": "Valencia — classic serif font",
+          "tags": ["serif", "classic"]
+        }
+      ]
+    },
+    "themes": {
+      "name": "Theme-Specific Fonts",
+      "path": "themes/",
+      "description": "Fonts used by specific udoui themes",
+      "fonts": [
+        {
+          "name": "Mallard",
+          "files": ["mallard-blocky.otf", "mallard-smooth.otf", "mallard-neueue.otf"],
+          "variants": [
+            "mallard-blockier.otf",
+            "mallard-smoother.otf",
+            "mallard-tiny.otf"
+          ],
+          "license": "CC BY-SA",
+          "attribution": "Mallard by gid — retro display font family (CC BY-SA)",
+          "tags": ["retro", "display", "theme"]
+        }
+      ]
+    }
+  },
+  "cdn": {
+    "base_url": "https://cdn.udo.space/fonts/",
+    "status": "planned",
+    "note": "Fonts will be hosted on CDN in Phase 2. Currently using local symlinks."
+  },
+  "setup": {
+    "mode": "local-symlink",
+    "instructions": "Use `udo font install <name>` to install a font, or symlink to this directory."
+  }
+}

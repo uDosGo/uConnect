@@ -1,0 +1,17 @@
+name: dev
+description: Dev environment setup and management for Linux Mint
+platform: linux
+version: 1.0.0
+commands:
+  - name: setup
+    description: Initial dev environment setup
+    script: setup.sh
+  - name: tools
+    description: Install/update dev tools
+    script: tools.sh
+  - name: env
+    description: Manage environment variables
+    script: env.sh
+  - name: check
+    description: Verify dev environment
+    script: check.sh

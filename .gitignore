@@ -129,4 +129,4 @@ target/
 .local/
 
 # Added by cargo (from HEAD version)
-/target
+/target*.ttf

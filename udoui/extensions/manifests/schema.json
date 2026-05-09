@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "udoui Extension Manifest",
+  "description": "Schema for udoui extension package manifests",
+  "type": "object",
+  "required": ["name", "version", "type", "displayName", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique package name (kebab-case)",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "type": {
+      "type": "string",
+      "description": "Extension type",
+      "enum": ["skill", "surface", "service", "integration", "theme", "tool"]
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable display name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the extension"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author or organization name"
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier",
+      "default": "MIT"
+    },
+    "platform": {
+      "type": "string",
+      "description": "Target platform",
+      "enum": ["linux", "macos", "any"],
+      "default": "any"
+    },
+    "homepage": {
+      "type": "string",
+      "description": "Project homepage URL",
+      "format": "uri"
+    },
+    "repository": {
+      "type": "object",
+      "description": "Source repository",
+      "properties": {
+        "type": { "type": "string", "enum": ["git"] },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Runtime dependencies (package: version constraints)",
+      "additionalProperties": { "type": "string" }
+    },
+    "surfaces": {
+      "type": "array",
+      "description": "Compatible uCode surfaces",
+      "items": {
+        "type": "string",
+        "enum": ["ucode1", "ucode2", "ucode3", "ucode4", "homenest", "devstudio"]
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Search tags",
+      "items": { "type": "string" }
+    },
+    "categories": {
+      "type": "array",
+      "description": "Category IDs from the market catalog",
+      "items": { "type": "string" }
+    },
+    "entry": {
+      "type": "string",
+      "description": "Entry point (binary path, Vue component, or script)"
+    },
+    "config": {
+      "type": "object",
+      "description": "Default configuration values"
+    },
+    "scripts": {
+      "type": "object",
+      "description": "Lifecycle scripts",
+      "properties": {
+        "preInstall": { "type": "string" },
+        "postInstall": { "type": "string" },
+        "preRemove": { "type": "string" },
+        "postRemove": { "type": "string" },
+        "healthcheck": { "type": "string" }
+      }
+    },
+    "size": {
+      "type": "string",
+      "description": "Install size (human-readable, e.g. '2.4 MB')"
+    },
+    "checksum": {
+      "type": "string",
+      "description": "SHA-256 checksum of the package archive"
+    }
+  }
+}

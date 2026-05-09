@@ -17,10 +17,6 @@
 			"path": "uCode3"
 		},
 		{
-			"name": "Rust Core (core-rs)",
-			"path": "core-rs"
-		},
-		{
 			"name": "Dev Docs & Handover",
 			"path": "dev"
 		},
@@ -59,7 +55,7 @@
 		"python.analysis.autoImportCompletions": true,
 		"terminal.integrated.defaultLocation": "editor",
 		"terminal.integrated.defaultProfile.osx": "zsh",
-		"workbench.colorTheme": "Default Dark Modern",
+		"workbench.colorTheme": "Dark Modern",
 		"workbench.startupEditor": "readme",
 		"workbench.sideBar.location": "left",
 		"explorer.compactFolders": false,

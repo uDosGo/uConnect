@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-10",
+  "categories": [
+    {
+      "id": "media",
+      "name": "Media",
+      "description": "Media playback, scanning, and library management",
+      "icon": "🎬",
+      "count": 4
+    },
+    {
+      "id": "automation",
+      "name": "Automation",
+      "description": "Home automation, scenes, and routines",
+      "icon": "🤖",
+      "count": 3
+    },
+    {
+      "id": "tv-dvr",
+      "name": "TV & DVR",
+      "description": "Live TV, EPG, and recording",
+      "icon": "📺",
+      "count": 2
+    },
+    {
+      "id": "feed-spool",
+      "name": "Feed & Spool",
+      "description": "RSS, events, and scheduled tasks",
+      "icon": "📡",
+      "count": 2
+    },
+    {
+      "id": "console",
+      "name": "Console",
+      "description": "UI surfaces, launchers, and navigation",
+      "icon": "🎮",
+      "count": 3
+    },
+    {
+      "id": "development",
+      "name": "Development",
+      "description": "Dev tools, editors, and SDKs",
+      "icon": "🛠️",
+      "count": 3
+    },
+    {
+      "id": "system",
+      "name": "System",
+      "description": "System operations, services, and health",
+      "icon": "⚙️",
+      "count": 4
+    },
+    {
+      "id": "themes",
+      "name": "Themes",
+      "description": "Visual themes, presets, and skins",
+      "icon": "🎨",
+      "count": 1
+    }
+  ]
+}

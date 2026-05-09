@@ -1,0 +1,36 @@
+{
+  "name": "homenest-ha-bridge",
+  "version": "1.0.0",
+  "type": "integration",
+  "displayName": "Home Assistant Bridge",
+  "description": "Home Assistant integration with controller navigation — entity sync, bidirectional control, SpecLang execution",
+  "author": "uDosGo",
+  "license": "MIT",
+  "platform": "linux",
+  "homepage": "https://github.com/uDosGo/Connect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uDosGo/Connect.git"
+  },
+  "dependencies": {
+    "uCode3": ">=1.0.0",
+    "homeassistant": ">=2024.0"
+  },
+  "surfaces": ["homenest"],
+  "tags": ["home-assistant", "automation", "bridge", "speclang", "homenest"],
+  "categories": ["automation"],
+  "entry": "bin/ha-bridge",
+  "config": {
+    "haUrl": "http://homeassistant.local:8123",
+    "haToken": "",
+    "autoDiscover": true,
+    "syncInterval": 30,
+    "entityFilter": ["light", "climate", "scene", "media_player", "switch"],
+    "controllerNavigation": true
+  },
+  "scripts": {
+    "postInstall": "systemctl --user enable homenest-ha-bridge.service",
+    "healthcheck": "systemctl --user is-active homenest-ha-bridge.service"
+  },
+  "size": "0.6 MB"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "homenest-media-browser",
+  "version": "1.0.0",
+  "type": "surface",
+  "displayName": "Media Browser",
+  "description": "Browse media catalog with spatial grid navigation — movies, TV, music, and home videos",
+  "author": "uDosGo",
+  "license": "MIT",
+  "platform": "linux",
+  "homepage": "https://github.com/OkAgentDigital/HomeNest",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OkAgentDigital/HomeNest.git"
+  },
+  "dependencies": {
+    "udoui": ">=1.0.0",
+    "vue": "^3.4.0",
+    "homenest-grid": ">=1.0.0"
+  },
+  "surfaces": ["homenest"],
+  "tags": ["media", "browser", "grid", "movies", "tv", "music", "homenest"],
+  "categories": ["media", "console"],
+  "entry": "surfaces/MediaBrowserSurface.vue",
+  "config": {
+    "defaultView": "grid",
+    "showPosters": true,
+    "showUnwatched": true,
+    "gridColumns": 6
+  },
+  "size": "1.8 MB"
+}

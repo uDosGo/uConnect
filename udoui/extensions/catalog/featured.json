@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-10",
+  "featured": [
+    {
+      "name": "homenest-media-scanner",
+      "reason": "Core media discovery — the first thing every HomeNest user needs"
+    },
+    {
+      "name": "homenest-launcher",
+      "reason": "The main console surface — controller-first navigation"
+    },
+    {
+      "name": "homenest-ha-bridge",
+      "reason": "Home Assistant integration — unlocks automation"
+    },
+    {
+      "name": "snackbar",
+      "reason": "Background task execution — powers the entire ecosystem"
+    }
+  ]
+}

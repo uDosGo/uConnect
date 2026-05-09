@@ -1,0 +1,152 @@
+# Story: The Quest for the Lost Link
+# Teaches [[wiki-link]] syntax through interactive narrative
+
+name: "The Quest for the Lost Link"
+id: quest-for-the-lost-link
+version: "1.0.0"
+lane: public
+type: interactive-narrative
+
+chapters:
+  - id: broken-vault
+    title: "The Broken Vault"
+    prompt: |
+      You stand before the Great Knowledge Vault. Its doors are sealed,
+      and the once-bright runes that connected all knowledge are dark.
+      
+      An old sage approaches: "The links have been broken. To restore them,
+      you must learn the ancient syntax of connection."
+      
+      "Tell me, young archivist — what symbol do we use to create a link
+      between two notes in uDos?"
+    options:
+      - text: "[[double brackets]]"
+        correct: true
+        feedback: "Correct! [[wiki-links]] are the heart of uDos knowledge connections."
+        next: whispering-hall
+      - text: "{{curly braces}}"
+        correct: false
+        feedback: "Not quite. Curly braces are for templates, not links."
+        next: broken-vault
+      - text: "((parentheses))"
+        correct: false
+        feedback: "Close! But parentheses are for inline references, not wiki-links."
+        next: broken-vault
+
+  - id: whispering-hall
+    title: "The Whispering Hall"
+    prompt: |
+      The hall is filled with floating notes, each whispering its title.
+      You need to create a link from your current note "Dragon Encounter"
+      to another note called "Treasure Map".
+      
+      "Write the link syntax that connects 'Dragon Encounter' to 'Treasure Map'."
+    options:
+      - text: "[[Treasure Map]]"
+        correct: true
+        feedback: "Perfect! [[Treasure Map]] creates a link. The vault trembles as a connection reforms."
+        next: mirror-chamber
+      - text: "[Treasure Map]"
+        correct: false
+        feedback: "Single brackets are for external URLs, not wiki-links. Try double brackets."
+        next: whispering-hall
+      - text: "{{Treasure Map}}"
+        correct: false
+        feedback: "Those are template braces. Wiki-links use double square brackets."
+        next: whispering-hall
+
+  - id: mirror-chamber
+    title: "The Mirror Chamber"
+    prompt: |
+      In this chamber, mirrors show different names for the same thing.
+      You want to link to "The Ancient Dragon of Mount Ember" but display
+      it as just "Dragon" in your note.
+      
+      "What syntax shows 'Dragon' but links to 'The Ancient Dragon of Mount Ember'?"
+    options:
+      - text: "[[The Ancient Dragon of Mount Ember|Dragon]]"
+        correct: true
+        feedback: "Magnificent! The pipe | creates an alias. The link points to the full title but displays your chosen text."
+        next: web-of-knowledge
+      - text: "[[Dragon|The Ancient Dragon of Mount Ember]]"
+        correct: false
+        feedback: "Almost! The format is [[target|display]]. The target comes first, then the display text after the pipe."
+        next: mirror-chamber
+      - text: "[[Dragon -> The Ancient Dragon of Mount Ember]]"
+        correct: false
+        feedback: "The arrow syntax isn't used for aliases. Use the pipe | character: [[target|display]]"
+        next: mirror-chamber
+
+  - id: web-of-knowledge
+    title: "The Web of Knowledge"
+    prompt: |
+      You enter a vast chamber where threads of light connect notes.
+      Three notes float before you: "Quest Log", "Dragon Encounter", "Treasure Map".
+      
+      "Create a knowledge web: Link 'Quest Log' to both 'Dragon Encounter'
+      and 'Treasure Map'. What does the note look like?"
+    options:
+      - text: |
+          # Quest Log
+          
+          Today I had a [[Dragon Encounter]] and found a [[Treasure Map]].
+        correct: true
+        feedback: "Yes! Multiple links in one note create a knowledge web. Each [[link]] is a thread in the web."
+        next: restoration
+      - text: |
+          # Quest Log
+          
+          Today I had a Dragon Encounter and found a Treasure Map.
+        correct: false
+        feedback: "Without [[brackets]], these are just words, not connections. Add the brackets to create links!"
+        next: web-of-knowledge
+      - text: |
+          # Quest Log
+          
+          Today I had a [Dragon Encounter] and found a [Treasure Map].
+        correct: false
+        feedback: "Single brackets create external links, not wiki-links. Use [[double brackets]] for internal connections."
+        next: web-of-knowledge
+
+  - id: restoration
+    title: "The Restoration"
+    prompt: |
+      The Great Knowledge Vault shudders as the final connections reform.
+      Light floods the chamber as the sage speaks once more:
+      
+      "You have learned the three sacred syntaxes:
+       1. [[Link]] — Basic connection
+       2. [[Target|Display]] — Aliased connection
+       3. Multiple [[Link]]s in one note — Knowledge web
+      
+      One final lesson: When you open a note that is linked TO by others,
+      you see its 'backlinks'. What command shows which notes link TO
+      your current note?"
+    options:
+      - text: "udos note backlinks"
+        correct: true
+        feedback: "🎉 THE VAULT IS RESTORED! Backlinks show you the web of connections pointing TO your note. You have mastered the wiki-link!"
+        next: null
+      - text: "udos note links"
+        correct: false
+        feedback: "'links' shows what your note links TO. 'backlinks' shows what links TO your note. Try again!"
+        next: restoration
+      - text: "udos link list"
+        correct: false
+        feedback: "Close! The command is 'udos note backlinks'. This shows all notes that reference your current note."
+        next: restoration
+
+completion:
+  title: "🏆 Quest Complete!"
+  message: |
+    You have restored the Great Knowledge Vault and mastered the art of
+    [[wiki-links]]. The knowledge web is whole once more.
+    
+    What you learned:
+    • [[Link]] — Create a basic wiki-link
+    • [[Target|Display]] — Create an aliased link
+    • Multiple links create a knowledge web
+    • Backlinks show what links to your note
+    
+    "The true power of knowledge is not in what you know,
+     but in how you connect it." — The Sage

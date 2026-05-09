@@ -1,0 +1,17 @@
+name: snackbar
+description: Snackbar Linux management — snacks, workflows, health
+platform: linux
+version: 1.0.0
+commands:
+  - name: status
+    description: Show Snackbar daemon status
+    script: status.sh
+  - name: snacks
+    description: List and manage snacks
+    script: snacks.sh
+  - name: workflows
+    description: Manage scheduled workflows
+    script: workflows.sh
+  - name: health
+    description: Check Snackbar health
+    script: health.sh

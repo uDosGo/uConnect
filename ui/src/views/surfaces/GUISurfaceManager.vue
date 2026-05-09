@@ -57,6 +57,11 @@ onMounted(() => {
     { id: 'tools', title: 'MCP Tool Registry', path: '/surface/tools' },
     { id: 'dev-dashboard', title: 'Dev Mode Dashboard', path: '/surface/dev-dashboard' },
     { id: 'react-renderer', title: 'React Renderer', path: '/surface/react-renderer' },
+    // uCode Surfaces
+    { id: 'ucode1', title: '🎮 uCode1 — Teletext/BASIC', path: '/surface/ucode1' },
+    { id: 'ucode2', title: '🎨 uCode2 — AMOS/Sprite', path: '/surface/ucode2' },
+    { id: 'ucode3', title: '🏠 uCode3 — Home Auto', path: '/surface/ucode3' },
+    { id: 'ucode4', title: '🌌 uCode4 — Spatial/3D', path: '/surface/ucode4' },
   ];
 });
 </script>
@@ -66,7 +71,7 @@ onMounted(() => {
     <!-- Header -->
     <header class="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-4">
-        <h1 class="text-xl font-bold text-cyan-400">🎮 uDosConnect GUI</h1>
+        <h1 class="text-xl font-bold text-cyan-400">🎮 udoui</h1>
         <div class="flex items-center space-x-2">
           <span class="text-xs bg-gray-700 px-2 py-1 rounded">Vault: ~/vault</span>
           <span class="text-sm text-gray-400">Theme:</span>

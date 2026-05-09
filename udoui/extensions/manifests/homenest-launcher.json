@@ -1,0 +1,32 @@
+{
+  "name": "homenest-launcher",
+  "version": "1.0.0",
+  "type": "surface",
+  "displayName": "HomeNest Launcher",
+  "description": "Main console dashboard with controller-first navigation — grid-based tile launcher",
+  "author": "uDosGo",
+  "license": "MIT",
+  "platform": "linux",
+  "homepage": "https://github.com/uDosGo/Connect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uDosGo/Connect.git"
+  },
+  "dependencies": {
+    "udoui": ">=1.0.0",
+    "vue": "^3.4.0"
+  },
+  "surfaces": ["homenest"],
+  "tags": ["launcher", "dashboard", "controller", "grid", "homenest"],
+  "categories": ["console"],
+  "entry": "surfaces/LauncherSurface.vue",
+  "config": {
+    "columns": 6,
+    "rows": 4,
+    "showClock": true,
+    "showWeather": false,
+    "backgroundImage": "",
+    "theme": "console-dark"
+  },
+  "size": "1.2 MB"
+}
