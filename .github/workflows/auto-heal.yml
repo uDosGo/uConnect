@@ -1,134 +1,32 @@
-name: Auto-Heal Workflow
+name: Auto-Heal
 
 on:
-  repository_dispatch:
-    types: [udos_feed_notification]
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["uDosGo CI"]
     types:
       - completed
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
-permissions:
-  actions: write
-  contents: read
-
 jobs:
   auto-heal:
-    if: github.event.workflow_run.conclusion == 'failure' || github.event.action == 'udos_feed_notification'
+    if: github.event.workflow_run.conclusion == 'failure'
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-      
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Analyze failure
-        id: analyze
         run: |
-          echo "Analyzing workflow failure..."
-          if [ "${{ github.event_name }}" == "workflow_run" ]; then
-            echo "Workflow run ID: ${{ github.event.workflow_run.id }}"
-            echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
-            echo "Triggering workflow: ${{ github.event.workflow_run.workflow_id }}"
-          fi
-          
-          # Determine if auto-heal should attempt to fix
-          echo "auto_heal_needed=true" >> $GITHUB_OUTPUT
-      
-      - name: Attempt auto-heal
-        if: steps.analyze.outputs.auto_heal_needed == 'true'
-        run: |
-          echo "Attempting auto-heal procedures..."
-          
-          # Run basic checks
-          echo "1. Running dependency checks..."
-          npm run workspaces:check
-          
-          echo "2. Running lint checks..."
-          npm run lint:check || echo "Lint issues found"
-          
-          echo "3. Checking boundary compliance..."
-          bash scripts/check-a1-boundary.sh || echo "Boundary issues found"
-          
+          echo "Workflow run ID: ${{ github.event.workflow_run.id }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
           echo "Auto-heal analysis complete"
-      
-      - name: Retry Failed Workflow
-        if: steps.analyze.outputs.auto_heal_needed == 'true' && github.event_name == 'workflow_run'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const workflowRunId = ${{ github.event.workflow_run.id }};
-            console.log(`Attempting to retry workflow run: ${workflowRunId}`);
-            console.log(`Repository: ${{ toJSON(github.repository) }}`);
-            console.log(`Actor: ${process.env.GITHUB_ACTOR}`);
-            console.log(`Token permissions: ${process.env.GITHUB_TOKEN_PERMISSIONS || 'not available'}`);
-            
-            // Check if we have the necessary permissions
-            try {
-              const { data: repo } = await github.rest.repos.get({{ toJSON(github.repository) }});
-              console.log(`Repo access confirmed: ${repo.full_name}`);
-            } catch (repoError) {
-              console.error(`Cannot access repository: ${repoError.message}`);
-              throw repoError;
-            }
-            
-            try {
-              // First check if the workflow run exists and is accessible
-              const { data: workflowRun } = await github.rest.actions.getWorkflowRun({
-                ...{{ toJSON(github.repository) }},
-                run_id: workflowRunId
-              });
-              console.log(`Workflow run found: ${workflowRun.id} (${workflowRun.status})`);
-              console.log(`Workflow name: ${workflowRun.name}`);
-              console.log(`Head branch: ${workflowRun.head_branch}`);
-              console.log(`Head sha: ${workflowRun.head_sha}`);
-              
-              // Only retry if this is from the same repository and main branch
-              if (workflowRun.head_branch === 'main' && workflowRun.repository.id === ${{ github.repository_id }}) {
-                console.log('Conditions met for retry...');
-                const response = await github.rest.actions.reRunWorkflow({
-                  ...{{ toJSON(github.repository) }},
-                  run_id: workflowRunId
-                });
-                console.log(`Successfully triggered retry for workflow run ${workflowRunId}`);
-                console.log(`Retry response: ${JSON.stringify(response.data)}`);
-              } else {
-                console.log(`Skipping retry: branch=${workflowRun.head_branch}, repo_id=${workflowRun.repository.id}`);
-                console.log('Auto-heal only retries main branch workflows from this repository');
-              }
-            } catch (error) {
-              console.error(`Failed to retry workflow: ${error.message}`);
-              console.error(`Error status: ${error.status}`);
-              console.error(`Error request: ${JSON.stringify(error.request || {})}`);
-              if (error.status === 403) {
-                console.error('Permission denied. This usually means:');
-                console.error('1. The workflow token lacks actions:write permission');
-                console.error('2. The workflow run belongs to a different repository');
-                console.error('3. The workflow run was triggered by a protected branch');
-                console.error('4. GitHub Actions token restrictions apply');
-              }
-              if (error.status === 404) {
-                console.error('Workflow run not found - it may have been deleted');
-              }
-              // Don't throw the error - let the workflow complete successfully
-              console.log('Auto-heal attempted but could not retry this workflow run');
-            }
-      
-      - name: Notify of auto-heal attempt
-        if: always()
-        run: |
-          echo "Auto-heal procedure completed"
-          echo "Status: ${{ job.status }}"
-          echo "If issues persist, manual intervention may be required"

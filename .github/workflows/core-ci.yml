@@ -1,39 +1,21 @@
-name: VA1 core (do CLI)
+name: Core CI
 
 on:
   pull_request:
     paths:
       - "package.json"
-      - "package-lock.json"
-      - "uDosConnect.code-workspace"
-      - "core/**"
-      - "core-rs/**"
-      - "tools/sonic-express/**"
-      - "tools/usxd-express/**"
-      - "modules/**"
-      - "launcher/**"
-      - "scripts/check-workspace-drift.sh"
-      - "scripts/check-mcp-stdio.sh"
-      - "scripts/bootstrap-markdownify-runtime.sh"
-      - "templates/usxd/**"
+      - "src/**"
+      - "binder/**"
+      - "scripts/**"
       - ".github/workflows/core-ci.yml"
   push:
     branches:
       - main
     paths:
       - "package.json"
-      - "package-lock.json"
-      - "uDosConnect.code-workspace"
-      - "core/**"
-      - "core-rs/**"
-      - "tools/sonic-express/**"
-      - "tools/usxd-express/**"
-      - "modules/**"
-      - "launcher/**"
-      - "scripts/check-workspace-drift.sh"
-      - "scripts/check-mcp-stdio.sh"
-      - "scripts/bootstrap-markdownify-runtime.sh"
-      - "templates/usxd/**"
+      - "src/**"
+      - "binder/**"
+      - "scripts/**"
       - ".github/workflows/core-ci.yml"
 
 jobs:
@@ -44,14 +26,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: npm
-          cache-dependency-path: package-lock.json
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Workspace drift guard
-        run: npm run workspace:drift
-      - name: MCP stdio smoke guard
-        run: bash scripts/check-mcp-stdio.sh
       - name: Install workspace and test
-        run: npm ci && npm test
-      - name: Rust markdownify integration tests
-        run: cargo test --manifest-path core-rs/Cargo.toml --test markdownify_tests
+        run: npm install && npm test

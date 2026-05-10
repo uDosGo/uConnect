@@ -1,10 +1,10 @@
-name: Validate VibeCLI Configuration
+name: Validate Configuration
 
 on:
   push:
-    branches: [ main, feature/** ]
+    branches: [main]
   pull_request:
-    branches: [ main, feature/** ]
+    branches: [main]
 
 jobs:
   validate:
@@ -14,14 +14,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Validate Configuration
-        run: bash vibecli/validate_config.sh
-
-      - name: Check Examples
+      - name: Validate package.json
         run: |
-          echo "Checking examples..."
-          ls -la vibecli/examples/
-          echo "✅ Examples folder exists and contains files."
+          python3 -c "
+          import json
+          with open('package.json') as f:
+              pkg = json.load(f)
+          assert 'name' in pkg, 'Missing name'
+          assert 'version' in pkg, 'Missing version'
+          print(f'✅ package.json valid: {pkg[\"name\"]} v{pkg[\"version\"]}')
+          "

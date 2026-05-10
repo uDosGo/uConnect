@@ -10,11 +10,8 @@ on:
         required: true
         type: string
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
-  # ── Pre-flight: Run Continue Checks ──────────────────────────────────────
+  # ── Pre-flight ─────────────────────────────────────────────────────────────
   preflight:
     name: Pre-flight Checks
     runs-on: ubuntu-latest
@@ -27,26 +24,14 @@ jobs:
       with:
         python-version: '3.12'
 
-    - name: Set up Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-        override: true
-        components: clippy, rustfmt
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r uCode1/requirements.txt
+        pip install pytest pytest-cov
 
     - name: Run tests
       run: |
-        cd uCode1 && python -m pytest tests/ -v --tb=short --cov=core_py --cov=narrator
-
-    - name: Build Rust release
-      run: |
-        cd uCode2 && cargo build --release --workspace
+        cd binder && python -m pytest tests/ -v --tb=short
 
     - name: Verify version matches tag
       run: |
@@ -54,35 +39,7 @@ jobs:
         echo "Tag version: $TAG_VERSION"
         echo "All checks passed ✅"
 
-  # ── PyPI Publish ─────────────────────────────────────────────────────────
-  pypi:
-    name: PyPI
-    needs: [preflight]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release'
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-
-    - name: Install build tools
-      run: |
-        python -m pip install --upgrade pip build twine
-
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-        cd uCode1
-        python -m build
-        twine upload dist/* --skip-existing || echo "Upload skipped (may already exist)"
-
-  # ── Documentation ────────────────────────────────────────────────────────
+  # ── Documentation ──────────────────────────────────────────────────────────
   docs:
     name: Documentation
     runs-on: ubuntu-latest
@@ -105,10 +62,8 @@ jobs:
       run: |
         mkdir -p docs/site
         cp README.md docs/site/index.md 2>/dev/null || echo "No README"
-        cp docs/roadmap.md docs/site/roadmap.md 2>/dev/null || echo "No roadmap"
         echo "# uDosGo Documentation" > docs/site/index.html
         echo "<p>Version: ${{ github.event.release.tag_name || github.ref_name }}</p>" >> docs/site/index.html
-        echo '<ul><li><a href="roadmap.html">Roadmap</a></li></ul>' >> docs/site/index.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
