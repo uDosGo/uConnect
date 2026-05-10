@@ -1,8 +1,101 @@
-# Local machine pointer (written by scripts/bootstrap-family-python.sh)
+# ── Dev-only / machine-specific ──────────────────────────────
+# These are kept on disk for local development but never committed.
+# They are not part of the public-facing repo.
+
+# Local machine pointers (written by bootstrap scripts)
 .udos-connect-python
 .udos-family-python
 
-# macOS / Windows noise
+# Pre-commit hooks (dev-only infrastructure)
+.githooks/
+
+# Vite cache (auto-generated)
+.vite/
+
+# Rust build artifacts
+**/target/
+/target*.ttf
+
+# Rust profiling artifacts
+default.profraw
+*.profraw
+
+# Node build artifacts
+node_modules/
+dist/
+
+# Lock files (managed by workspace)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+Cargo.lock
+
+# Version file (redundant with package.json)
+version
+
+# Local vendor clones (machine-specific symlinks)
+vendor/
+
+# Vibe config (machine-specific symlink)
+vibecli_config.json
+
+# ESLint config (dev-only tooling)
+eslint.config.js
+
+# Cargo.toml (stub — real build is in src/)
+Cargo.toml
+
+# Dev-only scripts (kept on disk, not in repo)
+scripts/imported/
+scripts/lib/
+scripts/migrated-round3/
+scripts/v4-dev/
+scripts/advance-round.sh
+scripts/apply-changes.sh
+scripts/audit-family-env-overlap.sh
+scripts/bootstrap-family-python.sh
+scripts/bootstrap-managed-envs.sh
+scripts/bootstrap-markdownify-runtime.sh
+scripts/check-a1-boundary.sh
+scripts/check-mcp-stdio.sh
+scripts/check-uos.sh
+scripts/check-usxd-go-scaffold.sh
+scripts/check-usxd-story.sh
+scripts/check-workspace-drift.sh
+scripts/clean-compost.sh
+scripts/clean-family-local-runtime.sh
+scripts/compost-v2-workspace-debris.sh
+scripts/deploy-production.sh
+scripts/fix_comma.sh
+scripts/gui-launcher.sh
+scripts/init-udos-sqlite.sh
+scripts/install-udos-complete.sh
+scripts/install-udos.sh
+scripts/operator-test-runner.sh
+scripts/prepare-p2.sh
+scripts/prepare-p3.sh
+scripts/promote-plugin.sh
+scripts/promote.sh
+scripts/report-udos-footprint.sh
+scripts/run-family-checks.sh
+scripts/run-family-ready.sh
+scripts/run-family-release-gates.sh
+scripts/run-migrations.sh
+scripts/run-udos-runtime-health.sh
+scripts/setup-github-token.sh
+scripts/setup-udos-v2-workspace.sh
+scripts/test-github-services.sh
+scripts/test-installation.sh
+scripts/test-udos.sh
+scripts/test_modular.sh
+scripts/update-udos.sh
+scripts/validate-p2-features.sh
+scripts/validate-p3-features.sh
+scripts/verify-deployment.sh
+
+# ── General noise ────────────────────────────────────────────
+
+# macOS / Windows
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -14,21 +107,18 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Local workspace overrides (keep *.code-workspace committed)
+# Local workspace overrides
 *.local.code-workspace
 *.code-workspace.local
-
-# Local override filename patterns (machine-specific)
 *.local.*
 *-local.*
 
-# Scratch (family convention)
+# Scratch / local data
 .local/
-# A1 contributor-only scratch under dev/ — see dev/.gitignore (`local/`)
 .compost/*
 !.compost/README.md
 
-# Cursor local cache (large)
+# Cursor cache
 .cursor/cache/
 
 # Python
@@ -38,38 +128,16 @@ __pycache__/
 venv/
 .pytest_cache/
 .mypy_cache/
+*.egg-info/
 
 # Logs
 *.log
 
-# Rust / Cargo
-**/target/
-
-# Rust profiling artifacts
-default.profraw
-*.profraw
-
-# Ad-hoc test run artefacts (optional; narrow if these extensions are used for real sources)
+# Ad-hoc test artefacts
 *.test
 *.fail
 
-# Node / JS
-node_modules/
-dist/
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
-
-# Rust / Cargo lock (managed by workspace)
-Cargo.lock
-
-# Version file (redundant with package.json)
-version
-
-# Optional local vendor clones (nested upstream repos; not part of monorepo history)
-vendor/
-
-# Aggressive cleanup exclusions - NEVER COMMIT THESE
+# Aggressive exclusions
 .archive/
 .compost/
 .backup/
@@ -86,17 +154,8 @@ coverage/
 jest-coverage/
 .env
 
-# Legacy (from HEAD version)
+# Legacy
 .state/
 Sandbox/
 _deprecated/
 Vendor/.legacy/
-
-# Additional Python
-*.egg-info/
-
-# Additional local data
-.local/
-
-# Added by cargo
-/target*.ttf

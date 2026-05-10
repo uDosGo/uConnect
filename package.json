@@ -13,12 +13,9 @@
     "build": "cd ui && npm run build",
     "test": "cd binder && python -m pytest tests/ -v",
     "lint": "eslint . --ext .vue,.js,.ts --fix",
-    "lint:check": "eslint . --ext .vue,.js,.ts",
-    "docs:generate": "bash scripts/generate-docs.sh",
-    "docs:index": "bash scripts/update-docs-index.sh",
-    "validate:env": "bash scripts/validate-environment.sh",
-    "shakedown": "bash scripts/shakedown.sh"
+    "lint:check": "eslint . --ext .vue,.js,.ts"
   },
+
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.10.0",
