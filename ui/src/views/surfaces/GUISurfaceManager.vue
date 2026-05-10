@@ -57,11 +57,11 @@ onMounted(() => {
     { id: 'tools', title: 'MCP Tool Registry', path: '/surface/tools' },
     { id: 'dev-dashboard', title: 'Dev Mode Dashboard', path: '/surface/dev-dashboard' },
     { id: 'react-renderer', title: 'React Renderer', path: '/surface/react-renderer' },
-    // uCode Surfaces
-    { id: 'ucode1', title: '🎮 uCode1 — Teletext/BASIC', path: '/surface/ucode1' },
-    { id: 'ucode2', title: '🎨 uCode2 — AMOS/Sprite', path: '/surface/ucode2' },
-    { id: 'ucode3', title: '🏠 uCode3 — Home Auto', path: '/surface/ucode3' },
-    { id: 'ucode4', title: '🌌 uCode4 — Spatial/3D', path: '/surface/ucode4' },
+    // uCode Surfaces (coming soon — no routes yet)
+    { id: 'ucode1', title: '🎮 uCode1 — Teletext/BASIC', path: '' },
+    { id: 'ucode2', title: '🎨 uCode2 — AMOS/Sprite', path: '' },
+    { id: 'ucode3', title: '🏠 uCode3 — Home Auto', path: '' },
+    { id: 'ucode4', title: '🌌 uCode4 — Spatial/3D', path: '' },
   ];
 });
 </script>
@@ -98,16 +98,24 @@ onMounted(() => {
       <!-- Sidebar -->
       <aside class="w-64 bg-gray-800 border-r border-gray-700 p-4">
         <nav class="space-y-1">
-          <router-link
-            v-for="surface in surfaces"
-            :key="surface.id"
-            :to="surface.path"
-            class="block px-3 py-2 rounded text-sm hover:bg-gray-700"
-            :class="{ 'bg-gray-700': activeSurface === surface.id }"
-            @click="navigateToSurface(surface.id)"
-          >
-            {{ surface.title }}
-          </router-link>
+          <template v-for="surface in surfaces" :key="surface.id">
+            <router-link
+              v-if="surface.path"
+              :to="surface.path"
+              class="block px-3 py-2 rounded text-sm hover:bg-gray-700"
+              :class="{ 'bg-gray-700': activeSurface === surface.id }"
+              @click="navigateToSurface(surface.id)"
+            >
+              {{ surface.title }}
+            </router-link>
+            <span
+              v-else
+              class="block px-3 py-2 rounded text-sm text-gray-500 cursor-not-allowed opacity-60"
+              title="Coming soon — no route configured yet"
+            >
+              {{ surface.title }} <span class="text-xs text-yellow-500">(coming soon)</span>
+            </span>
+          </template>
         </nav>
         
         <div class="mt-6 pt-4 border-t border-gray-700">

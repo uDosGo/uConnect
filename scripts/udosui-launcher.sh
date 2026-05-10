@@ -1,6 +1,6 @@
 #!/bin/bash
-# uDos UI Launcher — Linux desktop entry point
-# Installs as: ~/.local/share/applications/udosui.desktop
+# uDos UI Launcher — Linux/macOS entry point
+# Installs as: ~/.local/share/applications/udosui.desktop (Linux)
 # Usage: bash scripts/udosui-launcher.sh
 #
 # For Linux: run this once to install the .desktop launcher:
@@ -16,7 +16,26 @@ PID_FILE="$LOG_DIR/udosui.pid"
 
 mkdir -p "$LOG_DIR"
 
-echo "[$(date +'%Y-%m-%d %H:%M:%S')] Starting uDos UI..." | tee -a "$LOG_FILE"
+# ── Verbose startup ──────────────────────────────────────────
+echo ""
+echo "╔══════════════════════════════════════════════════════════╗"
+echo "║   🚀 uDos / Connect — UI Launcher                       ║"
+echo "╚══════════════════════════════════════════════════════════╝"
+echo ""
+echo "  📂 Connect dir: $CONNECT_DIR"
+echo "  📝 Log file:    $LOG_FILE"
+echo "  ⏰ Started:     $(date +'%Y-%m-%d %H:%M:%S')"
+echo ""
+
+# Log startup
+{
+  echo ""
+  echo "═══════════════════════════════════════════════════════════"
+  echo "  uDos UI Launcher — $(date +'%Y-%m-%d %H:%M:%S')"
+  echo "═══════════════════════════════════════════════════════════"
+  echo "  Connect dir: $CONNECT_DIR"
+  echo "  UI dir:      $UI_DIR"
+} >> "$LOG_FILE"
 
 # --install flag: create Linux .desktop entry
 if [ "${1:-}" = "--install" ]; then
@@ -34,25 +53,90 @@ Categories=Development;Education;
 StartupNotify=true
 EOF
     chmod +x "$DESKTOP_DIR/udosui.desktop"
-    echo "✅ Installed Linux desktop launcher: $DESKTOP_DIR/udosui.desktop" | tee -a "$LOG_FILE"
+    echo "  ✅ Installed Linux desktop launcher: $DESKTOP_DIR/udosui.desktop"
+    echo "  ℹ️  You can now find 'uDos UI' in your app menu."
+    echo ""
     exit 0
 fi
 
-# Check for Node.js
+# ── Check prerequisites ──────────────────────────────────────
+echo "  🔍 Checking prerequisites..."
+
 if ! command -v node &> /dev/null; then
-    echo "❌ Node.js is not installed. Please install Node.js v18+." | tee -a "$LOG_FILE" >&2
+    echo "  ❌ Node.js is not installed. Please install Node.js v18+."
+    echo "     https://nodejs.org/"
+    echo ""
     exit 1
 fi
 
-# Install dependencies if needed
-if [ ! -d "$UI_DIR/node_modules" ]; then
-    echo "Installing UI dependencies..." | tee -a "$LOG_FILE"
-    cd "$UI_DIR" && npm install >> "$LOG_FILE" 2>&1
+NODE_VERSION=$(node -v)
+echo "  ✅ Node.js $NODE_VERSION found"
+
+if ! command -v npm &> /dev/null; then
+    echo "  ❌ npm is not installed."
+    echo ""
+    exit 1
 fi
 
-# Start the dev server
+NPM_VERSION=$(npm -v)
+echo "  ✅ npm v$NPM_VERSION found"
+
+# ── Install dependencies ─────────────────────────────────────
+echo ""
+echo "  📦 Checking UI dependencies..."
+
+if [ ! -d "$UI_DIR/node_modules" ]; then
+    echo "  ⏳ Installing dependencies (this may take a minute)..."
+    echo "     Running: npm install"
+    echo ""
+    cd "$UI_DIR"
+    npm install 2>&1 | while IFS= read -r line; do
+        echo "     $line"
+    done
+    echo ""
+    echo "  ✅ Dependencies installed"
+    {
+        echo "  Dependencies installed"
+    } >> "$LOG_FILE"
+else
+    echo "  ✅ Dependencies already installed ($(ls -1 "$UI_DIR/node_modules" 2>/dev/null | wc -l) packages)"
+fi
+
+# ── Start dev server ─────────────────────────────────────────
+echo ""
+echo "  🚀 Launching Vite dev server..."
+echo "     http://localhost:5173"
+echo ""
+
 cd "$UI_DIR"
-echo "Launching UI at http://localhost:5173" | tee -a "$LOG_FILE"
-npx vite --port 5173 --open >> "$LOG_FILE" 2>&1 &
-echo $! > "$PID_FILE"
-echo "✅ uDos UI started (PID: $(cat "$PID_FILE"))" | tee -a "$LOG_FILE"
+
+# Start vite with verbose logging
+npx vite --port 5173 --open --debug 2>&1 | while IFS= read -r line; do
+    echo "     $line"
+done >> "$LOG_FILE" 2>&1 &
+VITE_PID=$!
+echo $VITE_PID > "$PID_FILE"
+
+# Wait for server to be ready
+echo "  ⏳ Waiting for server to start..."
+for i in $(seq 1 30); do
+    if curl -s http://localhost:5173 > /dev/null 2>&1; then
+        echo "  ✅ Server is ready! (PID: $VITE_PID)"
+        echo "  🌐 Open http://localhost:5173 in your browser"
+        echo ""
+        echo "  📝 Logs: $LOG_FILE"
+        echo "  🛑 Press Ctrl+C to stop"
+        echo ""
+        {
+          echo "  Server started (PID: $VITE_PID)"
+          echo "  URL: http://localhost:5173"
+        } >> "$LOG_FILE"
+        exit 0
+    fi
+    sleep 1
+done
+
+echo "  ⚠️  Server may still be starting up..."
+echo "  🌐 Try http://localhost:5173 in your browser"
+echo "  📝 Check logs: $LOG_FILE"
+echo ""

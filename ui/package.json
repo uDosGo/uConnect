@@ -42,6 +42,8 @@
     "@milkdown/theme-nord": "^7.20.0",
     "@milkdown/vue": "^7.20.0",
     "@tailwindcss/forms": "^0.5.11",
+    "date-fns": "^4.1.0",
+    "pinia": "^2.1.7",
     "vue-router": "^4.6.4"
   }
 }

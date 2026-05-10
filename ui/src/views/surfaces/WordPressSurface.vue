@@ -49,7 +49,7 @@
             required
           >
           <p class="helper-text">
-            💡 Use an <a href="#" @click.prevent="showAppPasswordHelp">Application Password</a> for better security
+            💡 Use an <a href="#" @click.prevent="toggleAppPasswordHelp">Application Password</a> for better security
           </p>
         </div>
         
@@ -548,7 +548,7 @@ export default {
       }
     }
     
-    const showAppPasswordHelp = () => {
+    const toggleAppPasswordHelp = () => {
       showAppPasswordHelp.value = true
     }
     
@@ -610,7 +610,7 @@ export default {
       getMediaIcon,
       saveSettings,
       testConnection,
-      showAppPasswordHelp
+      toggleAppPasswordHelp
     }
   }
 }

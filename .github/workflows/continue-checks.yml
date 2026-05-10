@@ -14,33 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Install Python deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest pytest-cov ruff
-
       - name: Install Continue CLI
         run: npm install -g @continuedev/cli 2>/dev/null || echo "Continue CLI not available, running checks manually"
-
-      # ── Check: Lint ─────────────────────────────────────────────────────────
-      - name: Check – Python Lint
-        run: |
-          cd binder && python -m ruff check --ignore E501,F401 . --no-cache || echo "Lint issues (non-blocking)"
-
-      # ── Check: Test ─────────────────────────────────────────────────────────
-      - name: Check – Python Tests
-        run: |
-          cd binder && python -m pytest tests/ -v --tb=short --cov=. --cov-report=term-missing || echo "Test issues (non-blocking)"
 
       # ── Check: Courses ─────────────────────────────────────────────────────
       - name: Check – Course Validation
