@@ -1,4 +1,0 @@
-vibe:
-  version: 1
-  udos_go_root: ~/Code/uDosGo
-  hivemind_vibecli: packages/hivemind/bin/vibecli.mjs
