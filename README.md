@@ -1,7 +1,7 @@
 # uDosGo/Connect Repository
 
 **Version:** v1.1.1  
-**Status:** Active development — breaking changes expected
+**Status:** Active development
 
 This is the **repository folder** for the `udos` system. It is a **Git repository** and contains version-controlled project files.
 
@@ -11,55 +11,48 @@ This is the **repository folder** for the `udos` system. It is a **Git repositor
 - **Collaboration**: Intended for team collaboration and contributions.
 
 ## Key Directories
-- `Docs/`: Project documentation (synced to `~Vault/docs/uDosGo/Connect`).
-- `Modules/`: Reusable modules for the `udos` system.
-- `src/`: Source code for the project.
-- `tests/`: Test files for the project.
-- `uCode1/`: Python core — CLIs, grid parser, USXD, snack/relic/binder (Python) — **Priority 1**
-- `uCode2/`: Rust + React — MCP server, TUI, ThinUI surfaces, spatial (Rust, JS) — **Priority 2**
-- `uCode3/`: Console / Tablet — game controller input, layback computing — **Priority 3**
-- `uCode4/`: 3D spatial runtime (future) — **Priority 4**
-- `.compost/`: Archived dev records
-
-## Best Practices
-- **Always work in this folder for development**: This ensures your changes are version-controlled and synced with the remote repository.
-- **Sync `Docs/` to `Vault`**: The `Docs/` folder is synced to `~Vault/docs/uDosGo/Connect` for centralized documentation.
-- **Use `git` for changes**: Pull, commit, and push changes to keep the repository up to date.
+- `docs/` — Project documentation (synced to `~Vault/docs/uDosGo/Connect`)
+- `core/` — Core system modules
+- `ui/` — User interface components
+- `tools/` — Development tools and utilities
+- `scripts/` — Utility scripts
+- `templates/` — Project templates
+- `.archive/` — Archived legacy directories (gitignored)
 
 ## Quick Start
 
 ```bash
-# Python (uCode1) — unified CLI
-cd uCode1 && python3 ucode --help
+# Install dependencies
+npm install
 
-# Rust (uCode2) — build workspace
-cd uCode2 && cargo build --workspace
+# Build
+npm run build
 
-# Tests
-make test
+# Test
+npm test
 ```
 
 ## Structure
 
-| Directory | Purpose | Language | Status |
-|-----------|---------|----------|--------|
-| `uCode1/` | Python core — CLIs, grid parser, USXD, snack/relic/binder | Python | 🟢 Active |
-| `uCode2/` | Rust + React — MCP server, TUI, ThinUI surfaces, spatial | Rust, JS | 🟡 Active |
-| `uCode3/` | Console / Tablet — game controller, layback computing | Rust | 🔵 Planning |
-| `uCode4/` | 3D spatial runtime (future) | — | ⚪ Planning |
-| `.compost/` | Archived dev records | — | 📦 Archive |
+| Directory | Purpose | Status |
+|-----------|---------|--------|
+| `core/` | Core system modules | 🟢 Active |
+| `ui/` | User interface components | 🟢 Active |
+| `tools/` | Development tools | 🟢 Active |
+| `docs/` | Documentation | 🟢 Active |
+| `.archive/` | Archived legacy directories | 📦 Archive |
 
 ## Docs
 
-- [`~/Code/DevStudio/RELEASE_SCHEDULE.md`](~/Code/DevStudio/RELEASE_SCHEDULE.md) — **Consolidated release schedule** (single source of truth)
-- [`docs/roadmap.md`](docs/roadmap.md) — Full development roadmap (historical reference)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Architecture overview
-- [`docs/specs/`](docs/specs/) — Format specifications (USXD, UDX, progression)
-- [`uCode4/docs/`](uCode4/docs/) — uCode3/4 planning docs
+- [`docs/roadmap.md`](docs/roadmap.md) — Development roadmap
+- [`docs/specs/`](docs/specs/) — Format specifications
 
-## Navigation
-- To work on the **repository** (e.g., documentation, modules, code), stay in `uDosGo/Connect`.
-- To manage **local configurations** or **user data**, navigate to `uDosGo` (the home folder).
+## Related Repositories
+
+- **SonicScrewdriver** (`~/Code/SonicScrewdriver`) — TARDIS Console: API Central Hub for smart home automation, secrets management, and container orchestration
+- **DevStudio** (`~/Code/DevStudio`) — Development environment configuration and tooling
+- **Vault** (`~/Code/Vault`) — Secure storage for notes, maps, feeds, and configuration
 
 ## Example Commands
 - Pull the latest changes:
@@ -72,11 +65,7 @@ make test
   git commit -m "Your commit message"
   git push
   ```
-- Sync `Docs/` to `Vault`:
+- Sync `docs/` to `Vault`:
   ```bash
-  cp -r Docs/* ~/Vault/docs/uDosGo/Connect/
+  cp -r docs/* ~/Vault/docs/uDosGo/Connect/
   ```
-
-## Related
-- For home folder documentation, see `uDosGo/README.md`.
-- For release schedule and priorities, see [`~/Code/DevStudio/RELEASE_SCHEDULE.md`](~/Code/DevStudio/RELEASE_SCHEDULE.md).

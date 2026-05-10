@@ -18,7 +18,7 @@ uDos is a modular, vault-native development platform designed for knowledge mana
 - **Testing**: Jest, ESLint
 - **CI/CD**: GitHub Actions
 
-### 1. uCode1 (Core CLI)
+### Core System
 
 The foundation of uDos, providing:
 - **Vault Management**: Secure storage for notes, maps, feeds
@@ -27,39 +27,16 @@ The foundation of uDos, providing:
 - **Spatial Engine**: Geospatial operations
 - **TUI**: Terminal user interface
 
-**Language**: Rust
-**Location**: `uCode1/`
+**Language**: Rust / Python / TypeScript
+**Location**: `core/`
 
-### 2. ThinUI (Dashboard)
+### Tools & Utilities
 
-A Tauri-based dashboard that provides:
-- **Plugin Management**: Load and manage plugins
-- **System Monitoring**: Health checks and status
-- **Configuration**: Settings and preferences
-- **MCP Tools**: Integration with GitHub services
+Development tools including:
+- **sonic-express**: Fast development server
+- **usxd-express**: USXD processing tools
 
-**Language**: React + TypeScript
-**Location**: `ThinUI/`
-
-### 3. DevStudio (VS Code Extension)
-
-A Visual Studio Code extension for:
-- **Plugin Promotion**: Move plugins between environments
-- **Health Validation**: Run health checks
-- **Script Execution**: Run uDos scripts
-
-**Language**: TypeScript
-**Location**: `DevStudio/` (planned)
-
-### 4. Storyteller (Documentation Engine)
-
-Automatically translates technical events into:
-- **Public Stories**: Gamified narrative
-- **Student Tutorials**: Instructional content
-- **Dev Logs**: Private technical logs
-
-**Language**: Rust
-**Location**: `SonicExpress/storyteller/`
+**Location**: `tools/`
 
 ## Data Flow
 
@@ -70,8 +47,8 @@ graph TD
     C -->|Public| D[Story Site]
     C -->|Student| E[Student Docs]
     C -->|Dev| F[Dev Logs]
-    A -->|Commands| G[uCode1]
-    G -->|MCP| H[ThinUI]
+    A -->|Commands| G[Core]
+    G -->|MCP| H[UI]
     H -->|Plugins| I[Registry]
 ```
 
@@ -79,16 +56,13 @@ graph TD
 
 ```
 uDosGo/
-├── uCode1/              # Core CLI (Rust)
-├── ThinUI/              # Dashboard (Tauri + React)
-├── DevStudio/           # VS Code extension (planned)
-├── SonicExpress/        # Tools and services
-│   └── storyteller/     # Documentation engine
+├── core/                # Core system modules
+├── ui/                  # User interface components
+├── tools/               # Development tools
 ├── docs/                # Documentation
 ├── scripts/             # Utility scripts
-├── Vendor/              # Third-party dependencies
-│   └── .legacy/         # Legacy code (gitignored)
-└── .compost/            # Deleted files (30-day TTL)
+├── templates/           # Project templates
+└── .archive/            # Archived legacy directories (gitignored)
 ```
 
 ## Key Concepts
@@ -140,27 +114,11 @@ A structured format for interactive narratives:
 - **uDos Feed**: Notification system
 - **Webhooks**: External integrations
 
-## Roadmap
+## Related Repositories
 
-### Phase 1: Foundation (Complete)
-- Core CLI (uCode1)
-- Basic dashboard (ThinUI)
-- Documentation engine (Storyteller)
-
-### Phase 2: UI/UX Transformation (In Progress)
-- React migration
-- MCP tool integration
-- Gamified documentation
-
-### Phase 3: Ecosystem Expansion
-- VS Code extension (DevStudio)
-- Plugin marketplace
-- Advanced analytics
-
-### Phase 4: Cloud Integration
-- GitHub services
-- Cloud storage
-- Collaboration features
+- **SonicScrewdriver** (`~/Code/SonicScrewdriver`) — TARDIS Console: API Central Hub for smart home automation, secrets management, and container orchestration
+- **DevStudio** (`~/Code/DevStudio`) — Development environment configuration and tooling
+- **Vault** (`~/Code/Vault`) — Secure storage for notes, maps, feeds, and configuration
 
 ## Future Directions
 
@@ -171,6 +129,6 @@ A structured format for interactive narratives:
 
 ## Conclusion
 
-uDos is designed to be **modular**, **extensible**, and **developer-friendly**. The architecture supports multiple editions (uCode1-4) with different themes and features, all built on the same core foundation.
+uDos is designed to be **modular**, **extensible**, and **developer-friendly**. The architecture supports multiple components built on the same core foundation.
 
 For more details, see the individual component documentation.
