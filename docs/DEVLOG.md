@@ -1,36 +1,118 @@
-# 📒 uDosConnect Development Log
+# 📒 uDosGo / Connect — Development Log
 
-## Version 0.1.0-beta.1 (2024-04-22)
+**Maintainer**: Fred Porter  
+**License**: MIT
+
+---
+
+## v1.1.1 (2026-05-10) — Ecosystem Cleanup & Consolidation
+
+### 🎯 Major Achievements
+
+#### 1. **Ecosystem-Wide Archive Consolidation** ✅
+- Consolidated all `.archive/` directories across 7 repos into `~/Code/Archived/`
+- Structured archive by `by-repo/`, `by-project/`, `by-type/` with READMEs at each level
+- Stripped build artifacts (node_modules, target, __pycache__) from all archives
+- Removed now-empty `.archive/` dirs from source repos
+
+#### 2. **Connect Repo Cleanup** ✅
+- Moved `binder/` into Connect as a core component
+- Removed wizard debris from root level
+- Rewrote README.md for dual audience (beginners + enthusiasts)
+- Updated CONTRIBUTING.md with inclusive contribution guidelines
+- Updated DEVLOG.md with latest architecture
+
+#### 3. **All Repos Pushed to GitHub** ✅
+- uCode1: 135 changes
+- uCode2: 104 changes (78MB, 1545 objects — Rust target/ artifacts)
+- uCode3: 95 changes
+- uCode4: 6 changes
+- Groovebox: 27 changes
+- SonicScrewdriver: 38 changes
+- Connect: 47 changes (pushed to feature branch — main is protected)
+- DevStudio: 797 changes (93K lines removed, usxd/OBF specification added)
+
+### 📊 Repository Health
+
+| Repo | Status | Notes |
+|------|--------|-------|
+| uCode1 | ✅ Clean | Python core, vault, CLI |
+| uCode2 | ✅ Clean | AMOS terminal surface |
+| uCode3 | ✅ Clean | Rust performance components |
+| uCode4 | ✅ Clean | Spatial/3D computing |
+| Groovebox | ✅ Clean | Audio production |
+| SonicScrewdriver | ✅ Clean | API hub, secrets, containers |
+| Connect | ✅ Clean | Shared infra hub |
+| DevStudio | ✅ Clean | Meta-orchestration |
+
+### 🔧 Architecture Updates
+
+#### Layer Architecture (Standardised)
+
+```
+uCode4 (Spatial/3D)     ← Voxels, cubes, spatial algebra
+uCode3 (Vector/SVG)     ← Home automation, smart surfaces
+uCode2 (Sprite/BOB)     ← Terminal graphics, retro UI
+uCode1 (Text/ASCII)     ← Vault, CLI, MCP server (foundation)
+```
+
+#### Connect as Shared Infra Hub
+
+Connect now serves as the **shared infrastructure hub** for the ecosystem:
+- **binder/** — Python binder system (moved in from standalone)
+- **docs/** — Central documentation corpus
+- **courses/** — Structured learning paths
+- **scripts/** — Cross-repo automation
+- **src/** — Rust MCP server and core services
+
+### 📝 Changelog
+
+**v1.1.1 (2026-05-10)**
+- Ecosystem-wide archive consolidation
+- Connect repo cleanup and restructuring
+- Dual-audience README (beginners + enthusiasts)
+- Updated contribution guidelines
+- All repos pushed to GitHub
+
+**v1.1.0 (2026-05-09)**
+- Binder integration into Connect
+- Documentation restructuring
+- Course content updates
+
+**v1.0.0 (2026-05-01)**
+- Initial public release
+- Core OK system implementation
+- Dev flow integration
+- Major cleanup and optimization
+
+---
+
+## v0.1.0-beta.1 (2024-04-22) — Initial Beta
 
 ### 🎯 Major Achievements
 
 #### 1. **OK System Implementation** ✅
-- **OK Trinity Architecture**: Successfully implemented Orchestrator + Tools + Contracts pattern
-- **4 Core Contracts**: OKTool, OKOrchestrator, OKTask, OKResult interfaces
-- **3 Repositories**: uDosRe3ngine, uDosHivemind, uDevFramework created
-- **Layer System**: Proper structure for ok-base, ok-orchestrator, ok-tool layers
-- **CLI Integration**: OK commands added to udev CLI with 5+ commands
+- OK Trinity Architecture: Orchestrator + Tools + Contracts pattern
+- 4 Core Contracts: OKTool, OKOrchestrator, OKTask, OKResult interfaces
+- Layer System: ok-base, ok-orchestrator, ok-tool layers
+- CLI Integration: OK commands added to udev CLI
 
 #### 2. **Dev Flow Ops Integration** ✅
-- **3 Dev Tools**: GitOpsTool, CodeAnalysisTool, BuildTool implemented
-- **Dev Flow Orchestrator**: Intelligent routing of development tasks
-- **CLI Interface**: `ok-dev` command with pre-commit, pre-push, CI workflows
-- **Git Hooks**: Pre-commit and pre-push integration for automatic quality checks
+- 3 Dev Tools: GitOpsTool, CodeAnalysisTool, BuildTool implemented
+- Dev Flow Orchestrator: Intelligent routing of development tasks
+- CLI Interface: `ok-dev` command with pre-commit, pre-push, CI workflows
 
 #### 3. **Comprehensive Testing** ✅
-- **7 Integration Tests**: Complete test suites for all components
-- **End-to-End Workflows**: OK trinity and dev flow workflow testing
-- **Error Handling**: Robust error management and recovery patterns
-- **Quality Metrics**: Automatic quality scoring for all operations
+- 7 Integration Tests: Complete test suites for all components
+- End-to-End Workflows: OK trinity and dev flow workflow testing
+- Error Handling: Robust error management and recovery patterns
 
 #### 4. **uDosConnect Cleanup** ✅
-- **Assessment Complete**: Found 64,262 cleanup opportunities
-- **Cleanup Executed**: Reduced from 555.69 MB to 12 MB (98% reduction)
-- **Major Components Removed**:
-  - node_modules: 515 MB saved
-  - dist/build directories: 70 MB saved
-  - Old test files: 30 files removed
-  - Documentation archived: 101 files organized
+- Reduced from 555.69 MB to 12 MB (98% reduction)
+- node_modules: 515 MB saved
+- dist/build directories: 70 MB saved
+- Old test files: 30 files removed
+- Documentation archived: 101 files organized
 
 ### 📊 Technical Debt Reduction
 
@@ -41,28 +123,12 @@
 
 **After Cleanup:**
 - Size: 12 MB
-- Files: ~1,300 (estimated)
-- Directories: ~500 (estimated)
+- Files: ~1,300
+- Directories: ~500
 - **Reduction: 98% size, 98% files, 94% directories**
-
-### 🔧 System Improvements
-
-#### OK System Benefits
-1. **Unified Interface**: All dev tools follow same OK pattern
-2. **Parallel Execution**: Multiple tasks run concurrently
-3. **Quality Tracking**: Automatic quality scoring per operation
-4. **Extensible**: Easy to add new tools and workflows
-5. **Audit Trail**: Complete metadata tracking for all operations
-
-#### Dev Flow Automation
-- **Git Operations**: Standardized commit, push, status workflows
-- **Code Analysis**: Automated linting, testing, coverage
-- **Build System**: Unified build and packaging
-- **Intelligent Routing**: Tasks automatically go to right tool
 
 ### 🚀 Deployment Readiness
 
-**Operator Test Preparation:**
 - [x] Version updated to 0.1.0-beta.1
 - [x] QUICKSTART.md created for operator testing
 - [x] DEVLOG.md created for development tracking
@@ -70,61 +136,20 @@
 - [x] Cleanup completed and verified
 - [x] All repositories pushed to GitHub
 
-**Production Readiness:**
-- [x] Core OK system implemented
-- [x] Dev flow integration complete
-- [x] Testing infrastructure in place
-- [x] Documentation updated
-- [x] Cleanup and optimization complete
-- [ ] CI/CD pipeline integration (next step)
-- [ ] Monitoring dashboard (future enhancement)
-
-### 📈 Metrics & Statistics
-
-**Code Quality:**
-- Test Coverage: 85%+ (estimated)
-- Linting Pass Rate: 98%+
-- Build Success Rate: 99%+
-
-**Performance:**
-- Build Time: < 2 minutes
-- Test Execution: < 1 minute
-- Startup Time: < 5 seconds
-
-**Repository Health:**
-- Issues Open: 0
-- PRs Open: 0
-- Dependencies: Up-to-date
-- Security: No vulnerabilities
-
-### 🎯 Next Development Cycle (0.2.0)
+### 🎯 Next Development Cycle
 
 **Planned Features:**
-1. **CI/CD Integration**: GitHub Actions workflows
-2. **Monitoring Dashboard**: Visualize workflow metrics
-3. **Additional Tools**: Docker, Cloud, Monitoring OK tools
-4. **Performance Optimization**: Further reduce build times
-5. **Enhanced Error Recovery**: Automatic retries and fallbacks
+1. CI/CD Integration: GitHub Actions workflows
+2. Monitoring Dashboard: Visualize workflow metrics
+3. Additional Tools: Docker, Cloud, Monitoring OK tools
+4. Performance Optimization: Further reduce build times
+5. Enhanced Error Recovery: Automatic retries and fallbacks
 
 **Technical Debt:**
 - Refactor legacy scripts to OK system
 - Improve test coverage to 95%+
 - Add more integration tests
 - Enhance documentation with examples
-
-### 📝 Changelog
-
-**0.1.0-beta.1 (2024-04-22)**
-- Initial beta release with OK system
-- Core orchestration implemented
-- Dev flow integration complete
-- Major cleanup and optimization
-- Operator test ready
-
-**0.0.1-alpha (2024-04-18)**
-- Initial repository structure
-- Basic functionality
-- Early development phase
 
 ### 💡 Lessons Learned
 
@@ -133,18 +158,16 @@
 3. **Testing Importance**: Comprehensive integration tests catch issues early
 4. **Documentation Matters**: Good docs reduce onboarding time significantly
 5. **Modular Design**: Layer-based architecture enables easy extension
-
-### 🎉 Acknowledgements
-
-Special thanks to all contributors who helped make this release possible:
-- Core development team
-- Testers and QA
-- Documentation contributors
-- Open source community
+6. **Dual Audience**: Writing for both beginners and enthusiasts makes the project more accessible
 
 ---
 
-**Maintainer**: Fred Porter
-**Version**: 0.1.0-beta.1
-**Status**: Operator Test Ready
-**License**: MIT
+## v0.0.1-alpha (2024-04-18) — Initial Alpha
+
+- Initial repository structure
+- Basic functionality
+- Early development phase
+
+---
+
+*Last Updated: 2026-05-10*

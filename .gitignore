@@ -45,6 +45,10 @@ venv/
 # Rust / Cargo (workspace: core-rs/)
 core-rs/target/
 
+# Rust profiling artifacts
+default.profraw
+*.profraw
+
 # Ad-hoc test run artefacts (optional; narrow if these extensions are used for real sources)
 *.test
 *.fail
