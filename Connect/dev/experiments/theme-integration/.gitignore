@@ -1,5 +1,0 @@
-# Cloned upstream repos and local build output (keep experiments out of git)
-vendor/
-node_modules/
-dist/
-*.local.html

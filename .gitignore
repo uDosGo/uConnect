@@ -130,3 +130,32 @@ target/
 
 # Added by cargo (from HEAD version)
 /target*.ttf
+
+# Legacy directories - migrated to component packages
+uCode1/
+uCode2/
+uCode4/
+ceetex-bridge/
+react-renderer/
+pty-server/
+launcher/
+narrator/
+surfaces/
+system/
+templates/
+archived/
+core/
+db/
+packages/
+production/
+seed/
+tools/
+Modules/
+Registry/
+Deb/
+Connect/
+Vault/
+SeedVault/
+@user/
+~/
+sonic-screwdriver

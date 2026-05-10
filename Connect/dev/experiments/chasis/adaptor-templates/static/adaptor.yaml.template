@@ -1,5 +1,0 @@
-runtime:
-  type: static
-  build: "echo no-build"
-  start: "serve static assets"
-  port: 8080

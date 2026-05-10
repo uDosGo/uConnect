@@ -1,4 +1,0 @@
-/**
- * uGridComposer types
- */
-export {};

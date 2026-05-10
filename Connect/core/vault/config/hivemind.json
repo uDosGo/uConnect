@@ -1,6 +1,0 @@
-{
-  "dsc2": {
-    "endpoint": "http://localhost:30000/mcp",
-    "use_real_server": true
-  }
-}

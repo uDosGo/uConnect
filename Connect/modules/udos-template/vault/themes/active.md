@@ -1,3 +1,0 @@
-# Active theme
-
-theme = "wireframe"

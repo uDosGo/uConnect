@@ -1,3 +1,0 @@
--- Optional: application layer should set cells.updated_at on mutation.
--- SQLite BEFORE/AFTER UPDATE triggers that UPDATE the same row are easy to get wrong;
--- prefer explicit timestamps in Host/CLI.
