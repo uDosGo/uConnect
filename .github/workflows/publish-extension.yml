@@ -1,0 +1,114 @@
+# uDoui Extension Publishing Workflow
+# Publishes uDoui extensions to the extension catalog
+# Triggered when extension manifests change in udoui/extensions/manifests/
+
+name: Publish uDoui Extension
+
+on:
+  push:
+    paths:
+      - 'udoui/extensions/manifests/**'
+      - 'udoui/extensions/catalog/**'
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      extension:
+        description: 'Extension name to publish (leave empty for all)'
+        required: false
+        type: string
+
+jobs:
+  validate:
+    name: Validate Extension Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Manifests
+        run: |
+          python3 -c "
+          import json, sys, os
+          schema_path = 'udoui/extensions/manifests/schema.json'
+          manifests_dir = 'udoui/extensions/manifests'
+          
+          with open(schema_path) as f:
+              schema = json.load(f)
+          
+          required_fields = schema.get('required', ['name', 'version', 'type', 'displayName', 'description'])
+          
+          for fname in os.listdir(manifests_dir):
+              if not fname.endswith('.json') or fname == 'schema.json':
+                  continue
+              fpath = os.path.join(manifests_dir, fname)
+              with open(fpath) as f:
+                  manifest = json.load(f)
+              
+              errors = []
+              for field in required_fields:
+                  if field not in manifest:
+                      errors.append(f'Missing required field: {field}')
+              
+              if errors:
+                  print(f'❌ {fname}:')
+                  for e in errors:
+                      print(f'   - {e}')
+                  sys.exit(1)
+              else:
+                  print(f'✅ {fname}: {manifest.get(\"displayName\", fname)} v{manifest.get(\"version\", \"?\")}')
+          print('\nAll manifests valid!')
+          "
+
+  publish:
+    name: Publish to Extension Catalog
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Catalog Index
+        run: |
+          python3 -c "
+          import json, os
+          
+          catalog_dir = 'udoui/extensions/catalog'
+          manifests_dir = 'udoui/extensions/manifests'
+          
+          # Build extension index
+          extensions = []
+          for fname in os.listdir(manifests_dir):
+              if not fname.endswith('.json') or fname == 'schema.json':
+                  continue
+              with open(os.path.join(manifests_dir, fname)) as f:
+                  manifest = json.load(f)
+              extensions.append({
+                  'name': manifest['name'],
+                  'version': manifest['version'],
+                  'type': manifest['type'],
+                  'displayName': manifest['displayName'],
+                  'description': manifest['description'],
+                  'tags': manifest.get('tags', []),
+                  'updated': manifest.get('updated', '')
+              })
+          
+          # Write catalog index
+          index_path = os.path.join(catalog_dir, 'index.json')
+          with open(index_path, 'w') as f:
+              json.dump({'extensions': extensions, 'count': len(extensions), 'updated': '2026-05-10'}, f, indent=2)
+          print(f'Catalog index updated: {len(extensions)} extensions')
+          "
+
+      - name: Commit Catalog Update
+        run: |
+          git config user.name "uDosGo Bot"
+          git config user.email "bot@udos.dev"
+          git add udoui/extensions/catalog/index.json
+          git diff --staged --quiet || git commit -m "chore: update extension catalog index [skip ci]"
+          git push

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: uDosGo Discussions
+    url: https://github.com/uDosGo/Connect/discussions
+    about: Please ask questions and discuss ideas here
+  - name: uDosGo Documentation
+    url: https://github.com/uDosGo/Connect/docs/
+    about: Check the docs before filing an issue
