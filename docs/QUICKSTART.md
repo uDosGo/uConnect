@@ -1,178 +1,99 @@
-# 🚀 uDosConnect Quickstart Guide
+# 🚀 uDos Quickstart Guide
 
-## Operator Test Preparation
+Welcome to **uDos** — a modular, vault-native platform for knowledge management, spatial computing, and creative productivity.
 
-This guide will help you quickly set up and test uDosConnect for operator testing.
-
-## 📋 Prerequisites
-
-### System Requirements
-- **Node.js**: v24+ (LTS recommended)
-- **npm**: v10+
-- **Git**: v2.30+
-- **Operating System**: macOS, Linux, or Windows (WSL2)
-- **Disk Space**: 500MB+ free
-- **Memory**: 4GB+ RAM
-
-### Required Tools
-- **Bash/Zsh** (for shell scripts)
-- **Python 3.9+** (for some utility scripts)
-- **Docker** (optional, for containerized testing)
-
-## 🔧 Installation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/fredporter/uDos.git
-cd uDos
-```
-
-### 2. Install Dependencies
-
-```bash
-# Install npm dependencies
-npm install
-
-# Install Python dependencies (if needed)
-pip install -r requirements.txt
-```
-
-### 3. Set Up Environment
-
-```bash
-# Copy example environment file
-cp .env.example .env
-
-# Edit .env with your configuration
-nano .env
-```
-
-## 🎯 Operator Testing
-
-### Basic Commands
-
-```bash
-# Start the development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm run test
-
-# Lint code
-npm run lint
-```
-
-### Common Workflows
-
-#### 1. **Development Workflow**
-
-```bash
-# Start development mode
-npm run dev
-
-# Access the application at http://localhost:3000
-```
-
-#### 2. **Testing Workflow**
-
-```bash
-# Run all tests
-npm run test
-
-# Run specific test suite
-npm run test -- --testPathPattern=specific-test
-```
-
-#### 3. **Build & Deploy Workflow**
-
-```bash
-# Build for production
-npm run build
-
-# Deploy to production
-npm run deploy:production
-```
-
-## 📚 Documentation
-
-### Key Files
-- **`docs/README.md`** - Main documentation hub
-- **`docs/DEVELOPMENT_GUIDE.md`** - Development guide
-- **`docs/ARCHITECTURE.md`** - System architecture
-- **`docs/CONTRIBUTING.md`** - Contribution guidelines
-
-### Generating Documentation
-
-```bash
-# Generate API documentation
-npm run docs:generate
-
-# Update documentation index
-npm run docs:index
-```
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-#### 1. **Port Already in Use**
-
-```bash
-# Find and kill process on port 3000
-lsof -i :3000
-kill -9 <PID>
-```
-
-#### 2. **Missing Dependencies**
-
-```bash
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
-
-#### 3. **Permission Issues**
-
-```bash
-# Fix file permissions
-chmod -R 755 .
-chown -R $USER:$USER .
-```
-
-## 📊 Operator Test Checklist
-
-- [ ] Clone repository
-- [ ] Install dependencies
-- [ ] Set up environment variables
-- [ ] Run development server
-- [ ] Test basic functionality
-- [ ] Run test suite
-- [ ] Check documentation
-- [ ] Verify build process
-- [ ] Test deployment
-
-## 🎉 Next Steps
-
-After completing the operator test:
-
-1. **Report Issues**: Open GitHub issues for any bugs found
-2. **Suggest Improvements**: Submit feature requests
-3. **Contribute Code**: Follow CONTRIBUTING.md guidelines
-4. **Join Community**: Participate in discussions and development
-
-## 📞 Support
-
-For help with operator testing:
-- **GitHub Issues**: https://github.com/fredporter/uDos/issues
-- **Documentation**: https://github.com/fredporter/uDos/docs
-- **Community**: Join the uDos Discord or Slack channel
+This guide gets you up and running in **5 minutes**. No prior experience needed.
 
 ---
 
-**Version**: 0.1.0-beta.1
-**Last Updated**: 2024-04-22
-**License**: MIT
+## ✅ What You'll Need
+
+- **Git** — to clone the repo
+- **Node.js** v18+ — for the web UI
+- **Python** 3.10+ — for the binder CLI tools
+- A **terminal** (Terminal.app on Mac, GNOME Terminal on Linux, etc.)
+
+---
+
+## 📦 1. Clone the Repo
+
+```bash
+git clone https://github.com/uDosGo/Connect.git
+cd Connect
+```
+
+---
+
+## 📖 2. Explore What's Here
+
+```bash
+# See the top-level structure
+ls
+
+# Read the docs
+ls docs/
+
+# Check out the courses
+ls courses/
+```
+
+---
+
+## 🧪 3. Try the Binder CLI
+
+The binder is a Python tool for working with structured data (snacks, spools, feeds).
+
+```bash
+# Go to the binder directory
+cd binder
+
+# Install dependencies (recommended: use a virtual env)
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+
+# See available commands
+python -m binder --help
+```
+
+---
+
+## 🌐 4. Launch the Web UI (Optional)
+
+```bash
+cd ui
+npm install
+npm run dev
+```
+
+Open your browser to `http://localhost:5173` (or whatever port Vite prints).
+
+### Desktop Launchers
+
+| Platform | How to Launch |
+|----------|---------------|
+| **macOS** | Double-click `udosui.command` in Finder (after `chmod +x udosui.command`) |
+| **Linux** | Run `bash scripts/udosui-launcher.sh --install` once, then find "uDos UI" in your app menu |
+| **Any** | `bash scripts/udosui-launcher.sh` from the terminal |
+
+---
+
+## 📚 5. Start Learning
+
+| Resource | What It Covers |
+|----------|---------------|
+| **[Courses](../courses/)** | Step-by-step learning paths (start with `01-markdown-first`) |
+| **[Student Guide](student/)** | Tutorials in everyday language — no jargon |
+| **[User Manual](ucode-user-manual.md)** | All `udo` commands explained |
+| **[Lexicon](lexicon.md)** | What all the terms mean |
+
+---
+
+## 🆘 Need Help?
+
+- Open an [issue](https://github.com/uDosGo/Connect/issues)
+- Start a [discussion](https://github.com/uDosGo/Connect/discussions)
+
+---
+
+*Happy building! 🚀*

@@ -1,4 +1,0 @@
-# This file is copied to `.udos-connect-python` (gitignored) by
-# `scripts/bootstrap-family-python.sh`. It must contain a single line: the
-# absolute path to the shared interpreter, for example:
-# /home/you/.udos/envs/family-py311/bin/python

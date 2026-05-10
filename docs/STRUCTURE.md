@@ -1,32 +1,60 @@
-# uDos Project Structure
+# uDos / Connect — Project Structure
 
 ## Root Level
-- `package.json`: Main package configuration
-- `README.md`: Project overview
-- `CONTRIBUTING.md`: Contribution guidelines
-- `docs/`: Documentation directory
-- `core/`: Core functionality
-- `ui/`: User interface components
-- `tools/`: Development tools
-- `modules/`: Project modules
-- `scripts/`: Utility scripts
-- `templates/`: Project templates
+
+```
+Connect/
+├── binder/               # Python binder system (structured data)
+├── config/               # Shared configuration (email, webhooks)
+├── courses/              # Structured learning paths
+├── docs/                 # Documentation corpus
+├── scripts/              # Automation and utility scripts
+├── src/                  # Rust source (MCP server, core)
+├── stories/              # Interactive narratives (quests)
+├── test/                 # Test suites
+├── udo/                  # UDO runtime (bin, fonts, skills)
+├── udoui/                # UI extensions
+├── ui/                   # Web UI (Vite + React)
+│
+├── Cargo.toml            # Rust workspace
+├── CONTRIBUTING.md       # Contribution guidelines
+├── eslint.config.js      # ESLint configuration
+├── LICENSE               # MIT License
+├── package.json          # Node workspace
+├── README.md             # Project overview (this is the entry point)
+├── uDosGo.code-workspace # VS Code workspace file
+├── udosui.command        # macOS double-click launcher
+└── version               # Current version (v1.1.1)
+```
 
 ## Key Components
 
-### Core
-The core directory contains the main business logic and functionality.
+### `binder/` — Python Binder System
+The binder is a Python tool for working with structured data (snacks, spools, feeds). It provides CLI tools and a library for parsing, validating, and transforming data formats.
 
-### UI
-The UI directory contains Vue.js components and user interface code.
+### `ui/` — Web UI
+A Vite + React web application that provides a graphical interface for the uDos ecosystem.
 
-### Tools
-Development tools including:
-- `sonic-express`: Fast development server
-- `usxd-express`: USXD processing tools
+### `src/` — Rust Core
+Rust source code for the MCP server and core services. Currently a minimal scaffold.
 
-### Modules
-Modular components that can be used independently or together.
+### `scripts/` — Automation
+Utility scripts for installation, testing, deployment, and maintenance.
+
+### `docs/` — Documentation
+All documentation including architecture, guides, specs, and learning resources.
+
+### `courses/` — Learning Paths
+Structured, step-by-step courses for learning uDos concepts and skills.
+
+### `udo/` — UDO Runtime
+Runtime assets including fonts, skills, and binaries.
+
+### `udoui/` — UI Extensions
+Extension manifests and catalog for the uDos UI.
+
+### `stories/` — Interactive Quests
+Narrative-driven interactive experiences for learning through play.
 
 ## Development Workflow
 

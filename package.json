@@ -1,45 +1,23 @@
 {
-  "name": "udos",
+  "name": "udos-connect",
   "private": true,
-  "description": "uDos family monorepo — npm workspaces for JS/TS packages (core, ui, tools/sonic-express, tools/usxd-express, modules/*) plus core-rs Rust CLI",
+  "description": "uDosGo/Connect — shared-infrastructure hub for the uDos ecosystem",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fredporter/uDos.git"
+    "url": "git+https://github.com/uDosGo/Connect.git"
   },
   "type": "module",
-  "workspaces": [
-    "core",
-    "ui",
-    "react-renderer",
-    "tools/sonic-express",
-    "tools/usxd-express",
-    "modules/*"
-  ],
   "scripts": {
-    "build": "npm run build -w @udos/shared-types && npm run build -w @udos/shared-utils && npm run build -w @udos/obf-grid && npm run build -w @udos/core && npm run build -w @udos/sonic-express && npm run build -w @udos/usxd-express && npm run build -w @udos/feed-engine && npm run build -w @udos/publish-gateway && npm run build -w @udos/spool-archiver && npm run build -w @udos/vault-manager && npm run build -w @udos/usxd-renderer",
-    "test": "npm run build && npm run test -w @udos/core",
-    "verify:a1": "npm test && ./scripts/shakedown.sh && (cd core-rs && cargo test)",
-    "verify:usxd-go": "bash scripts/check-usxd-go-scaffold.sh",
-    "verify:story": "bash scripts/check-usxd-story.sh",
-    "verify:uos": "bash scripts/check-uos.sh",
-    "workspaces:list": "npm query .workspace --json",
-    "workspaces:check": "npm run workspaces:list > /dev/null && echo \"npm workspace resolution OK\"",
-    "workspace:drift": "bash scripts/check-workspace-drift.sh",
+    "dev": "cd ui && npm run dev",
+    "build": "cd ui && npm run build",
+    "test": "cd binder && python -m pytest tests/ -v",
     "lint": "eslint . --ext .vue,.js,.ts --fix",
     "lint:check": "eslint . --ext .vue,.js,.ts",
     "docs:generate": "bash scripts/generate-docs.sh",
     "docs:index": "bash scripts/update-docs-index.sh",
-    "docs:check": "echo 'Checking documentation...' && test -d docs && echo '✅ Documentation exists'",
-    "deploy:production": "bash scripts/deploy-production.sh",
-    "verify:deployment": "bash scripts/verify-deployment.sh",
     "validate:env": "bash scripts/validate-environment.sh",
-    "prepare:p2": "bash scripts/prepare-p2.sh",
-    "prepare:p3": "bash scripts/prepare-p3.sh",
-    "spec:template": "bash scripts/create-spec-template.sh",
-    "validate:p2": "bash scripts/validate-p2-features.sh",
-    "validate:p3": "bash scripts/validate-p3-features.sh",
-    "validate:all": "echo 'Validating all specs...' && npm run validate:env && npm run validate:p2 && npm run validate:p3"
+    "shakedown": "bash scripts/shakedown.sh"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -51,19 +29,8 @@
     "js-yaml": "^4.1.1",
     "typescript": "^5.7.3"
   },
-  "version": "0.1.0-beta.1",
+  "version": "1.1.1",
   "engines": {
-    "node": ">=24"
-  },
-  "main": "eslint.config.js",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
-  "keywords": [],
-  "author": "",
-  "bugs": {
-    "url": "https://github.com/fredporter/uDos/issues"
-  },
-  "homepage": "https://github.com/fredporter/uDos#readme"
+    "node": ">=18"
+  }
 }

@@ -1,32 +1,44 @@
 {
 	"folders": [
 		{
-			"name": "uDosGo (root)",
+			"name": "uDosGo / Connect",
 			"path": "."
 		},
 		{
-			"name": "uCode1 — BBC BASIC Interpreter",
-			"path": "uCode1"
+			"name": "Binder (Python)",
+			"path": "binder"
 		},
 		{
-			"name": "uCode2 — ACS Publishing",
-			"path": "uCode2"
+			"name": "Web UI",
+			"path": "ui"
 		},
 		{
-			"name": "uCode3 — Performance Core",
-			"path": "uCode3"
+			"name": "Documentation",
+			"path": "docs"
 		},
 		{
-			"name": "Dev Docs & Handover",
-			"path": "dev"
+			"name": "Courses",
+			"path": "courses"
 		},
 		{
-			"name": "Vault (content)",
-			"path": "~/Vault"
+			"name": "Scripts",
+			"path": "scripts"
 		},
 		{
-			"name": "DevStudio (tools)",
-			"path": "~/Code/DevStudio"
+			"name": "UDO Runtime",
+			"path": "udo"
+		},
+		{
+			"name": "UDO UI Extensions",
+			"path": "udoui"
+		},
+		{
+			"name": "Stories",
+			"path": "stories"
+		},
+		{
+			"name": "Rust Core",
+			"path": "src"
 		}
 	],
 	"settings": {
@@ -36,7 +48,10 @@
 			"**/node_modules": true,
 			"**/target": true,
 			"**/*.pyc": true,
-			"**/.DS_Store": true
+			"**/.DS_Store": true,
+			"**/Cargo.lock": true,
+			"**/pnpm-lock.yaml": true,
+			"**/package-lock.json": true
 		},
 		"editor.formatOnSave": true,
 		"editor.rulers": [100, 120],
@@ -49,10 +64,6 @@
 			"*.spool": "json",
 			"*.feed": "json"
 		},
-		"python.defaultInterpreterPath": "/Users/fredbook/Code/uDosGo/uCode1/.venv/bin/python",
-		"python.terminal.activateEnvironment": true,
-		"python.analysis.typeCheckingMode": "basic",
-		"python.analysis.autoImportCompletions": true,
 		"terminal.integrated.defaultLocation": "editor",
 		"terminal.integrated.defaultProfile.osx": "zsh",
 		"workbench.colorTheme": "Dark Modern",
@@ -60,15 +71,10 @@
 		"workbench.sideBar.location": "left",
 		"explorer.compactFolders": false,
 		"explorer.sortOrder": "type",
-		"debug.allowBreakpointsEverywhere": true,
 		"editor.bracketPairColorization.enabled": true,
 		"editor.guides.bracketPairs": true,
 		"markdown.preview.breaks": true,
-		"markdown.extension.toc.updateOnSave": true,
-		"yaml.schemas": {
-			"uCode1/core_py/snack_container/manifest.py": ["*.snack"],
-			"uCode1/core_py/snack_container/snackpack.py": ["*.snackpack"]
-		}
+		"markdown.extension.toc.updateOnSave": true
 	},
 	"extensions": {
 		"recommendations": [
@@ -77,8 +83,6 @@
 			"ms-python.debugpy",
 			"ms-python.mypy-type-checker",
 			"ms-python.ruff",
-			"rust-lang.rust-analyzer",
-			"tamasfe.even-better-toml",
 			"yzhang.markdown-all-in-one",
 			"bierner.markdown-mermaid",
 			"redhat.vscode-yaml",
@@ -86,147 +90,6 @@
 			"mhutchie.git-graph",
 			"aaron-bond.better-comments",
 			"wayou.vscode-todo-highlight"
-		]
-	},
-	"tasks": {
-		"version": "2.0.0",
-		"tasks": [
-			{
-				"label": "uCode1: Run interpreter tests",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && python -m pytest tests/ -v",
-				"group": "test",
-				"presentation": {
-					"reveal": "always",
-					"panel": "new"
-				}
-			},
-			{
-				"label": "uCode1: Verify interpreter syntax",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && python -c \"import ast; ast.parse(open('core_py/bbc/interpreter.py').read()); print('✅ Syntax OK')\"",
-				"group": "build",
-				"presentation": {
-					"reveal": "never",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "uCode1: Run all linting (ruff)",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && ruff check .",
-				"group": "build",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "uCode1: Run BBC BASIC demo",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && python ucode run examples/lens_skin_mcp_demo.bas",
-				"group": "test",
-				"presentation": {
-					"reveal": "always",
-					"panel": "new"
-				}
-			},
-			{
-				"label": "uCode1: Validate all snacks",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && python scripts/ci_validate_snacks.py",
-				"group": "test",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "uCode1: Validate all snackpacks",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/uCode1 && python scripts/ci_validate_snackpacks.py",
-				"group": "test",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "Rust: Build core-rs",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/core-rs && cargo build",
-				"group": "build",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "Rust: Run core-rs tests",
-				"type": "shell",
-				"command": "cd ${workspaceFolder}/core-rs && cargo test",
-				"group": "test",
-				"presentation": {
-					"reveal": "always",
-					"panel": "new"
-				}
-			},
-			{
-				"label": "Handover: Read handover docs",
-				"type": "shell",
-				"command": "cat ${workspaceFolder}/dev/HANDOVER.md",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			},
-			{
-				"label": "Handover: Read sprint plan",
-				"type": "shell",
-				"command": "cat ${workspaceFolder}/uCode1/SPRINT_TODO.md",
-				"presentation": {
-					"reveal": "always",
-					"panel": "dedicated"
-				}
-			}
-		]
-	},
-	"launch": {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"name": "uCode1: Debug interpreter",
-				"type": "python",
-				"request": "launch",
-				"program": "${workspaceFolder}/uCode1/ucode",
-				"args": ["run", "${file}"],
-				"console": "integratedTerminal",
-				"justMyCode": true,
-				"env": {
-					"PYTHONPATH": "${workspaceFolder}/uCode1"
-				}
-			},
-			{
-				"name": "uCode1: Debug tests",
-				"type": "python",
-				"request": "launch",
-				"module": "pytest",
-				"args": ["-v", "${file}"],
-				"console": "integratedTerminal",
-				"justMyCode": true,
-				"env": {
-					"PYTHONPATH": "${workspaceFolder}/uCode1"
-				}
-			},
-			{
-				"name": "Rust: Debug core-rs",
-				"type": "lldb",
-				"request": "launch",
-				"program": "${workspaceFolder}/core-rs/target/debug/udos",
-				"args": [],
-				"cwd": "${workspaceFolder}",
-				"preLaunchTask": "Rust: Build core-rs"
-			}
 		]
 	}
 }

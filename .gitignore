@@ -42,8 +42,8 @@ venv/
 # Logs
 *.log
 
-# Rust / Cargo (workspace: core-rs/)
-core-rs/target/
+# Rust / Cargo
+**/target/
 
 # Rust profiling artifacts
 default.profraw
@@ -53,39 +53,29 @@ default.profraw
 *.test
 *.fail
 
-# A1 TypeScript build artefacts (core, tools, modules)
+# Node / JS
 node_modules/
-core/dist/
-tools/sonic-express/dist/
-tools/usxd-express/dist/
-modules/vault-manager/dist/
-modules/feed-engine/dist/
-modules/spool-archiver/dist/
-modules/publish-gateway/dist/
-modules/usxd-renderer/dist/
-modules/shared-types/dist/
-modules/shared-utils/dist/
-modules/obf-grid/dist/
+dist/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Rust / Cargo lock (managed by workspace)
+Cargo.lock
+
+# Version file (redundant with package.json)
+version
 
 # Optional local vendor clones (nested upstream repos; not part of monorepo history)
 vendor/
-
-# Optional toybox experiment clones (see dev/toybox-experiments/README.md)
-dev/toybox-experiments/markdown-runtime/rnmd/
-dev/toybox-experiments/markdown-runtime/marki/
-dev/toybox-experiments/foam/foam/
 
 # Aggressive cleanup exclusions - NEVER COMMIT THESE
 .archive/
 .compost/
 .backup/
-*.log
 *.tmp
-*.swp
 *.bak
 core.*
-.DS_Store
-Thumbs.db
 .cache/
 .parcel-cache/
 .next/
@@ -96,70 +86,17 @@ coverage/
 jest-coverage/
 .env
 
-# Runtime data (from HEAD version)
-.Vendor/
-Tools/*
-
-# Build artifacts (from HEAD version)
-target/
-dist/
-*.log
-.DS_Store
-
-# IDE files (from HEAD version)
-.idea/
-.vscode/
-
 # Legacy (from HEAD version)
 .state/
 Sandbox/
 _deprecated/
 Vendor/.legacy/
 
-# Rust/Cargo (from HEAD version)
-**/target/
-**/node_modules/
-
-# JavaScript (from HEAD version)
-*.tmp
-target/
-**/target/
-
-# Additional Python (from HEAD version)
-*.egg-info/
+# Additional Python
 *.egg-info/
 
-# Additional local data (from HEAD version)
+# Additional local data
 .local/
 
-# Added by cargo (from HEAD version)
+# Added by cargo
 /target*.ttf
-
-# Legacy directories - migrated to component packages
-uCode1/
-uCode2/
-uCode4/
-ceetex-bridge/
-react-renderer/
-pty-server/
-launcher/
-narrator/
-surfaces/
-system/
-templates/
-archived/
-core/
-db/
-packages/
-production/
-seed/
-tools/
-Modules/
-Registry/
-Deb/
-Connect/
-Vault/
-SeedVault/
-@user/
-~/
-sonic-screwdriver

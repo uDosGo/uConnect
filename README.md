@@ -23,16 +23,16 @@ The ecosystem spans **7 repos** across the [uDosGo](https://github.com/uDosGo) G
 
 ### 👋 Beginners & Learners ("I want to learn")
 
-Welcome! If you're new to uDos, you're in the right place. This repo is the **front door** to the ecosystem.
+**New here?** You're in the right place. This repo is the **front door** to the uDos ecosystem.
 
-**Start here:**
-- **[Quickstart Guide](docs/QUICKSTART.md)** — Get up and running in 5 minutes
+**Start here (no experience needed):**
+- **[Quickstart Guide](docs/QUICKSTART.md)** — Up and running in 5 minutes
+- **[Student Guide](docs/student/)** — Plain-language tutorials, no jargon
 - **[Courses](courses/)** — Structured learning paths (start with `01-markdown-first`)
 - **[User Manual](docs/ucode-user-manual.md)** — All the `udo` commands explained
 - **[Lexicon](docs/lexicon.md)** — What all the terms mean (Vault, Spool, Surface, etc.)
-- **[Student Docs](docs/student/)** — Tutorials written in everyday language
 
-**No prior experience needed.** Just a terminal and curiosity.
+**Just need a terminal and curiosity.**
 
 ### 🔧 Enthusiasts & Developers ("I want to build")
 
@@ -53,9 +53,13 @@ Connect/                  ← You are here (shared infra hub)
 ├── binder/               # Python binder system (structured data)
 ├── config/               # Shared configuration (email, webhooks)
 ├── courses/              # Structured learning paths
-├── dev/                  # Contributor workflow, tasks, templates
 ├── docs/                 # Documentation corpus
+│   ├── QUICKSTART.md     # 5-minute setup guide
+│   ├── student/          # Beginner-friendly tutorials
+│   └── ...               # Architecture, guides, specs
 ├── scripts/              # Automation and utility scripts
+│   ├── udosui-launcher.sh  # Linux/macOS UI launcher
+│   └── ...
 ├── src/                  # Rust source (MCP server, core)
 ├── stories/              # Interactive narratives (quests)
 ├── test/                 # Test suites
@@ -64,7 +68,7 @@ Connect/                  ← You are here (shared infra hub)
 ├── ui/                   # Web UI (Vite + React)
 ├── Cargo.toml            # Rust workspace
 ├── package.json          # Node workspace
-└── pnpm-workspace.yaml   # pnpm workspace config
+└── udosui.command        # macOS double-click launcher
 ```
 
 ### Key Directories Explained
@@ -73,7 +77,6 @@ Connect/                  ← You are here (shared infra hub)
 |-----------|--------------|----------|
 | `binder/` | Python binder — structured data parsing, CLI tools | Developers |
 | `courses/` | Step-by-step learning paths (markdown-first) | Learners |
-| `dev/` | Contributor workflow, task tracking, templates | Contributors |
 | `docs/` | All documentation — architecture, guides, specs | Everyone |
 | `scripts/` | Automation scripts — install, test, deploy | Operators |
 | `src/` | Rust source — MCP server, core services | Developers |
@@ -154,6 +157,20 @@ udo doctor       # Health check
 udo tour         # Interactive tour
 ```
 
+### 5. Launch the Web UI
+
+```bash
+cd ui && npm install && npm run dev
+```
+
+Or use the desktop launcher for your platform:
+
+| Platform | Command |
+|----------|---------|
+| **macOS** | Double-click `udosui.command` (after `chmod +x`) |
+| **Linux** | `bash scripts/udosui-launcher.sh --install` (one-time setup) |
+| **Any** | `bash scripts/udosui-launcher.sh` |
+
 ---
 
 ## 📚 Learning Pathways
@@ -178,7 +195,6 @@ udo tour         # Interactive tour
 1. **[Core Architecture](docs/CORE_ARCHITECTURE.md)** — Python/Rust boundaries
 2. **[API Reference](docs/api/)** — Technical API docs
 3. **[GitHub Workflow](docs/GITHUB_WORKFLOW.md)** — CI/CD and collaboration
-4. **[Dev Guide](dev/README.md)** — Contributor workflow and templates
 
 ---
 

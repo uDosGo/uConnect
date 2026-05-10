@@ -1,1 +1,0 @@
-{"mcpServers": {"udos-gateway": {"command": "cargo", "args": ["run", "--bin", "mcp-server"], "env": {"PORT": "30000"}, "label": "uDos MCP Server"}}}
