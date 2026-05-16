@@ -1,0 +1,269 @@
+/* ============================================================
+   udoui-typography.css — Font sizing, weights, and classes
+   ============================================================ */
+
+:root {
+  /* ===== FONT SIZES (rem-based, scalable) ===== */
+  --udoui-text-xs: 0.75rem;     /* 12px */
+  --udoui-text-sm: 0.875rem;    /* 14px */
+  --udoui-text-base: 1rem;      /* 16px */
+  --udoui-text-lg: 1.125rem;    /* 18px */
+  --udoui-text-xl: 1.25rem;     /* 20px */
+  --udoui-text-2xl: 1.5rem;     /* 24px */
+  --udoui-text-3xl: 1.875rem;   /* 30px */
+  --udoui-text-4xl: 2.25rem;    /* 36px */
+  --udoui-text-5xl: 3rem;       /* 48px */
+  --udoui-text-6xl: 3.75rem;    /* 60px */
+  --udoui-text-7xl: 4.5rem;     /* 72px */
+  --udoui-text-8xl: 6rem;       /* 96px */
+  
+  /* ===== FONT WEIGHTS ===== */
+  --udoui-font-light: 300;
+  --udoui-font-normal: 400;
+  --udoui-font-medium: 500;
+  --udoui-font-semibold: 600;
+  --udoui-font-bold: 700;
+  
+  /* ===== LINE HEIGHTS ===== */
+  --udoui-leading-none: 1;
+  --udoui-leading-tight: 1.25;
+  --udoui-leading-snug: 1.375;
+  --udoui-leading-normal: 1.5;
+  --udoui-leading-relaxed: 1.625;
+  --udoui-leading-loose: 2;
+  
+  /* ===== LETTER SPACING ===== */
+  --udoui-tracking-tighter: -0.05em;
+  --udoui-tracking-tight: -0.025em;
+  --udoui-tracking-normal: 0;
+  --udoui-tracking-wide: 0.025em;
+  --udoui-tracking-wider: 0.05em;
+  --udoui-tracking-widest: 0.1em;
+}
+
+/* Font zoom support (runtime adjustable) */
+:root {
+  font-size: 16px;
+}
+
+[data-font-size="small"] { font-size: 14px; }
+[data-font-size="medium"] { font-size: 16px; }
+[data-font-size="large"] { font-size: 18px; }
+[data-font-size="xlarge"] { font-size: 20px; }
+[data-font-size="xxlarge"] { font-size: 24px; }
+
+/* ===== BODY TEXT ===== */
+.udoui-body {
+  font-family: var(--udoui-font-body);
+  font-size: var(--udoui-text-base);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-normal);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-body-sm {
+  font-size: var(--udoui-text-sm);
+  line-height: var(--udoui-leading-snug);
+}
+
+.udoui-body-lg {
+  font-size: var(--udoui-text-lg);
+  line-height: var(--udoui-leading-relaxed);
+}
+
+/* ===== HEADINGS ===== */
+.udoui-h1 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-5xl);
+  font-weight: var(--udoui-font-bold);
+  line-height: var(--udoui-leading-tight);
+  margin-bottom: var(--udoui-spacing-6);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-h2 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-4xl);
+  font-weight: var(--udoui-font-semibold);
+  line-height: var(--udoui-leading-tight);
+  margin-bottom: var(--udoui-spacing-5);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-h3 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-3xl);
+  font-weight: var(--udoui-font-semibold);
+  line-height: var(--udoui-leading-snug);
+  margin-bottom: var(--udoui-spacing-4);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-h4 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-2xl);
+  font-weight: var(--udoui-font-medium);
+  line-height: var(--udoui-leading-snug);
+  margin-bottom: var(--udoui-spacing-3);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-h5 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-xl);
+  font-weight: var(--udoui-font-medium);
+  line-height: var(--udoui-leading-normal);
+  margin-bottom: var(--udoui-spacing-2);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-h6 {
+  font-family: var(--udoui-font-heading);
+  font-size: var(--udoui-text-lg);
+  font-weight: var(--udoui-font-semibold);
+  line-height: var(--udoui-leading-normal);
+  margin-bottom: var(--udoui-spacing-2);
+  color: rgb(var(--udoui-text-muted));
+}
+
+/* ===== UI ELEMENTS ===== */
+.udoui-button-text {
+  font-family: var(--udoui-font-ui);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-medium);
+  line-height: var(--udoui-leading-none);
+  letter-spacing: var(--udoui-tracking-wide);
+}
+
+.udoui-input-text {
+  font-family: var(--udoui-font-ui);
+  font-size: var(--udoui-text-base);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-normal);
+}
+
+.udoui-label-text {
+  font-family: var(--udoui-font-ui);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-medium);
+  line-height: var(--udoui-leading-none);
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-menu-text {
+  font-family: var(--udoui-font-ui);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-medium);
+  line-height: var(--udoui-leading-normal);
+}
+
+/* ===== CODE & MONOSPACE ===== */
+.udoui-code {
+  font-family: var(--udoui-font-mono);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-normal);
+  background-color: rgb(var(--udoui-surface));
+  padding: var(--udoui-spacing-1) var(--udoui-spacing-2);
+  border-radius: var(--udoui-radius-md);
+}
+
+.udoui-code-block {
+  font-family: var(--udoui-font-mono);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-relaxed);
+  background-color: rgb(var(--udoui-surface));
+  padding: var(--udoui-spacing-4);
+  border-radius: var(--udoui-radius-lg);
+  overflow-x: auto;
+}
+
+.udoui-terminal {
+  font-family: var(--udoui-font-mono);
+  font-size: var(--udoui-text-sm);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-normal);
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: var(--udoui-spacing-4);
+  border-radius: var(--udoui-radius-lg);
+}
+
+/* ===== DISPLAY / HERO ===== */
+.udoui-display {
+  font-family: var(--udoui-font-display);
+  font-size: var(--udoui-text-7xl);
+  font-weight: var(--udoui-font-bold);
+  line-height: var(--udoui-leading-tight);
+  letter-spacing: var(--udoui-tracking-tight);
+}
+
+.udoui-display-lg {
+  font-size: var(--udoui-text-8xl);
+}
+
+.udoui-display-sm {
+  font-size: var(--udoui-text-6xl);
+}
+
+/* ===== CAPTION & METADATA ===== */
+.udoui-caption {
+  font-family: var(--udoui-font-caption);
+  font-size: var(--udoui-text-xs);
+  font-weight: var(--udoui-font-normal);
+  line-height: var(--udoui-leading-normal);
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-caption-sm {
+  font-size: 0.625rem;
+}
+
+/* ===== TELETEXT EXTENDED ===== */
+.udoui-teletext {
+  font-family: var(--udoui-font-teletext);
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.udoui-teletext-condensed {
+  font-family: 'Teletext50 Condensed', monospace;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.udoui-teletext-extended {
+  font-family: 'Teletext50 Extended', monospace;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.udoui-petscii {
+  font-family: var(--udoui-font-petscii);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.udoui-petscii-double {
+  font-family: var(--udoui-font-petscii-double);
+  font-size: 32px;
+  line-height: 1;
+  transform: scaleY(2);
+  transform-origin: top;
+}
+
+.udoui-retro {
+  font-family: var(--udoui-font-retro);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+.udoui-c64 {
+  font-family: var(--udoui-font-c64);
+  font-size: 16px;
+  line-height: 1.2;
+}

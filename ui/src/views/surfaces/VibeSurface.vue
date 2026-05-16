@@ -99,7 +99,7 @@ async function sendCommand(cmd: string) {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 p-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-cyan-400">🌀 Vibe TUI Surface</h2>

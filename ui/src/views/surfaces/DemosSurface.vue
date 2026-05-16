@@ -5,37 +5,37 @@ const demos = ref([
   {
     name: 'Teletext Console',
     description: 'Retro teletext-style console interface',
-    url: 'http://localhost:3000/surface/teletext-console',
+    url: '/surface/teletext-console',
     preview: '/images/demo-teletext.png'
   },
   {
     name: 'GitHub Theme',
     description: 'GitHub-inspired dark theme with cyan accents',
-    url: 'http://localhost:3000/surface/github-theme',
+    url: '/surface/github-theme',
     preview: '/images/demo-github.png'
   },
   {
     name: 'NES Classic',
     description: 'Nintendo Entertainment System retro theme',
-    url: 'http://localhost:3000/surface/nes-classic',
+    url: '/surface/nes-classic',
     preview: '/images/demo-nes.png'
   },
   {
     name: 'Bedstead Modern',
     description: 'Clean modern interface design',
-    url: 'http://localhost:3000/surface/bedstead-modern',
+    url: '/surface/bedstead-modern',
     preview: '/images/demo-bedstead.png'
   },
   {
     name: 'C64 Retro',
     description: 'Commodore 64 inspired theme',
-    url: 'http://localhost:3000/surface/c64-retro',
+    url: '/surface/c64-retro',
     preview: '/images/demo-c64.png'
   },
   {
     name: 'Wireframe',
     description: 'Minimal wireframe design',
-    url: 'http://localhost:3000/surface/wireframe',
+    url: '/surface/wireframe',
     preview: '/images/demo-wireframe.png'
   }
 ]);
@@ -149,17 +149,26 @@ async function listSurfaces() {
       </div>
       
       <div class="mt-4 pt-2 border-t border-gray-700">
-        <div class="text-xs text-gray-400 mb-1">COMMON SURFACES:</div>
+        <div class="text-xs text-gray-400 mb-1">BUILT-IN SURFACES (local):</div>
         <div class="text-sm text-gray-300 space-x-2">
-          <a href="http://localhost:3000/surface/teletext-console" target="_blank" class="text-cyan-400 hover:underline">
+          <router-link to="/surface/teletext-console" class="text-cyan-400 hover:underline">
             teletext-console
-          </a>
-          <a href="http://localhost:3000/surface/github-theme" target="_blank" class="text-cyan-400 hover:underline">
+          </router-link>
+          <router-link to="/surface/github-theme" class="text-cyan-400 hover:underline">
             github-theme
-          </a>
-          <a href="http://localhost:3000/surface/nes-classic" target="_blank" class="text-cyan-400 hover:underline">
+          </router-link>
+          <router-link to="/surface/nes-classic" class="text-cyan-400 hover:underline">
             nes-classic
-          </a>
+          </router-link>
+          <router-link to="/surface/bedstead-modern" class="text-cyan-400 hover:underline">
+            bedstead-modern
+          </router-link>
+          <router-link to="/surface/c64-retro" class="text-cyan-400 hover:underline">
+            c64-retro
+          </router-link>
+          <router-link to="/surface/wireframe" class="text-cyan-400 hover:underline">
+            wireframe
+          </router-link>
         </div>
       </div>
     </div>

@@ -1,0 +1,103 @@
+{
+  "$schema": "../schema/v1.json",
+  "version": "1.0.0",
+  "meta": {
+    "id": "udoui-target-ucode2",
+    "title": "uCode2 Target Configuration",
+    "description": "Modern browser target for uCode2 — full feature set with PWA, WebGL, and advanced APIs",
+    "target": "web",
+    "responsive": true
+  },
+  "variables": {
+    "bundle_size": {
+      "type": "string",
+      "default": "full",
+      "options": ["small", "medium", "full"],
+      "description": "Bundle size optimization level"
+    }
+  },
+  "compatibility": {
+    "css_grid": true,
+    "flexbox": true,
+    "localStorage": true,
+    "webgl": true,
+    "service_workers": true,
+    "web_components": true,
+    "css_variables": true,
+    "es_modules": true,
+    "intersection_observer": true,
+    "resize_observer": true,
+    "css_container_queries": true,
+    "css_subgrid": true,
+    "web_animations_api": true
+  },
+  "optimizations": {
+    "bundle_size": "full",
+    "lazy_load": false,
+    "preconnect": ["https://fonts.googleapis.com"],
+    "code_splitting": true,
+    "tree_shaking": true,
+    "css_minification": true,
+    "image_optimization": true,
+    "polyfills": []
+  },
+  "features": {
+    "ai_chat": true,
+    "voice_input": true,
+    "drag_drop": true,
+    "file_system_api": true,
+    "pwa_enabled": true,
+    "offline_support": true,
+    "push_notifications": true,
+    "web_workers": true,
+    "webgpu": false,
+    "webtransport": false,
+    "web_codecs": true,
+    "screen_wake_lock": true,
+    "clipboard_api": true,
+    "fullscreen_api": true,
+    "pointer_lock": true,
+    "gamepad_api": true,
+    "speech_synthesis": true,
+    "speech_recognition": true
+  },
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "Chrome >= 100",
+    "Firefox >= 100",
+    "Safari >= 15",
+    "Edge >= 100"
+  ],
+  "components": {
+    "available": [
+      "navbar",
+      "menu",
+      "prose",
+      "card",
+      "table",
+      "terminal",
+      "story_form",
+      "chart",
+      "status_bar",
+      "list",
+      "stats_grid",
+      "divider",
+      "spacer"
+    ],
+    "unavailable": []
+  },
+  "theming": {
+    "mono": true,
+    "flowbite_icons": true,
+    "dark_mode_supported": true,
+    "font_zoom_supported": true,
+    "animations": "full",
+    "pwa": {
+      "enabled": true,
+      "offline_page": "/offline",
+      "cache_strategy": "stale-while-revalidate",
+      "precache_urls": ["/", "/surface/vibe", "/surface/vault"]
+    }
+  }
+}

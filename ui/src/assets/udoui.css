@@ -1,0 +1,1047 @@
+/* ============================================================
+   udoui.css — Universal Document Oriented User Interface
+   Complete browser GUI styling for uCode1 + uCode2
+   
+   Based on: Mono theme + Flowbite icons
+   Inherits: USX CSS variables for consistency
+   ============================================================ */
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
+:root {
+  /* ===== COLOR SYSTEM - Mono only ===== */
+  --udoui-bg: 255 255 255;
+  --udoui-surface: 248 250 252;
+  --udoui-text: 15 23 42;
+  --udoui-text-muted: 100 116 139;
+  --udoui-border: 226 232 240;
+  --udoui-primary: 15 23 42;
+  --udoui-primary-text: 255 255 255;
+  --udoui-secondary: 100 116 139;
+  
+  /* ===== TYPOGRAPHY ===== */
+  --udoui-font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --udoui-font-heading: 'Inter', system-ui, sans-serif;
+  --udoui-font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  /* Font sizes (scalable) */
+  --udoui-font-xs: 0.75rem;
+  --udoui-font-sm: 0.875rem;
+  --udoui-font-base: 1rem;
+  --udoui-font-lg: 1.125rem;
+  --udoui-font-xl: 1.25rem;
+  --udoui-font-2xl: 1.5rem;
+  --udoui-font-3xl: 1.875rem;
+  
+  /* ===== SPACING ===== */
+  --udoui-spacing-1: 0.25rem;
+  --udoui-spacing-2: 0.5rem;
+  --udoui-spacing-3: 0.75rem;
+  --udoui-spacing-4: 1rem;
+  --udoui-spacing-5: 1.25rem;
+  --udoui-spacing-6: 1.5rem;
+  --udoui-spacing-8: 2rem;
+  --udoui-spacing-10: 2.5rem;
+  --udoui-spacing-12: 3rem;
+  
+  /* ===== BORDERS ===== */
+  --udoui-radius-sm: 0.25rem;
+  --udoui-radius-md: 0.5rem;
+  --udoui-radius-lg: 0.75rem;
+  --udoui-radius-xl: 1rem;
+  --udoui-radius-2xl: 1.5rem;
+  
+  /* ===== SHADOWS (flat, minimal) ===== */
+  --udoui-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --udoui-shadow-md: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --udoui-shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  
+  /* ===== TRANSITIONS ===== */
+  --udoui-transition: 150ms ease;
+}
+
+/* ===== DARK MODE ===== */
+.dark {
+  --udoui-bg: 10 14 23;
+  --udoui-surface: 21 27 41;
+  --udoui-text: 241 245 249;
+  --udoui-text-muted: 148 163 184;
+  --udoui-border: 51 65 85;
+  --udoui-primary: 241 245 249;
+  --udoui-primary-text: 10 14 23;
+}
+
+/* ===== FONT ZOOM SUPPORT ===== */
+[data-font-size="small"] { font-size: 14px; }
+[data-font-size="medium"] { font-size: 16px; }
+[data-font-size="large"] { font-size: 18px; }
+[data-font-size="xlarge"] { font-size: 20px; }
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+.udoui-app {
+  font-family: var(--udoui-font-sans);
+  font-size: var(--udoui-font-base);
+  color: rgb(var(--udoui-text));
+  background-color: rgb(var(--udoui-bg));
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   LAYOUT COMPONENTS
+   ============================================================ */
+
+/* Grid Layout */
+.udoui-grid {
+  display: grid;
+  gap: var(--udoui-spacing-4);
+  padding: var(--udoui-spacing-6);
+}
+
+/* Flex Layout */
+.udoui-flex {
+  display: flex;
+  gap: var(--udoui-spacing-4);
+}
+
+/* Stack Layout */
+.udoui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--udoui-spacing-4);
+}
+
+/* ============================================================
+   NAVBAR COMPONENT
+   ============================================================ */
+
+.udoui-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-6);
+  background-color: rgb(var(--udoui-surface));
+  border-bottom: 1px solid rgb(var(--udoui-border));
+  height: 56px;
+}
+
+.udoui-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-3);
+}
+
+.udoui-navbar-logo {
+  font-size: var(--udoui-font-xl);
+  font-weight: 700;
+  color: rgb(var(--udoui-primary));
+}
+
+.udoui-navbar-title {
+  font-size: var(--udoui-font-lg);
+  font-weight: 600;
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-navbar-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-navbar-breadcrumbs .separator {
+  color: rgb(var(--udoui-text-muted));
+  opacity: 0.5;
+}
+
+.udoui-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+}
+
+.udoui-navbar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--udoui-radius-md);
+  border: none;
+  background: transparent;
+  color: rgb(var(--udoui-text-muted));
+  cursor: pointer;
+  transition: all var(--udoui-transition);
+  position: relative;
+}
+
+.udoui-navbar-action:hover {
+  background-color: rgb(var(--udoui-border));
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-navbar-action .badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+}
+
+/* User Menu */
+.udoui-user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+  padding: var(--udoui-spacing-1) var(--udoui-spacing-2);
+  border-radius: var(--udoui-radius-md);
+  cursor: pointer;
+  transition: background var(--udoui-transition);
+}
+
+.udoui-user-menu:hover {
+  background-color: rgb(var(--udoui-border));
+}
+
+.udoui-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--udoui-font-sm);
+  font-weight: 600;
+}
+
+.udoui-user-name {
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text));
+}
+
+/* ============================================================
+   SIDEBAR / MENU COMPONENT
+   ============================================================ */
+
+.udoui-sidebar {
+  width: 240px;
+  background-color: rgb(var(--udoui-surface));
+  border-right: 1px solid rgb(var(--udoui-border));
+  padding: var(--udoui-spacing-3);
+  overflow-y: auto;
+  transition: width var(--udoui-transition);
+}
+
+.udoui-sidebar.collapsed {
+  width: 56px;
+}
+
+.udoui-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-3);
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-3);
+  border-radius: var(--udoui-radius-md);
+  color: rgb(var(--udoui-text));
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--udoui-transition);
+  font-size: var(--udoui-font-sm);
+  position: relative;
+}
+
+.udoui-menu-item:hover {
+  background-color: rgb(var(--udoui-border));
+}
+
+.udoui-menu-item.active {
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+  font-weight: 500;
+}
+
+.udoui-menu-item .menu-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.udoui-menu-item .menu-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: rgb(var(--udoui-border));
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-menu-item.active .menu-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgb(var(--udoui-primary-text));
+}
+
+.udoui-menu-divider {
+  height: 1px;
+  background-color: rgb(var(--udoui-border));
+  margin: var(--udoui-spacing-2) var(--udoui-spacing-3);
+}
+
+.udoui-menu-children {
+  padding-left: var(--udoui-spacing-8);
+}
+
+/* ============================================================
+   PROSE / CONTENT COMPONENT
+   ============================================================ */
+
+.udoui-prose {
+  max-width: 70ch;
+  font-family: var(--udoui-font-sans);
+  color: rgb(var(--udoui-text));
+  line-height: 1.75;
+}
+
+.udoui-prose h1 {
+  font-size: var(--udoui-font-3xl);
+  font-weight: 700;
+  margin-bottom: var(--udoui-spacing-4);
+  color: rgb(var(--udoui-text));
+  letter-spacing: -0.02em;
+}
+
+.udoui-prose h2 {
+  font-size: var(--udoui-font-2xl);
+  font-weight: 600;
+  margin-top: var(--udoui-spacing-8);
+  margin-bottom: var(--udoui-spacing-3);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-prose h3 {
+  font-size: var(--udoui-font-xl);
+  font-weight: 600;
+  margin-top: var(--udoui-spacing-6);
+  margin-bottom: var(--udoui-spacing-2);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-prose p {
+  margin-bottom: var(--udoui-spacing-4);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-prose a {
+  color: rgb(var(--udoui-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.udoui-prose a:hover {
+  opacity: 0.8;
+}
+
+.udoui-prose code {
+  font-family: var(--udoui-font-mono);
+  font-size: 0.9em;
+  padding: 0.15em 0.3em;
+  background-color: rgb(var(--udoui-surface));
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-sm);
+}
+
+.udoui-prose pre {
+  font-family: var(--udoui-font-mono);
+  font-size: var(--udoui-font-sm);
+  padding: var(--udoui-spacing-4);
+  background-color: rgb(var(--udoui-surface));
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-md);
+  overflow-x: auto;
+  margin-bottom: var(--udoui-spacing-4);
+}
+
+.udoui-prose blockquote {
+  border-left: 3px solid rgb(var(--udoui-primary));
+  padding-left: var(--udoui-spacing-4);
+  margin-left: 0;
+  color: rgb(var(--udoui-text-muted));
+  font-style: italic;
+}
+
+.udoui-prose ul,
+.udoui-prose ol {
+  padding-left: var(--udoui-spacing-6);
+  margin-bottom: var(--udoui-spacing-4);
+}
+
+.udoui-prose li {
+  margin-bottom: var(--udoui-spacing-1);
+}
+
+.udoui-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--udoui-spacing-4);
+}
+
+.udoui-prose th,
+.udoui-prose td {
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-3);
+  border: 1px solid rgb(var(--udoui-border));
+  text-align: left;
+  font-size: var(--udoui-font-sm);
+}
+
+.udoui-prose th {
+  background-color: rgb(var(--udoui-surface));
+  font-weight: 600;
+}
+
+.udoui-prose.dropcap::first-letter {
+  float: left;
+  font-size: 3em;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: 0.5rem;
+  color: rgb(var(--udoui-primary));
+}
+
+/* ============================================================
+   CARD COMPONENT
+   ============================================================ */
+
+.udoui-card {
+  background-color: rgb(var(--udoui-surface));
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--udoui-transition);
+}
+
+.udoui-card:hover {
+  box-shadow: var(--udoui-shadow-md);
+}
+
+.udoui-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--udoui-spacing-4) var(--udoui-spacing-5);
+  border-bottom: 1px solid rgb(var(--udoui-border));
+}
+
+.udoui-card-header h3 {
+  font-size: var(--udoui-font-sm);
+  font-weight: 600;
+  color: rgb(var(--udoui-text));
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+}
+
+.udoui-card-content {
+  padding: var(--udoui-spacing-5);
+}
+
+.udoui-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-5);
+  border-top: 1px solid rgb(var(--udoui-border));
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text-muted));
+}
+
+/* Card Variants */
+.udoui-card.outline {
+  border-width: 2px;
+}
+
+.udoui-card.filled {
+  background-color: rgb(var(--udoui-bg));
+  border-color: transparent;
+}
+
+.udoui-card.ghost {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+/* Stats Grid (inside cards) */
+.udoui-stats-grid {
+  display: grid;
+  gap: var(--udoui-spacing-4);
+}
+
+.udoui-stat-item {
+  text-align: center;
+  padding: var(--udoui-spacing-3);
+}
+
+.udoui-stat-value {
+  font-size: var(--udoui-font-2xl);
+  font-weight: 700;
+  color: rgb(var(--udoui-text));
+  display: block;
+}
+
+.udoui-stat-label {
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text-muted));
+  display: block;
+  margin-top: var(--udoui-spacing-1);
+}
+
+.udoui-stat-trend {
+  font-size: var(--udoui-font-xs);
+  color: rgb(var(--udoui-text-muted));
+  display: block;
+  margin-top: var(--udoui-spacing-1);
+}
+
+/* ============================================================
+   TABLE COMPONENT
+   ============================================================ */
+
+.udoui-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-lg);
+}
+
+.udoui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--udoui-font-sm);
+}
+
+.udoui-table thead {
+  background-color: rgb(var(--udoui-surface));
+}
+
+.udoui-table th {
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-4);
+  text-align: left;
+  font-weight: 600;
+  color: rgb(var(--udoui-text));
+  border-bottom: 1px solid rgb(var(--udoui-border));
+  white-space: nowrap;
+  user-select: none;
+}
+
+.udoui-table th.sortable {
+  cursor: pointer;
+}
+
+.udoui-table th.sortable:hover {
+  background-color: rgb(var(--udoui-border));
+}
+
+.udoui-table th .sort-icon {
+  margin-left: var(--udoui-spacing-1);
+  opacity: 0.5;
+}
+
+.udoui-table td {
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-4);
+  border-bottom: 1px solid rgb(var(--udoui-border));
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-table tbody tr {
+  transition: background-color var(--udoui-transition);
+}
+
+.udoui-table tbody tr:hover {
+  background-color: rgb(var(--udoui-surface));
+}
+
+.udoui-table tbody tr.clickable {
+  cursor: pointer;
+}
+
+.udoui-table-search {
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-4);
+  border-bottom: 1px solid rgb(var(--udoui-border));
+}
+
+.udoui-table-search input {
+  width: 100%;
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-3);
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-md);
+  font-size: var(--udoui-font-sm);
+  font-family: var(--udoui-font-sans);
+  background-color: rgb(var(--udoui-bg));
+  color: rgb(var(--udoui-text));
+  outline: none;
+}
+
+.udoui-table-search input:focus {
+  border-color: rgb(var(--udoui-primary));
+}
+
+.udoui-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-4);
+  border-top: 1px solid rgb(var(--udoui-border));
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-table-pagination button {
+  padding: var(--udoui-spacing-1) var(--udoui-spacing-3);
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-md);
+  background-color: rgb(var(--udoui-surface));
+  color: rgb(var(--udoui-text));
+  cursor: pointer;
+  font-size: var(--udoui-font-sm);
+  transition: all var(--udoui-transition);
+}
+
+.udoui-table-pagination button:hover {
+  background-color: rgb(var(--udoui-border));
+}
+
+.udoui-table-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   TERMINAL COMPONENT
+   ============================================================ */
+
+.udoui-terminal {
+  background-color: #0a0a0a;
+  border: 1px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-lg);
+  overflow: hidden;
+  font-family: var(--udoui-font-mono);
+}
+
+.udoui-terminal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-3);
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.udoui-terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.udoui-terminal-dot.red { background-color: #ff5f56; }
+.udoui-terminal-dot.yellow { background-color: #ffbd2e; }
+.udoui-terminal-dot.green { background-color: #27c93f; }
+
+.udoui-terminal-title {
+  font-size: var(--udoui-font-xs);
+  color: #666;
+  margin-left: var(--udoui-spacing-2);
+}
+
+.udoui-terminal-body {
+  padding: var(--udoui-spacing-4);
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  color: #e2e8f0;
+  font-size: var(--udoui-font-sm);
+  line-height: 1.6;
+}
+
+.udoui-terminal-line {
+  white-space: pre-wrap;
+  margin-bottom: 2px;
+}
+
+.udoui-terminal-prompt {
+  color: #4ade80;
+}
+
+.udoui-terminal-input-line {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+}
+
+.udoui-terminal-cursor {
+  color: #e2e8f0;
+  animation: udoui-blink 0.5s step-end infinite;
+}
+
+@keyframes udoui-blink {
+  50% { opacity: 0; }
+}
+
+.udoui-terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-family: var(--udoui-font-mono);
+  font-size: var(--udoui-font-sm);
+  outline: none;
+}
+
+/* ============================================================
+   STORY FORM COMPONENT (Typeform-Style)
+   ============================================================ */
+
+.udoui-story-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--udoui-spacing-8);
+}
+
+.udoui-form-step {
+  animation: udoui-fade-in 0.3s ease;
+}
+
+@keyframes udoui-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.udoui-form-step-intro {
+  text-align: center;
+  padding: var(--udoui-spacing-8);
+}
+
+.udoui-form-step-intro h2 {
+  font-size: var(--udoui-font-2xl);
+  font-weight: 700;
+  margin-bottom: var(--udoui-spacing-3);
+}
+
+.udoui-form-step-intro p {
+  color: rgb(var(--udoui-text-muted));
+  font-size: var(--udoui-font-lg);
+}
+
+.udoui-form-label {
+  display: block;
+  font-size: var(--udoui-font-lg);
+  font-weight: 600;
+  margin-bottom: var(--udoui-spacing-3);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-form-input {
+  width: 100%;
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-4);
+  border: 2px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-md);
+  font-size: var(--udoui-font-lg);
+  font-family: var(--udoui-font-sans);
+  background-color: rgb(var(--udoui-bg));
+  color: rgb(var(--udoui-text));
+  outline: none;
+  transition: border-color var(--udoui-transition);
+}
+
+.udoui-form-input:focus {
+  border-color: rgb(var(--udoui-primary));
+}
+
+.udoui-form-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--udoui-spacing-3);
+}
+
+.udoui-form-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--udoui-spacing-2);
+  padding: var(--udoui-spacing-5);
+  border: 2px solid rgb(var(--udoui-border));
+  border-radius: var(--udoui-radius-lg);
+  cursor: pointer;
+  transition: all var(--udoui-transition);
+  text-align: center;
+}
+
+.udoui-form-choice:hover {
+  border-color: rgb(var(--udoui-primary));
+  background-color: rgb(var(--udoui-surface));
+}
+
+.udoui-form-choice.selected {
+  border-color: rgb(var(--udoui-primary));
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+}
+
+.udoui-form-choice-icon {
+  font-size: 2rem;
+}
+
+.udoui-form-choice-label {
+  font-size: var(--udoui-font-sm);
+  font-weight: 500;
+}
+
+.udoui-form-scale {
+  display: flex;
+  gap: var(--udoui-spacing-2);
+  justify-content: center;
+}
+
+.udoui-form-scale-btn {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgb(var(--udoui-border));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--udoui-font-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--udoui-transition);
+  background-color: rgb(var(--udoui-bg));
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-form-scale-btn:hover {
+  border-color: rgb(var(--udoui-primary));
+  background-color: rgb(var(--udoui-surface));
+}
+
+.udoui-form-scale-btn.selected {
+  border-color: rgb(var(--udoui-primary));
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+}
+
+.udoui-form-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--udoui-spacing-2);
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text-muted));
+}
+
+.udoui-form-confirm {
+  text-align: center;
+  padding: var(--udoui-spacing-8);
+}
+
+.udoui-form-confirm h2 {
+  font-size: var(--udoui-font-2xl);
+  font-weight: 700;
+  margin-bottom: var(--udoui-spacing-4);
+}
+
+.udoui-form-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--udoui-spacing-6);
+}
+
+.udoui-btn {
+  padding: var(--udoui-spacing-3) var(--udoui-spacing-6);
+  border: 2px solid rgb(var(--udoui-primary));
+  border-radius: var(--udoui-radius-md);
+  font-size: var(--udoui-font-base);
+  font-weight: 600;
+  font-family: var(--udoui-font-sans);
+  cursor: pointer;
+  transition: all var(--udoui-transition);
+  background-color: transparent;
+  color: rgb(var(--udoui-primary));
+}
+
+.udoui-btn:hover {
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+}
+
+.udoui-btn.primary {
+  background-color: rgb(var(--udoui-primary));
+  color: rgb(var(--udoui-primary-text));
+}
+
+.udoui-btn.primary:hover {
+  opacity: 0.9;
+}
+
+.udoui-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   CHART COMPONENT
+   ============================================================ */
+
+.udoui-chart {
+  padding: var(--udoui-spacing-4);
+}
+
+.udoui-chart-title {
+  font-size: var(--udoui-font-sm);
+  font-weight: 600;
+  color: rgb(var(--udoui-text));
+  margin-bottom: var(--udoui-spacing-3);
+}
+
+.udoui-chart-container {
+  position: relative;
+  width: 100%;
+}
+
+/* ============================================================
+   STATUS BAR COMPONENT
+   ============================================================ */
+
+.udoui-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-4);
+  background-color: rgb(var(--udoui-surface));
+  border-top: 1px solid rgb(var(--udoui-border));
+  font-size: var(--udoui-font-xs);
+  color: rgb(var(--udoui-text-muted));
+  height: 28px;
+}
+
+.udoui-status-left,
+.udoui-status-right {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-3);
+}
+
+.udoui-status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--udoui-spacing-1);
+}
+
+/* ============================================================
+   LIST COMPONENT
+   ============================================================ */
+
+.udoui-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.udoui-list-item {
+  padding: var(--udoui-spacing-2) var(--udoui-spacing-3);
+  border-bottom: 1px solid rgb(var(--udoui-border));
+  font-size: var(--udoui-font-sm);
+  color: rgb(var(--udoui-text));
+}
+
+.udoui-list-item:last-child {
+  border-bottom: none;
+}
+
+/* ============================================================
+   RESPONSIVE UTILITIES
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .udoui-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgb(var(--udoui-border));
+  }
+
+  .udoui-navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: var(--udoui-spacing-2) var(--udoui-spacing-4);
+  }
+
+  .udoui-navbar-breadcrumbs {
+    display: none;
+  }
+
+  .udoui-form-choice-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .udoui-form-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .udoui-table-pagination {
+    flex-direction: column;
+    gap: var(--udoui-spacing-2);
+  }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+.udoui-app ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.udoui-app ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.udoui-app ::-webkit-scrollbar-thumb {
+  background-color: rgb(var(--udoui-border));
+  border-radius: 4px;
+}
+
+.udoui-app ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(var(--udoui-text-muted));
+}
+
+/* ============================================================
+   NES POINTER CURSOR (global — pixelated hand cursor)
+   Extracted from nes.css so it's available across all surfaces
+   without importing the full NES.css framework globally.
+   ============================================================ */
+
+.nes-pointer {
+  cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAzElEQVRYR+2X0Q6AIAhF5f8/2jYXZkwEjNSVvVUjDpcrGgT7FUkI2D9xRfQETwNIiWO85wfINfQUEyxBG2ArsLwC0jioGt5zFcwF4OYDPi/mBYKm4t0U8ATgRm3ThFoAqkhNgWkA0jJLvaOVSs7j3qMnSgXWBMiWPXe94QqMBMBc1VZIvaTu5u5pQewq0EqNZvIEMCmxAawK0DNkay9QmfFNAJUXfgGgUkLaE7j/h8fnASkxHTz0DGIBMCnBeeM7AArpUd3mz2x3C7wADglA8BcWMZhZAAAAAElFTkSuQmCC) 14 0, pointer;
+}

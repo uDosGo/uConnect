@@ -1,0 +1,75 @@
+SURFACE name="nes-classic" version="A1.0.0" title="NES Classic"
+
+STYLE
+  background: #181a1b
+  ink: #e8e8e8
+  accent: #5040a0
+  accent-dark: #302080
+  accent-light: #7050c0
+  success: #4caf50
+  warning: #ff9800
+  surface: #202020
+  surface-hover: #2a2a2a
+  border: #5040a0
+  font-family: "Courier New, Press Start 2P, monospace"
+  pixelated: true
+
+REGIONS
+  header: "uDos NES SYSTEM v1.0"
+  score: "SCORE: 000042"
+  footer: "PRESS START TO CONTINUE"
+
+BLOCKS
+  block id="boot"
+    type: nes-grid
+    items:
+      - icon: "🗄️"
+        title: "VAULT"
+        desc: "File Management"
+        status: ready
+      - icon: "🌀"
+        title: "VIBE"
+        desc: "AI Chat Interface"
+        status: ready
+      - icon: "🔌"
+        title: "MCP"
+        desc: "Tool Bridge"
+        status: ready
+      - icon: "📖"
+        title: "USXD"
+        desc: "Document Viewer"
+        status: ready
+      - icon: "🌐"
+        title: "GITHUB"
+        desc: "Repository Sync"
+        status: loading
+      - icon: "⚙️"
+        title: "WORKFLOW"
+        desc: "Automation Engine"
+        status: ready
+      - icon: "⚙️"
+        title: "SETTINGS"
+        desc: "System Config"
+        status: ready
+      - icon: "🎨"
+        title: "DEMOS"
+        desc: "Demo Surfaces"
+        status: ready
+
+  block id="help"
+    type: nes-modal
+    title: "HELP"
+    content: |
+      🎮 NES Classic Surface
+      
+      Select an application from the grid and press START (A) to launch it.
+      
+      Use BACK (←) to return to the menu.
+      
+      ⬆ ⬇ ⬅ ➡ + A + B + START
+
+COMMANDS
+  command id="help" block="help"
+  command id="start" action="launch"
+  command id="back" action="back"
+  command id="select" action="select"

@@ -171,7 +171,7 @@ watch(mistralConfig, (newConfig) => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 p-4">
     <!-- Header -->
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold text-cyan-400">🔧 Dev Mode Dashboard</h2>

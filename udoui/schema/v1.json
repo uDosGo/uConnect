@@ -1,0 +1,448 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://udoui.dev/schema/v1",
+  "title": "UDOUI Schema v1",
+  "description": "Universal Document Oriented User Interface schema for uCode1 + uCode2 browser-based GUI layer. Extends USX principles to the web with Liquid templates, CSS Grid layout, mono theme, and Flowbite icons.",
+  "type": "object",
+  "version": "1.0.0",
+  "required": ["version", "meta", "components"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version (e.g. 1.0.0)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the UDOUI interface",
+      "required": ["id", "title"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this interface"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the interface"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target platform",
+          "enum": ["web", "electron", "pwa"],
+          "default": "web"
+        },
+        "responsive": {
+          "type": "boolean",
+          "description": "Whether the interface supports responsive layout",
+          "default": true
+        }
+      }
+    },
+    "variables": {
+      "type": "object",
+      "description": "Template variables that can be used in Liquid expressions throughout the schema",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "array", "object"]
+          },
+          "default": {
+            "description": "Default value for the variable"
+          },
+          "options": {
+            "type": "array",
+            "description": "Allowed values (for enum-like variables)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the variable"
+          }
+        },
+        "required": ["type"]
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "Grid layout definition for the interface",
+      "required": ["type", "columns"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["grid", "flex", "stack"],
+          "description": "Layout engine type"
+        },
+        "columns": {
+          "type": "integer",
+          "description": "Number of grid columns (for grid layout)",
+          "minimum": 1,
+          "maximum": 24,
+          "default": 12
+        },
+        "gap": {
+          "type": "string",
+          "description": "CSS gap value (e.g. 'var(--udoui-spacing-4)')"
+        },
+        "padding": {
+          "type": "string",
+          "description": "CSS padding value"
+        },
+        "template": {
+          "type": "object",
+          "description": "Named grid areas mapping component IDs to grid positions",
+          "additionalProperties": {
+            "type": "string",
+            "description": "Grid column span (e.g. '1 / 13' for full width)"
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "description": "Array of UI components to render",
+      "items": {
+        "$ref": "#/definitions/component"
+      },
+      "minItems": 1
+    },
+    "theming": {
+      "type": "object",
+      "description": "Theme configuration",
+      "properties": {
+        "inherits": {
+          "type": "string",
+          "description": "URI of parent theme to inherit from"
+        },
+        "mono": {
+          "type": "boolean",
+          "description": "Whether to enforce mono (grayscale) theme",
+          "default": true
+        },
+        "flowbite_icons": {
+          "type": "boolean",
+          "description": "Whether to use Flowbite icon set",
+          "default": true
+        },
+        "dark_mode_supported": {
+          "type": "boolean",
+          "description": "Whether dark mode is supported",
+          "default": true
+        },
+        "overrides": {
+          "type": "object",
+          "description": "CSS variable overrides",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interactions": {
+      "type": "object",
+      "description": "Keyboard shortcuts and gesture bindings",
+      "properties": {
+        "keyboard": {
+          "type": "object",
+          "description": "Keyboard shortcut mappings",
+          "additionalProperties": {
+            "type": "string",
+            "description": "Action identifier (e.g. 'command_palette.open')"
+          }
+        },
+        "gestures": {
+          "type": "object",
+          "description": "Gesture mappings for touch devices",
+          "additionalProperties": {
+            "type": "string",
+            "description": "Action identifier"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "component": {
+      "type": "object",
+      "description": "A UI component definition",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique component identifier within this interface"
+        },
+        "type": {
+          "type": "string",
+          "description": "Component type",
+          "enum": [
+            "navbar",
+            "menu",
+            "prose",
+            "card",
+            "table",
+            "terminal",
+            "story_form",
+            "chart",
+            "status_bar",
+            "list",
+            "stats_grid",
+            "divider",
+            "spacer"
+          ]
+        },
+        "content": {
+          "description": "Component content (type-dependent)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Component title"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Flowbite icon name or emoji"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Visual variant",
+          "enum": ["default", "outline", "filled", "ghost"]
+        },
+        "position": {
+          "type": "string",
+          "description": "Position for layout components",
+          "enum": ["left", "right", "top", "bottom"]
+        },
+        "collapsible": {
+          "type": "boolean",
+          "description": "Whether the component can be collapsed"
+        },
+        "items": {
+          "type": "array",
+          "description": "Items for menu, list, and similar components",
+          "items": {
+            "$ref": "#/definitions/menuItem"
+          }
+        },
+        "format": {
+          "type": "string",
+          "description": "Content format (for prose components)",
+          "enum": ["markdown", "html", "text", "liquid"]
+        },
+        "height": {
+          "type": "string",
+          "description": "Component height (CSS value)"
+        },
+        "max_width": {
+          "type": "string",
+          "description": "Maximum width (CSS value, e.g. '70ch')"
+        },
+        "columns": {
+          "type": "array",
+          "description": "Column definitions (for table components)",
+          "items": {
+            "$ref": "#/definitions/tableColumn"
+          }
+        },
+        "data": {
+          "description": "Data source reference (Liquid expression)"
+        },
+        "searchable": {
+          "type": "boolean",
+          "description": "Whether the component supports search"
+        },
+        "paginated": {
+          "type": "boolean",
+          "description": "Whether the component supports pagination"
+        },
+        "rows_per_page": {
+          "type": "integer",
+          "description": "Number of rows per page"
+        },
+        "steps": {
+          "type": "array",
+          "description": "Steps for story_form components",
+          "items": {
+            "$ref": "#/definitions/formStep"
+          }
+        },
+        "footer": {
+          "type": "object",
+          "description": "Footer configuration",
+          "properties": {
+            "text": { "type": "string" },
+            "action": { "$ref": "#/definitions/action" }
+          }
+        },
+        "features": {
+          "type": "object",
+          "description": "Feature flags for the component"
+        },
+        "on_row_click": {
+          "type": "string",
+          "description": "Action to trigger on row click"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "const": "navbar" } }
+          },
+          "then": {
+            "properties": {
+              "content": { "$ref": "#/definitions/navbarContent" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "menu" } }
+          },
+          "then": {
+            "required": ["items"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "table" } }
+          },
+          "then": {
+            "required": ["columns", "data"]
+          }
+        },
+        {
+          "if": {
+            "properties": { "type": { "const": "story_form" } }
+          },
+          "then": {
+            "required": ["steps"]
+          }
+        }
+      ]
+    },
+    "navbarContent": {
+      "type": "object",
+      "properties": {
+        "logo": { "type": "string" },
+        "title": { "type": "string" },
+        "breadcrumbs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "icon": { "type": "string" },
+              "action": { "type": "string" },
+              "tooltip": { "type": "string" },
+              "badge": { "type": ["integer", "string"] }
+            }
+          }
+        },
+        "user_menu": {
+          "type": "object",
+          "properties": {
+            "avatar": { "type": "string" },
+            "name": { "type": "string" },
+            "email": { "type": "string" },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": { "type": "string" },
+                  "action": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "menuItem": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "icon": { "type": "string" },
+        "route": { "type": "string" },
+        "active": { "type": "boolean" },
+        "badge": { "type": ["string", "integer"] },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/menuItem" }
+        },
+        "type": {
+          "type": "string",
+          "enum": ["item", "divider"]
+        }
+      }
+    },
+    "tableColumn": {
+      "type": "object",
+      "required": ["field", "label"],
+      "properties": {
+        "field": { "type": "string" },
+        "label": { "type": "string" },
+        "sortable": { "type": "boolean" },
+        "filterable": { "type": "boolean" },
+        "align": {
+          "type": "string",
+          "enum": ["left", "center", "right"]
+        },
+        "width": { "type": "string" }
+      }
+    },
+    "formStep": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["intro", "input", "choice", "scale", "confirm"]
+        },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "label": { "type": "string" },
+        "variable": { "type": "string" },
+        "placeholder": { "type": "string" },
+        "required": { "type": "boolean" },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": { "type": "string" },
+              "label": { "type": "string" },
+              "icon": { "type": "string" }
+            }
+          }
+        },
+        "min": { "type": "integer" },
+        "max": { "type": "integer" },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "confirm_label": { "type": "string" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "action": { "type": "string" },
+        "icon": { "type": "string" }
+      }
+    }
+  }
+}

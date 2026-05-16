@@ -1,0 +1,118 @@
+SURFACE name="teletext-console" version="A1.0.0" title="Teletext Console"
+
+STYLE
+  background: #0a0a0a
+  ink: #33ff33
+  dim: #1a8c1a
+  bright: #66ff66
+  border: #33ff33
+  header-bg: #111111
+  font-family: "Courier New, Consolas, monospace"
+  scanlines: true
+  phosphor: green
+
+REGIONS
+  header: "uDos Teletext v1.0"
+  status: "CHANNEL 1"
+  footer: "PAGE 001"
+  prompt: ">"
+
+BLOCKS
+  block id="boot"
+    type: teletext-page
+    content: |
+      ╔══════════════════════════════════════╗
+      ║    uDos Teletext Console v1.0        ║
+      ║    Type "help" for commands           ║
+      ╚══════════════════════════════════════╝
+      
+      System ready. Waiting for input...
+
+  block id="status"
+    type: teletext-page
+    content: |
+      ╔══════════════════════════════════════╗
+      ║        uDos System Status            ║
+      ╠══════════════════════════════════════╣
+      ║  Version:    1.1.0                   ║
+      ║  Vault:      ~/Vault (42 entries)    ║
+      ║  MCP:        Connected               ║
+      ║  USXD:       Ready                   ║
+      ║  Vibe:       Idle                    ║
+      ╚══════════════════════════════════════╝
+
+  block id="help"
+    type: teletext-list
+    items:
+      - "Available commands:"
+      - "  status      - Show system status"
+      - "  list        - List vault contents"
+      - "  vibe        - Start Vibe TUI"
+      - "  mcp         - MCP Bridge status"
+      - "  usxd        - USXD Renderer status"
+      - "  github      - GitHub Sync status"
+      - "  workflow    - Workflow Engine status"
+      - "  vault       - Vault operations"
+      - "  clear       - Clear screen"
+      - "  help        - Show this help"
+
+  block id="vault-list"
+    type: teletext-list
+    items:
+      - "📁 Vault Contents:"
+      - "  README.md         2.4 KB"
+      - "  workflows/        -"
+      - "  notes/            -"
+      - "  config.yaml      1.2 KB"
+      - "  surfaces/         -"
+
+  block id="mcp-status"
+    type: teletext-page
+    content: |
+      🔌 MCP Bridge Status:
+        Server:      Connected
+        Tools:       12 registered
+        Resources:   8 available
+
+  block id="usxd-status"
+    type: teletext-page
+    content: |
+      📖 USXD Renderer:
+        Documents:   5 available
+        Templates:   4 installed
+        Server:      Ready on :3000
+
+  block id="github-status"
+    type: teletext-page
+    content: |
+      🌐 GitHub Sync:
+        Repo:        uDosGo/Connect
+        Branch:      main
+        Status:      Up to date
+
+  block id="workflow-status"
+    type: teletext-page
+    content: |
+      ⚙️ Workflow Engine:
+        Active:      2 workflows
+        Pending:     1 workflow
+        Completed:   15 workflows
+
+  block id="vault-status"
+    type: teletext-page
+    content: |
+      🗄️ Vault Operations:
+        Location:    ~/Vault
+        Entries:     42 files
+        Last Sync:   Today 14:30
+
+COMMANDS
+  command id="status" block="status"
+  command id="list" block="vault-list"
+  command id="help" block="help"
+  command id="mcp" block="mcp-status"
+  command id="usxd" block="usxd-status"
+  command id="github" block="github-status"
+  command id="workflow" block="workflow-status"
+  command id="vault" block="vault-status"
+  command id="clear" action="clear"

@@ -1,0 +1,102 @@
+{
+  "$schema": "../schema/v1.json",
+  "version": "1.0.0",
+  "meta": {
+    "id": "ucode-workspace",
+    "title": "uCode Development Environment",
+    "description": "Browser-based GUI for uCode1 and uCode2",
+    "target": "ucode2",
+    "responsive": true
+  },
+  
+  "variables": {
+    "workspace_name": { "type": "string", "default": "My Workspace" },
+    "theme": { "type": "string", "default": "light", "options": ["light", "dark"] },
+    "font_size": { "type": "string", "default": "medium", "options": ["small", "medium", "large", "xlarge"] }
+  },
+  
+  "layout": {
+    "type": "grid",
+    "columns": 12,
+    "gap": "var(--udoui-spacing-4)",
+    "padding": "var(--udoui-spacing-6)",
+    "template": {
+      "header": "1 / 13",
+      "sidebar": "2 / 4",
+      "main": "4 / 10",
+      "right": "10 / 13",
+      "footer": "1 / 13"
+    }
+  },
+  
+  "components": [
+    {
+      "id": "header",
+      "type": "navbar",
+      "content": {
+        "title": "{{ workspace_name }}",
+        "actions": [
+          { "icon": "search", "action": "search.open" },
+          { "icon": "settings", "action": "settings.open" },
+          { "icon": "notifications", "action": "notifications.show" }
+        ]
+      }
+    },
+    {
+      "id": "sidebar",
+      "type": "menu",
+      "items": [
+        { "label": "Dashboard", "icon": "dashboard", "route": "/" },
+        { "label": "Files", "icon": "folder", "route": "/files" },
+        { "label": "Tasks", "icon": "checklist", "route": "/tasks" },
+        { "label": "Terminal", "icon": "terminal", "route": "/terminal" },
+        { "label": "Settings", "icon": "settings", "route": "/settings" }
+      ]
+    },
+    {
+      "id": "main_content",
+      "type": "prose",
+      "content": "# Welcome to uCode\n\nThis is your development environment.",
+      "format": "markdown"
+    },
+    {
+      "id": "right_panel",
+      "type": "card",
+      "title": "Recent Activity",
+      "content": {
+        "type": "list",
+        "items": [
+          "Opened workspace at {{ $now | date }}",
+          "Updated settings",
+          "Created new file"
+        ]
+      }
+    },
+    {
+      "id": "footer",
+      "type": "status_bar",
+      "content": "Ready • {{ $user.name }} • {{ $workspace.path }}"
+    }
+  ],
+  
+  "theming": {
+    "inherits": "usxd://themes/mono",
+    "overrides": {
+      "color_background": "var(--udoui-bg)",
+      "color_surface": "var(--udoui-surface)",
+      "border_radius": "var(--udoui-radius-md)"
+    }
+  },
+  
+  "interactions": {
+    "keyboard": {
+      "Ctrl+K": "command_palette.open",
+      "Ctrl+P": "files.quick_open",
+      "Ctrl+Shift+P": "command_palette.show"
+    },
+    "gestures": {
+      "swipe_left": "sidebar.toggle",
+      "swipe_right": "right_panel.toggle"
+    }
+  }
+}

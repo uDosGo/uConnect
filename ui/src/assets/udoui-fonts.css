@@ -1,0 +1,194 @@
+/* ============================================================
+   udoui-fonts.css — Complete font pack for browser GUI
+   Based on: ~/Code/Vendor/fonts/ + udo/fonts/
+   ============================================================ */
+
+/* Google Fonts (Inter for headings) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ===== MODERN FONTS (from udo/fonts/modern/) ===== */
+
+/* Role 1,2,4: Body, Heading, UI */
+@font-face {
+  font-family: 'SF Pro';
+  src: url('/fonts/SF-Pro.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Athene';
+  src: url('/fonts/Athene.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Role 2,4: Desktop Title, UI */
+@font-face {
+  font-family: 'ChicagoFLF';
+  src: url('/fonts/ChicagoFLF.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SanFrisco';
+  src: url('/fonts/Sanfrisco.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Liverpool';
+  src: url('/fonts/Liverpool.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== RETRO FONTS (from udo/fonts/retro/) ===== */
+
+/* Role 3: Monospace */
+@font-face {
+  font-family: 'SourceCodePro';
+  src: url('/fonts/SourceCodePro-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50';
+  src: url('/fonts/Teletext50.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 Condensed';
+  src: url('/fonts/Teletext50-condensed.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 Extended';
+  src: url('/fonts/Teletext50-extended.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 SemiCondensed';
+  src: url('/fonts/Teletext50-semicondensed.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 ExtraCondensed';
+  src: url('/fonts/Teletext50-extracondensed.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 UltraCondensed';
+  src: url('/fonts/Teletext50-ultracondensed.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PetMe128';
+  src: url('/fonts/PetMe128.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PetMe128 Double';
+  src: url('/fonts/PetMe1282Y.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/press-start-2p.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* NES.css uses 'PressStart2P' (no spaces) — alias */
+@font-face {
+  font-family: 'PressStart2P';
+  src: url('/fonts/press-start-2p.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'C64 User Mono';
+  src: url('/fonts/C64_User_Mono_v1.0-STYLE.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== FONT STACK DECLARATIONS ===== */
+:root {
+  /* Role-based font stacks with fallbacks */
+  --udoui-font-body: 'SF Pro', 'Quicksand', 'Poppins', 'Athene', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  
+  --udoui-font-heading: 'Inter', 'ChicagoFLF', 'SanFrisco', 'Liverpool', 'SF Pro', 'Quicksand', 'Athene', 'Poppins', system-ui, sans-serif;
+  
+  --udoui-font-ui: 'SF Pro', 'ChicagoFLF', 'SanFrisco', 'Liverpool', 'Quicksand', 'Poppins', system-ui, sans-serif;
+  
+  --udoui-font-mono: 'SourceCodePro', 'Teletext50', 'Press Start 2P', 'PetMe128', 'C64 User Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  --udoui-font-display: 'Liverpool', 'ChicagoFLF', 'SanFrisco', 'Inter', system-ui, sans-serif;
+  
+  --udoui-font-caption: 'SF Pro', 'Poppins', system-ui, sans-serif;
+  
+  /* Teletext extended */
+  --udoui-font-teletext: 'Teletext50 Condensed', 'Teletext50', monospace;
+  --udoui-font-teletext-extended: 'Teletext50 Extended', 'Teletext50', monospace;
+  --udoui-font-teletext-semicondensed: 'Teletext50 SemiCondensed', 'Teletext50', monospace;
+  --udoui-font-teletext-extracondensed: 'Teletext50 ExtraCondensed', 'Teletext50', monospace;
+  --udoui-font-teletext-ultracondensed: 'Teletext50 UltraCondensed', 'Teletext50', monospace;
+  --udoui-font-petscii: 'PetMe128', monospace;
+  --udoui-font-petscii-double: 'PetMe128 Double', monospace;
+  --udoui-font-retro: 'Press Start 2P', monospace;
+  --udoui-font-c64: 'C64 User Mono', monospace;
+}

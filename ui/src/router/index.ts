@@ -1,18 +1,41 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import GUISurfaceManager from '../views/surfaces/GUISurfaceManager.vue'
 import VibeSurface from '../views/surfaces/VibeSurface.vue'
-import ReactRendererActual from '../views/surfaces/ReactRendererActual.vue'
-import ReactRendererEnhanced from '../views/surfaces/ReactRendererEnhanced.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/surface/vibe',
+    redirect: '/surface/ucode1',
   },
   {
     path: '/surface',
     component: GUISurfaceManager,
     children: [
+      {
+        path: 'ucode1teledesk',
+        component: () => import('../views/surfaces/uCode1TeledeskSurface.vue'),
+        meta: { title: 'uCode1 Teledesk' },
+      },
+      {
+        path: 'ucode1',
+        component: () => import('../views/surfaces/uCode1Surface.vue'),
+        meta: { title: 'uCode1 Terminal' },
+      },
+      {
+        path: 'ucode2reasoning',
+        component: () => import('../views/surfaces/uCode2ReasoningSurface.vue'),
+        meta: { title: 'uCode2 Reasoning' },
+      },
+      {
+        path: 'ucode2',
+        component: () => import('../views/surfaces/uCode2Surface.vue'),
+        meta: { title: 'uCode2 Publish' },
+      },
+      {
+        path: 'dashboard',
+        component: () => import('../views/surfaces/NESClassicSurface.vue'),
+        meta: { title: 'Dashboard' },
+      },
       {
         path: 'vibe',
         component: VibeSurface,
@@ -56,7 +79,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'dev',
         component: () => import('../views/surfaces/DevModeSurface.vue'),
-        meta: { title: 'Dev Mode Dashboard' },
+        meta: { title: 'Dev Dashboard' },
       },
       {
         path: 'browser',
@@ -64,36 +87,21 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Browser Surface' },
       },
       {
-        path: 'story',
-        component: () => import('../views/surfaces/StorySurface.vue'),
-        meta: { title: 'Story Surface' },
-      },
-      {
         path: 'tools',
         component: () => import('../views/surfaces/ToolRegistrySurface.vue'),
         meta: { title: 'MCP Tool Registry' },
       },
       {
-        path: 'dev-dashboard',
-        component: () => import('../views/surfaces/DevModeDashboard.vue'),
-        meta: { title: 'Dev Mode Dashboard' },
-      },
-      {
-        path: 'react-renderer',
-        component: ReactRendererEnhanced,
-        meta: { title: 'React Renderer (Enhanced)' },
-      },
-      {
-        path: 'react-renderer-basic',
-        component: ReactRendererActual,
-        meta: { title: 'React Renderer (Basic)' },
+        path: 'settings',
+        component: () => import('../views/surfaces/SettingsSurface.vue'),
+        meta: { title: 'Settings' },
       },
     ],
   },
 
   {
     path: '/:catchAll(.*)',
-    redirect: '/surface/vibe',
+    redirect: '/surface/ucode1',
   },
 ]
 

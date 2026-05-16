@@ -1,0 +1,137 @@
+/* ============================================================
+   usx-font-tokens.css — USX Font Token System
+   Zero-hardcoding typography for all surfaces
+   ============================================================ */
+
+:root {
+  /* ===== BASE FONT TOKENS ===== */
+  --usx-font-base-size: 16px;
+  --usx-font-base-unit: 1rem;
+  --usx-line-height-base: 1.5;
+
+  /* ===== FONT FAMILIES (role-based) ===== */
+  --usx-font-body: 'SF Pro', system-ui, -apple-system, sans-serif;
+  --usx-font-heading: 'Inter', system-ui, sans-serif;
+  --usx-font-mono: 'SourceCodePro', 'SF Mono', monospace;
+  --usx-font-ui: 'SF Pro', system-ui, sans-serif;
+  --usx-font-display: 'Liverpool', 'Inter', system-ui, sans-serif;
+  --usx-font-caption: 'SF Pro', system-ui, sans-serif;
+
+  /* ===== FONT SIZE SCALE (rem-based) ===== */
+  --usx-font-xs: calc(var(--usx-font-base-unit) * 0.75);
+  --usx-font-sm: calc(var(--usx-font-base-unit) * 0.875);
+  --usx-font-base: var(--usx-font-base-unit);
+  --usx-font-lg: calc(var(--usx-font-base-unit) * 1.125);
+  --usx-font-xl: calc(var(--usx-font-base-unit) * 1.25);
+  --usx-font-2xl: calc(var(--usx-font-base-unit) * 1.5);
+  --usx-font-3xl: calc(var(--usx-font-base-unit) * 1.875);
+  --usx-font-4xl: calc(var(--usx-font-base-unit) * 2.25);
+  --usx-font-5xl: calc(var(--usx-font-base-unit) * 3);
+  --usx-font-6xl: calc(var(--usx-font-base-unit) * 3.75);
+  --usx-font-7xl: calc(var(--usx-font-base-unit) * 4.5);
+  --usx-font-8xl: calc(var(--usx-font-base-unit) * 6);
+
+  /* ===== FONT WEIGHTS ===== */
+  --usx-font-light: 300;
+  --usx-font-normal: 400;
+  --usx-font-medium: 500;
+  --usx-font-semibold: 600;
+  --usx-font-bold: 700;
+
+  /* ===== LINE HEIGHTS ===== */
+  --usx-leading-none: 1;
+  --usx-leading-tight: 1.25;
+  --usx-leading-snug: 1.375;
+  --usx-leading-normal: 1.5;
+  --usx-leading-relaxed: 1.625;
+  --usx-leading-loose: 2;
+
+  /* ===== LETTER SPACING ===== */
+  --usx-tracking-tighter: -0.05em;
+  --usx-tracking-tight: -0.025em;
+  --usx-tracking-normal: 0;
+  --usx-tracking-wide: 0.025em;
+  --usx-tracking-wider: 0.05em;
+  --usx-tracking-widest: 0.1em;
+
+  /* ===== CURRENT ACTIVE VALUES (updated by toggles) ===== */
+  --usx-active-font-family: var(--usx-font-body);
+  --usx-active-font-size: var(--usx-font-base);
+  --usx-active-line-height: var(--usx-leading-normal);
+  --usx-active-letter-spacing: var(--usx-tracking-normal);
+  --usx-active-font-weight: var(--usx-font-normal);
+}
+
+/* ===== FONT STYLE PRESETS ===== */
+[data-font-style="serif"] {
+  --usx-font-body: 'Athene', Georgia, Times, serif;
+  --usx-font-heading: 'Athene', Georgia, Times, serif;
+  --usx-active-line-height: 1.6;
+  --usx-active-letter-spacing: 0.01em;
+}
+
+[data-font-style="compact"] {
+  --usx-active-line-height: 1.3;
+  --usx-active-letter-spacing: -0.01em;
+}
+
+[data-font-style="teletext"] {
+  --usx-font-body: 'Teletext50', monospace;
+  --usx-font-heading: 'Teletext50', monospace;
+  --usx-font-mono: 'Teletext50', monospace;
+  --usx-font-ui: 'Teletext50', monospace;
+  --usx-active-line-height: 1.2;
+  --usx-active-letter-spacing: 0;
+}
+
+[data-font-style="retro"] {
+  --usx-font-body: 'PressStart2P', monospace;
+  --usx-font-heading: 'PressStart2P', monospace;
+  --usx-font-mono: 'PressStart2P', monospace;
+  --usx-font-ui: 'PressStart2P', monospace;
+  --usx-active-line-height: 1.5;
+  --usx-active-letter-spacing: 0.5px;
+}
+
+[data-font-style="c64"] {
+  --usx-font-body: 'PetMe128', monospace;
+  --usx-font-heading: 'PetMe128', monospace;
+  --usx-font-mono: 'PetMe128', monospace;
+  --usx-font-ui: 'PetMe128', monospace;
+  --usx-active-line-height: 1.2;
+  --usx-active-letter-spacing: 0;
+}
+
+/* ===== FONT SIZE ZOOM LEVELS ===== */
+[data-font-size="small"] {
+  --usx-font-base-size: 14px;
+}
+
+[data-font-size="medium"] {
+  --usx-font-base-size: 16px;
+}
+
+[data-font-size="large"] {
+  --usx-font-base-size: 18px;
+}
+
+[data-font-size="xlarge"] {
+  --usx-font-base-size: 20px;
+}
+
+[data-font-size="xxlarge"] {
+  --usx-font-base-size: 24px;
+}
+
+/* ===== APPLY ACTIVE VALUES ===== */
+html {
+  font-size: var(--usx-font-base-size);
+}
+
+body {
+  font-family: var(--usx-active-font-family);
+  font-size: var(--usx-active-font-size);
+  line-height: var(--usx-active-line-height);
+  letter-spacing: var(--usx-active-letter-spacing);
+  font-weight: var(--usx-active-font-weight);
+}

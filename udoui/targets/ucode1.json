@@ -1,0 +1,89 @@
+{
+  "$schema": "../schema/v1.json",
+  "version": "1.0.0",
+  "meta": {
+    "id": "udoui-target-ucode1",
+    "title": "uCode1 Target Configuration",
+    "description": "Legacy browser target for uCode1 — optimized for older browsers with limited capabilities",
+    "target": "web",
+    "responsive": true
+  },
+  "variables": {
+    "bundle_size": {
+      "type": "string",
+      "default": "small",
+      "options": ["small", "medium", "full"],
+      "description": "Bundle size optimization level"
+    }
+  },
+  "compatibility": {
+    "css_grid": true,
+    "flexbox": true,
+    "localStorage": true,
+    "webgl": false,
+    "service_workers": false,
+    "web_components": false,
+    "css_variables": true,
+    "es_modules": true,
+    "intersection_observer": true,
+    "resize_observer": false
+  },
+  "optimizations": {
+    "bundle_size": "small",
+    "lazy_load": true,
+    "preconnect": ["https://fonts.googleapis.com"],
+    "code_splitting": true,
+    "tree_shaking": true,
+    "css_minification": true,
+    "image_optimization": true,
+    "polyfills": [
+      "css-grid",
+      "flexbox",
+      "intersection-observer",
+      "custom-elements"
+    ]
+  },
+  "features": {
+    "ai_chat": false,
+    "voice_input": false,
+    "drag_drop": true,
+    "file_system_api": false,
+    "pwa_enabled": false,
+    "offline_support": false,
+    "push_notifications": false,
+    "web_workers": true
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11",
+    "not op_mini all"
+  ],
+  "components": {
+    "available": [
+      "navbar",
+      "menu",
+      "prose",
+      "card",
+      "table",
+      "terminal",
+      "story_form",
+      "status_bar",
+      "list",
+      "stats_grid",
+      "divider",
+      "spacer"
+    ],
+    "unavailable": [
+      "chart"
+    ]
+  },
+  "theming": {
+    "mono": true,
+    "flowbite_icons": true,
+    "dark_mode_supported": true,
+    "font_zoom_supported": true,
+    "animations": "reduced"
+  }
+}
