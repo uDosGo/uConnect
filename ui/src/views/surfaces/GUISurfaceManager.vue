@@ -142,6 +142,8 @@ onMounted(() => {
     { id: 'ucode1', title: 'uCode1 Terminal', path: '/surface/ucode1', section: 'ucode' },
     { id: 'ucode2reasoning', title: 'uCode2 Reasoning', path: '/surface/ucode2reasoning', section: 'ucode' },
     { id: 'ucode2', title: 'uCode2 Publish', path: '/surface/ucode2', section: 'ucode' },
+    { id: 'ucode3', title: 'uCode3 Surface', path: '/surface/ucode3', section: 'ucode' },
+    { id: 'ucode4', title: 'uCode4 Wireframe', path: '/surface/ucode4', section: 'ucode' },
     // Core Surfaces
     { id: 'dashboard', title: 'Dashboard', path: '/surface/dashboard', section: 'core' },
     { id: 'vibe', title: 'Vibe TUI', path: '/surface/vibe', section: 'core' },
@@ -371,6 +373,13 @@ const sectionLabels: Record<string, string> = {
 }
 
 /* ─── Nav Item Text ───────────────────────────────────────────── */
+.nav-item {
+  color: #d1d5db; /* gray-300 — prevent default blue link color */
+  text-decoration: none;
+}
+.nav-item:hover {
+  color: #f3f4f6; /* gray-100 */
+}
 .nav-item span {
   overflow: hidden;
   text-overflow: ellipsis;

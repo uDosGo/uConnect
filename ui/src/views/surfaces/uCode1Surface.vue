@@ -19,6 +19,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onUnmounted } from 'vue';
+import * as api from '../../services/api.prod';
+import { useMCPStore } from '../../stores/mcp';
+import { useUSXDStore } from '../../stores/usxd';
+import { useVaultStore } from '../../stores/vault';
+import { useWorkflowStore } from '../../stores/workflow';
+import { useGitHubStore } from '../../stores/github';
+import { useToolRegistryStore } from '../../stores/toolRegistry';
 
 // ─── State ──────────────────────────────────────────────────────
 const output = ref<HTMLDivElement | null>(null);
@@ -84,51 +91,68 @@ const commandHandlers: Record<string, (args: string[]) => string | string[]> = {
   ],
   CLS: () => { contentLines.value = []; return []; },
   CLEAR: () => { contentLines.value = []; return []; },
-  STATUS: () => [
-    '',
-    '╔══════════════════════════════════════╗',
-    '║        uDos System Status            ║',
-    '╠══════════════════════════════════════╣',
-    '║  Version:    1.1.0                   ║',
-    '║  Memory:     38911 BYTES FREE        ║',
-    '║  Vault:      ~/Vault (42 entries)    ║',
-    '║  MCP:        Connected               ║',
-    '║  USXD:       Ready                   ║',
-    '║  Vibe:       Idle                    ║',
-    '║  Terminal:   40×24 Ceefax · 16px     ║',
-    '╚══════════════════════════════════════╝',
-    '',
-    'READY.',
-  ],
-  LIST: () => [
-    '',
-    '📁 Vault Contents:',
-    '  README.md         2.4 KB',
-    '  workflows/        -',
-    '  notes/            -',
-    '  config.yaml      1.2 KB',
-    '  surfaces/         -',
-    '',
-    'READY.',
-  ],
-  CATALOG: () => [
-    '',
-    'LOADING "$"',
-    'SEARCHING FOR $',
-    'LOADING',
-    'READY.',
-    '',
-    '0 "U-DOS VAULT    "  PRG',
-    '1 "README"        PRG 00245',
-    '2 "CONFIG"        PRG 01152',
-    '3 "WORKFLOWS"     PRG 03001',
-    '4 "SURFACES"      PRG 01500',
-    '5 "NOTES"         PRG 00800',
-    '',
-    'BLOCKS FREE: 38911',
-    '',
-    'READY.',
-  ],
+  STATUS: async () => {
+    const mcpStore = useMCPStore();
+    const usxdStore = useUSXDStore();
+    const vaultStore = useVaultStore();
+    const workflowStore = useWorkflowStore();
+    await Promise.all([
+      mcpStore.loadStatus(),
+      usxdStore.loadDocuments(),
+      vaultStore.loadEntries('/'),
+      workflowStore.loadWorkflows(),
+    ]);
+    const mcpCount = mcpStore.runningServers.length;
+    const usxdCount = usxdStore.documentCount;
+    const vaultCount = vaultStore.entries.length;
+    const wfCount = workflowStore.activeWorkflows.length;
+    return [
+      '',
+      '╔══════════════════════════════════════╗',
+      '║        uDos System Status            ║',
+      '╠══════════════════════════════════════╣',
+      `║  Version:    1.1.0                   ║`,
+      `║  Memory:     38911 BYTES FREE        ║`,
+      `║  Vault:      ~/Vault (${vaultCount} entries)    ║`,
+      `║  MCP:        ${mcpCount > 0 ? `${mcpCount} running` : 'Disconnected'}           ║`,
+      `║  USXD:       ${usxdCount > 0 ? `${usxdCount} docs` : 'Ready'}                   ║`,
+      `║  Workflows:  ${wfCount} active                 ║`,
+      `║  Terminal:   40×24 Ceefax · 16px     ║`,
+      '╚══════════════════════════════════════╝',
+      '',
+      'READY.',
+    ];
+  },
+  LIST: async () => {
+    const vaultStore = useVaultStore();
+    await vaultStore.loadEntries('/');
+    const lines = ['', '📁 Vault Contents:'];
+    for (const entry of vaultStore.entries) {
+      const icon = entry.type === 'dir' ? '📂' : '📄';
+      const size = entry.type === 'dir' ? '-' : `${(entry.size / 1024).toFixed(1)} KB`;
+      lines.push(`  ${icon} ${entry.name.padEnd(20)} ${size}`);
+    }
+    lines.push('', 'READY.');
+    return lines;
+  },
+  CATALOG: async () => {
+    const vaultStore = useVaultStore();
+    await vaultStore.loadEntries('/');
+    const lines = [
+      '',
+      'LOADING "$"',
+      'SEARCHING FOR $',
+      'LOADING',
+      'READY.',
+      '',
+    ];
+    vaultStore.entries.forEach((entry, i) => {
+      const size = entry.type === 'dir' ? 'PRG 00000' : `PRG ${String(entry.size).padStart(5, '0')}`;
+      lines.push(`${i} "${entry.name.toUpperCase().padEnd(16)}"  ${size}`);
+    });
+    lines.push('', 'BLOCKS FREE: 38911', '', 'READY.');
+    return lines;
+  },
   VIBE: () => [
     '',
     'LOADING VIBE TUI',
@@ -140,75 +164,103 @@ const commandHandlers: Record<string, (args: string[]) => string | string[]> = {
     '',
     'READY.',
   ],
-  MCP: () => [
-    '',
-    '🔌 MCP Bridge Status:',
-    '  Server:      Connected',
-    '  Tools:       12 registered',
-    '  Resources:   8 available',
-    '',
-    'READY.',
-  ],
-  USXD: () => [
-    '',
-    '📖 USXD Renderer:',
-    '  Documents:   5 available',
-    '  Templates:   4 installed',
-    '  Server:      Ready on :3000',
-    '',
-    'READY.',
-  ],
-  GITHUB: () => [
-    '',
-    '🌐 GitHub Sync:',
-    '  Repo:        uDosGo/Connect',
-    '  Branch:      main',
-    '  Status:      Up to date',
-    '',
-    'READY.',
-  ],
-  WP: () => [
-    '',
-    '🌍 WordPress Adaptor:',
-    '  Site:        uDosGo Blog',
-    '  Status:      Connected',
-    '  Posts:       12 published',
-    '',
-    'READY.',
-  ],
-  WORKFLOW: () => [
-    '',
-    '⚙️ Workflow Engine:',
-    '  Active:      2 workflows',
-    '  Pending:     1 workflow',
-    '  Completed:   15 workflows',
-    '',
-    'READY.',
-  ],
+  MCP: async () => {
+    const mcpStore = useMCPStore();
+    await mcpStore.loadStatus();
+    const lines = ['', '🔌 MCP Bridge Status:'];
+    if (mcpStore.servers.length === 0) {
+      lines.push('  No MCP servers configured');
+    } else {
+      for (const server of mcpStore.servers) {
+        const status = server.running ? '🟢 Running' : '🔴 Stopped';
+        lines.push(`  ${server.name}: ${status}`);
+      }
+    }
+    lines.push('', 'READY.');
+    return lines;
+  },
+  USXD: async () => {
+    const usxdStore = useUSXDStore();
+    await usxdStore.loadDocuments();
+    return [
+      '',
+      '📖 USXD Renderer:',
+      `  Documents:   ${usxdStore.documentCount} available`,
+      '  Templates:   4 installed',
+      '  Server:      Ready on :3000',
+      '',
+      'READY.',
+    ];
+  },
+  GITHUB: async () => {
+    const githubStore = useGitHubStore();
+    await githubStore.loadTargets();
+    const connected = githubStore.connectedTargets.length;
+    return [
+      '',
+      '🌐 GitHub Sync:',
+      `  Targets:     ${githubStore.targets.length} configured`,
+      `  Connected:   ${connected}`,
+      `  Last Sync:   ${githubStore.lastSync || 'Never'}`,
+      '',
+      'READY.',
+    ];
+  },
+  WP: async () => {
+    const githubStore = useGitHubStore();
+    await githubStore.loadTargets();
+    const wpTargets = githubStore.targets.filter(t => t.type === 'wordpress');
+    return [
+      '',
+      '🌍 WordPress Adaptor:',
+      `  Sites:       ${wpTargets.length} configured`,
+      `  Status:      ${wpTargets.some(t => t.status === 'connected') ? 'Connected' : 'Disconnected'}`,
+      '',
+      'READY.',
+    ];
+  },
+  WORKFLOW: async () => {
+    const workflowStore = useWorkflowStore();
+    await Promise.all([
+      workflowStore.loadWorkflows(),
+      workflowStore.loadTasks(),
+    ]);
+    const active = workflowStore.activeWorkflows.length;
+    const pending = workflowStore.tasks.filter(t => t.status === 'pending').length;
+    const completed = workflowStore.tasks.filter(t => t.status === 'completed').length;
+    return [
+      '',
+      '⚙️ Workflow Engine:',
+      `  Active:      ${active} workflows`,
+      `  Pending:     ${pending} tasks`,
+      `  Completed:   ${completed} tasks`,
+      '',
+      'READY.',
+    ];
+  },
   DEV: () => [
     '',
     '🔧 Dev Status:',
-    '  API Server:  :5175',
-    '  GUI:         :5176',
+    '  API Server:  :8001',
+    '  GUI:         :5173',
     '  USXD:        :3000',
     '  Vite:        :5173',
     '',
     'READY.',
   ],
-  TOOLS: () => [
-    '',
-    '🛠️ MCP Tools Registry:',
-    '  vault-read     — Read vault files',
-    '  vault-write    — Write vault files',
-    '  github-sync    — Sync with GitHub',
-    '  wp-publish     — Publish to WordPress',
-    '  usxd-render    — Render USXD documents',
-    '  workflow-run   — Execute workflows',
-    '  vibe-chat      — AI chat interface',
-    '  dev-status     — System diagnostics',
-    '',
-    'READY.',
-  ],
+  TOOLS: async () => {
+    const toolStore = useToolRegistryStore();
+    await toolStore.loadTools();
+    const lines = ['', '🛠️ MCP Tools Registry:'];
+    for (const tool of toolStore.tools) {
+      lines.push(`  ${tool.name.padEnd(16)} — ${tool.description}`);
+    }
+    if (toolStore.tools.length === 0) {
+      lines.push('  No tools available (start MCP servers)');
+    }
+    lines.push('', 'READY.');
+    return lines;
+  },
   RUN: () => [
     '',
     'RUNNING...',
@@ -272,9 +324,66 @@ const commandHandlers: Record<string, (args: string[]) => string | string[]> = {
     }
     return ['Usage: SIZE <viewport>', 'Available: 20x10, 32x16, 40x24, 80x30, 48x48', '', 'READY.'];
   },
-  UDO: (args) => {
+  UDO: async (args) => {
     if (args.length === 0) return ['Usage: UDO <command> [args...]', '', 'READY.'];
-    return [`Executing: udo ${args.join(' ')}`, '  ✅ Command sent to udo backend', '', 'READY.'];
+    const sub = args[0].toLowerCase();
+    try {
+      if (sub === 'skills') {
+        const result = await api.listSkills();
+        const lines = ['', '📋 UDO Skills:'];
+        for (const skill of result) {
+          lines.push(`  ${skill.enabled ? '🟢' : '🔴'} ${skill.name} — ${skill.description}`);
+        }
+        lines.push('', 'READY.');
+        return lines;
+      }
+      if (sub === 'tasks') {
+        const result = await api.listTasks();
+        const lines = ['', '📋 UDO Tasks:'];
+        for (const task of result) {
+          lines.push(`  ${task.status === 'running' ? '🔄' : task.status === 'completed' ? '✅' : '⏳'} ${task.type} (${task.status})`);
+        }
+        lines.push('', 'READY.');
+        return lines;
+      }
+      if (sub === 'agents') {
+        const result = await api.listAgents();
+        const lines = ['', '🤖 UDO Agents:'];
+        for (const agent of result) {
+          lines.push(`  ${agent.status === 'running' ? '🟢' : '⚪'} ${agent.name} — Health: ${agent.health}%`);
+        }
+        lines.push('', 'READY.');
+        return lines;
+      }
+      if (sub === 'workflows') {
+        const result = await api.listWorkflows();
+        const lines = ['', '⚙️ UDO Workflows:'];
+        for (const wf of result) {
+          lines.push(`  ${wf.status === 'active' ? '🟢' : '🔴'} ${wf.name} — ${wf.runs} runs`);
+        }
+        lines.push('', 'READY.');
+        return lines;
+      }
+      if (sub === 'vault') {
+        const path = args[1] || '/';
+        const result = await api.listVaultEntries(path);
+        const lines = ['', `📁 Vault: ${path}`];
+        for (const entry of result) {
+          const icon = entry.type === 'dir' ? '📂' : '📄';
+          lines.push(`  ${icon} ${entry.name}`);
+        }
+        lines.push('', 'READY.');
+        return lines;
+      }
+      if (sub === 'exec') {
+        const cmd = args.slice(1).join(' ');
+        const result = await api.executeCommand(cmd);
+        return ['', `$ ${cmd}`, result.output, '', 'READY.'];
+      }
+      return [`Unknown udo command: ${sub}`, 'Available: skills, tasks, agents, workflows, vault, exec', '', 'READY.'];
+    } catch (err: any) {
+      return ['', `❌ UDO Error: ${err.message}`, '', 'READY.'];
+    }
   },
   EXIT: () => ['Goodbye!'],
 };

@@ -2,8 +2,8 @@
   <div class="wireframe-surface min-h-screen">
     <!-- Surface Header -->
     <div class="surface-header">
-      <h1><span class="surface-icon">📐</span> Wireframe <span class="badge-ucode2">uCode2</span></h1>
-      <p class="surface-tagline">Wireframe version of Bedstead Modern — same layout, dashed borders, flat icons, monospace font.</p>
+      <h1><span class="surface-icon">📐</span> Wireframe <span class="badge-ucode4">uCode4</span></h1>
+      <p class="surface-tagline">Wireframe theme scaffold for uCode4 — console-style layout with dashed borders, flat icons, monospace font.</p>
     </div>
 
     <!-- Top Navigation Bar (Wireframe) -->
@@ -212,7 +212,7 @@ function nextTip() {
   gap: 0.75rem;
 }
 
-.badge-ucode2 {
+.badge-ucode4 {
   font-size: 0.55rem;
   border: 1px dashed #999;
   color: #999;

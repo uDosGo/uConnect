@@ -1,471 +1,324 @@
-/* eslint-disable no-undef */
 /**
- * uDOS Vault API Service - Production Version
- * Enhanced API service with comprehensive error handling, logging, and retry logic
- * Note: This file uses browser APIs (WebSocket, fetch, localStorage, etc.)
- * which are globally available in browser environments.
+ * uDos ConnectUI — Production API Service
+ * 
+ * Centralized API client for communicating with uCode1's ThinUI API
+ * and the UDO runtime backend.
+ * 
+ * In dev mode, points to localhost:8001 (ThinUI API).
+ * In production, points to the configured backend URL.
  */
 
-declare global {
-  interface Window {
-    WebSocket: typeof WebSocket;
-    fetch: typeof fetch;
-    localStorage: Storage;
-    clearTimeout: typeof clearTimeout;
-    setTimeout: typeof setTimeout;
-    clearInterval: typeof clearInterval;
-    File: typeof File;
-    FormData: typeof FormData;
-    AbortController: typeof AbortController;
-    RequestInit: RequestInit;
-  }
-}
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001/api'
+const WS_BASE = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8001'
 
-interface Task {
-  id: string;
-  title: string;
-  status: string;
-  dueDate: string;
-  tags: string[];
-  notes: string;
-  properties: Record<string, any>;
-  attachments: Array<{
-    id: string;
-    name: string;
-    path: string;
-    type: string;
-  }>;
-  selected?: boolean;
-}
+// ─── Generic fetch wrapper ───────────────────────────────────────
 
-interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
-  timestamp?: string;
-}
-
-interface ApiError extends Error {
-  code?: string;
-  status?: number;
-  response?: any;
-}
-
-// Configuration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5175/api';
-const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:5175';
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second between retries
-
-// Real-time sync state
-let socket: WebSocket | null = null;
-let syncInterval: number | null = null;
-// eslint-disable-next-line no-unused-vars
-let syncCallbacks: Array<(tasks: Task[]) => void> = [];
-let reconnectAttempts = 0;
-const MAX_RECONNECT_ATTEMPTS = 5;
-
-// Logger utility
-function logError(error: ApiError, context: string = 'API') {
-  const timestamp = new Date().toISOString();
-  
-  if (import.meta.env.DEV) {
-    console.error(`[${timestamp}] [${context}]`, error);
-  }
-  
-  // In production, you might send errors to a monitoring service
-  if (import.meta.env.PROD && import.meta.env.VITE_FEATURE_ANALYTICS) {
-    // Send to error monitoring service
-    console.warn(`[${context}] Error reported to monitoring service`);
-  }
-}
-
-// Retry utility with exponential backoff
-async function withRetry<T>(
-  operation: () => Promise<T>,
-  operationName: string,
-  maxRetries: number = MAX_RETRIES
+async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {}
 ): Promise<T> {
-  let lastError: ApiError | null = null;
-  
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await operation();
-    } catch (error) {
-      lastError = error as ApiError;
-      logError(lastError, `${operationName} (Attempt ${attempt}/${maxRetries})`);
-      
-      // Don't retry on client errors (4xx)
-      if (lastError.code && lastError.code.startsWith('4')) {
-        break;
-      }
-      
-      // Exponential backoff
-      if (attempt < maxRetries) {
-        const delay = RETRY_DELAY * Math.pow(2, attempt - 1);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
+  const url = `${API_BASE}${path}`
+  const res = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  })
+  if (!res.ok) {
+    const text = await res.text().catch(() => 'Unknown error')
+    throw new Error(`API ${res.status}: ${text}`)
   }
-  
-  throw lastError;
+  return res.json()
 }
 
-// API Client with timeout and error handling
-async function apiClient<T>(
-  endpoint: string,
-  options: RequestInit = {},
-  timeout: number = 10000
-): Promise<T> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const error: ApiError = new Error(
-        errorData.message || `API request failed with status ${response.status}`
-      );
-      error.code = response.status.toString();
-      error.status = response.status;
-      error.response = errorData;
-      throw error;
-    }
-    
-    return response.json();
-  } catch (error) {
-    clearTimeout(timeoutId);
-    
-    if (error.name === 'AbortError') {
-      const timeoutError: ApiError = new Error('Request timeout');
-      timeoutError.code = 'TIMEOUT';
-      throw timeoutError;
-    }
-    
-    throw error;
-  }
+// ─── Health ───────────────────────────────────────────────────────
+
+export async function checkHealth(): Promise<{ status: string; version: string }> {
+  return apiFetch('/thinui/health')
 }
 
-/**
- * Fetch all tasks from the vault with retry logic
- */
-export async function getTasks(): Promise<Task[]> {
-  try {
-    return await withRetry(
-      () => apiClient<Task[]>('/tasks', { method: 'GET' }),
-      'getTasks'
-    );
-  } catch (error) {
-    logError(error as ApiError, 'getTasks');
-    
-    // Fallback to cached data or empty array
-    const cachedTasks = localStorage.getItem('udos.tasks');
-    if (cachedTasks) {
-      try {
-        return JSON.parse(cachedTasks);
-      } catch (parseError) {
-        logError(parseError as ApiError, 'getTasks.parseCache');
-      }
-    }
-    
-    return [];
-  }
+// ─── USXD / Grid ──────────────────────────────────────────────────
+
+export interface ThinUIGridData {
+  format: { version: string; type: string }
+  title: string
+  root: any
+  grid?: any
+  styles?: Record<string, any>
 }
 
-/**
- * Get a single task by ID
- */
-export async function getTask(id: string): Promise<Task | null> {
-  try {
-    return await withRetry(
-      () => apiClient<Task>(`/tasks/${id}`, { method: 'GET' }),
-      'getTask'
-    );
-  } catch (error) {
-    logError(error as ApiError, 'getTask');
-    return null;
-  }
+export async function parseGrid(text: string, title?: string): Promise<ThinUIGridData> {
+  return apiFetch('/thinui/parse', {
+    method: 'POST',
+    body: JSON.stringify({ text, title }),
+  })
 }
 
-/**
- * Create a new task with retry logic
- */
-export async function createTask(task: Omit<Task, 'id'>): Promise<Task> {
-  try {
-    const createdTask = await withRetry(
-      () => apiClient<Task>('/tasks', {
-        method: 'POST',
-        body: JSON.stringify(task),
-      }),
-      'createTask'
-    );
-    
-    // Cache the updated task list
-    try {
-      const tasks = await getTasks();
-      localStorage.setItem('udos.tasks', JSON.stringify(tasks));
-    } catch (cacheError) {
-      logError(cacheError as ApiError, 'createTask.cache');
-    }
-    
-    return createdTask;
-  } catch (error) {
-    logError(error as ApiError, 'createTask');
-    
-    // Return optimistic task with generated ID
-    return {
-      ...task,
-      id: `temp-${Date.now()}`,
-      attachments: task.attachments || [],
-    };
-  }
+export async function parseGridFromFile(filepath: string): Promise<ThinUIGridData> {
+  return apiFetch('/thinui/from-file', {
+    method: 'POST',
+    body: JSON.stringify({ filepath }),
+  })
 }
 
-/**
- * Update an existing task with retry logic
- */
-export async function updateTask(id: string, updates: Partial<Task>): Promise<Task> {
-  try {
-    const updatedTask = await withRetry(
-      () => apiClient<Task>(`/tasks/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updates),
-      }),
-      'updateTask'
-    );
-    
-    // Update cache
-    try {
-      const tasks = await getTasks();
-      const updatedTasks = tasks.map(t => t.id === id ? updatedTask : t);
-      localStorage.setItem('udos.tasks', JSON.stringify(updatedTasks));
-    } catch (cacheError) {
-      logError(cacheError as ApiError, 'updateTask.cache');
-    }
-    
-    return updatedTask;
-  } catch (error) {
-    logError(error as ApiError, 'updateTask');
-    
-    // Return optimistic update
-    return {
-      id,
-      ...updates,
-    } as Task;
-  }
+export async function renderGrid(cells: any[], rows: number, cols: number, title?: string): Promise<ThinUIGridData> {
+  return apiFetch('/thinui/render', {
+    method: 'POST',
+    body: JSON.stringify({ cells, rows, cols, title }),
+  })
 }
 
-/**
- * Delete a task with retry logic
- */
-export async function deleteTask(id: string): Promise<boolean> {
-  try {
-    const success = await withRetry(
-      () => apiClient<{ success: boolean }>(`/tasks/${id}`, {
-        method: 'DELETE',
-      }).then(res => res.success),
-      'deleteTask'
-    );
-    
-    if (success) {
-      // Update cache
-      try {
-        const tasks = await getTasks();
-        const updatedTasks = tasks.filter(t => t.id !== id);
-        localStorage.setItem('udos.tasks', JSON.stringify(updatedTasks));
-      } catch (cacheError) {
-        logError(cacheError as ApiError, 'deleteTask.cache');
-      }
-    }
-    
-    return success;
-  } catch (error) {
-    logError(error as ApiError, 'deleteTask');
-    return false;
-  }
+export async function getComponentTree(text: string, title?: string): Promise<any> {
+  return apiFetch('/thinui/tree', {
+    method: 'POST',
+    body: JSON.stringify({ text, title }),
+  })
 }
 
-/**
- * Upload a file attachment with retry logic
- */
-export async function uploadAttachment(file: File, taskId: string): Promise<Task['attachments'][0]> {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('taskId', taskId);
-    
-    return await withRetry(
-      () => apiClient<Task['attachments'][0]>(`/tasks/${taskId}/attachments`, {
-        method: 'POST',
-        body: formData,
-        headers: {}, // Let browser set Content-Type with boundary
-      }),
-      'uploadAttachment'
-    );
-  } catch (error) {
-    logError(error as ApiError, 'uploadAttachment');
-    
-    // Return mock attachment
-    return {
-      id: `temp-${Date.now()}`,
-      name: file.name,
-      path: `/attachments/${taskId}/${file.name}`,
-      type: file.type,
-    };
-  }
+export async function createLayout(text: string, title?: string): Promise<any> {
+  return apiFetch('/thinui/layout', {
+    method: 'POST',
+    body: JSON.stringify({ text, title }),
+  })
 }
 
-/**
- * Remove an attachment with retry logic
- */
-export async function removeAttachment(taskId: string, attachmentId: string): Promise<boolean> {
-  try {
-    return await withRetry(
-      () => apiClient<{ success: boolean }>(`/tasks/${taskId}/attachments/${attachmentId}`, {
-        method: 'DELETE',
-      }).then(res => res.success),
-      'removeAttachment'
-    );
-  } catch (error) {
-    logError(error as ApiError, 'removeAttachment');
-    return false;
-  }
+// ─── UDO Runtime ──────────────────────────────────────────────────
+
+export interface UDOSkill {
+  id: string
+  name: string
+  description: string
+  trigger: 'event' | 'schedule' | 'manual'
+  eventType?: string
+  action: string
+  enabled: boolean
 }
 
-/**
- * Enhanced Real-time sync with reconnection logic
- */
-// eslint-disable-next-line no-unused-vars
-export function setupRealTimeSync(callback: (tasks: Task[]) => void): () => void {
-  syncCallbacks.push(callback);
-  
-  const connectWebSocket = () => {
-    try {
-      socket = new WebSocket(`${WS_BASE_URL}/tasks/sync`);
-      
-      socket.onopen = () => {
-        reconnectAttempts = 0;
-        console.log('[WS] Connection established');
-        
-        // Send initial sync request
-        if (socket?.readyState === WebSocket.OPEN) {
-          socket.send(JSON.stringify({ type: 'initial_sync' }));
-        }
-      };
-      
-      socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          if (data.type === 'tasks_update') {
-            callback(data.tasks);
-            
-            // Update cache
-            try {
-              localStorage.setItem('udos.tasks', JSON.stringify(data.tasks));
-            } catch (cacheError) {
-              logError(cacheError as ApiError, 'WS.cache');
-            }
-          }
-        } catch (err) {
-          logError(err as ApiError, 'WS.message');
-        }
-      };
-      
-      socket.onclose = (event) => {
-        console.log(`[WS] Connection closed (code: ${event.code})`);
-        
-        // Attempt to reconnect
-        if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-          reconnectAttempts++;
-          const delay = Math.min(RETRY_DELAY * Math.pow(2, reconnectAttempts), 30000); // Max 30s
-          console.log(`[WS] Attempting to reconnect in ${delay}ms...`);
-          setTimeout(connectWebSocket, delay);
-        } else {
-          console.warn('[WS] Max reconnect attempts reached. Falling back to polling.');
-          startPolling();
-        }
-      };
-      
-      socket.onerror = (err) => {
-        logError(err as ApiError, 'WS.error');
-      };
-      
-    } catch (err) {
-      logError(err as ApiError, 'WS.connect');
-      startPolling();
-    }
-  };
-  
-  // Try WebSocket first
-  connectWebSocket();
-  
-  const cleanup = () => {
-    if (socket) {
-      socket.close();
-      socket = null;
-    }
-    
-    if (syncInterval) {
-      clearInterval(syncInterval);
-      syncInterval = null;
-    }
-    
-    syncCallbacks = syncCallbacks.filter(cb => cb !== callback);
-  };
-  
-  return cleanup;
+export interface UDOTask {
+  id: string
+  type: 'agent' | 'workflow' | 'autoloop'
+  status: 'running' | 'completed' | 'failed' | 'pending'
+  priority: number
+  createdAt: string
+  updatedAt: string
 }
 
-function startPolling() {
-  if (syncInterval) return;
-  
-  console.log('[Sync] Starting polling (WebSocket unavailable)');
-  
-  syncInterval = window.setInterval(async () => {
-    try {
-      const tasks = await getTasks();
-      syncCallbacks.forEach(cb => cb(tasks));
-    } catch (err) {
-      logError(err as ApiError, 'Sync.poll');
-    }
-  }, 15000); // Poll every 15 seconds
+export interface UDOVariable {
+  key: string
+  value: string
+  scope: 'user' | 'workspace' | 'system'
+  encrypted: boolean
+  usedBy: string[]
 }
 
-// Initialize cache from localStorage if available
-export function initializeCache() {
-  try {
-    const cachedTasks = localStorage.getItem('udos.tasks');
-    if (cachedTasks) {
-      console.log('[Cache] Initialized from localStorage');
-      return JSON.parse(cachedTasks) as Task[];
-    }
-  } catch (error) {
-    logError(error as ApiError, 'Cache.init');
-  }
-  return [];
+export interface UDOAgent {
+  id: string
+  name: string
+  type: string
+  status: 'idle' | 'running' | 'error'
+  health: number
+  tasksCompleted: number
 }
 
-// Clear cache
-export function clearCache() {
-  try {
-    localStorage.removeItem('udos.tasks');
-    console.log('[Cache] Cleared');
-  } catch (error) {
-    logError(error as ApiError, 'Cache.clear');
-  }
+export interface UDOWorkflow {
+  id: string
+  name: string
+  file: string
+  type: string
+  status: 'active' | 'disabled' | 'error'
+  runs: number
+  lastRun?: string
 }
 
-// Export types for better TypeScript support
-export type { Task, ApiResponse, ApiError };
+export interface UDOPublishTarget {
+  id: string
+  name: string
+  type: 'github' | 'wordpress' | 'local'
+  status: 'connected' | 'disconnected' | 'error'
+}
+
+// ─── Skills ───────────────────────────────────────────────────────
+
+export async function listSkills(): Promise<UDOSkill[]> {
+  return apiFetch('/udo/skills')
+}
+
+export async function enableSkill(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/skills/${id}/enable`, { method: 'POST' })
+}
+
+export async function disableSkill(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/skills/${id}/disable`, { method: 'POST' })
+}
+
+export async function runSkill(id: string): Promise<{ success: boolean; result: string }> {
+  return apiFetch(`/udo/skills/${id}/run`, { method: 'POST' })
+}
+
+// ─── Tasks ────────────────────────────────────────────────────────
+
+export async function listTasks(): Promise<UDOTask[]> {
+  return apiFetch('/udo/tasks')
+}
+
+export async function cancelTask(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/tasks/${id}/cancel`, { method: 'POST' })
+}
+
+export async function retryTask(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/tasks/${id}/retry`, { method: 'POST' })
+}
+
+// ─── Variables ────────────────────────────────────────────────────
+
+export async function listVariables(): Promise<UDOVariable[]> {
+  return apiFetch('/udo/variables')
+}
+
+export async function setVariable(key: string, value: string, scope: string, encrypted: boolean): Promise<{ success: boolean }> {
+  return apiFetch('/udo/variables', {
+    method: 'POST',
+    body: JSON.stringify({ key, value, scope, encrypted }),
+  })
+}
+
+export async function deleteVariable(key: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/variables/${key}`, { method: 'DELETE' })
+}
+
+// ─── Agents ───────────────────────────────────────────────────────
+
+export async function listAgents(): Promise<UDOAgent[]> {
+  return apiFetch('/udo/agents')
+}
+
+export async function startAgent(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/agents/${id}/start`, { method: 'POST' })
+}
+
+export async function stopAgent(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/agents/${id}/stop`, { method: 'POST' })
+}
+
+export async function getAgentHealth(id: string): Promise<{ health: number; status: string }> {
+  return apiFetch(`/udo/agents/${id}/health`)
+}
+
+// ─── Workflows ────────────────────────────────────────────────────
+
+export async function listWorkflows(): Promise<UDOWorkflow[]> {
+  return apiFetch('/udo/workflows')
+}
+
+export async function runWorkflow(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/workflows/${id}/run`, { method: 'POST' })
+}
+
+export async function disableWorkflow(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/workflows/${id}/disable`, { method: 'POST' })
+}
+
+export async function createWorkflow(name: string, description?: string): Promise<UDOWorkflow> {
+  return apiFetch('/udo/workflows', {
+    method: 'POST',
+    body: JSON.stringify({ name, description }),
+  })
+}
+
+// ─── Publish ──────────────────────────────────────────────────────
+
+export async function listPublishTargets(): Promise<UDOPublishTarget[]> {
+  return apiFetch('/udo/publish/targets')
+}
+
+export async function publishTo(targetId: string, content: any): Promise<{ success: boolean; url?: string }> {
+  return apiFetch(`/udo/publish/${targetId}`, {
+    method: 'POST',
+    body: JSON.stringify(content),
+  })
+}
+
+// ─── Vault ────────────────────────────────────────────────────────
+
+export async function listVaultEntries(path?: string): Promise<any[]> {
+  const qs = path ? `?path=${encodeURIComponent(path)}` : ''
+  return apiFetch(`/udo/vault${qs}`)
+}
+
+export async function readVaultFile(path: string): Promise<{ content: string; metadata: any }> {
+  return apiFetch(`/udo/vault/read`, {
+    method: 'POST',
+    body: JSON.stringify({ path }),
+  })
+}
+
+export async function writeVaultFile(path: string, content: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/vault/write`, {
+    method: 'POST',
+    body: JSON.stringify({ path, content }),
+  })
+}
+
+// ─── MCP ──────────────────────────────────────────────────────────
+
+export interface MCPServerStatus {
+  id: string
+  name: string
+  running: boolean
+  output: string[]
+  error?: string
+  startedAt?: number
+}
+
+export async function getMCPStatus(): Promise<MCPServerStatus[]> {
+  return apiFetch('/udo/mcp/status')
+}
+
+export async function startMCPServer(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/mcp/${id}/start`, { method: 'POST' })
+}
+
+export async function stopMCPServer(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/mcp/${id}/stop`, { method: 'POST' })
+}
+
+export async function callMCPTool(serverId: string, tool: string, args: Record<string, any>): Promise<any> {
+  return apiFetch(`/udo/mcp/${serverId}/call`, {
+    method: 'POST',
+    body: JSON.stringify({ tool, args }),
+  })
+}
+
+// ─── Checks ───────────────────────────────────────────────────────
+
+export interface CheckResult {
+  id: string
+  name: string
+  status: 'pass' | 'fail' | 'running'
+  duration: number
+  timestamp: string
+  output: string
+  repository: string
+}
+
+export async function listChecks(): Promise<CheckResult[]> {
+  return apiFetch('/udo/checks')
+}
+
+export async function runCheck(id: string): Promise<{ success: boolean }> {
+  return apiFetch(`/udo/checks/${id}/run`, { method: 'POST' })
+}
+
+export async function getCheckResults(id: string): Promise<CheckResult> {
+  return apiFetch(`/udo/checks/${id}/results`)
+}
+
+// ─── Command Execution ────────────────────────────────────────────
+
+export async function executeCommand(command: string): Promise<{ output: string; exitCode: number }> {
+  return apiFetch('/udo/exec', {
+    method: 'POST',
+    body: JSON.stringify({ command }),
+  })
+}

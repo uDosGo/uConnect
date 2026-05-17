@@ -42,14 +42,14 @@
       "name": "Development",
       "description": "Dev tools, editors, and SDKs",
       "icon": "🛠️",
-      "count": 3
+      "count": 5
     },
     {
       "id": "system",
       "name": "System",
       "description": "System operations, services, and health",
       "icon": "⚙️",
-      "count": 4
+      "count": 6
     },
     {
       "id": "themes",
