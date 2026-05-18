@@ -596,7 +596,7 @@ export default {
 
 .surface-definition {
   color: var(--text-tertiary);
-  font-size: 0.9rem;
+  font-size: var(--wf-font-sm);
   margin: 0;
 }
 
@@ -673,8 +673,8 @@ export default {
 .address-bar input {
   flex: 1;
   border: none;
-  padding: 0.5rem;
-  font-size: 1rem;
+  padding: var(--wf-spacing-2);
+  font-size: var(--wf-font-md);
 }
 
 .address-bar input:focus {
@@ -719,7 +719,7 @@ export default {
 
 .browser-welcome h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--wf-font-xl);
   margin-bottom: 0.5rem;
 }
 
@@ -764,8 +764,8 @@ export default {
 .browser-stats {
   text-align: right;
   color: var(--text-tertiary);
-  font-size: 0.85rem;
-  padding: 0.5rem;
+  font-size: var(--wf-font-xs);
+  padding: var(--wf-spacing-2);
 }
 
 .modal-overlay {
@@ -805,7 +805,7 @@ export default {
 .close-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--wf-font-xl);
   cursor: pointer;
 }
 
@@ -872,10 +872,10 @@ export default {
 }
 
 .setting-description {
-  font-size: 0.85rem;
+  font-size: var(--wf-font-xs);
   color: var(--text-tertiary);
-  margin-left: 1.5rem;
-  margin-top: 0.25rem;
+  margin-left: var(--wf-spacing-4);
+  margin-top: var(--wf-spacing-1);
 }
 
 .bookmark-form {
@@ -912,31 +912,34 @@ button.primary {
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
+  border-radius: 6px;
   cursor: pointer;
+  font-size: var(--wf-font-sm);
 }
 
 button.secondary {
   background: var(--surface-background);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
+  border-radius: 6px;
   cursor: pointer;
+  font-size: var(--wf-font-sm);
 }
 
 button.danger {
   background: var(--danger-background);
   color: var(--danger-color);
   border: 1px solid var(--danger-border);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
+  border-radius: 6px;
   cursor: pointer;
+  font-size: var(--wf-font-sm);
 }
 
 button.small {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.85rem;
+  padding: var(--wf-spacing-1) var(--wf-spacing-2);
+  font-size: var(--wf-font-xs);
 }
 </style>
