@@ -1,668 +1,374 @@
-# Surface Component Style Guide
+# UniversalSurfaceXD Style Guide
 
-This document outlines the standardized style and structure for all surface components in the uDosGo Connect UI.
+This document outlines the style standards for UniversalSurfaceXD surfaces to ensure consistency across all surfaces in the uDosGo Connect UI.
 
-## Overview
+## Base Typography Scale
 
-All surface components follow a consistent pattern with:
-- Standardized header structure
-- Loading, error, and empty states
-- Grid-based content layout
-- Responsive design
-- Dark mode support
-- CSS custom properties for theming
-
-## Standard Structure
-
-### 1. Template Structure
-
-```vue
-<template>
-  <div class="surface-name">
-    <!-- Surface Header -->
-    <div class="surface-header">
-      <div class="header-left">
-        <SurfaceIcon name="icon-name" class="header-icon" :size="24" />
-        <div>
-          <h1>Surface Title</h1>
-          <p class="surface-tagline">Brief description</p>
-          <p class="surface-definition">
-            <strong>What's this?</strong> Detailed explanation of the surface's purpose
-          </p>
-        </div>
-      </div>
-      <div class="header-right">
-        <!-- Action buttons -->
-      </div>
-    </div>
-
-    <!-- Info Banner (optional) -->
-    <div class="info-banner">
-      <SurfaceIcon name="info" :size="18" />
-      <div>
-        <strong>Title</strong>
-        Description text
-      </div>
-    </div>
-
-    <!-- Loading State -->
-    <div v-if="isLoading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading...</p>
-      <p class="helper-text">This usually takes a few seconds.</p>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="error-state">
-      <div class="error-icon">
-        <SurfaceIcon name="alert-circle" :size="48" />
-      </div>
-      <h3>Couldn't load content</h3>
-      <p>{{ error }}</p>
-      <p class="helper-text">
-        Try:
-        <br>
-        • Refreshing the page
-        <br>
-        • Checking your internet connection
-        <br>
-        • Making sure uDOS services are running
-      </p>
-      <div class="error-actions">
-        <button @click="retryLoad" class="btn-primary">
-          <SurfaceIcon name="refresh" :size="16" />
-          Try Again
-        </button>
-      </div>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="items.length === 0" class="empty-state">
-      <div class="empty-icon">
-        <SurfaceIcon name="icon-name" :size="48" />
-      </div>
-      <h3>{{ searchQuery ? 'No items found' : 'No items yet' }}</h3>
-      <p>{{ searchQuery ? 'Try a different search term' : 'Create your first item' }}</p>
-      <button v-if="!searchQuery" class="btn-primary" @click="createNew">
-        <SurfaceIcon name="plus" :size="16" />
-        New Item
-      </button>
-      <p v-if="!searchQuery" class="helper-text">
-        <SurfaceIcon name="info" :size="14" />
-        Additional helpful text
-      </p>
-    </div>
-
-    <!-- Main Content -->
-    <div v-else class="main-container">
-      <!-- Controls -->
-      <div class="action-bar">
-        <div class="search-container" v-if="hasSearch">
-          <SurfaceIcon name="search" :size="16" class="search-icon" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            :placeholder="searchPlaceholder"
-            @input="filterItems"
-            class="search-input"
-          >
-          <button v-if="searchQuery" class="btn-icon btn-sm" @click="clearSearch">
-            <SurfaceIcon name="x" :size="14" />
-          </button>
-        </div>
-        <button class="btn-secondary" @click="refreshItems">
-          <SurfaceIcon name="refresh" :size="16" />
-          Refresh
-        </button>
-        <button class="btn-primary" @click="createNew" v-if="hasCreate">
-          <SurfaceIcon name="plus" :size="16" />
-          New
-        </button>
-      </div>
-
-      <!-- Grid -->
-      <div class="item-grid">
-        <div
-          v-for="item in filteredItems"
-          :key="item.id"
-          class="item-card"
-          @click="openItem(item)"
-        >
-          <div class="item-header">
-            <SurfaceIcon :name="item.icon || 'default-icon'" :size="20" class="item-icon" />
-            <h3 class="item-name">{{ item.name }}</h3>
-            <span class="item-type">{{ item.type }}</span>
-          </div>
-
-          <div class="item-meta">
-            <span class="item-category">{{ item.category }}</span>
-            <span class="item-version" v-if="item.version">v{{ item.version }}</span>
-            <span class="item-size" v-if="item.size">{{ formatSize(item.size) }}</span>
-            <span class="item-updated" v-if="item.updatedAt">Updated {{ formatTime(item.updatedAt) }}</span>
-          </div>
-
-          <div class="item-description" v-if="item.description">
-            {{ item.description }}
-          </div>
-
-          <div class="item-actions">
-            <button
-              class="btn-icon btn-sm"
-              @click.stop="action1(item)"
-              :title="action1Title"
-            >
-              <SurfaceIcon name="icon1" :size="14" />
-            </button>
-            <button
-              class="btn-icon btn-sm"
-              @click.stop="action2(item)"
-              :title="action2Title"
-            >
-              <SurfaceIcon name="icon2" :size="14" />
-            </button>
-            <button
-              class="btn-icon btn-sm"
-              @click.stop="action3(item)"
-              :title="action3Title"
-            >
-              <SurfaceIcon name="icon3" :size="14" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Statistics -->
-      <div class="item-stats">
-        <span>{{ filteredItems.length }} items</span>
-        <span>{{ activeItems }} active</span>
-        <span>{{ totalSize }} total</span>
-        <span>{{ itemCategories }} categories</span>
-      </div>
-    </div>
-  </div>
-</template>
-```
-
-### 2. Script Structure
-
-```javascript
-<script>
-import { ref, computed, onMounted } from 'vue'
-import { formatDistanceToNow } from 'date-fns'
-import SurfaceIcon from '@/components/SurfaceIcons.vue'
-
-export default {
-  name: 'SurfaceName',
-  components: {
-    SurfaceIcon
-  },
-  setup() {
-    // State
-    const isLoading = ref(false)
-    const error = ref(null)
-    const items = ref([])
-    const searchQuery = ref('')
-
-    // Computed
-    const activeItems = computed(() => items.value.filter(i => i.active).length)
-    const itemCategories = computed(() => [...new Set(items.value.map(i => i.category))].length)
-    const filteredItems = computed(() => {
-      if (!searchQuery.value) return items.value
-      const query = searchQuery.value.toLowerCase()
-      return items.value.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        (item.description && item.description.toLowerCase().includes(query)) ||
-        item.category.toLowerCase().includes(query)
-      )
-    })
-
-    // Methods
-    const loadItems = async () => {
-      isLoading.value = true
-      error.value = null
-      try {
-        await new Promise(resolve => setTimeout(resolve, 500))
-        // Mock data
-        items.value = [...]
-      } catch (err) {
-        error.value = err.message || 'Failed to load'
-      } finally {
-        isLoading.value = false
-      }
-    }
-
-    const createNew = () => { alert('Create new') }
-    const openItem = (item) => { alert(`Open ${item.name}`) }
-    const action1 = (item) => { alert(`Action 1 on ${item.name}`) }
-    const action2 = (item) => { alert(`Action 2 on ${item.name}`) }
-    const action3 = (item) => { alert(`Action 3 on ${item.name}`) }
-    const refreshItems = () => { loadItems() }
-    const retryLoad = () => { error.value = null; loadItems() }
-    const clearSearch = () => { searchQuery.value = '' }
-    const filterItems = () => { /* Handled by computed */ }
-    const formatSize = (bytes) => { /* Format bytes to KB/MB */ }
-    const formatTime = (dateString) => { /* Format relative time */ }
-
-    // Lifecycle
-    onMounted(() => { loadItems() })
-
-    return {
-      isLoading, error, items, searchQuery, filteredItems,
-      activeItems, itemCategories,
-      loadItems, createNew, openItem, action1, action2, action3,
-      refreshItems, retryLoad, clearSearch, filterItems,
-      formatSize, formatTime
-    }
-  }
-}
-</script>
-```
-
-### 3. CSS Custom Properties
-
-All surfaces use the following CSS custom properties for consistent theming:
+The new udoui base styles provide a consistent typography scale. All surfaces should use these CSS variables:
 
 ```css
-/* Light mode */
-.surface-name {
-  --background: #ffffff;
-  --text-primary: #1a1a2e;
-  --text-secondary: #6b6b6b;
-  --text-tertiary: #b0b0b0;
-  --border-color: #e9e9e7;
-  --surface-background: #f7f6f3;
-  --surface-hover: #e9e9e7;
-  --primary-color: #2e7d64;
-  --primary-hover: #236b54;
-  --danger-color: #eb5757;
-  --success-color: #2e7d64;
-  --warning-color: #f57c00;
-  --info-color: #1565c0;
-}
+/* Font Sizes */
+--wf-font-xs: 0.75rem;      /* 12px */
+--wf-font-sm: 0.875rem;    /* 14px */
+--wf-font-md: 1rem;        /* 16px */
+--wf-font-lg: 1.125rem;    /* 18px */
+--wf-font-xl: 1.25rem;     /* 20px */
+--wf-font-2xl: 1.5rem;     /* 24px */
+--wf-font-3xl: 2rem;       /* 32px */
 
-/* Dark mode */
-.ucode3-dark .surface-name {
-  --background: #1a1a2e;
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0c0;
-  --text-tertiary: #6b6b8a;
-  --border-color: #2a2a4a;
-  --surface-background: #16213e;
-  --surface-hover: #2a2a4a;
-  --primary-color: #2e7d64;
-  --primary-hover: #236b54;
-  --danger-color: #eb5757;
-  --success-color: #7dcea0;
-  --warning-color: #f57c00;
-  --info-color: #7db0e0;
+/* Colors */
+--wf-primary: #2e7d64;     /* Primary brand color */
+--wf-secondary: #6b6b6b;   /* Secondary text color */
+--wf-text: #1a1a2e;        /* Primary text color */
+--wf-text-muted: #b0b0b0;  /* Muted/disabled text */
+--wf-border: #e9e9e7;      /* Border color */
+--wf-surface: #f7f6f3;     /* Surface background */
+--wf-success: #2e7d64;     /* Success state */
+--wf-info: #1565c0;        /* Info state */
+--wf-warning: #f57c00;     /* Warning state */
+--wf-error: #eb5757;       /* Error state */
+```
+
+## Spacing Scale
+
+```css
+--wf-spacing-1: 0.25rem;   /* 4px */
+--wf-spacing-2: 0.5rem;    /* 8px */
+--wf-spacing-3: 0.75rem;   /* 12px */
+--wf-spacing-4: 1rem;      /* 16px */
+--wf-spacing-5: 1.5rem;    /* 24px */
+--wf-spacing-6: 2rem;      /* 32px */
+--wf-spacing-7: 2.5rem;    /* 40px */
+--wf-spacing-8: 3rem;      /* 48px */
+```
+
+## Surface Layout Standards
+
+### 1. Surface Container
+
+```css
+.surface-container {
+  background: rgb(var(--wf-surface));
+  color: rgb(var(--wf-text));
+  font-family: var(--wf-font-sans);
+  padding: var(--wf-spacing-5);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 ```
 
-### 4. Scoped Styles Structure
+### 2. Surface Header
 
 ```css
-<style scoped>
-.surface-name {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--background);
-  color: var(--text-primary);
-}
-
-/* Header */
 .surface-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.header-icon {
-  color: var(--primary-color);
+  margin-bottom: var(--wf-spacing-5);
+  padding-bottom: var(--wf-spacing-3);
+  border-bottom: 2px dashed rgb(var(--wf-border));
 }
 
 .surface-header h1 {
+  font-size: var(--wf-font-xl);
+  font-weight: bold;
+  color: rgb(var(--wf-primary));
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--wf-spacing-3);
 }
 
 .surface-tagline {
-  color: var(--text-secondary);
-  margin: 0.5rem 0;
+  color: rgb(var(--wf-secondary));
+  font-size: var(--wf-font-sm);
+  margin: 0 0 var(--wf-spacing-1);
+}
+```
+
+### 3. Navigation Elements
+
+```css
+.surface-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px dashed rgb(var(--wf-border));
+  padding: var(--wf-spacing-3) var(--wf-spacing-4);
+  margin-bottom: var(--wf-spacing-5);
 }
 
-.surface-definition {
-  color: var(--text-tertiary);
-  font-size: 0.9rem;
+.surface-nav-link {
+  font-size: var(--wf-font-sm);
+  color: rgb(var(--wf-text-muted));
+  cursor: pointer;
+  padding: var(--wf-spacing-1) 0;
+  border-bottom: 2px dashed transparent;
+}
+
+.surface-nav-link:hover {
+  color: rgb(var(--wf-text));
+}
+
+.surface-nav-link.active {
+  color: rgb(var(--wf-primary));
+  border-bottom-color: rgb(var(--wf-primary));
+}
+```
+
+### 4. Card Components
+
+```css
+.surface-card {
+  border: 2px dashed rgb(var(--wf-border));
+  overflow: hidden;
+}
+
+.surface-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--wf-spacing-3) var(--wf-spacing-4);
+  border-bottom: 1px dashed rgb(var(--wf-border));
+}
+
+.surface-card-header h3 {
+  margin: 0;
+  font-size: var(--wf-font-sm);
+  font-weight: bold;
+  color: rgb(var(--wf-text));
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.surface-card-content {
+  padding: var(--wf-spacing-4);
+}
+```
+
+### 5. Text Elements
+
+```css
+.surface-text {
+  font-size: var(--wf-font-sm);
+  color: rgb(var(--wf-secondary));
+  margin: 0 0 var(--wf-spacing-3);
+}
+
+.surface-text-link {
+  font-size: var(--wf-font-xs);
+  color: rgb(var(--wf-primary));
+  cursor: pointer;
+  border-bottom: 1px dashed rgb(var(--wf-primary));
+  text-decoration: none;
+}
+
+.surface-text-link:hover {
+  opacity: 0.8;
+}
+```
+
+### 6. Status Indicators
+
+```css
+.surface-status {
+  font-size: var(--wf-font-xs);
+  padding: var(--wf-spacing-1) var(--wf-spacing-3);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.status-up {
+  color: #4caf50;
+}
+
+.status-degraded {
+  color: #ff9800;
+}
+
+.status-down {
+  color: #f44336;
+}
+```
+
+## Component-Specific Standards
+
+### GitHub Surface
+
+```css
+/* Repository Cards */
+.repo-card {
+  background: rgb(var(--wf-surface));
+  border: 1px solid rgb(var(--wf-border));
+  border-radius: 8px;
+  padding: var(--wf-spacing-4);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.repo-card:hover {
+  background: rgb(var(--wf-surface));
+  border-color: rgb(var(--wf-primary));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.repo-name {
+  font-size: var(--wf-font-md);
+  font-weight: 600;
   margin: 0;
 }
 
-.header-right {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Info Banner */
-.info-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--info-background);
-  border-radius: 8px;
-  margin: 1rem;
-  color: var(--info-color);
+.repo-description {
+  font-size: var(--wf-font-sm);
+  color: rgb(var(--wf-secondary));
+  margin-bottom: var(--wf-spacing-3);
 }
 
 /* Buttons */
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--primary-color);
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
+  background: rgb(var(--wf-primary));
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
+  background: rgb(var(--wf-primary));
+  opacity: 0.9;
 }
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--surface-background);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
+  background: rgb(var(--wf-surface));
+  color: rgb(var(--wf-text));
+  border: 1px solid rgb(var(--wf-border));
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-secondary:hover {
-  background: var(--surface-hover);
-  border-color: var(--primary-color);
+  background: rgb(var(--wf-surface));
+  border-color: rgb(var(--wf-primary));
 }
-
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  background: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--text-secondary);
-}
-
-.btn-icon:hover {
-  background: var(--surface-hover);
-  border-color: var(--primary-color);
-  color: var(--text-primary);
-}
-
-.btn-sm {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.8125rem;
-  height: auto;
-}
-
-/* Loading State */
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 4rem 2rem;
-  color: var(--text-secondary);
-}
-
-.spinner {
-  width: 2rem;
-  height: 2rem;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--primary-color);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Error State */
-.error-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.error-icon {
-  margin-bottom: 1.5rem;
-  color: var(--danger-color);
-}
-
-.error-state h3 {
-  margin-bottom: 0.5rem;
-}
-
-.error-state p {
-  margin-bottom: 1.5rem;
-}
-
-.error-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-/* Empty State */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.empty-icon {
-  margin-bottom: 1.5rem;
-  color: var(--text-tertiary);
-}
-
-.empty-state h3 {
-  margin-bottom: 0.5rem;
-}
-
-.empty-state p {
-  margin-bottom: 1.5rem;
-}
-
-/* Grid */
-.item-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.item-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--surface-background);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.item-card:hover {
-  background: var(--surface-hover);
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.item-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.item-icon {
-  color: var(--primary-color);
-}
-
-.item-name {
-  flex: 1;
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.item-type {
-  padding: 0.25rem 0.75rem;
-  background: var(--surface-hover);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-}
-
-.item-meta {
-  display: flex;
-  gap: 0.75rem;
-  font-size: 0.75rem;
-  color: var(--text-tertiary);
-  flex-wrap: wrap;
-}
-
-.item-description {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-.item-actions {
-  display: flex;
-  gap: 0.25rem;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.item-card:hover .item-actions {
-  opacity: 1;
-}
-
-/* Statistics */
-.item-stats {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 1rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--border-color);
-}
-</style>
 ```
 
-## Surface-Specific Components
+### WordPress Surface
 
-### VaultSurface.vue
-- **Purpose**: Display and manage Vault content
-- **Key Features**: File tree navigation, content preview, search functionality
-- **Icon**: `folder` or `database`
+```css
+/* Post Cards */
+.post-card {
+  background: rgb(var(--wf-surface));
+  border: 1px solid rgb(var(--wf-border));
+  border-radius: 8px;
+  padding: var(--wf-spacing-4);
+  margin-bottom: var(--wf-spacing-3);
+}
 
-### WorkflowSurface.vue
-- **Purpose**: Display and manage workflows
-- **Key Features**: Workflow cards, status indicators, execution controls
-- **Icon**: `workflow` or `git-branch`
+.post-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--wf-spacing-2);
+}
 
-### ToolRegistrySurface.vue
-- **Purpose**: Discover and manage available tools
-- **Key Features**: Tool cards, filtering, usage statistics
-- **Icon**: `tool` or `wrench`
+.post-title {
+  font-size: var(--wf-font-lg);
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
 
-### USXDSurface.vue
-- **Purpose**: View and edit universal documents
-- **Key Features**: Document grid, import/export, version tracking
-- **Icon**: `file-text` or `file`
+.post-status {
+  font-size: var(--wf-font-xs);
+  padding: var(--wf-spacing-1) var(--wf-spacing-3);
+  border-radius: 4px;
+}
 
-### GitHubSurface.vue
-- **Purpose**: Connect to GitHub repositories
-- **Key Features**: Repository list, issue management, PR tracking
-- **Icon**: `github` or `git-fork`
+.status-published {
+  background: rgba(46, 125, 100, 0.1);
+  color: rgb(var(--wf-success));
+}
 
-### WordPressSurface.vue
-- **Purpose**: Connect to WordPress sites
-- **Key Features**: Site management, post editing, publishing controls
-- **Icon**: `wordpress` or `globe`
+.status-draft {
+  background: rgba(245, 124, 0, 0.1);
+  color: rgb(var(--wf-warning));
+}
+```
 
-### DevModeSurface.vue
-- **Purpose**: Access developer tools and utilities
-- **Key Features**: System monitoring, debugging, configuration editing
-- **Icon**: `code` or `terminal`
+## Font Size Comparison
 
-### StoryWizard.vue
-- **Purpose**: Create interactive stories and narratives
-- **Key Features**: Story cards, branching paths, publishing workflow
-- **Icon**: `book-open` or `book`
+### Old UniversalSurfaceXD Font Sizes (Oversized)
+- h1: 1.5rem (24px) - Too large
+- h2: 1.25rem (20px) - Too large
+- h3: 1rem (16px) - Too large
+- body text: 0.875rem (14px) - Too large
+- small text: 0.75rem (12px) - Too large
 
-### VibeTUI.vue
-- **Purpose**: Terminal user interface for uDOS
-- **Key Features**: Command input, output display, session management
-- **Icon**: `terminal` or `command`
+### New udoui Font Sizes (Recommended)
+- h1: var(--wf-font-xl) (20px) - ✓ Correct
+- h2: var(--wf-font-lg) (18px) - ✓ Correct
+- h3: var(--wf-font-md) (16px) - ✓ Correct
+- body text: var(--wf-font-sm) (14px) - ✓ Correct
+- small text: var(--wf-font-xs) (12px) - ✓ Correct
+
+## Color Palette Consistency
+
+All surfaces should use the same color variables:
+
+```css
+/* Primary Colors */
+--wf-primary: #2e7d64;     /* Green (brand) */
+--wf-secondary: #6b6b6b;   /* Gray */
+--wf-text: #1a1a2e;        /* Dark blue */
+--wf-text-muted: #b0b0b0;  /* Light gray */
+--wf-border: #e9e9e7;      /* Light border */
+--wf-surface: #f7f6f3;     /* Light background */
+--wf-success: #4caf50;     /* Success green */
+--wf-info: #2196f3;        /* Info blue */
+--wf-warning: #ff9800;     /* Warning orange */
+--wf-error: #f44336;       /* Error red */
+```
 
 ## Implementation Checklist
 
-When creating a new surface component, verify:
+- [ ] All surfaces use CSS variables from udoui base styles
+- [ ] Font sizes are consistent with typography scale
+- [ ] Colors use the shared palette
+- [ ] Spacing uses the spacing scale
+- [ ] Surface containers have consistent padding
+- [ ] Status indicators use standardized classes
+- [ ] Buttons follow the button style guide
+- [ ] Cards have consistent border styling
+- [ ] Navigation elements use consistent styling
 
-- [ ] Component follows the standard template structure
-- [ ] All three states (loading, error, empty) are implemented
-- [ ] Search functionality is included if applicable
-- [ ] Action buttons are properly styled
-- [ ] CSS custom properties are defined for both light and dark modes
-- [ ] Scoped styles are properly organized
-- [ ] Computed properties for statistics are implemented
-- [ ] All methods follow the naming convention
-- [ ] Component is registered in the appropriate parent component
+## Migration Steps
 
-## Notes
+1. **Identify all surfaces** using the old style guide
+2. **Replace hardcoded values** with CSS variables
+3. **Update font sizes** to use the typography scale
+4. **Standardize colors** using the shared palette
+5. **Apply spacing scale** consistently
+6. **Test across different surfaces** for visual consistency
+7. **Update documentation** to reflect new standards
 
-- All surfaces should use the `SurfaceIcon` component for consistent icon rendering
-- Use `v-if`/`v-else-if`/`v-else` for state management
-- Always include helper text in error and empty states
-- Use CSS transitions for hover effects
-- Keep the grid layout consistent (minmax(280px, 1fr))
-- Ensure all interactive elements have proper titles for accessibility
+## Verification
+
+After applying these standards, verify:
+- All surfaces have consistent font sizes
+- Color usage is uniform across surfaces
+- Spacing is consistent throughout
+- Status indicators are easily recognizable
+- Navigation elements follow the same pattern

@@ -576,18 +576,18 @@ export default {
 
 .surface-header h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--wf-font-xl);
   font-weight: 600;
 }
 
 .surface-tagline {
   color: var(--text-secondary);
-  margin: 0.5rem 0;
+  margin: var(--wf-spacing-1) 0;
 }
 
 .surface-definition {
   color: var(--text-tertiary);
-  font-size: 0.9rem;
+  font-size: var(--wf-font-sm);
   margin: 0;
 }
 
@@ -699,7 +699,7 @@ export default {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   color: var(--text-primary);
   outline: none;
 }
@@ -748,7 +748,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 1rem;
+  font-size: var(--wf-font-md);
   font-weight: 600;
 }
 
@@ -759,15 +759,15 @@ export default {
 .repo-meta {
   display: flex;
   gap: 1rem;
-  font-size: 0.85rem;
+  font-size: var(--wf-font-sm);
   color: var(--text-tertiary);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--wf-spacing-2);
 }
 
 .repo-description {
-  font-size: 0.9rem;
+  font-size: var(--wf-font-sm);
   color: var(--text-secondary);
-  margin-bottom: 1rem;
+  margin-bottom: var(--wf-spacing-4);
   line-height: 1.4;
 }
 
@@ -781,13 +781,13 @@ export default {
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
   background: var(--primary-color);
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
@@ -800,13 +800,13 @@ export default {
 .btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
   background: var(--surface-background);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -849,7 +849,7 @@ export default {
 }
 
 .sync-status {
-  font-size: 0.85rem;
+  font-size: var(--wf-font-sm);
   text-align: right;
 }
 
@@ -868,8 +868,8 @@ export default {
 .repo-stats {
   text-align: right;
   color: var(--text-tertiary);
-  font-size: 0.85rem;
-  padding: 0.5rem;
+  font-size: var(--wf-font-sm);
+  padding: var(--wf-spacing-2);
 }
 
 /* Modal */
@@ -903,26 +903,26 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: var(--wf-spacing-4) var(--wf-spacing-6);
   border-bottom: 1px solid var(--border-color);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: var(--wf-font-lg);
   font-weight: 600;
 }
 
 .repo-detail-content {
-  padding: 1.5rem;
+  padding: var(--wf-spacing-6);
 }
 
 .repo-meta-detail {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+  gap: var(--wf-spacing-2);
+  margin-bottom: var(--wf-spacing-4);
+  font-size: var(--wf-font-sm);
 }
 
 .meta-item {
@@ -950,9 +950,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: var(--wf-spacing-2);
+  font-size: var(--wf-font-sm);
   color: var(--text-tertiary);
-  margin-top: 1rem;
+  margin-top: var(--wf-spacing-4);
 }
 </style>

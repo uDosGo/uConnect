@@ -804,7 +804,7 @@ export default {
 
 .surface-header h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--wf-font-xl);
   font-weight: 600;
 }
 
@@ -815,7 +815,7 @@ export default {
 
 .surface-definition {
   color: var(--text-tertiary);
-  font-size: 0.9rem;
+  font-size: var(--wf-font-sm);
   margin: 0;
 }
 
@@ -853,10 +853,10 @@ export default {
 }
 
 .form-group input {
-  padding: 0.75rem;
+  padding: var(--wf-spacing-4);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: var(--wf-font-md);
   background: var(--background);
   color: var(--text-primary);
 }
@@ -869,13 +869,13 @@ export default {
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
   background: var(--primary-color);
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
@@ -888,13 +888,13 @@ export default {
 .btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: var(--wf-spacing-2);
+  padding: var(--wf-spacing-2) var(--wf-spacing-4);
   background: var(--surface-background);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--wf-font-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
