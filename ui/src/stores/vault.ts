@@ -18,6 +18,26 @@ export const useVaultStore = defineStore('vault', () => {
     }))
   })
 
+  // Computed properties for VaultSurface compatibility
+  const files = computed(() => 
+    entries.value.filter(e => e.type === 'file').map(e => ({
+      id: e.path,
+      name: e.name,
+      size: e.size || 0,
+      updatedAt: e.modified || new Date().toISOString(),
+      tags: [],
+      type: e.name.split('.').pop() || 'file'
+    }))
+  )
+
+  const folders = computed(() => 
+    entries.value.filter(e => e.type === 'directory').map(e => ({
+      id: e.path,
+      name: e.name,
+      path: e.path
+    }))
+  )
+
   async function loadEntries(path?: string) {
     isLoading.value = true
     error.value = null
@@ -29,6 +49,10 @@ export const useVaultStore = defineStore('vault', () => {
     } finally {
       isLoading.value = false
     }
+  }
+
+  async function loadFiles() {
+    await loadEntries('/')
   }
 
   async function navigateTo(path: string) {
@@ -63,8 +87,56 @@ export const useVaultStore = defineStore('vault', () => {
     }
   }
 
+  async function uploadFiles(fileList: File[]) {
+    // Placeholder implementation
+    console.log('Upload files:', fileList)
+    throw new Error('Upload not implemented yet')
+  }
+
+  function createDocument(name: string) {
+    // Placeholder implementation
+    console.log('Create document:', name)
+  }
+
+  function createFolder(name: string) {
+    // Placeholder implementation
+    console.log('Create folder:', name)
+  }
+
+  async function syncAll() {
+    // Placeholder implementation
+    console.log('Sync all')
+  }
+
+  async function getFileContent(id: string) {
+    await openFile(id)
+    return currentContent.value || ''
+  }
+
+  async function renderMarkdown(content: string) {
+    // Simple markdown rendering placeholder
+    return content.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  }
+
+  function shareFile(id: string) {
+    console.log('Share file:', id)
+  }
+
+  function deleteFile(id: string) {
+    console.log('Delete file:', id)
+    entries.value = entries.value.filter(e => e.path !== id)
+  }
+
+  function downloadFile(id: string) {
+    console.log('Download file:', id)
+  }
+
   return {
     entries,
+    files,
+    folders,
     currentPath,
     currentContent,
     currentMetadata,
@@ -72,8 +144,18 @@ export const useVaultStore = defineStore('vault', () => {
     error,
     breadcrumbs,
     loadEntries,
+    loadFiles,
     navigateTo,
     openFile,
     saveFile,
+    uploadFiles,
+    createDocument,
+    createFolder,
+    syncAll,
+    getFileContent,
+    renderMarkdown,
+    shareFile,
+    deleteFile,
+    downloadFile,
   }
 })
