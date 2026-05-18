@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'usxd',
-        component: () => import('../views/surfaces/USXDSurface.vue'),
+        component: () => import('../views/surfaces/VibeTUI.vue'),
         meta: { title: 'USXD Renderer' },
       },
       {
