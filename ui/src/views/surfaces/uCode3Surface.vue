@@ -3,12 +3,36 @@
     <!-- Surface Header -->
     <div class="surface-header">
       <div class="surface-header-left">
-        <span class="surface-icon">📝</span>
+        <svg class="surface-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
         <h1>uCode3 <span class="badge">Surface</span></h1>
       </div>
       <div class="surface-header-right">
         <span class="header-badge notion-badge">Notion-Style Workspace</span>
         <span class="header-badge lens-badge">LENS Ready</span>
+        <button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
+          <!-- Sun icon -->
+          <svg v-if="isDark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sm">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <!-- Moon icon -->
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sm">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -18,7 +42,10 @@
       <aside class="doc-sidebar" :class="{ collapsed: sidebarCollapsed }">
         <div class="sidebar-header">
           <div class="sidebar-search">
-            <span class="search-icon">🔍</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
             <input
               v-model="searchQuery"
               type="text"
@@ -27,7 +54,11 @@
             />
           </div>
           <button class="new-doc-btn" @click="createDocument">
-            <span>+</span> New Page
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            New Page
           </button>
         </div>
         <div class="sidebar-documents">
@@ -38,15 +69,29 @@
             :class="{ active: activeDocumentId === doc.id }"
             @click="selectDocument(doc.id)"
           >
-            <span class="doc-icon">{{ doc.icon || '📄' }}</span>
+            <!-- File icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
             <span class="doc-title">{{ doc.title || 'Untitled' }}</span>
-            <span v-if="doc.isPublished" class="published-dot" title="Published">🌐</span>
+            <!-- Globe icon for published -->
+            <svg v-if="doc.isPublished" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs published-dot" title="Published">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
           </div>
         </div>
         <div class="sidebar-footer">
           <button class="sidebar-toggle-btn" @click="sidebarCollapsed = !sidebarCollapsed">
-            <span v-if="sidebarCollapsed">→</span>
-            <span v-else>←</span>
+            <!-- Chevron left/right -->
+            <svg v-if="!sidebarCollapsed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
             <span class="toggle-label">{{ sidebarCollapsed ? 'Expand' : 'Collapse' }}</span>
           </button>
         </div>
@@ -62,11 +107,22 @@
 
         <!-- Empty State -->
         <div v-else-if="!activeDocument" class="empty-state">
-          <div class="empty-icon">📝</div>
+          <!-- File text icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
           <h2>Welcome to uCode3</h2>
           <p>Select a document from the sidebar or create a new one.</p>
           <button class="create-btn" @click="createDocument">
-            <span>+</span> Create New Document
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sm">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Create New Document
           </button>
         </div>
 
@@ -75,16 +131,31 @@
           <!-- Cover Image -->
           <div v-if="activeDocument.coverImage" class="cover-image-container">
             <img :src="activeDocument.coverImage" alt="Cover" class="cover-image" />
-            <button class="remove-cover-btn" @click="removeCover">✕</button>
+            <button class="remove-cover-btn" @click="removeCover">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
           </div>
           <div v-else class="cover-placeholder" @click="addCover">
+            <!-- Image icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sm">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
             <span>Add Cover</span>
           </div>
 
           <!-- Document Header -->
           <div class="doc-header">
             <div class="doc-icon-area">
-              <span class="doc-icon-large">{{ activeDocument.icon || '📄' }}</span>
+              <!-- File icon large -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="doc-icon-large">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
               <button class="change-icon-btn" @click="changeIcon">Change</button>
             </div>
             <input
@@ -104,7 +175,16 @@
               :class="[`block-${block.type}`, { 'is-empty': !block.content }]"
             >
               <!-- Drag Handle -->
-              <span class="drag-handle" title="Drag to reorder">⠿</span>
+              <span class="drag-handle" title="Drag to reorder">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="icon-xs">
+                  <circle cx="9" cy="5" r="1.5"/>
+                  <circle cx="15" cy="5" r="1.5"/>
+                  <circle cx="9" cy="12" r="1.5"/>
+                  <circle cx="15" cy="12" r="1.5"/>
+                  <circle cx="9" cy="19" r="1.5"/>
+                  <circle cx="15" cy="19" r="1.5"/>
+                </svg>
+              </span>
 
               <!-- Block Type Selector -->
               <select
@@ -164,7 +244,13 @@
               </div>
               <div v-else-if="block.type === 'toggle'" class="block-content toggle-block">
                 <button class="toggle-btn" @click="block.expanded = !block.expanded">
-                  <span>{{ block.expanded ? '▼' : '▶' }}</span>
+                  <!-- Chevron right/down -->
+                  <svg v-if="!block.expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                  <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
                 </button>
                 <input
                   v-model="block.content"
@@ -204,7 +290,12 @@
                 ></textarea>
               </div>
               <div v-else-if="block.type === 'callout'" class="block-content callout-block">
-                <span class="callout-icon">💡</span>
+                <!-- Lightbulb icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="callout-icon">
+                  <path d="M9 18h6"/>
+                  <path d="M10 22h4"/>
+                  <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+                </svg>
                 <textarea
                   v-model="block.content"
                   class="block-textarea callout-textarea"
@@ -218,9 +309,20 @@
               <div v-else-if="block.type === 'image'" class="block-content image-block">
                 <div v-if="block.imageUrl" class="image-preview">
                   <img :src="block.imageUrl" alt="Block image" />
-                  <button class="remove-image-btn" @click="removeImage(block)">✕</button>
+                  <button class="remove-image-btn" @click="removeImage(block)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                      <line x1="18" y1="6" x2="6" y2="18"/>
+                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
                 </div>
                 <div v-else class="image-upload-area" @click="uploadImage(block)">
+                  <!-- Image icon -->
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-sm">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
                   <span>Click to upload image</span>
                 </div>
               </div>
@@ -255,15 +357,34 @@
 
               <!-- Block Actions -->
               <div class="block-actions">
-                <button class="block-action-btn add-above" @click="addBlockAbove(index)" title="Add block above">+</button>
-                <button class="block-action-btn add-below" @click="addBlockBelow(index)" title="Add block below">+</button>
-                <button class="block-action-btn delete-block" @click="deleteBlock(index)" title="Delete block">🗑</button>
+                <button class="block-action-btn add-above" @click="addBlockAbove(index)" title="Add block above">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </button>
+                <button class="block-action-btn add-below" @click="addBlockBelow(index)" title="Add block below">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </button>
+                <button class="block-action-btn delete-block" @click="deleteBlock(index)" title="Delete block">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
               </div>
             </div>
 
             <!-- Add Block Button (bottom) -->
             <button class="add-block-btn" @click="addBlockAtEnd">
-              <span>+</span> Add a block
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add a block
             </button>
           </div>
 
@@ -274,7 +395,13 @@
                 Last edited: {{ formatDate(activeDocument.updatedAt) }}
               </span>
               <span v-if="activeDocument.isPublished" class="published-badge">
-                🌐 Published
+                <!-- Globe icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                Published
               </span>
             </div>
             <div class="footer-right">
@@ -282,7 +409,12 @@
                 {{ activeDocument.isPublished ? 'Unpublish' : 'Publish' }}
               </button>
               <button class="footer-btn trash-btn" @click="deleteDocument">
-                🗑 Move to Trash
+                <!-- Trash icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-xs">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Move to Trash
               </button>
             </div>
           </div>
@@ -322,13 +454,29 @@ const sidebarCollapsed = ref(false)
 const searchQuery = ref('')
 const isLoading = ref(false)
 const activeDocumentId = ref<string | null>(null)
+const isDark = ref(false)
+
+// ─── Theme ──────────────────────────────────────────────────────
+function toggleTheme() {
+  isDark.value = !isDark.value
+  document.documentElement.classList.toggle('ucode3-dark', isDark.value)
+}
+
+onMounted(() => {
+  activeDocumentId.value = 'welcome'
+  // Respect system preference
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    isDark.value = true
+    document.documentElement.classList.add('ucode3-dark')
+  }
+})
 
 // ─── Sample Documents ───────────────────────────────────────────
 const documents = ref<Document[]>([
   {
     id: 'welcome',
     title: 'Welcome to uCode3',
-    icon: '👋',
+    icon: 'file',
     coverImage: null,
     isPublished: true,
     blocks: [
@@ -356,7 +504,7 @@ const documents = ref<Document[]>([
   {
     id: 'architecture',
     title: 'Architecture Overview',
-    icon: '🏗️',
+    icon: 'layers',
     coverImage: null,
     isPublished: true,
     blocks: [
@@ -375,7 +523,7 @@ const documents = ref<Document[]>([
   {
     id: 'integration',
     title: 'Jotion Integration Plan',
-    icon: '🔗',
+    icon: 'link',
     coverImage: null,
     isPublished: false,
     blocks: [
@@ -394,7 +542,7 @@ const documents = ref<Document[]>([
   {
     id: 'roadmap',
     title: 'Development Roadmap',
-    icon: '🗺️',
+    icon: 'map',
     coverImage: null,
     isPublished: false,
     blocks: [
@@ -441,7 +589,7 @@ function createDocument() {
   const newDoc: Document = {
     id: `doc-${Date.now()}`,
     title: 'Untitled',
-    icon: '📄',
+    icon: 'file',
     coverImage: null,
     isPublished: false,
     blocks: [
@@ -516,7 +664,7 @@ function splitBlock(index: number) {
   const currentBlock = activeDocument.value.blocks[index]
   if (!currentBlock || currentBlock.type !== 'paragraph') return
 
-  const cursorPos = 0 // Simplified — in a real editor we'd track cursor position
+  const cursorPos = 0
   const before = currentBlock.content
   const after = ''
 
@@ -570,7 +718,7 @@ function removeCover() {
 
 function changeIcon() {
   if (!activeDocument.value) return
-  const icons = ['📄', '📝', '👋', '🏗️', '🔗', '🗺️', '⭐', '🎯', '💡', '📌', '📋', '📁']
+  const icons = ['file', 'layers', 'link', 'map', 'star', 'target', 'lightbulb', 'pin', 'clipboard', 'folder']
   const currentIdx = icons.indexOf(activeDocument.value.icon)
   activeDocument.value.icon = icons[(currentIdx + 1) % icons.length]
   onBlockChange()
@@ -600,17 +748,162 @@ function formatDate(dateStr: string): string {
   })
 }
 
-// ─── Init ───────────────────────────────────────────────────────
-onMounted(() => {
-  activeDocumentId.value = 'welcome'
-})
 </script>
 
+<style>
+/* ─── CSS Custom Properties (Light / Dark) — UNSCOPED ─────────── */
+:root {
+  --ucode3-bg: #ffffff;
+  --ucode3-text: #37352f;
+  --ucode3-header-bg: #fafafa;
+  --ucode3-header-border: #e9e9e7;
+  --ucode3-sidebar-bg: #f7f6f3;
+  --ucode3-sidebar-border: #e9e9e7;
+  --ucode3-sidebar-hover: #e9e9e7;
+  --ucode3-sidebar-active: #d9e8ff;
+  --ucode3-input-bg: #ffffff;
+  --ucode3-input-border: #e9e9e7;
+  --ucode3-text-muted: #6b6b6b;
+  --ucode3-text-subtle: #b0b0b0;
+  --ucode3-badge-bg: #e9e9e7;
+  --ucode3-badge-text: #6b6b6b;
+  --ucode3-notion-bg: #e8f5e9;
+  --ucode3-notion-text: #2e7d64;
+  --ucode3-lens-bg: #e3f2fd;
+  --ucode3-lens-text: #1565c0;
+  --ucode3-callout-bg: #f7f6f3;
+  --ucode3-cover-placeholder: #f7f6f3;
+  --ucode3-cover-border: #e9e9e7;
+  --ucode3-divider: #e9e9e7;
+  --ucode3-scrollbar: #e9e9e7;
+  --ucode3-scrollbar-hover: #b0b0b0;
+  --ucode3-btn-hover: #f7f6f3;
+  --ucode3-create-btn-bg: #2e7d64;
+  --ucode3-create-btn-text: #ffffff;
+  --ucode3-create-btn-hover: #236b54;
+  --ucode3-published-bg: #e8f5e9;
+  --ucode3-published-text: #2e7d64;
+  --ucode3-trash-hover-bg: #fce4e4;
+  --ucode3-trash-hover-text: #eb5757;
+  --ucode3-trash-hover-border: #eb5757;
+  --ucode3-code-bg: #1e1e1e;
+  --ucode3-code-bar: #2d2d2d;
+  --ucode3-code-border: #3d3d3d;
+  --ucode3-code-text: #d4d4d4;
+  --ucode3-code-select-bg: #3d3d3d;
+  --ucode3-code-select-text: #ccc;
+  --ucode3-code-select-border: #555;
+  --ucode3-toggle-btn: #6b6b6b;
+  --ucode3-drag-handle: #b0b0b0;
+  --ucode3-drag-handle-hover: #6b6b6b;
+  --ucode3-block-type-color: #b0b0b0;
+  --ucode3-block-type-hover-border: #e9e9e7;
+  --ucode3-block-type-hover-bg: #f7f6f3;
+  --ucode3-block-action-border: #e9e9e7;
+  --ucode3-block-action-color: #6b6b6b;
+  --ucode3-block-action-hover-bg: #e9e9e7;
+  --ucode3-add-block-border: #e9e9e7;
+  --ucode3-add-block-color: #6b6b6b;
+  --ucode3-add-block-hover-bg: #f7f6f3;
+  --ucode3-add-block-hover-border: #b0b0b0;
+  --ucode3-add-block-hover-color: #37352f;
+  --ucode3-footer-btn-bg: #ffffff;
+  --ucode3-footer-btn-border: #e9e9e7;
+  --ucode3-footer-btn-color: #37352f;
+  --ucode3-footer-btn-hover-bg: #f7f6f3;
+  --ucode3-quote-text: #6b6b6b;
+  --ucode3-quote-border: #2e7d64;
+  --ucode3-todo-checked: #b0b0b0;
+  --ucode3-checkbox-accent: #2e7d64;
+  --ucode3-image-upload-border: #e9e9e7;
+  --ucode3-image-upload-color: #6b6b6b;
+  --ucode3-image-upload-hover-bg: #f7f6f3;
+  --ucode3-list-marker: #6b6b6b;
+  --ucode3-option-bg: #ffffff;
+  --ucode3-option-text: #37352f;
+}
+
+.ucode3-dark {
+  --ucode3-bg: #1a1a2e;
+  --ucode3-text: #e0e0e0;
+  --ucode3-header-bg: #16213e;
+  --ucode3-header-border: #2a2a4a;
+  --ucode3-sidebar-bg: #16213e;
+  --ucode3-sidebar-border: #2a2a4a;
+  --ucode3-sidebar-hover: #2a2a4a;
+  --ucode3-sidebar-active: #1a3a5e;
+  --ucode3-input-bg: #1a1a2e;
+  --ucode3-input-border: #2a2a4a;
+  --ucode3-text-muted: #a0a0c0;
+  --ucode3-text-subtle: #6b6b8a;
+  --ucode3-badge-bg: #2a2a4a;
+  --ucode3-badge-text: #a0a0c0;
+  --ucode3-notion-bg: #1a3a2e;
+  --ucode3-notion-text: #7dcea0;
+  --ucode3-lens-bg: #1a2a3e;
+  --ucode3-lens-text: #7db0e0;
+  --ucode3-callout-bg: #16213e;
+  --ucode3-cover-placeholder: #16213e;
+  --ucode3-cover-border: #2a2a4a;
+  --ucode3-divider: #2a2a4a;
+  --ucode3-scrollbar: #2a2a4a;
+  --ucode3-scrollbar-hover: #3a3a5a;
+  --ucode3-btn-hover: #2a2a4a;
+  --ucode3-create-btn-bg: #2e7d64;
+  --ucode3-create-btn-text: #ffffff;
+  --ucode3-create-btn-hover: #236b54;
+  --ucode3-published-bg: #1a3a2e;
+  --ucode3-published-text: #7dcea0;
+  --ucode3-trash-hover-bg: #3a1a1a;
+  --ucode3-trash-hover-text: #eb5757;
+  --ucode3-trash-hover-border: #eb5757;
+  --ucode3-toggle-btn: #a0a0c0;
+  --ucode3-drag-handle: #6b6b8a;
+  --ucode3-drag-handle-hover: #a0a0c0;
+  --ucode3-block-type-color: #6b6b8a;
+  --ucode3-block-type-hover-border: #2a2a4a;
+  --ucode3-block-type-hover-bg: #16213e;
+  --ucode3-block-action-border: #2a2a4a;
+  --ucode3-block-action-color: #a0a0c0;
+  --ucode3-block-action-hover-bg: #2a2a4a;
+  --ucode3-add-block-border: #2a2a4a;
+  --ucode3-add-block-color: #a0a0c0;
+  --ucode3-add-block-hover-bg: #16213e;
+  --ucode3-add-block-hover-border: #6b6b8a;
+  --ucode3-add-block-hover-color: #e0e0e0;
+  --ucode3-footer-btn-bg: #1a1a2e;
+  --ucode3-footer-btn-border: #2a2a4a;
+  --ucode3-footer-btn-color: #e0e0e0;
+  --ucode3-footer-btn-hover-bg: #2a2a4a;
+  --ucode3-quote-text: #a0a0c0;
+  --ucode3-quote-border: #7dcea0;
+  --ucode3-todo-checked: #6b6b8a;
+  --ucode3-checkbox-accent: #7dcea0;
+  --ucode3-image-upload-border: #2a2a4a;
+  --ucode3-image-upload-color: #a0a0c0;
+  --ucode3-image-upload-hover-bg: #16213e;
+  --ucode3-list-marker: #a0a0c0;
+  --ucode3-option-bg: #1a1a2e;
+  --ucode3-option-text: #e0e0e0;
+}
+</style>
+
 <style scoped>
+/* ─── Icon Sizes ──────────────────────────────────────────────── */
+.icon-xs {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-sm {
+  width: 18px;
+  height: 18px;
+}
+
 /* ─── Surface Layout ──────────────────────────────────────────── */
 .ucode3-surface {
-  background: #fff;
-  color: #37352f;
+  background: var(--ucode3-bg);
+  color: var(--ucode3-text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100%;
   display: flex;
@@ -622,8 +915,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  border-bottom: 1px solid #e9e9e7;
-  background: #fafafa;
+  border-bottom: 1px solid var(--ucode3-header-border);
+  background: var(--ucode3-header-bg);
 }
 
 .surface-header-left {
@@ -633,20 +926,22 @@ onMounted(() => {
 }
 
 .surface-icon {
-  font-size: 1.25rem;
+  width: 20px;
+  height: 20px;
+  color: var(--ucode3-text);
 }
 
 .surface-header-left h1 {
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
-  color: #37352f;
+  color: var(--ucode3-text);
 }
 
 .badge {
   font-size: 0.6rem;
-  background: #e9e9e7;
-  color: #6b6b6b;
+  background: var(--ucode3-badge-bg);
+  color: var(--ucode3-badge-text);
   padding: 2px 6px;
   border-radius: 3px;
   font-weight: 600;
@@ -659,6 +954,7 @@ onMounted(() => {
 .surface-header-right {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .header-badge {
@@ -669,13 +965,32 @@ onMounted(() => {
 }
 
 .notion-badge {
-  background: #e8f5e9;
-  color: #2e7d64;
+  background: var(--ucode3-notion-bg);
+  color: var(--ucode3-notion-text);
 }
 
 .lens-badge {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--ucode3-lens-bg);
+  color: var(--ucode3-lens-text);
+}
+
+/* ─── Theme Toggle ────────────────────────────────────────────── */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--ucode3-header-border);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  color: var(--ucode3-text);
+}
+
+.theme-toggle:hover {
+  background: var(--ucode3-btn-hover);
 }
 
 /* ─── Workspace Layout ────────────────────────────────────────── */
@@ -688,8 +1003,8 @@ onMounted(() => {
 /* ─── Document Sidebar ────────────────────────────────────────── */
 .doc-sidebar {
   width: 280px;
-  background: #f7f6f3;
-  border-right: 1px solid #e9e9e7;
+  background: var(--ucode3-sidebar-bg);
+  border-right: 1px solid var(--ucode3-sidebar-border);
   display: flex;
   flex-direction: column;
   transition: width 0.2s ease;
@@ -703,7 +1018,7 @@ onMounted(() => {
 
 .sidebar-header {
   padding: 0.75rem;
-  border-bottom: 1px solid #e9e9e7;
+  border-bottom: 1px solid var(--ucode3-sidebar-border);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -713,14 +1028,10 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #fff;
-  border: 1px solid #e9e9e7;
+  background: var(--ucode3-input-bg);
+  border: 1px solid var(--ucode3-input-border);
   border-radius: 6px;
   padding: 0.4rem 0.6rem;
-}
-
-.search-icon {
-  font-size: 0.8rem;
 }
 
 .search-input {
@@ -728,13 +1039,13 @@ onMounted(() => {
   border: none;
   background: transparent;
   font-size: 0.8rem;
-  color: #37352f;
+  color: var(--ucode3-text);
   outline: none;
   font-family: inherit;
 }
 
 .search-input::placeholder {
-  color: #b0b0b0;
+  color: var(--ucode3-text-subtle);
 }
 
 .new-doc-btn {
@@ -742,10 +1053,10 @@ onMounted(() => {
   align-items: center;
   gap: 0.35rem;
   padding: 0.4rem 0.75rem;
-  background: #fff;
-  border: 1px solid #e9e9e7;
+  background: var(--ucode3-input-bg);
+  border: 1px solid var(--ucode3-input-border);
   border-radius: 6px;
-  color: #37352f;
+  color: var(--ucode3-text);
   font-size: 0.8rem;
   font-family: inherit;
   cursor: pointer;
@@ -753,7 +1064,7 @@ onMounted(() => {
 }
 
 .new-doc-btn:hover {
-  background: #e9e9e7;
+  background: var(--ucode3-btn-hover);
 }
 
 .sidebar-documents {
@@ -774,16 +1085,11 @@ onMounted(() => {
 }
 
 .doc-tree-item:hover {
-  background: #e9e9e7;
+  background: var(--ucode3-sidebar-hover);
 }
 
 .doc-tree-item.active {
-  background: #d9e8ff;
-}
-
-.doc-icon {
-  font-size: 0.9rem;
-  flex-shrink: 0;
+  background: var(--ucode3-sidebar-active);
 }
 
 .doc-title {
@@ -791,17 +1097,17 @@ onMounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #37352f;
+  color: var(--ucode3-text);
 }
 
 .published-dot {
-  font-size: 0.75rem;
   flex-shrink: 0;
+  color: var(--ucode3-published-text);
 }
 
 .sidebar-footer {
   padding: 0.5rem;
-  border-top: 1px solid #e9e9e7;
+  border-top: 1px solid var(--ucode3-sidebar-border);
 }
 
 .sidebar-toggle-btn {
@@ -810,9 +1116,9 @@ onMounted(() => {
   gap: 0.5rem;
   padding: 0.4rem 0.6rem;
   background: transparent;
-  border: 1px solid #e9e9e7;
+  border: 1px solid var(--ucode3-input-border);
   border-radius: 4px;
-  color: #6b6b6b;
+  color: var(--ucode3-text-muted);
   font-size: 0.75rem;
   font-family: inherit;
   cursor: pointer;
@@ -821,7 +1127,7 @@ onMounted(() => {
 }
 
 .sidebar-toggle-btn:hover {
-  background: #e9e9e7;
+  background: var(--ucode3-btn-hover);
 }
 
 .toggle-label {
@@ -848,14 +1154,14 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   height: 60vh;
-  color: #6b6b6b;
+  color: var(--ucode3-text-muted);
 }
 
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #e9e9e7;
-  border-top-color: #2e7d64;
+  border: 3px solid var(--ucode3-divider);
+  border-top-color: var(--ucode3-create-btn-bg);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -883,20 +1189,22 @@ onMounted(() => {
 }
 
 .empty-icon {
-  font-size: 3rem;
+  width: 48px;
+  height: 48px;
   margin-bottom: 1rem;
+  color: var(--ucode3-text-muted);
 }
 
 .empty-state h2 {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 0.5rem;
-  color: #37352f;
+  color: var(--ucode3-text);
 }
 
 .empty-state p {
   font-size: 0.9rem;
-  color: #6b6b6b;
+  color: var(--ucode3-text-muted);
   margin: 0 0 1.5rem;
   max-width: 400px;
 }
@@ -906,8 +1214,8 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1.25rem;
-  background: #2e7d64;
-  color: #fff;
+  background: var(--ucode3-create-btn-bg);
+  color: var(--ucode3-create-btn-text);
   border: none;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -917,7 +1225,7 @@ onMounted(() => {
 }
 
 .create-btn:hover {
-  background: #236b54;
+  background: var(--ucode3-create-btn-hover);
 }
 
 /* ─── Document Editor ─────────────────────────────────────────── */
@@ -952,10 +1260,11 @@ onMounted(() => {
   border: none;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
 }
 
 .cover-image-container:hover .remove-cover-btn {
@@ -965,21 +1274,22 @@ onMounted(() => {
 .cover-placeholder {
   width: 100%;
   height: 48px;
-  background: #f7f6f3;
-  border: 1px dashed #e9e9e7;
+  background: var(--ucode3-cover-placeholder);
+  border: 1px dashed var(--ucode3-cover-border);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
   cursor: pointer;
   transition: background 0.15s;
   font-size: 0.8rem;
-  color: #6b6b6b;
+  color: var(--ucode3-text-muted);
 }
 
 .cover-placeholder:hover {
-  background: #efefec;
+  background: var(--ucode3-btn-hover);
 }
 
 /* ─── Document Header ─────────────────────────────────────────── */
@@ -997,15 +1307,16 @@ onMounted(() => {
 }
 
 .doc-icon-large {
-  font-size: 2.5rem;
-  line-height: 1;
+  width: 40px;
+  height: 40px;
+  color: var(--ucode3-text);
 }
 
 .change-icon-btn {
   font-size: 0.7rem;
-  color: #6b6b6b;
+  color: var(--ucode3-text-muted);
   background: transparent;
-  border: 1px solid #e9e9e7;
+  border: 1px solid var(--ucode3-input-border);
   border-radius: 4px;
   padding: 0.2rem 0.5rem;
   cursor: pointer;
@@ -1022,7 +1333,7 @@ onMounted(() => {
   font-weight: 700;
   border: none;
   background: transparent;
-  color: #37352f;
+  color: var(--ucode3-text);
   width: 100%;
   padding: 0.25rem 0;
   outline: none;
@@ -1030,7 +1341,7 @@ onMounted(() => {
 }
 
 .doc-title-input::placeholder {
-  color: #b0b0b0;
+  color: var(--ucode3-text-subtle);
 }
 
 /* ─── Block Editor ────────────────────────────────────────────── */
@@ -1056,8 +1367,7 @@ onMounted(() => {
 }
 
 .drag-handle {
-  font-size: 0.8rem;
-  color: #b0b0b0;
+  color: var(--ucode3-drag-handle);
   cursor: grab;
   padding: 0.25rem;
   opacity: 0;
@@ -1066,10 +1376,13 @@ onMounted(() => {
   width: 16px;
   text-align: center;
   margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .drag-handle:hover {
-  color: #6b6b6b;
+  color: var(--ucode3-drag-handle-hover);
 }
 
 .block-type-select {
@@ -1078,7 +1391,7 @@ onMounted(() => {
   border: 1px solid transparent;
   border-radius: 3px;
   background: transparent;
-  color: #b0b0b0;
+  color: var(--ucode3-block-type-color);
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s;
@@ -1092,13 +1405,13 @@ onMounted(() => {
 }
 
 .block-type-select:hover {
-  border-color: #e9e9e7;
-  background: #f7f6f3;
+  border-color: var(--ucode3-block-type-hover-border);
+  background: var(--ucode3-block-type-hover-bg);
 }
 
 .block-type-select option {
-  color: #37352f;
-  background: #fff;
+  color: var(--ucode3-option-text);
+  background: var(--ucode3-option-bg);
 }
 
 .block-content {
@@ -1111,7 +1424,7 @@ onMounted(() => {
   width: 100%;
   border: none;
   background: transparent;
-  color: #37352f;
+  color: var(--ucode3-text);
   font-family: inherit;
   outline: none;
   padding: 0.25rem 0;
@@ -1120,14 +1433,14 @@ onMounted(() => {
 }
 
 .block-input::placeholder {
-  color: #b0b0b0;
+  color: var(--ucode3-text-subtle);
 }
 
 .block-textarea {
   width: 100%;
   border: none;
   background: transparent;
-  color: #37352f;
+  color: var(--ucode3-text);
   font-family: inherit;
   outline: none;
   padding: 0.25rem 0;
@@ -1138,7 +1451,7 @@ onMounted(() => {
 }
 
 .block-textarea::placeholder {
-  color: #b0b0b0;
+  color: var(--ucode3-text-subtle);
 }
 
 /* ─── Heading Styles ──────────────────────────────────────────── */
@@ -1173,12 +1486,12 @@ onMounted(() => {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #2e7d64;
+  accent-color: var(--ucode3-checkbox-accent);
 }
 
 .todo-input.checked {
   text-decoration: line-through;
-  color: #b0b0b0;
+  color: var(--ucode3-todo-checked);
 }
 
 /* ─── Toggle Block ────────────────────────────────────────────── */
@@ -1193,14 +1506,15 @@ onMounted(() => {
   border: none;
   cursor: pointer;
   padding: 0.25rem;
-  font-size: 0.75rem;
-  color: #6b6b6b;
+  color: var(--ucode3-toggle-btn);
   margin-top: 2px;
+  display: flex;
+  align-items: center;
 }
 
 /* ─── Code Block ──────────────────────────────────────────────── */
 .code-block {
-  background: #1e1e1e;
+  background: var(--ucode3-code-bg);
   border-radius: 8px;
   overflow: hidden;
   margin: 0.5rem 0;
@@ -1211,16 +1525,16 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  background: #2d2d2d;
-  border-bottom: 1px solid #3d3d3d;
+  background: var(--ucode3-code-bar);
+  border-bottom: 1px solid var(--ucode3-code-border);
 }
 
 .code-lang-select {
   font-size: 0.7rem;
   padding: 0.15rem 0.4rem;
-  background: #3d3d3d;
-  color: #ccc;
-  border: 1px solid #555;
+  background: var(--ucode3-code-select-bg);
+  color: var(--ucode3-code-select-text);
+  border: 1px solid var(--ucode3-code-select-border);
   border-radius: 3px;
   font-family: inherit;
   cursor: pointer;
@@ -1229,9 +1543,9 @@ onMounted(() => {
 .copy-btn {
   font-size: 0.7rem;
   padding: 0.15rem 0.5rem;
-  background: #3d3d3d;
-  color: #ccc;
-  border: 1px solid #555;
+  background: var(--ucode3-code-select-bg);
+  color: var(--ucode3-code-select-text);
+  border: 1px solid var(--ucode3-code-select-border);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -1245,7 +1559,7 @@ onMounted(() => {
   min-height: 100px;
   padding: 0.75rem;
   background: transparent;
-  color: #d4d4d4;
+  color: var(--ucode3-code-text);
   border: none;
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 0.85rem;
@@ -1261,14 +1575,14 @@ onMounted(() => {
 
 /* ─── Quote Block ─────────────────────────────────────────────── */
 .quote-block {
-  border-left: 3px solid #2e7d64;
+  border-left: 3px solid var(--ucode3-quote-border);
   padding-left: 1rem;
   margin: 0.5rem 0;
 }
 
 .quote-textarea {
   font-style: italic;
-  color: #6b6b6b;
+  color: var(--ucode3-quote-text);
 }
 
 /* ─── Callout Block ───────────────────────────────────────────── */
@@ -1276,16 +1590,18 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background: #f7f6f3;
+  background: var(--ucode3-callout-bg);
   border-radius: 8px;
   padding: 1rem;
   margin: 0.5rem 0;
 }
 
 .callout-icon {
-  font-size: 1.25rem;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   margin-top: 2px;
+  color: var(--ucode3-text);
 }
 
 .callout-textarea {
@@ -1299,7 +1615,7 @@ onMounted(() => {
 
 .divider {
   border: none;
-  border-top: 1px solid #e9e9e7;
+  border-top: 1px solid var(--ucode3-divider);
   margin: 0;
 }
 
@@ -1328,29 +1644,31 @@ onMounted(() => {
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   cursor: pointer;
-  font-size: 0.75rem;
-  opacity: 0;
-  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
 }
 
-.image-preview:hover .remove-image-btn {
-  opacity: 1;
+.remove-image-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .image-upload-area {
-  border: 2px dashed #e9e9e7;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   padding: 2rem;
-  text-align: center;
+  border: 2px dashed var(--ucode3-image-upload-border);
+  border-radius: 8px;
   cursor: pointer;
-  color: #6b6b6b;
+  color: var(--ucode3-image-upload-color);
   font-size: 0.85rem;
   transition: background 0.15s;
-  margin: 0.5rem 0;
 }
 
 .image-upload-area:hover {
-  background: #f7f6f3;
+  background: var(--ucode3-image-upload-hover-bg);
 }
 
 /* ─── List Blocks ─────────────────────────────────────────────── */
@@ -1361,21 +1679,15 @@ onMounted(() => {
 }
 
 .list-marker {
-  color: #6b6b6b;
-  font-size: 0.9rem;
-  flex-shrink: 0;
+  color: var(--ucode3-list-marker);
+  font-size: 1rem;
+  min-width: 1.5rem;
+  text-align: right;
   margin-top: 4px;
-  min-width: 1.2rem;
 }
 
 .number-marker {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.85rem;
-}
-
-/* ─── Paragraph Block ─────────────────────────────────────────── */
-.paragraph-textarea {
-  min-height: 1.5em;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ─── Block Actions ───────────────────────────────────────────── */
@@ -1389,29 +1701,25 @@ onMounted(() => {
 }
 
 .block-action-btn {
-  width: 20px;
-  height: 20px;
+  background: transparent;
+  border: 1px solid var(--ucode3-block-action-border);
+  border-radius: 3px;
+  padding: 0.15rem;
+  cursor: pointer;
+  color: var(--ucode3-block-action-color);
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid #e9e9e7;
-  border-radius: 3px;
-  color: #6b6b6b;
-  font-size: 0.65rem;
-  cursor: pointer;
-  padding: 0;
   transition: background 0.1s;
 }
 
 .block-action-btn:hover {
-  background: #e9e9e7;
+  background: var(--ucode3-block-action-hover-bg);
 }
 
 .delete-block:hover {
-  background: #fce4e4;
-  color: #eb5757;
-  border-color: #eb5757;
+  background: var(--ucode3-trash-hover-bg);
+  color: var(--ucode3-trash-hover-text);
+  border-color: var(--ucode3-trash-hover-border);
 }
 
 /* ─── Add Block Button ────────────────────────────────────────── */
@@ -1421,21 +1729,21 @@ onMounted(() => {
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   background: transparent;
-  border: 1px dashed #e9e9e7;
+  border: 1px solid var(--ucode3-add-block-border);
   border-radius: 6px;
-  color: #6b6b6b;
+  color: var(--ucode3-add-block-color);
   font-size: 0.85rem;
   font-family: inherit;
   cursor: pointer;
   width: 100%;
   margin-top: 0.5rem;
-  transition: background 0.15s, border-color 0.15s;
+  transition: all 0.15s;
 }
 
 .add-block-btn:hover {
-  background: #f7f6f3;
-  border-color: #b0b0b0;
-  color: #37352f;
+  background: var(--ucode3-add-block-hover-bg);
+  border-color: var(--ucode3-add-block-hover-border);
+  color: var(--ucode3-add-block-hover-color);
 }
 
 /* ─── Document Footer ─────────────────────────────────────────── */
@@ -1443,9 +1751,9 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e9e9e7;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid var(--ucode3-divider);
 }
 
 .footer-left {
@@ -1455,16 +1763,20 @@ onMounted(() => {
 }
 
 .footer-info {
-  font-size: 0.8rem;
-  color: #6b6b6b;
+  font-size: 0.75rem;
+  color: var(--ucode3-text-muted);
 }
 
 .published-badge {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  background: #e8f5e9;
-  color: #2e7d64;
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  background: var(--ucode3-published-bg);
+  color: var(--ucode3-published-text);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
 .footer-right {
@@ -1473,11 +1785,14 @@ onMounted(() => {
 }
 
 .footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   padding: 0.4rem 0.75rem;
-  background: #fff;
-  border: 1px solid #e9e9e7;
+  background: var(--ucode3-footer-btn-bg);
+  border: 1px solid var(--ucode3-footer-btn-border);
   border-radius: 6px;
-  color: #37352f;
+  color: var(--ucode3-footer-btn-color);
   font-size: 0.8rem;
   font-family: inherit;
   cursor: pointer;
@@ -1485,19 +1800,19 @@ onMounted(() => {
 }
 
 .footer-btn:hover {
-  background: #f7f6f3;
+  background: var(--ucode3-footer-btn-hover-bg);
 }
 
 .trash-btn:hover {
-  background: #fce4e4;
-  color: #eb5757;
-  border-color: #eb5757;
+  background: var(--ucode3-trash-hover-bg);
+  color: var(--ucode3-trash-hover-text);
+  border-color: var(--ucode3-trash-hover-border);
 }
 
-/* ─── Scrollbar Styling ───────────────────────────────────────── */
+/* ─── Scrollbar ───────────────────────────────────────────────── */
 .doc-sidebar::-webkit-scrollbar,
 .doc-main::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .doc-sidebar::-webkit-scrollbar-track,
@@ -1507,12 +1822,12 @@ onMounted(() => {
 
 .doc-sidebar::-webkit-scrollbar-thumb,
 .doc-main::-webkit-scrollbar-thumb {
-  background: #e9e9e7;
-  border-radius: 2px;
+  background: var(--ucode3-scrollbar);
+  border-radius: 3px;
 }
 
 .doc-sidebar::-webkit-scrollbar-thumb:hover,
 .doc-main::-webkit-scrollbar-thumb:hover {
-  background: #b0b0b0;
+  background: var(--ucode3-scrollbar-hover);
 }
 </style>

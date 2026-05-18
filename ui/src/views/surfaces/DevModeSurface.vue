@@ -1,479 +1,565 @@
-<script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-// Dev Mode State
-const devModeEnabled = ref<boolean>(false);
-const devModeStatus = ref<'idle' | 'loading' | 'active' | 'error'>('idle');
-const devModeConfig = ref<any>(null);
-const isUpdatingConfig = ref<boolean>(false);
-
-// UI Settings
-const uiSettings = ref({
-  show_mcp_tools_editor: false,
-  show_rate_limits_panel: false,
-  show_mistral_dev_chat: false,
-  show_webhook_config: false,
-  show_advanced_sections: false,
-  dev_mode_badge: false
-});
-
-// Dangerous Actions Settings
-const dangerousActions = ref({
-  require_confirmation: true,
-  log_actions: true
-});
-
-// Mistral Chat Configuration
-const mistralConfig = ref({
-  general_chat: {
-    system_prompt: 'You are a helpful assistant for uDosConnect.',
-    model: 'mistral',
-    context_window: 4096
-  },
-  dev_chat: {
-    system_prompt: 'You are a dev assistant for uDosConnect with access to advanced tools.',
-    model: 'mistral',
-    context_window: 8192
-  }
-});
-
-// Load Dev Mode Configuration
-async function loadDevConfig() {
-  devModeStatus.value = 'loading';
-  try {
-    const response = await fetch('/dev_mode_config.json');
-    if (response.ok) {
-      devModeConfig.value = await response.json();
-      uiSettings.value = devModeConfig.value.dev_mode.ui_settings;
-      dangerousActions.value = devModeConfig.value.dev_mode.dangerous_actions;
-      mistralConfig.value = devModeConfig.value.mistral_chat;
-      devModeEnabled.value = devModeConfig.value.dev_mode.enabled;
-      devModeStatus.value = 'active';
-    } else {
-      devModeStatus.value = 'error';
-      console.error('Failed to load dev mode config');
-    }
-  } catch (error) {
-    devModeStatus.value = 'error';
-    console.error('Error loading dev mode config:', error);
-  }
-}
-
-// Save Dev Mode Configuration
-async function saveDevConfig() {
-  isUpdatingConfig.value = true;
-  try {
-    const updatedConfig = {
-      ...devModeConfig.value,
-      dev_mode: {
-        ...devModeConfig.value.dev_mode,
-        enabled: devModeEnabled.value,
-        ui_settings: uiSettings.value,
-        dangerous_actions: dangerousActions.value
-      },
-      mistral_chat: mistralConfig.value
-    };
-
-    // In a real implementation, this would save to the server
-    console.log('Saving dev config:', updatedConfig);
-    
-    // For now, we'll just update the local state
-    devModeConfig.value = updatedConfig;
-    
-    // Show success message
-    alert('✅ Dev Mode configuration saved successfully!');
-  } catch (error) {
-    console.error('Error saving dev config:', error);
-    alert('❌ Error saving configuration: ' + error.message);
-  } finally {
-    isUpdatingConfig.value = false;
-  }
-}
-
-// Toggle Dev Mode
-async function toggleDevMode() {
-  const newState = !devModeEnabled.value;
-  
-  if (newState) {
-    // Enable Dev Mode
-    const confirm = window.confirm('⚠️ Are you sure you want to enable Dev Mode? This will show all advanced features.');
-    if (!confirm) return;
-  } else {
-    // Disable Dev Mode
-    const confirm = window.confirm('🔒 Are you sure you want to disable Dev Mode? This will hide all advanced features.');
-    if (!confirm) return;
-  }
-  
-  devModeEnabled.value = newState;
-  
-  // Update UI settings based on dev mode state
-  const newUiSettings = {
-    show_mcp_tools_editor: newState,
-    show_rate_limits_panel: newState,
-    show_mistral_dev_chat: newState,
-    show_webhook_config: newState,
-    show_advanced_sections: newState,
-    dev_mode_badge: newState
-  };
-  
-  uiSettings.value = newUiSettings;
-  
-  await saveDevConfig();
-}
-
-// Execute Dev Command
-async function execDevCommand(cmd: string) {
-  try {
-    const response = await fetch('http://localhost:5175/api/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ command: cmd })
-    });
-    
-    const data = await response.json();
-    
-    if (data.success) {
-      alert(`✅ Command executed successfully:\n\n${data.output}`);
-    } else {
-      alert(`❌ Error executing command:\n\n${data.error || 'Unknown error'}`);
-    }
-  } catch (error) {
-    alert(`❌ Error: ${error.message}`);
-  }
-}
-
-// Initialize
-onMounted(() => {
-  loadDevConfig();
-});
-
-// Watch for changes in UI settings
-watch(uiSettings, (newSettings) => {
-  if (devModeConfig.value) {
-    saveDevConfig();
-  }
-}, { deep: true });
-
-watch(dangerousActions, (newActions) => {
-  if (devModeConfig.value) {
-    saveDevConfig();
-  }
-}, { deep: true });
-
-watch(mistralConfig, (newConfig) => {
-  if (devModeConfig.value) {
-    saveDevConfig();
-  }
-}, { deep: true });
-</script>
-
 <template>
-  <div class="space-y-6 p-4">
-    <!-- Header -->
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-cyan-400">🔧 Dev Mode Dashboard</h2>
-      <div class="flex items-center space-x-2">
-        <span class="text-sm">Dev Mode:</span>
-        <button
-          @click="toggleDevMode"
-          class="relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none"
-          :class="{
-            'bg-green-500': devModeEnabled,
-            'bg-gray-600': !devModeEnabled
-          }"
-        >
-          <span
-            class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform"
-            :class="{
-              'translate-x-6': devModeEnabled,
-              'translate-x-1': !devModeEnabled
-            }"
-          />
+  <div class="devmode-surface">
+    <!-- Surface Header -->
+    <div class="surface-header">
+      <div class="header-left">
+        <SurfaceIcon name="code" class="header-icon" :size="24" />
+        <div>
+          <h1>Dev Mode</h1>
+          <p class="surface-tagline">Developer tools and utilities for uDOS.</p>
+          <p class="surface-definition">
+            <strong>What's Dev Mode?</strong> A special interface for developers to access advanced tools,
+            debug information, and system utilities. Perfect for troubleshooting and development tasks.
+          </p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="btn-secondary btn-sm" @click="refreshTools">
+          <SurfaceIcon name="refresh" :size="16" />
+          Refresh
         </button>
-        <span class="text-sm font-semibold" :class="{
-          'text-green-400': devModeEnabled,
-          'text-gray-400': !devModeEnabled
-        }">
-          {{ devModeEnabled ? 'ON' : 'OFF' }}
-        </span>
-        <span v-if="devModeEnabled" class="bg-yellow-500 text-black px-2 py-1 rounded text-xs font-bold">
-          ⚠️ DEV MODE ACTIVE
-        </span>
       </div>
     </div>
 
-    <!-- Status -->
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-      <div class="flex items-center space-x-2 mb-2">
-        <span class="text-gray-400">Status:</span>
-        <span
-          class="px-2 py-1 rounded text-xs font-semibold"
-          :class="{
-            'bg-gray-600 text-gray-300': devModeStatus === 'idle',
-            'bg-yellow-600 text-yellow-100': devModeStatus === 'loading',
-            'bg-green-600 text-green-100': devModeStatus === 'active',
-            'bg-red-600 text-red-100': devModeStatus === 'error'
-          }"
+    <!-- Info Banner -->
+    <div class="info-banner">
+      <SurfaceIcon name="info" :size="18" />
+      <div>
+        <strong>Developer Mode</strong>
+        Advanced tools and utilities for system administration and development.
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading developer tools...</p>
+      <p class="helper-text">This usually takes a few seconds.</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="error-state">
+      <div class="error-icon">
+        <SurfaceIcon name="alert-circle" :size="48" />
+      </div>
+      <h3>Couldn't load developer tools</h3>
+      <p>{{ error }}</p>
+      <p class="helper-text">
+        Try:
+        <br>
+        • Refreshing the page
+        <br>
+        • Checking your internet connection
+        <br>
+        • Making sure uDOS services are running
+      </p>
+      <div class="error-actions">
+        <button @click="retryLoad" class="btn-primary">
+          <SurfaceIcon name="refresh" :size="16" />
+          Try Again
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div v-else-if="tools.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <SurfaceIcon name="code" :size="48" />
+      </div>
+      <h3>No developer tools found</h3>
+      <p>Your developer toolkit appears to be empty.</p>
+      <p class="helper-text">
+        <SurfaceIcon name="info" :size="14" />
+        Tools are loaded from connected services
+      </p>
+    </div>
+
+    <!-- Main Content -->
+    <div v-else class="tool-container">
+      <div class="tool-grid">
+        <div
+          v-for="tool in tools"
+          :key="tool.id"
+          class="tool-card"
+          @click="useTool(tool)"
         >
-          {{ devModeStatus.toUpperCase() }}
-        </span>
-      </div>
-      <div v-if="devModeStatus === 'active'" class="text-sm text-gray-300">
-        Configuration loaded successfully
-      </div>
-      <div v-if="devModeStatus === 'error'" class="text-sm text-red-400">
-        Failed to load configuration
-      </div>
-    </div>
-
-    <!-- UI Settings Panel -->
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-      <h3 class="text-lg font-semibold text-cyan-400 mb-4">🎨 UI Settings</h3>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">MCP Tools Editor</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.show_mcp_tools_editor"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">Rate Limits Panel</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.show_rate_limits_panel"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">Mistral Dev Chat</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.show_mistral_dev_chat"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">Webhook Configuration</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.show_webhook_config"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">Advanced Sections</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.show_advanced_sections"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <label class="text-sm text-gray-300">Dev Mode Badge</label>
-          <input
-            type="checkbox"
-            v-model="uiSettings.dev_mode_badge"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-      </div>
-    </div>
-
-    <!-- Dangerous Actions Panel -->
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-      <h3 class="text-lg font-semibold text-cyan-400 mb-4">⚠️ Dangerous Actions</h3>
-      
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <label class="text-sm text-gray-300">Require Confirmation</label>
-            <p class="text-xs text-gray-400">Prompt before executing dangerous actions</p>
+          <div class="tool-header">
+            <SurfaceIcon :name="tool.icon" :size="20" class="tool-icon" />
+            <h3 class="tool-name">{{ tool.name }}</h3>
+            <span class="tool-type">{{ tool.type }}</span>
           </div>
-          <input
-            type="checkbox"
-            v-model="dangerousActions.require_confirmation"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-        
-        <div class="flex items-center justify-between">
-          <div>
-            <label class="text-sm text-gray-300">Log Actions</label>
-            <p class="text-xs text-gray-400">Record dangerous actions to log file</p>
-          </div>
-          <input
-            type="checkbox"
-            v-model="dangerousActions.log_actions"
-            class="rounded focus:ring-cyan-400"
-            :disabled="!devModeEnabled"
-          >
-        </div>
-      </div>
-    </div>
 
-    <!-- Mistral Chat Configuration -->
-    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-      <h3 class="text-lg font-semibold text-cyan-400 mb-4">🤖 Mistral Chat Configuration</h3>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- General Chat -->
-        <div class="bg-gray-700 rounded-lg p-3">
-          <h4 class="text-sm font-semibold text-blue-400 mb-2">General Chat</h4>
-          <div class="space-y-2">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">System Prompt</label>
-              <textarea
-                v-model="mistralConfig.general_chat.system_prompt"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                rows="2"
-                :disabled="!devModeEnabled"
-              ></textarea>
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">Model</label>
-              <select
-                v-model="mistralConfig.general_chat.model"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                :disabled="!devModeEnabled"
-              >
-                <option value="mistral">mistral</option>
-                <option value="mistral-large">mistral-large</option>
-                <option value="claude-3-opus">claude-3-opus</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">Context Window</label>
-              <input
-                type="number"
-                v-model="mistralConfig.general_chat.context_window"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                :disabled="!devModeEnabled"
-              >
-            </div>
+          <div class="tool-meta">
+            <span class="tool-category">{{ tool.category }}</span>
+            <span class="tool-version">v{{ tool.version }}</span>
           </div>
-        </div>
-        
-        <!-- Dev Chat -->
-        <div class="bg-gray-700 rounded-lg p-3">
-          <h4 class="text-sm font-semibold text-green-400 mb-2">Dev Chat</h4>
-          <div class="space-y-2">
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">System Prompt</label>
-              <textarea
-                v-model="mistralConfig.dev_chat.system_prompt"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                rows="2"
-                :disabled="!devModeEnabled"
-              ></textarea>
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">Model</label>
-              <select
-                v-model="mistralConfig.dev_chat.model"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                :disabled="!devModeEnabled"
-              >
-                <option value="mistral">mistral</option>
-                <option value="mistral-large">mistral-large</option>
-                <option value="claude-3-opus">claude-3-opus</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs text-gray-400 block mb-1">Context Window</label>
-              <input
-                type="number"
-                v-model="mistralConfig.dev_chat.context_window"
-                class="w-full bg-gray-600 text-white px-2 py-1 rounded text-xs"
-                :disabled="!devModeEnabled"
-              >
-            </div>
+
+          <div class="tool-description" v-if="tool.description">
+            {{ tool.description }}
+          </div>
+
+          <div class="tool-actions">
+            <button class="btn-primary" @click.stop="useTool(tool)">
+              <SurfaceIcon name="play" :size="14" />
+              Use
+            </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-2 gap-4">
-      <button
-        @click="execDevCommand('udo dev status')"
-        class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded text-left"
-        :disabled="!devModeEnabled"
-      >
-        🔍 Check Dev Status
-      </button>
-      <button
-        @click="execDevCommand('udo dev exec mistral-prompt-edit --tool=custom_parser')"
-        class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded text-left"
-        :disabled="!devModeEnabled"
-      >
-        ✏️ Edit Mistral Prompt
-      </button>
-      <button
-        @click="execDevCommand('udo gui demos')"
-        class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded text-left"
-        :disabled="!devModeEnabled"
-      >
-        🎨 Show USXD Demos
-      </button>
-      <button
-        @click="execDevCommand('udo publish preview')"
-        class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded text-left"
-        :disabled="!devModeEnabled"
-      >
-        📄 Publish Preview
-      </button>
-    </div>
-
-    <!-- Save Button -->
-    <div class="flex justify-end">
-      <button
-        @click="saveDevConfig"
-        :disabled="isUpdatingConfig"
-        class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-600"
-      >
-        <span v-if="isUpdatingConfig">🔄 Saving...</span>
-        <span v-else>💾 Save Configuration</span>
-      </button>
+      <!-- Tool Statistics -->
+      <div class="tool-stats">
+        <span>{{ tools.length }} tools</span>
+        <span>{{ activeTools }} active</span>
+        <span>{{ toolCategories }} categories</span>
+      </div>
     </div>
   </div>
 </template>
 
+<script>
+import { ref, computed, onMounted } from 'vue'
+import SurfaceIcon from '@/components/SurfaceIcons.vue'
+
+export default {
+  name: 'DevModeSurface',
+  components: {
+    SurfaceIcon
+  },
+  setup() {
+    // State
+    const isLoading = ref(false)
+    const error = ref(null)
+    const tools = ref([])
+
+    // Computed
+    const activeTools = computed(() => tools.value.filter(t => t.active).length)
+    const toolCategories = computed(() => [...new Set(tools.value.map(t => t.category))].length)
+
+    // Methods
+    const loadTools = async () => {
+      isLoading.value = true
+      error.value = null
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // Mock data
+        tools.value = [
+          {
+            id: 1,
+            name: 'System Monitor',
+            description: 'Monitor system resources and performance',
+            type: 'monitor',
+            category: 'system',
+            version: '2.0.0',
+            icon: 'cpu',
+            active: true
+          },
+          {
+            id: 2,
+            name: 'Log Viewer',
+            description: 'View and filter system logs',
+            type: 'viewer',
+            category: 'logs',
+            version: '1.5.0',
+            icon: 'file-text',
+            active: true
+          },
+          {
+            id: 3,
+            name: 'Terminal',
+            description: 'Access command line interface',
+            type: 'terminal',
+            category: 'shell',
+            version: '3.2.0',
+            icon: 'terminal',
+            active: true
+          },
+          {
+            id: 4,
+            name: 'Debug Console',
+            description: 'Debug and inspect running processes',
+            type: 'debugger',
+            category: 'development',
+            version: '1.8.0',
+            icon: 'bug',
+            active: true
+          },
+          {
+            id: 5,
+            name: 'Config Editor',
+            description: 'Edit configuration files',
+            type: 'editor',
+            category: 'configuration',
+            version: '2.1.0',
+            icon: 'settings',
+            active: true
+          },
+          {
+            id: 6,
+            name: 'Service Manager',
+            description: 'Start, stop, and manage services',
+            type: 'manager',
+            category: 'system',
+            version: '1.9.0',
+            icon: 'server',
+            active: true
+          }
+        ]
+      } catch (err) {
+        error.value = err.message || 'Failed to load tools'
+      } finally {
+        isLoading.value = false
+      }
+    }
+
+    const useTool = (tool) => {
+      alert(`Using tool: ${tool.name}`)
+    }
+
+    const refreshTools = () => {
+      loadTools()
+    }
+
+    const retryLoad = () => {
+      error.value = null
+      loadTools()
+    }
+
+    // Load on mount
+    onMounted(() => {
+      loadTools()
+    })
+
+    return {
+      isLoading,
+      error,
+      tools,
+      activeTools,
+      toolCategories,
+      loadTools,
+      useTool,
+      refreshTools,
+      retryLoad
+    }
+  }
+}
+</script>
+
+<style>
+/* CSS Custom Properties */
+.devmode-surface {
+  --background: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6b6b6b;
+  --text-tertiary: #b0b0b0;
+  --border-color: #e9e9e7;
+  --surface-background: #f7f6f3;
+  --surface-hover: #e9e9e7;
+  --primary-color: #2e7d64;
+  --primary-hover: #236b54;
+  --danger-color: #eb5757;
+  --success-color: #2e7d64;
+  --warning-color: #f57c00;
+  --info-color: #1565c0;
+}
+
+.ucode3-dark .devmode-surface {
+  --background: #1a1a2e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0c0;
+  --text-tertiary: #6b6b8a;
+  --border-color: #2a2a4a;
+  --surface-background: #16213e;
+  --surface-hover: #2a2a4a;
+  --primary-color: #2e7d64;
+  --primary-hover: #236b54;
+  --danger-color: #eb5757;
+  --success-color: #7dcea0;
+  --warning-color: #f57c00;
+  --info-color: #7db0e0;
+}
+</style>
+
 <style scoped>
-/* Toggle switch animation */
-.translate-x-6 {
-  transform: translateX(1.5rem);
+.devmode-surface {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--background);
+  color: var(--text-primary);
 }
 
-.translate-x-1 {
-  transform: translateX(0.25rem);
+/* Header */
+.surface-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Disabled state */
-input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-textarea:disabled, select:disabled, input:disabled {
-  background-color: #4a5568 !important;
-  cursor: not-allowed;
+.header-icon {
+  color: var(--primary-color);
+}
+
+.surface-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.surface-tagline {
+  color: var(--text-secondary);
+  margin: 0.5rem 0;
+}
+
+.surface-definition {
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Info Banner */
+.info-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--info-background);
+  border-radius: 8px;
+  margin: 1rem;
+  color: var(--info-color);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--surface-background);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-color);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+  height: auto;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.error-icon {
+  margin-bottom: 1.5rem;
+  color: var(--danger-color);
+}
+
+.error-state h3 {
+  margin-bottom: 0.5rem;
+}
+
+.error-state p {
+  margin-bottom: 1.5rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 1.5rem;
+  color: var(--text-tertiary);
+}
+
+.empty-state h3 {
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+}
+
+/* Tool Container */
+.tool-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Tool Grid */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--surface-background);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tool-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tool-icon {
+  color: var(--primary-color);
+}
+
+.tool-name {
+  flex: 1;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.tool-type {
+  padding: 0.25rem 0.75rem;
+  background: var(--surface-hover);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.tool-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.tool-category {
+  font-weight: 500;
+}
+
+.tool-version {
+  margin-left: auto;
+}
+
+.tool-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Tool Statistics */
+.tool-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
 }
 </style>

@@ -1,44 +1,54 @@
+# Surface Component Style Guide
+
+This document outlines the standardized style and structure for all surface components in the uDosGo Connect UI.
+
+## Overview
+
+All surface components follow a consistent pattern with:
+- Standardized header structure
+- Loading, error, and empty states
+- Grid-based content layout
+- Responsive design
+- Dark mode support
+- CSS custom properties for theming
+
+## Standard Structure
+
+### 1. Template Structure
+
+```vue
 <template>
-  <div class="usxd-surface">
+  <div class="surface-name">
     <!-- Surface Header -->
     <div class="surface-header">
       <div class="header-left">
-        <SurfaceIcon name="file-text" class="header-icon" :size="24" />
+        <SurfaceIcon name="icon-name" class="header-icon" :size="24" />
         <div>
-          <h1>USXD Renderer</h1>
-          <p class="surface-tagline">View and edit universal documents. One format, any surface.</p>
+          <h1>Surface Title</h1>
+          <p class="surface-tagline">Brief description</p>
           <p class="surface-definition">
-            <strong>What's USXD?</strong> Universal Surface Document - a file format that looks right on any screen.
-            Create once, view anywhere. USXD documents are portable and adapt to different devices and surfaces.
+            <strong>What's this?</strong> Detailed explanation of the surface's purpose
           </p>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-secondary btn-sm" @click="importDocument">
-          <SurfaceIcon name="upload" :size="16" />
-          Import
-        </button>
-        <button class="btn-primary btn-sm" @click="createNewDocument">
-          <SurfaceIcon name="plus" :size="16" />
-          New USXD
-        </button>
+        <!-- Action buttons -->
       </div>
     </div>
 
-    <!-- Info Banner -->
+    <!-- Info Banner (optional) -->
     <div class="info-banner">
       <SurfaceIcon name="info" :size="18" />
       <div>
-        <strong>What's USXD?</strong>
-        Universal Surface Document - a file format that looks right on any screen.
-        Create once, view anywhere.
+        <strong>Title</strong>
+        Description text
       </div>
     </div>
 
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="spinner"></div>
-      <p>Loading USXD renderer...</p>
+      <p>Loading...</p>
       <p class="helper-text">This usually takes a few seconds.</p>
     </div>
 
@@ -47,7 +57,7 @@
       <div class="error-icon">
         <SurfaceIcon name="alert-circle" :size="48" />
       </div>
-      <h3>Couldn't load USXD renderer</h3>
+      <h3>Couldn't load content</h3>
       <p>{{ error }}</p>
       <p class="helper-text">
         Try:
@@ -67,111 +77,122 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="documents.length === 0" class="empty-state">
+    <div v-else-if="items.length === 0" class="empty-state">
       <div class="empty-icon">
-        <SurfaceIcon name="file-text" :size="64" />
+        <SurfaceIcon name="icon-name" :size="48" />
       </div>
-      <h3>{{ searchQuery ? 'No documents found' : 'No USXD documents yet' }}</h3>
-      <p>{{ searchQuery ? 'Try a different search term' : 'Create your first universal document' }}</p>
-      <button v-if="!searchQuery" class="btn-primary" @click="createNewDocument">
+      <h3>{{ searchQuery ? 'No items found' : 'No items yet' }}</h3>
+      <p>{{ searchQuery ? 'Try a different search term' : 'Create your first item' }}</p>
+      <button v-if="!searchQuery" class="btn-primary" @click="createNew">
         <SurfaceIcon name="plus" :size="16" />
-        New USXD Document
+        New Item
       </button>
       <p v-if="!searchQuery" class="helper-text">
         <SurfaceIcon name="info" :size="14" />
-        USXD files work on any device and surface
+        Additional helpful text
       </p>
     </div>
 
     <!-- Main Content -->
-    <div v-else class="main-content">
-      <!-- Search Bar -->
+    <div v-else class="main-container">
+      <!-- Controls -->
       <div class="action-bar">
-        <div class="search-container">
+        <div class="search-container" v-if="hasSearch">
           <SurfaceIcon name="search" :size="16" class="search-icon" />
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search documents..."
-            @input="searchDocuments"
+            :placeholder="searchPlaceholder"
+            @input="filterItems"
             class="search-input"
           >
           <button v-if="searchQuery" class="btn-icon btn-sm" @click="clearSearch">
             <SurfaceIcon name="x" :size="14" />
           </button>
         </div>
-        <button class="btn-secondary" @click="reloadDocuments">
+        <button class="btn-secondary" @click="refreshItems">
           <SurfaceIcon name="refresh" :size="16" />
           Refresh
         </button>
+        <button class="btn-primary" @click="createNew" v-if="hasCreate">
+          <SurfaceIcon name="plus" :size="16" />
+          New
+        </button>
       </div>
 
-      <!-- Document Grid -->
-      <div class="document-grid">
+      <!-- Grid -->
+      <div class="item-grid">
         <div
-          v-for="doc in filteredDocuments"
-          :key="doc.id"
-          class="document-card"
-          @click="openDocument(doc)"
+          v-for="item in filteredItems"
+          :key="item.id"
+          class="item-card"
+          @click="openItem(item)"
         >
-          <div class="document-header">
-            <SurfaceIcon name="file-text" :size="20" class="document-icon" />
-            <h3 class="document-name">{{ doc.name }}</h3>
-            <span class="document-type">USXD</span>
+          <div class="item-header">
+            <SurfaceIcon :name="item.icon || 'default-icon'" :size="20" class="item-icon" />
+            <h3 class="item-name">{{ item.name }}</h3>
+            <span class="item-type">{{ item.type }}</span>
           </div>
 
-          <div class="document-meta">
-            <span class="document-size">{{ formatFileSize(doc.size) }}</span>
-            <span class="document-updated">Updated {{ formatRelativeTime(doc.updatedAt) }}</span>
+          <div class="item-meta">
+            <span class="item-category">{{ item.category }}</span>
+            <span class="item-version" v-if="item.version">v{{ item.version }}</span>
+            <span class="item-size" v-if="item.size">{{ formatSize(item.size) }}</span>
+            <span class="item-updated" v-if="item.updatedAt">Updated {{ formatTime(item.updatedAt) }}</span>
           </div>
 
-          <div class="document-description" v-if="doc.description">
-            {{ doc.description }}
+          <div class="item-description" v-if="item.description">
+            {{ item.description }}
           </div>
 
-          <div class="document-actions">
+          <div class="item-actions">
             <button
               class="btn-icon btn-sm"
-              @click.stop="editDocument(doc)"
-              title="Edit document"
+              @click.stop="action1(item)"
+              :title="action1Title"
             >
-              <SurfaceIcon name="edit" :size="14" />
+              <SurfaceIcon name="icon1" :size="14" />
             </button>
             <button
               class="btn-icon btn-sm"
-              @click.stop="shareDocument(doc)"
-              title="Share document"
+              @click.stop="action2(item)"
+              :title="action2Title"
             >
-              <SurfaceIcon name="share" :size="14" />
+              <SurfaceIcon name="icon2" :size="14" />
             </button>
             <button
               class="btn-icon btn-sm"
-              @click.stop="deleteDocument(doc)"
-              title="Delete document"
+              @click.stop="action3(item)"
+              :title="action3Title"
             >
-              <SurfaceIcon name="trash" :size="14" />
+              <SurfaceIcon name="icon3" :size="14" />
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Document Statistics -->
-      <div class="document-stats">
-        <span>{{ filteredDocuments.length }} documents</span>
+      <!-- Statistics -->
+      <div class="item-stats">
+        <span>{{ filteredItems.length }} items</span>
+        <span>{{ activeItems }} active</span>
         <span>{{ totalSize }} total</span>
-        <span>{{ recentDocuments }} recently updated</span>
+        <span>{{ itemCategories }} categories</span>
       </div>
     </div>
   </div>
 </template>
+```
 
+### 2. Script Structure
+
+```javascript
 <script>
 import { ref, computed, onMounted } from 'vue'
 import { formatDistanceToNow } from 'date-fns'
 import SurfaceIcon from '@/components/SurfaceIcons.vue'
 
 export default {
-  name: 'USXDSurface',
+  name: 'SurfaceName',
   components: {
     SurfaceIcon
   },
@@ -179,168 +200,71 @@ export default {
     // State
     const isLoading = ref(false)
     const error = ref(null)
-    const documents = ref([])
+    const items = ref([])
     const searchQuery = ref('')
 
     // Computed
-    const totalSize = computed(() => {
-      return documents.value.reduce((sum, doc) => sum + doc.size, 0)
-    })
-
-    const recentDocuments = computed(() => {
-      const now = new Date()
-      return documents.value.filter(doc => {
-        const updated = new Date(doc.updatedAt)
-        return (now - updated) < 86400000 * 7 // Within last 7 days
-      }).length
-    })
-
-    const filteredDocuments = computed(() => {
-      if (!searchQuery.value) return documents.value
-
+    const activeItems = computed(() => items.value.filter(i => i.active).length)
+    const itemCategories = computed(() => [...new Set(items.value.map(i => i.category))].length)
+    const filteredItems = computed(() => {
+      if (!searchQuery.value) return items.value
       const query = searchQuery.value.toLowerCase()
-      return documents.value.filter(doc =>
-        doc.name.toLowerCase().includes(query) ||
-        (doc.description && doc.description.toLowerCase().includes(query))
+      return items.value.filter(item =>
+        item.name.toLowerCase().includes(query) ||
+        (item.description && item.description.toLowerCase().includes(query)) ||
+        item.category.toLowerCase().includes(query)
       )
     })
 
     // Methods
-    const loadDocuments = async () => {
+    const loadItems = async () => {
       isLoading.value = true
       error.value = null
       try {
-        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500))
-
         // Mock data
-        documents.value = [
-          {
-            id: 1,
-            name: 'Project Plan',
-            description: 'Universal document for project planning and task management',
-            size: 4096,
-            updatedAt: new Date(Date.now() - 86400000 * 2).toISOString()
-          },
-          {
-            id: 2,
-            name: 'Meeting Notes',
-            description: 'Template for meeting notes and action items',
-            size: 2048,
-            updatedAt: new Date(Date.now() - 86400000 * 1).toISOString()
-          },
-          {
-            id: 3,
-            name: 'Design Spec',
-            description: 'Design specifications and wireframes',
-            size: 8192,
-            updatedAt: new Date(Date.now() - 86400000 * 5).toISOString()
-          },
-          {
-            id: 4,
-            name: 'API Documentation',
-            description: 'REST API documentation and endpoints',
-            size: 12288,
-            updatedAt: new Date(Date.now() - 86400000 * 3).toISOString()
-          }
-        ]
+        items.value = [...]
       } catch (err) {
-        error.value = err.message || 'Failed to load documents'
+        error.value = err.message || 'Failed to load'
       } finally {
         isLoading.value = false
       }
     }
 
-    const createNewDocument = () => {
-      alert('Creating new USXD document...')
-    }
+    const createNew = () => { alert('Create new') }
+    const openItem = (item) => { alert(`Open ${item.name}`) }
+    const action1 = (item) => { alert(`Action 1 on ${item.name}`) }
+    const action2 = (item) => { alert(`Action 2 on ${item.name}`) }
+    const action3 = (item) => { alert(`Action 3 on ${item.name}`) }
+    const refreshItems = () => { loadItems() }
+    const retryLoad = () => { error.value = null; loadItems() }
+    const clearSearch = () => { searchQuery.value = '' }
+    const filterItems = () => { /* Handled by computed */ }
+    const formatSize = (bytes) => { /* Format bytes to KB/MB */ }
+    const formatTime = (dateString) => { /* Format relative time */ }
 
-    const openDocument = (doc) => {
-      alert(`Opening document: ${doc.name}`)
-    }
-
-    const editDocument = (doc) => {
-      alert(`Editing document: ${doc.name}`)
-    }
-
-    const shareDocument = (doc) => {
-      alert(`Sharing document: ${doc.name}`)
-    }
-
-    const deleteDocument = (doc) => {
-      if (confirm(`Delete "${doc.name}"?`)) {
-        documents.value = documents.value.filter(d => d.id !== doc.id)
-        alert('Document deleted')
-      }
-    }
-
-    const importDocument = () => {
-      alert('Import document feature coming soon!')
-    }
-
-    const reloadDocuments = () => {
-      loadDocuments()
-    }
-
-    const retryLoad = () => {
-      error.value = null
-      loadDocuments()
-    }
-
-    const clearSearch = () => {
-      searchQuery.value = ''
-    }
-
-    const searchDocuments = () => {
-      // Handled by computed property
-    }
-
-    const formatFileSize = (bytes) => {
-      if (bytes < 1024) return `${bytes} B`
-      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-      if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-      return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`
-    }
-
-    const formatRelativeTime = (dateString) => {
-      const date = new Date(dateString)
-      return formatDistanceToNow(date, { addSuffix: true })
-    }
-
-    // Load on mount
-    onMounted(() => {
-      loadDocuments()
-    })
+    // Lifecycle
+    onMounted(() => { loadItems() })
 
     return {
-      isLoading,
-      error,
-      documents,
-      searchQuery,
-      filteredDocuments,
-      totalSize,
-      recentDocuments,
-      loadDocuments,
-      createNewDocument,
-      openDocument,
-      editDocument,
-      shareDocument,
-      deleteDocument,
-      importDocument,
-      reloadDocuments,
-      retryLoad,
-      clearSearch,
-      searchDocuments,
-      formatFileSize,
-      formatRelativeTime
+      isLoading, error, items, searchQuery, filteredItems,
+      activeItems, itemCategories,
+      loadItems, createNew, openItem, action1, action2, action3,
+      refreshItems, retryLoad, clearSearch, filterItems,
+      formatSize, formatTime
     }
   }
 }
 </script>
+```
 
-<style>
-/* CSS Custom Properties */
-.usxd-surface {
+### 3. CSS Custom Properties
+
+All surfaces use the following CSS custom properties for consistent theming:
+
+```css
+/* Light mode */
+.surface-name {
   --background: #ffffff;
   --text-primary: #1a1a2e;
   --text-secondary: #6b6b6b;
@@ -356,7 +280,8 @@ export default {
   --info-color: #1565c0;
 }
 
-.ucode3-dark .usxd-surface {
+/* Dark mode */
+.ucode3-dark .surface-name {
   --background: #1a1a2e;
   --text-primary: #e0e0e0;
   --text-secondary: #a0a0c0;
@@ -371,10 +296,13 @@ export default {
   --warning-color: #f57c00;
   --info-color: #7db0e0;
 }
-</style>
+```
 
+### 4. Scoped Styles Structure
+
+```css
 <style scoped>
-.usxd-surface {
+.surface-name {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -433,45 +361,6 @@ export default {
   border-radius: 8px;
   margin: 1rem;
   color: var(--info-color);
-}
-
-/* Action Bar */
-.action-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--surface-background);
-}
-
-.search-container {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--background);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  max-width: 400px;
-}
-
-.search-icon {
-  color: var(--text-tertiary);
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  outline: none;
-}
-
-.search-input::placeholder {
-  color: var(--text-tertiary);
 }
 
 /* Buttons */
@@ -618,21 +507,15 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-/* Main Content */
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-}
-
-/* Document Grid */
-.document-grid {
+/* Grid */
+.item-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   padding: 1rem;
 }
 
-.document-card {
+.item-card {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -644,31 +527,31 @@ export default {
   transition: all 0.2s;
 }
 
-.document-card:hover {
+.item-card:hover {
   background: var(--surface-hover);
   border-color: var(--primary-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.document-header {
+.item-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.document-icon {
+.item-icon {
   color: var(--primary-color);
 }
 
-.document-name {
+.item-name {
   flex: 1;
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
 }
 
-.document-type {
+.item-type {
   padding: 0.25rem 0.75rem;
   background: var(--surface-hover);
   border-radius: 12px;
@@ -676,40 +559,33 @@ export default {
   color: var(--text-secondary);
 }
 
-.document-meta {
+.item-meta {
   display: flex;
   gap: 0.75rem;
   font-size: 0.75rem;
   color: var(--text-tertiary);
+  flex-wrap: wrap;
 }
 
-.document-size {
-  font-weight: 500;
-}
-
-.document-updated {
-  margin-left: auto;
-}
-
-.document-description {
+.item-description {
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.4;
 }
 
-.document-actions {
+.item-actions {
   display: flex;
   gap: 0.25rem;
   opacity: 0;
   transition: opacity 0.2s;
 }
 
-.document-card:hover .document-actions {
+.item-card:hover .item-actions {
   opacity: 1;
 }
 
-/* Document Statistics */
-.document-stats {
+/* Statistics */
+.item-stats {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -719,3 +595,74 @@ export default {
   border-top: 1px solid var(--border-color);
 }
 </style>
+```
+
+## Surface-Specific Components
+
+### VaultSurface.vue
+- **Purpose**: Display and manage Vault content
+- **Key Features**: File tree navigation, content preview, search functionality
+- **Icon**: `folder` or `database`
+
+### WorkflowSurface.vue
+- **Purpose**: Display and manage workflows
+- **Key Features**: Workflow cards, status indicators, execution controls
+- **Icon**: `workflow` or `git-branch`
+
+### ToolRegistrySurface.vue
+- **Purpose**: Discover and manage available tools
+- **Key Features**: Tool cards, filtering, usage statistics
+- **Icon**: `tool` or `wrench`
+
+### USXDSurface.vue
+- **Purpose**: View and edit universal documents
+- **Key Features**: Document grid, import/export, version tracking
+- **Icon**: `file-text` or `file`
+
+### GitHubSurface.vue
+- **Purpose**: Connect to GitHub repositories
+- **Key Features**: Repository list, issue management, PR tracking
+- **Icon**: `github` or `git-fork`
+
+### WordPressSurface.vue
+- **Purpose**: Connect to WordPress sites
+- **Key Features**: Site management, post editing, publishing controls
+- **Icon**: `wordpress` or `globe`
+
+### DevModeSurface.vue
+- **Purpose**: Access developer tools and utilities
+- **Key Features**: System monitoring, debugging, configuration editing
+- **Icon**: `code` or `terminal`
+
+### StoryWizard.vue
+- **Purpose**: Create interactive stories and narratives
+- **Key Features**: Story cards, branching paths, publishing workflow
+- **Icon**: `book-open` or `book`
+
+### VibeTUI.vue
+- **Purpose**: Terminal user interface for uDOS
+- **Key Features**: Command input, output display, session management
+- **Icon**: `terminal` or `command`
+
+## Implementation Checklist
+
+When creating a new surface component, verify:
+
+- [ ] Component follows the standard template structure
+- [ ] All three states (loading, error, empty) are implemented
+- [ ] Search functionality is included if applicable
+- [ ] Action buttons are properly styled
+- [ ] CSS custom properties are defined for both light and dark modes
+- [ ] Scoped styles are properly organized
+- [ ] Computed properties for statistics are implemented
+- [ ] All methods follow the naming convention
+- [ ] Component is registered in the appropriate parent component
+
+## Notes
+
+- All surfaces should use the `SurfaceIcon` component for consistent icon rendering
+- Use `v-if`/`v-else-if`/`v-else` for state management
+- Always include helper text in error and empty states
+- Use CSS transitions for hover effects
+- Keep the grid layout consistent (minmax(280px, 1fr))
+- Ensure all interactive elements have proper titles for accessibility

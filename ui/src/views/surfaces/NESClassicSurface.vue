@@ -274,6 +274,63 @@ onUnmounted(() => {
   color: #fff;
 }
 
+/* ─── Fix NES.css container title backgrounds on dark theme ──── */
+.nes-dashboard :deep(.nes-container.with-title > .title) {
+  background-color: #212529;
+  color: #fff;
+}
+
+/* ─── Fix NES.css default container background on dark theme ─── */
+.nes-dashboard :deep(.nes-container) {
+  color: #fff;
+}
+
+/* ─── Fix NES.css progress bar text color ────────────────────── */
+.nes-dashboard :deep(.nes-progress) {
+  color: #fff;
+}
+
+/* ─── Fix NES.css balloon text on dark background ────────────── */
+.nes-dashboard :deep(.nes-balloon.from-left) {
+  color: #212529;
+}
+
+/* ─── Fix NES.css dialog on dark background ──────────────────── */
+.nes-dashboard :deep(.nes-dialog) {
+  background: #212529;
+  color: #fff;
+  border-color: #5040a0;
+}
+
+/* ─── Fix NES.css input on dark background ───────────────────── */
+.nes-dashboard :deep(.nes-input) {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #5040a0;
+}
+
+/* ─── Fix NES.css select on dark background ──────────────────── */
+.nes-dashboard :deep(.nes-select select) {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #5040a0;
+}
+
+/* ─── Fix NES.css checkbox on dark background ────────────────── */
+.nes-dashboard :deep(.nes-checkbox) {
+  color: #fff;
+}
+
+/* ─── Fix NES.css badge on dark background ───────────────────── */
+.nes-dashboard :deep(.nes-badge) {
+  color: #fff;
+}
+
+/* ─── Fix NES.css list on dark background ────────────────────── */
+.nes-dashboard :deep(.nes-list) {
+  color: #fff;
+}
+
 /* ─── Header Controls ─────────────────────────────────────────── */
 .header-controls {
   display: flex;

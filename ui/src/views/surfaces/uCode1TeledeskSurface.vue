@@ -2,7 +2,32 @@
   <div class="teledesk-surface">
     <!-- Loading State -->
     <div v-if="status === 'loading'" class="teledesk-loading">
-      <div class="teledesk-loading-spinner">⧗</div>
+      <pre class="teledesk-logo">
+╔══════════════════════════════════════╗
+║                                      ║
+║    ██╗   ██╗ ██████╗ ██████╗ ██████╗ ║
+║    ██║   ██║██╔════╝██╔════╝██╔═══██╗║
+║    ██║   ██║██║     ██║     ██║   ██║║
+║    ██║   ██║██║     ██║     ██║   ██║║
+║    ╚██████╔╝╚██████╗╚██████╗╚██████╔╝║
+║     ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ║
+║                                      ║
+║         ████████╗███████╗            ║
+║         ╚══██╔══╝██╔════╝            ║
+║            ██║   █████╗              ║
+║            ██║   ██╔══╝              ║
+║            ██║   ███████╗            ║
+║            ╚═╝   ╚══════╝            ║
+║                                      ║
+║   ███████╗██╗     ███████╗██████╗    ║
+║   ██╔════╝██║     ██╔════╝██╔══██╗   ║
+║   █████╗  ██║     █████╗  ██║  ██║   ║
+║   ██╔══╝  ██║     ██╔══╝  ██║  ██║   ║
+║   ███████╗███████╗███████╗██████╔╝   ║
+║   ╚══════╝╚══════╝╚══════╝╚═════╝    ║
+║                                      ║
+╚══════════════════════════════════════╝
+      </pre>
       <div class="teledesk-loading-text">INITIALIZING CEETEX CONTAINER...</div>
     </div>
 
@@ -118,23 +143,42 @@ function renderIndex(): string[][] {
   const grid: string[][] = Array.from({ length: 24 }, () => Array(40).fill(' '));
 
   // Row 0: Top border
-  setLine(grid, 0, '═'.repeat(40));
+  setLine(grid, 0, '╔══════════════════════════════════════╗');
 
-  // Row 1-2: Header
-  setLine(grid, 1, '║' + centerText('C E E F A X', 38) + '║');
-  setLine(grid, 2, '║' + centerText('uCode1 Teledesk', 38) + '║');
+  // Row 1-6: Teletext-style uCode1 banner
+  setLine(grid, 1, '║                                      ║');
+  setLine(grid, 2, '║    ██╗   ██╗ ██████╗ ██████╗ ██████╗ ║');
+  setLine(grid, 3, '║    ██║   ██║██╔════╝██╔════╝██╔═══██╗║');
+  setLine(grid, 4, '║    ██║   ██║██║     ██║     ██║   ██║║');
+  setLine(grid, 5, '║    ██║   ██║██║     ██║     ██║   ██║║');
+  setLine(grid, 6, '║    ╚██████╔╝╚██████╗╚██████╗╚██████╔╝║');
 
-  // Row 3: Bottom border
-  setLine(grid, 3, '═'.repeat(40));
+  // Row 7: Separator
+  setLine(grid, 7, '║     ╚═════╝  ╚═════╝ ╚═════╝ ╚═════╝ ║');
 
-  // Row 4: Subtitle
-  setLine(grid, 4, centerText('PAGE 100  INDEX', 40));
+  // Row 8: Blank
+  setLine(grid, 8, '║                                      ║');
 
-  // Row 5: Blank
-  setLine(grid, 5, '');
+  // Row 9: Subtitle
+  setLine(grid, 9, '║' + centerText('C E E F A X   T E L E D E S K', 36) + '║');
 
-  // Rows 6+: Page listings
-  let y = 6;
+  // Row 10: Blank
+  setLine(grid, 10, '║                                      ║');
+
+  // Row 11: Bottom border
+  setLine(grid, 11, '╚══════════════════════════════════════╝');
+
+  // Row 12: Blank
+  setLine(grid, 12, '');
+
+  // Row 13: Subtitle
+  setLine(grid, 13, centerText('PAGE 100  INDEX', 40));
+
+  // Row 14: Blank
+  setLine(grid, 14, '');
+
+  // Rows 15+: Page listings
+  let y = 15;
   const sortedPages = Object.entries(pages.value).sort(([a], [b]) => Number(a) - Number(b));
   for (const [code, page] of sortedPages) {
     if (y >= 22) break;
@@ -643,7 +687,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   font-family: 'Teletext50', monospace;
-  border: 2px solid #333;
 }
 
 .teledesk-loading-spinner {
@@ -682,7 +725,6 @@ onUnmounted(() => {
   justify-content: center;
   font-family: 'Teletext50', monospace;
   text-align: center;
-  border: 2px solid #333;
 }
 
 .teledesk-error-icon {

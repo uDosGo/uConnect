@@ -1,34 +1,45 @@
 <template>
-  <div class="workflow-surface">
+  <div class="story-wizard">
     <!-- Surface Header -->
     <div class="surface-header">
       <div class="header-left">
-        <SurfaceIcon name="git-branch" class="header-icon" :size="24" />
+        <SurfaceIcon name="book-open" class="header-icon" :size="24" />
         <div>
-          <h1>Workflow Manager</h1>
-          <p class="surface-tagline">Create and manage automated workflows for your tasks.</p>
+          <h1>Story Builder</h1>
+          <p class="surface-tagline">Create interactive stories and narratives.</p>
           <p class="surface-definition">
-            <strong>What's a Workflow?</strong> A sequence of automated tasks that run based on triggers.
-            Save time by automating repetitive processes and keeping your work flowing smoothly.
+            <strong>What's a Story?</strong> An interactive narrative experience that can be used for
+            documentation, tutorials, or creative writing. Stories guide users through content with
+            choices and branching paths.
           </p>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-secondary btn-sm" @click="refreshWorkflows">
-          <SurfaceIcon name="refresh" :size="16" />
-          Refresh
-        </button>
-        <button class="btn-primary btn-sm" @click="createNewWorkflow">
+        <button class="btn-secondary btn-sm" @click="newStory">
           <SurfaceIcon name="plus" :size="16" />
-          New Workflow
+          New Story
         </button>
+        <button class="btn-primary btn-sm" @click="publishStory">
+          <SurfaceIcon name="send" :size="16" />
+          Publish
+        </button>
+      </div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="info-banner">
+      <SurfaceIcon name="info" :size="18" />
+      <div>
+        <strong>Story Format</strong>
+        Create branching narratives with choices and paths.
+        Perfect for interactive documentation and tutorials.
       </div>
     </div>
 
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
       <div class="spinner"></div>
-      <p>Loading workflows...</p>
+      <p>Loading stories...</p>
       <p class="helper-text">This usually takes a few seconds.</p>
     </div>
 
@@ -37,7 +48,7 @@
       <div class="error-icon">
         <SurfaceIcon name="alert-circle" :size="48" />
       </div>
-      <h3>Couldn't load workflows</h3>
+      <h3>Couldn't load stories</h3>
       <p>{{ error }}</p>
       <p class="helper-text">
         Try:
@@ -57,92 +68,89 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="workflows.length === 0" class="empty-state">
+    <div v-else-if="stories.length === 0" class="empty-state">
       <div class="empty-icon">
-        <SurfaceIcon name="git-branch" :size="48" />
+        <SurfaceIcon name="book-open" :size="48" />
       </div>
-      <h3>No workflows yet</h3>
-      <p>Create your first automated workflow!</p>
-      <button class="btn-primary" @click="createNewWorkflow">
+      <h3>No stories yet</h3>
+      <p>Create your first interactive story!</p>
+      <button class="btn-primary" @click="newStory">
         <SurfaceIcon name="plus" :size="16" />
-        Create Workflow
+        Create New Story
       </button>
       <p class="helper-text">
         <SurfaceIcon name="info" :size="14" />
-        Workflows help automate repetitive tasks
+        Stories can be used for documentation, tutorials, or creative writing
       </p>
     </div>
 
     <!-- Main Content -->
-    <div v-else class="workflow-container">
-      <div class="workflow-controls">
-        <div class="workflow-search">
+    <div v-else class="story-container">
+      <div class="story-controls">
+        <div class="story-search">
           <SurfaceIcon name="search" :size="16" class="search-icon" />
           <input
-            type="text"
             v-model="searchQuery"
-            placeholder="Search workflows..."
-            @input="filterWorkflows"
+            type="text"
+            placeholder="Search stories..."
+            @input="filterStories"
             class="search-input"
           >
           <button v-if="searchQuery" class="btn-icon btn-sm" @click="clearSearch">
             <SurfaceIcon name="x" :size="14" />
           </button>
         </div>
-        <button class="btn-secondary" @click="refreshWorkflows">
+        <button class="btn-secondary" @click="refreshStories">
           <SurfaceIcon name="refresh" :size="16" />
           Refresh
         </button>
+        <button class="btn-primary" @click="newStory">
+          <SurfaceIcon name="plus" :size="16" />
+          New Story
+        </button>
       </div>
 
-      <div class="workflow-grid">
+      <div class="story-grid">
         <div
-          v-for="workflow in filteredWorkflows"
-          :key="workflow.id"
-          class="workflow-card"
-          @click="openWorkflow(workflow)"
+          v-for="story in filteredStories"
+          :key="story.id"
+          class="story-card"
+          @click="openStory(story)"
         >
-          <div class="workflow-header">
-            <SurfaceIcon name="git-branch" :size="20" class="workflow-icon" />
-            <h3 class="workflow-name">{{ workflow.name }}</h3>
-            <span class="workflow-status" :class="workflow.active ? 'active' : 'inactive'">
-              {{ workflow.active ? 'Active' : 'Inactive' }}
-            </span>
+          <div class="story-header">
+            <SurfaceIcon name="book-open" :size="20" class="story-icon" />
+            <h3 class="story-name">{{ story.name }}</h3>
+            <span class="story-type">{{ story.type }}</span>
           </div>
 
-          <div class="workflow-meta">
-            <span class="workflow-trigger">
-              <SurfaceIcon name="zap" :size="14" />
-              {{ workflow.triggers.join(', ') }}
-            </span>
-            <span class="workflow-updated">
-              Updated {{ formatRelativeTime(workflow.updatedAt) }}
-            </span>
+          <div class="story-meta">
+            <span class="story-pages">{{ story.pages }} pages</span>
+            <span class="story-updated">Updated {{ formatRelativeTime(story.updatedAt) }}</span>
           </div>
 
-          <div class="workflow-description" v-if="workflow.description">
-            {{ workflow.description }}
+          <div class="story-description" v-if="story.description">
+            {{ story.description }}
           </div>
 
-          <div class="workflow-actions">
+          <div class="story-actions">
             <button
               class="btn-icon btn-sm"
-              @click.stop="toggleWorkflow(workflow)"
-              :title="workflow.active ? 'Deactivate workflow' : 'Activate workflow'"
-            >
-              <SurfaceIcon :name="workflow.active ? 'pause' : 'play'" :size="14" />
-            </button>
-            <button
-              class="btn-icon btn-sm"
-              @click.stop="editWorkflow(workflow)"
-              title="Edit workflow"
+              @click.stop="editStory(story)"
+              title="Edit story"
             >
               <SurfaceIcon name="edit" :size="14" />
             </button>
             <button
               class="btn-icon btn-sm"
-              @click.stop="deleteWorkflow(workflow)"
-              title="Delete workflow"
+              @click.stop="previewStory(story)"
+              title="Preview story"
+            >
+              <SurfaceIcon name="eye" :size="14" />
+            </button>
+            <button
+              class="btn-icon btn-sm"
+              @click.stop="deleteStory(story)"
+              title="Delete story"
             >
               <SurfaceIcon name="trash" :size="14" />
             </button>
@@ -150,11 +158,11 @@
         </div>
       </div>
 
-      <!-- Workflow Statistics -->
-      <div class="workflow-stats">
-        <span>{{ filteredWorkflows.length }} workflows</span>
-        <span>{{ activeWorkflows }} active</span>
-        <span>{{ totalRuns }} total runs</span>
+      <!-- Story Statistics -->
+      <div class="story-stats">
+        <span>{{ filteredStories.length }} stories</span>
+        <span>{{ totalPages }} pages</span>
+        <span>{{ publishedStories }} published</span>
       </div>
     </div>
   </div>
@@ -166,7 +174,7 @@ import { formatDistanceToNow } from 'date-fns'
 import SurfaceIcon from '@/components/SurfaceIcons.vue'
 
 export default {
-  name: 'WorkflowSurface',
+  name: 'StoryWizard',
   components: {
     SurfaceIcon
   },
@@ -174,24 +182,25 @@ export default {
     // State
     const isLoading = ref(false)
     const error = ref(null)
-    const workflows = ref([])
+    const stories = ref([])
     const searchQuery = ref('')
-    const activeWorkflows = computed(() => workflows.value.filter(w => w.active).length)
-    const totalRuns = computed(() => workflows.value.reduce((sum, w) => sum + (w.runCount || 0), 0))
 
     // Computed
-    const filteredWorkflows = computed(() => {
-      if (!searchQuery.value) return workflows.value
+    const totalPages = computed(() => stories.value.reduce((sum, story) => sum + story.pages, 0))
+    const publishedStories = computed(() => stories.value.filter(s => s.published).length)
+
+    const filteredStories = computed(() => {
+      if (!searchQuery.value) return stories.value
 
       const query = searchQuery.value.toLowerCase()
-      return workflows.value.filter(workflow =>
-        workflow.name.toLowerCase().includes(query) ||
-        (workflow.description && workflow.description.toLowerCase().includes(query))
+      return stories.value.filter(story =>
+        story.name.toLowerCase().includes(query) ||
+        (story.description && story.description.toLowerCase().includes(query))
       )
     })
 
     // Methods
-    const loadWorkflows = async () => {
+    const loadStories = async () => {
       isLoading.value = true
       error.value = null
       try {
@@ -199,89 +208,92 @@ export default {
         await new Promise(resolve => setTimeout(resolve, 500))
 
         // Mock data
-        workflows.value = [
+        stories.value = [
           {
             id: 1,
-            name: 'Daily Backup',
-            description: 'Automatically backup all documents at 2 AM',
-            triggers: ['time', 'schedule'],
-            active: true,
-            runCount: 42,
-            updatedAt: new Date(Date.now() - 86400000 * 3).toISOString()
+            name: 'Getting Started Guide',
+            description: 'Interactive tutorial for new users',
+            type: 'tutorial',
+            pages: 8,
+            published: true,
+            updatedAt: new Date(Date.now() - 86400000 * 2).toISOString()
           },
           {
             id: 2,
-            name: 'Git Sync',
-            description: 'Sync GitHub repos every hour',
-            triggers: ['time', 'github'],
-            active: true,
-            runCount: 128,
+            name: 'API Documentation',
+            description: 'Interactive API reference with examples',
+            type: 'documentation',
+            pages: 15,
+            published: true,
             updatedAt: new Date(Date.now() - 86400000 * 1).toISOString()
           },
           {
             id: 3,
-            name: 'Document Processing',
-            description: 'Process uploaded documents and extract metadata',
-            triggers: ['file-upload', 'vault'],
-            active: false,
-            runCount: 7,
-            updatedAt: new Date(Date.now() - 86400000 * 7).toISOString()
+            name: 'Product Demo',
+            description: 'Interactive product demonstration',
+            type: 'demo',
+            pages: 5,
+            published: false,
+            updatedAt: new Date(Date.now() - 86400000 * 5).toISOString()
           },
           {
             id: 4,
-            name: 'Chat Summarization',
-            description: 'Summarize long conversations automatically',
-            triggers: ['message', 'vibe'],
-            active: true,
-            runCount: 234,
-            updatedAt: new Date(Date.now() - 86400000 * 2).toISOString()
+            name: 'User Manual',
+            description: 'Comprehensive user guide with branching paths',
+            type: 'manual',
+            pages: 22,
+            published: true,
+            updatedAt: new Date(Date.now() - 86400000 * 3).toISOString()
           }
         ]
       } catch (err) {
-        error.value = err.message || 'Failed to load workflows'
+        error.value = err.message || 'Failed to load stories'
       } finally {
         isLoading.value = false
       }
     }
 
-    const createNewWorkflow = () => {
-      alert('Workflow creation interface coming soon!')
+    const newStory = () => {
+      alert('Creating new story...')
     }
 
-    const openWorkflow = (workflow) => {
-      alert(`Opening workflow: ${workflow.name}`)
+    const openStory = (story) => {
+      alert(`Opening story: ${story.name}`)
     }
 
-    const toggleWorkflow = (workflow) => {
-      workflow.active = !workflow.active
-      alert(`Workflow ${workflow.active ? 'activated' : 'deactivated'}`)
+    const editStory = (story) => {
+      alert(`Editing story: ${story.name}`)
     }
 
-    const editWorkflow = (workflow) => {
-      alert(`Editing workflow: ${workflow.name}`)
+    const previewStory = (story) => {
+      alert(`Previewing story: ${story.name}`)
     }
 
-    const deleteWorkflow = (workflow) => {
-      if (confirm(`Delete workflow "${workflow.name}"?`)) {
-        workflows.value = workflows.value.filter(w => w.id !== workflow.id)
-        alert('Workflow deleted')
+    const deleteStory = (story) => {
+      if (confirm(`Delete "${story.name}"?`)) {
+        stories.value = stories.value.filter(s => s.id !== story.id)
+        alert('Story deleted')
       }
     }
 
-    const refreshWorkflows = () => {
-      loadWorkflows()
+    const publishStory = () => {
+      alert('Publishing story feature coming soon!')
+    }
+
+    const refreshStories = () => {
+      loadStories()
     }
 
     const retryLoad = () => {
       error.value = null
-      loadWorkflows()
+      loadStories()
     }
 
     const clearSearch = () => {
       searchQuery.value = ''
     }
 
-    const filterWorkflows = () => {
+    const filterStories = () => {
       // Handled by computed property
     }
 
@@ -292,27 +304,28 @@ export default {
 
     // Load on mount
     onMounted(() => {
-      loadWorkflows()
+      loadStories()
     })
 
     return {
       isLoading,
       error,
-      workflows,
+      stories,
       searchQuery,
-      filteredWorkflows,
-      activeWorkflows,
-      totalRuns,
-      loadWorkflows,
-      createNewWorkflow,
-      openWorkflow,
-      toggleWorkflow,
-      editWorkflow,
-      deleteWorkflow,
-      refreshWorkflows,
+      filteredStories,
+      totalPages,
+      publishedStories,
+      loadStories,
+      newStory,
+      openStory,
+      editStory,
+      previewStory,
+      deleteStory,
+      publishStory,
+      refreshStories,
       retryLoad,
       clearSearch,
-      filterWorkflows,
+      filterStories,
       formatRelativeTime
     }
   }
@@ -321,7 +334,7 @@ export default {
 
 <style>
 /* CSS Custom Properties */
-.workflow-surface {
+.story-wizard {
   --background: #ffffff;
   --text-primary: #1a1a2e;
   --text-secondary: #6b6b6b;
@@ -337,7 +350,7 @@ export default {
   --info-color: #1565c0;
 }
 
-.ucode3-dark .workflow-surface {
+.ucode3-dark .story-wizard {
   --background: #1a1a2e;
   --text-primary: #e0e0e0;
   --text-secondary: #a0a0c0;
@@ -355,7 +368,7 @@ export default {
 </style>
 
 <style scoped>
-.workflow-surface {
+.story-wizard {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -404,8 +417,20 @@ export default {
   gap: 0.5rem;
 }
 
-/* Controls */
-.workflow-controls {
+/* Info Banner */
+.info-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--info-background);
+  border-radius: 8px;
+  margin: 1rem;
+  color: var(--info-color);
+}
+
+/* Story Controls */
+.story-controls {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -414,7 +439,7 @@ export default {
   background: var(--surface-background);
 }
 
-.workflow-search {
+.story-search {
   flex: 1;
   display: flex;
   align-items: center;
@@ -587,20 +612,21 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-/* Workflow Container */
-.workflow-container {
+/* Story Container */
+.story-container {
   flex: 1;
   overflow-y: auto;
 }
 
-.workflow-grid {
+/* Story Grid */
+.story-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   padding: 1rem;
 }
 
-.workflow-card {
+.story-card {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -612,83 +638,72 @@ export default {
   transition: all 0.2s;
 }
 
-.workflow-card:hover {
+.story-card:hover {
   background: var(--surface-hover);
   border-color: var(--primary-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.workflow-header {
+.story-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.workflow-icon {
+.story-icon {
   color: var(--primary-color);
 }
 
-.workflow-name {
+.story-name {
   flex: 1;
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
 }
 
-.workflow-status {
+.story-type {
   padding: 0.25rem 0.75rem;
+  background: var(--surface-hover);
   border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: 500;
+  color: var(--text-secondary);
 }
 
-.workflow-status.active {
-  background: rgba(46, 125, 100, 0.1);
-  color: var(--success-color);
-}
-
-.workflow-status.inactive {
-  background: rgba(176, 176, 176, 0.1);
-  color: var(--text-tertiary);
-}
-
-.workflow-meta {
+.story-meta {
   display: flex;
   gap: 0.75rem;
   font-size: 0.75rem;
   color: var(--text-tertiary);
 }
 
-.workflow-trigger {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+.story-pages {
+  font-weight: 500;
 }
 
-.workflow-updated {
+.story-updated {
   margin-left: auto;
 }
 
-.workflow-description {
+.story-description {
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.4;
 }
 
-.workflow-actions {
+.story-actions {
   display: flex;
   gap: 0.25rem;
   opacity: 0;
   transition: opacity 0.2s;
 }
 
-.workflow-card:hover .workflow-actions {
+.story-card:hover .story-actions {
   opacity: 1;
 }
 
-/* Workflow Statistics */
-.workflow-stats {
+/* Story Statistics */
+.story-stats {
   display: flex;
   justify-content: center;
   gap: 2rem;
