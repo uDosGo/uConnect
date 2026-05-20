@@ -12,6 +12,6 @@ jobs:
     name: Validate Courses
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Validate course shells
         run: bash scripts/validate-courses.sh
