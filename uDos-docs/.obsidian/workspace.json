@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "24e3e205656f38b2",
+    "type": "split",
+    "children": [
+      {
+        "id": "adf4762b949975be",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f9f8979ac66a6a22",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "roadmaps/WORDPRESS_ROUND_2_ROADMAP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "WORDPRESS_ROUND_2_ROADMAP"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "450da3cf44345e10",
+    "type": "split",
+    "children": [
+      {
+        "id": "13f8ac3e92110b8c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b124400890f431bd",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "4db7ead5e2137954",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "9b840c0b56a8a84e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "845392008e72d056",
+    "type": "split",
+    "children": [
+      {
+        "id": "d9b4e7a08be1c13a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8b1c2680798bb311",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "roadmaps/WORDPRESS_ROUND_2_ROADMAP.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for WORDPRESS_ROUND_2_ROADMAP"
+            }
+          },
+          {
+            "id": "79e2ca9cf6c3710f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "roadmaps/WORDPRESS_ROUND_2_ROADMAP.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from WORDPRESS_ROUND_2_ROADMAP"
+            }
+          },
+          {
+            "id": "ea378956943f0285",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "4e9cb73f4486f07e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "c26f6144fe10ee9d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "roadmaps/WORDPRESS_ROUND_2_ROADMAP.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of WORDPRESS_ROUND_2_ROADMAP"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "f9f8979ac66a6a22",
+  "lastOpenFiles": [
+    "roadmaps/CONSOLIDATED_PHASE_8_IMPLEMENTATION_PLAN.md",
+    "specs/open-box-format.md",
+    "specs/obf-grid-spec.md",
+    "specs/obf-components.md",
+    "contributor/migrated-round2/examples/README.md",
+    "specs/UDOS_UCELL_VOXEL_MAPPING_v1.md",
+    "specs/UDOS_TOWER_OF_KNOWLEDGE_LOCKED_v1.md",
+    "specs/UDOS_SPATIAL_ALGEBRA_LOCKED_v1.2.md",
+    "contributor/guides/UDOS_DEV_PRACTICE_TEMPLATE.md",
+    "contributor/guides/UDOSCLI_MODULARIZATION_PLAN.md",
+    "contributor/guides/TERMINOLOGY_CHANGES.md",
+    "contributor/guides/SQLITE_VEC_INTEGRATION_GUIDE.md",
+    "contributor/guides/PRODUCTION_CHECKLIST.md",
+    "contributor/guides/MCP_VAULT_MIRRORING_GUIDE.md",
+    "contributor/guides/MCP_TROUBLESHOOTING_GUIDE.md",
+    "contributor/guides/MASTER_INDEX.md",
+    "contributor/guides/LOCALHOST_SERVICES.md",
+    "contributor/guides/IMPLEMENTATION_OVERVIEW.md",
+    "contributor/guides/IMPLEMENTATION_COMPLETE.md",
+    "contributor/guides/GUI_INTEGRATION_COMPLETE.md",
+    "contributor/guides/DEPLOYMENT_GUIDE.md",
+    "contributor/guides/CONTRIBUTING.md",
+    "contributor/guides/AGENTS.md",
+    "contributor/guides",
+    "contributor/public/vault-guide.md",
+    "contributor/public/ucode-commands.md",
+    "contributor/public/publishing-guide.md",
+    "contributor/public",
+    "contributor/tools",
+    "contributor/themes",
+    "contributor/templates",
+    "contributor/student/tutorials",
+    "contributor/student",
+    "contributor/course",
+    "contributor/site/data/library-manifest.json",
+    "contributor/site/data/family.json"
+  ]
+}

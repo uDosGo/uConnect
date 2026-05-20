@@ -1,0 +1,17 @@
+// clone-postiz.ucode — intent stub for Postiz (gitroomhq/postiz-app, AGPL-3.0)
+// Pair: uDosDev UDOS_TOOL_FAMILY_POSTIZ_NAME_GENERATOR_UCOIN_LOCKED_v1.md §1
+// Replace COMMENT blocks with real uCode when your runtime supports git + env checks.
+
+COMMENT "Verify upstream URL and license before clone:"
+COMMENT "  https://github.com/gitroomhq/postiz-app"
+
+COMMENT "Example (shell — not executed by this stub):"
+COMMENT "  git clone https://github.com/gitroomhq/postiz-app.git"
+COMMENT "  cd postiz-app && follow upstream README for Docker or install"
+
+COMMENT "Open-box config (user fills in vault or worksheet):"
+COMMENT "  - domain / hostname"
+COMMENT "  - email / notifications"
+COMMENT "  - first social platform OAuth app"
+
+OUTPUT "Postiz clone intent recorded — complete install using upstream docs."
