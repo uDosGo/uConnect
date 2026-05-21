@@ -133,6 +133,9 @@ venv/
 # Logs
 *.log
 
+# udoserver runtime data (PID files, logs)
+.udoserver/
+
 # Ad-hoc test artefacts
 *.test
 *.fail
