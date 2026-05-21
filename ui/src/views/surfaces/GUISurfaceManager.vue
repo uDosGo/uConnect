@@ -140,6 +140,7 @@ onMounted(() => {
     // ═══ uCode Surfaces ═══
     { id: 'ucode2reasoning', title: 'uCode2 Reasoning', path: '/surface/ucode2reasoning', section: 'ucode' },
     { id: 'ucode2', title: 'uCode2 Publish', path: '/surface/ucode2', section: 'ucode' },
+    { id: 'proseui', title: 'ProseUI Document', path: '/surface/proseui', section: 'ucode' },
     // Core Surfaces
     { id: 'vibe', title: 'Vibe TUI', path: '/surface/vibe', section: 'core' },
     { id: 'vault', title: 'Vault Browser', path: '/surface/vault', section: 'core' },

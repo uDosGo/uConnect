@@ -77,6 +77,11 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: 'MCP Tool Registry' },
       },
       {
+        path: 'proseui',
+        component: () => import('../views/surfaces/ProseUISurface.vue'),
+        meta: { title: 'ProseUI Document Surface' },
+      },
+      {
         path: 'settings',
         component: () => import('../views/surfaces/SettingsSurface.vue'),
         meta: { title: 'Settings' },
