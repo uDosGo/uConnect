@@ -5,22 +5,12 @@ import VibeSurface from '../views/surfaces/VibeSurface.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/surface/ucode1',
+    redirect: '/surface/ucode2',
   },
   {
     path: '/surface',
     component: GUISurfaceManager,
     children: [
-      {
-        path: 'ucode1teledesk',
-        component: () => import('../views/surfaces/uCode1TeledeskSurface.vue'),
-        meta: { title: 'uCode1 Teledesk' },
-      },
-      {
-        path: 'ucode1',
-        component: () => import('../views/surfaces/uCode1Surface.vue'),
-        meta: { title: 'uCode1 Terminal' },
-      },
       {
         path: 'ucode2reasoning',
         component: () => import('../views/surfaces/uCode2ReasoningSurface.vue'),
@@ -30,21 +20,6 @@ const routes: Array<RouteRecordRaw> = [
         path: 'ucode2',
         component: () => import('../views/surfaces/uCode2Surface.vue'),
         meta: { title: 'uCode2 Publish' },
-      },
-      {
-        path: 'ucode3',
-        component: () => import('../views/surfaces/uCode3Surface.vue'),
-        meta: { title: 'uCode3 Surface' },
-      },
-      {
-        path: 'ucode4',
-        component: () => import('../views/surfaces/WireframeSurface.vue'),
-        meta: { title: 'uCode4 Wireframe' },
-      },
-      {
-        path: 'dashboard',
-        component: () => import('../views/surfaces/NESClassicSurface.vue'),
-        meta: { title: 'Dashboard' },
       },
       {
         path: 'vibe',
@@ -111,7 +86,7 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: '/:catchAll(.*)',
-    redirect: '/surface/ucode1',
+    redirect: '/surface/ucode2',
   },
 ]
 

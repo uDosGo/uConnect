@@ -1,0 +1,266 @@
+/* ─── code4ui Theme (USX LENS/SKIN) ───────────────────────────── */
+/* Wireframe-style theme with dashed borders and monospace font */
+
+:root {
+  /* USX Color Tokens */
+  --usx-color-primary: #333333;
+  --usx-color-on-primary: #ffffff;
+  --usx-color-primary-container: #f0f0f0;
+  --usx-color-on-primary-container: #1a1a1a;
+  --usx-color-secondary: #666666;
+  --usx-color-on-secondary: #ffffff;
+  --usx-color-secondary-container: #e8e8e8;
+  --usx-color-on-secondary-container: #1a1a1a;
+  --usx-color-tertiary: #4a4a4a;
+  --usx-color-on-tertiary: #ffffff;
+  --usx-color-tertiary-container: #e0e0e0;
+  --usx-color-on-tertiary-container: #1a1a1a;
+  --usx-color-error: #d32f2f;
+  --usx-color-on-error: #ffffff;
+  --usx-color-error-container: #fce4e4;
+  --usx-color-on-error-container: #5c1010;
+  --usx-color-background: #ffffff;
+  --usx-color-on-background: #1a1a1a;
+  --usx-color-surface: #ffffff;
+  --usx-color-on-surface: #1a1a1a;
+  --usx-color-surface-variant: #f5f5f5;
+  --usx-color-on-surface-variant: #666666;
+  --usx-color-surface-container: #f0f0f0;
+  --usx-color-surface-container-high: #e8e8e8;
+  --usx-color-outline: #cccccc;
+  --usx-color-outline-variant: #e0e0e0;
+
+  /* code4ui specific tokens */
+  --code4ui-font-size: 14px;
+  --code4ui-font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  --code4ui-header-height: 48px;
+  --code4ui-sidebar-width: 220px;
+  --code4ui-sidebar-collapsed-width: 56px;
+  --code4ui-chat-width: 320px;
+
+  /* M3 Shape Tokens */
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-full: 9999px;
+}
+
+/* ─── Dark Mode ───────────────────────────────────────────────── */
+.code4ui-dark {
+  --usx-color-primary: #e0e0e0;
+  --usx-color-on-primary: #1a1a1a;
+  --usx-color-primary-container: #333333;
+  --usx-color-on-primary-container: #e0e0e0;
+  --usx-color-secondary: #b0b0b0;
+  --usx-color-on-secondary: #1a1a1a;
+  --usx-color-secondary-container: #444444;
+  --usx-color-on-secondary-container: #e0e0e0;
+  --usx-color-tertiary: #c0c0c0;
+  --usx-color-on-tertiary: #1a1a1a;
+  --usx-color-tertiary-container: #3a3a3a;
+  --usx-color-on-tertiary-container: #e0e0e0;
+  --usx-color-error: #ef5350;
+  --usx-color-on-error: #1a1a1a;
+  --usx-color-error-container: #5c1010;
+  --usx-color-on-error-container: #fce4e4;
+  --usx-color-background: #121212;
+  --usx-color-on-background: #e0e0e0;
+  --usx-color-surface: #1a1a1a;
+  --usx-color-on-surface: #e0e0e0;
+  --usx-color-surface-variant: #2a2a2a;
+  --usx-color-on-surface-variant: #999999;
+  --usx-color-surface-container: #222222;
+  --usx-color-surface-container-high: #2e2e2e;
+  --usx-color-outline: #444444;
+  --usx-color-outline-variant: #333333;
+}
+
+/* ─── M3 Component Styles ─────────────────────────────────────── */
+
+/* Circular Progress */
+.m3-circular-progress {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--usx-color-outline);
+  border-top-color: var(--usx-color-primary);
+  border-radius: 50%;
+  animation: m3-spin 0.8s linear infinite;
+}
+
+@keyframes m3-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Snackbar */
+.m3-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background: var(--usx-color-surface-container);
+  color: var(--usx-color-on-surface);
+  font-size: calc(var(--code4ui-font-size) * 0.85);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  animation: m3-snackbar-in 0.25s ease;
+  border: 1px dashed var(--usx-color-outline);
+}
+
+@keyframes m3-snackbar-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.m3-snackbar--success {
+  border-color: #4caf50;
+}
+
+.m3-snackbar--error {
+  border-color: var(--usx-color-error);
+}
+
+.m3-snackbar-action {
+  padding: 4px 8px;
+  border: 1px dashed var(--usx-color-primary);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: transparent;
+  color: var(--usx-color-primary);
+  font-family: inherit;
+  font-size: calc(var(--code4ui-font-size) * 0.8);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Button */
+.m3-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px dashed var(--usx-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: transparent;
+  color: var(--usx-color-on-surface);
+  font-family: inherit;
+  font-size: calc(var(--code4ui-font-size) * 0.85);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.m3-btn:hover {
+  background: var(--usx-color-surface-variant);
+}
+
+.m3-btn--filled {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border-style: solid;
+}
+
+.m3-btn--filled:hover {
+  opacity: 0.9;
+}
+
+/* Text Field */
+.m3-text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.m3-text-field input,
+.m3-text-field textarea {
+  padding: 8px 12px;
+  border: 1px dashed var(--usx-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--usx-color-surface);
+  color: var(--usx-color-on-surface);
+  font-family: inherit;
+  font-size: calc(var(--code4ui-font-size) * 0.85);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.m3-text-field input:focus,
+.m3-text-field textarea:focus {
+  border-color: var(--usx-color-primary);
+  border-style: solid;
+}
+
+.m3-text-field label {
+  font-size: calc(var(--code4ui-font-size) * 0.75);
+  color: var(--usx-color-on-surface-variant);
+}
+
+/* Badge */
+.m3-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--usx-color-primary-container);
+  color: var(--usx-color-on-primary-container);
+  font-size: calc(var(--code4ui-font-size) * 0.7);
+  font-weight: 500;
+  border: 1px dashed var(--usx-color-outline);
+}
+
+/* Tooltip */
+.m3-tooltip {
+  position: relative;
+}
+
+.m3-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--usx-color-surface-container);
+  color: var(--usx-color-on-surface);
+  font-size: calc(var(--code4ui-font-size) * 0.7);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  border: 1px dashed var(--usx-color-outline);
+}
+
+.m3-tooltip:hover::after {
+  opacity: 1;
+}
+
+/* Typography */
+.m3-headline {
+  font-size: calc(var(--code4ui-font-size) * 1.5);
+  font-weight: 700;
+  color: var(--usx-color-on-surface);
+  margin: 0;
+}
+
+.m3-title {
+  font-size: calc(var(--code4ui-font-size) * 1.15);
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin: 0;
+}
+
+.m3-body {
+  font-size: var(--code4ui-font-size);
+  color: var(--usx-color-on-surface);
+  line-height: 1.5;
+}
+
+.m3-label {
+  font-size: calc(var(--code4ui-font-size) * 0.8);
+  color: var(--usx-color-on-surface-variant);
+  font-weight: 500;
+}

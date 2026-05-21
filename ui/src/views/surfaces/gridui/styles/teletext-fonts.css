@@ -1,0 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════════
+   gridui — Teletext & Retro Font Pack
+   USX font system: Teletext50, Monaspace Krypton, PetMe128, etc.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Teletext50 — Primary teletext font ────────────────────────── */
+@font-face {
+  font-family: 'Teletext50';
+  src:
+    local('Teletext50'),
+    local('Teletext 50'),
+    url('https://cdn.udo.space/fonts/Teletext50.woff2') format('woff2'),
+    url('https://cdn.udo.space/fonts/Teletext50.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Teletext50 Condensed';
+  src:
+    local('Teletext50 Condensed'),
+    local('Teletext 50 Condensed'),
+    url('https://cdn.udo.space/fonts/Teletext50-Condensed.woff2') format('woff2'),
+    url('https://cdn.udo.space/fonts/Teletext50-Condensed.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Monaspace Krypton — USX default monospace ────────────────── */
+@font-face {
+  font-family: 'Monaspace Krypton';
+  src:
+    local('Monaspace Krypton'),
+    local('MonaspaceKrypton'),
+    url('https://cdn.udo.space/fonts/MonaspaceKrypton.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monaspace Krypton';
+  src:
+    local('Monaspace Krypton Bold'),
+    local('MonaspaceKrypton-Bold'),
+    url('https://cdn.udo.space/fonts/MonaspaceKrypton-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── PetMe128 — C64-style font ─────────────────────────────────── */
+@font-face {
+  font-family: 'PetMe128';
+  src:
+    local('PetMe128'),
+    local('Pet Me 128'),
+    url('https://cdn.udo.space/fonts/PetMe128.woff2') format('woff2'),
+    url('https://cdn.udo.space/fonts/PetMe128.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── C64 User Mono — Commodore 64 font ─────────────────────────── */
+@font-face {
+  font-family: 'C64 User Mono';
+  src:
+    local('C64 User Mono'),
+    local('C64UserMono'),
+    url('https://cdn.udo.space/fonts/C64UserMono.woff2') format('woff2'),
+    url('https://cdn.udo.space/fonts/C64UserMono.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Press Start 2P — NES-style pixel font ─────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ─── Material Symbols (M3 Icons) ───────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+/* ─── Font Utility Classes ──────────────────────────────────────── */
+.font-teletext {
+  font-family: 'Teletext50', 'Courier New', monospace;
+}
+
+.font-teletext-condensed {
+  font-family: 'Teletext50 Condensed', 'Teletext50', 'Courier New', monospace;
+}
+
+.font-c64 {
+  font-family: 'PetMe128', 'C64 User Mono', 'Courier New', monospace;
+}
+
+.font-pixel {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+.font-mono {
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ─── Material Symbols Icon Class ───────────────────────────────── */
+.material-symbol {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.material-symbol.filled {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}

@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════
+   gridui — Per-Panel Color Palettes
+   Each palette maps USX style tokens to M3 dynamic color
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── C64 Palette ───────────────────────────────────────────────── */
+[data-palette="c64"] {
+  --usx-ink: #E0E0FF;
+  --usx-paper: #1a1a2e;
+  --usx-grid: #16213e;
+  --usx-accent: #533483;
+  --usx-error: #FF4444;
+  --usx-warning: #FFCC00;
+
+  --md-sys-color-primary: #7B5EA7;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #533483;
+  --md-sys-color-on-primary-container: #EADDFF;
+  --md-sys-color-secondary: #9E8EC0;
+  --md-sys-color-surface: #1a1a2e;
+  --md-sys-color-on-surface: #E0E0FF;
+  --md-sys-color-surface-variant: #16213e;
+  --md-sys-color-on-surface-variant: #C4B8D8;
+  --md-sys-color-outline: #533483;
+  --md-sys-color-background: #1a1a2e;
+  --md-sys-color-on-background: #E0E0FF;
+
+  --gridui-bg: #1a1a2e;
+  --gridui-surface: #16213e;
+  --gridui-surface-elevated: #1E2A4A;
+  --gridui-text: #E0E0FF;
+  --gridui-text-muted: #9E8EC0;
+  --gridui-text-subtle: #6B5E8A;
+  --gridui-border: #2A1F3E;
+  --gridui-accent: #7B5EA7;
+  --gridui-accent-hover: #9E8EC0;
+  --gridui-nav-rail-bg: #16213e;
+}
+
+/* ─── Teletext Palette ──────────────────────────────────────────── */
+[data-palette="teletext"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #000000;
+  --usx-grid: #1A1A1A;
+  --usx-accent: #FFFF00;
+  --usx-error: #FF0000;
+  --usx-warning: #FFCC00;
+
+  --md-sys-color-primary: #FFFF00;
+  --md-sys-color-on-primary: #000000;
+  --md-sys-color-primary-container: #333300;
+  --md-sys-color-on-primary-container: #FFFFCC;
+  --md-sys-color-secondary: #00FF00;
+  --md-sys-color-surface: #000000;
+  --md-sys-color-on-surface: #FFFFFF;
+  --md-sys-color-surface-variant: #1A1A1A;
+  --md-sys-color-on-surface-variant: #CCCCCC;
+  --md-sys-color-outline: #333333;
+  --md-sys-color-background: #000000;
+  --md-sys-color-on-background: #FFFFFF;
+
+  --gridui-bg: #000000;
+  --gridui-surface: #0A0A0A;
+  --gridui-surface-elevated: #141414;
+  --gridui-text: #FFFFFF;
+  --gridui-text-muted: #888888;
+  --gridui-text-subtle: #555555;
+  --gridui-border: #333333;
+  --gridui-accent: #FFFF00;
+  --gridui-accent-hover: #FFCC00;
+  --gridui-nav-rail-bg: #0A0A0A;
+}
+
+/* ─── NES Palette ───────────────────────────────────────────────── */
+[data-palette="nes"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #212529;
+  --usx-grid: #2A2A2A;
+  --usx-accent: #5040a0;
+  --usx-error: #E76F51;
+  --usx-warning: #E9C46A;
+
+  --md-sys-color-primary: #7B6BC0;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #5040a0;
+  --md-sys-color-on-primary-container: #E8E0FF;
+  --md-sys-color-secondary: #E76F51;
+  --md-sys-color-surface: #212529;
+  --md-sys-color-on-surface: #FFFFFF;
+  --md-sys-color-surface-variant: #2A2A2A;
+  --md-sys-color-on-surface-variant: #CCCCCC;
+  --md-sys-color-outline: #5040a0;
+  --md-sys-color-background: #212529;
+  --md-sys-color-on-background: #FFFFFF;
+
+  --gridui-bg: #212529;
+  --gridui-surface: #2A2D33;
+  --gridui-surface-elevated: #33363D;
+  --gridui-text: #FFFFFF;
+  --gridui-text-muted: #AAAAAA;
+  --gridui-text-subtle: #777777;
+  --gridui-border: #3A3D44;
+  --gridui-accent: #7B6BC0;
+  --gridui-accent-hover: #9E8ED0;
+  --gridui-nav-rail-bg: #2A2D33;
+}
+
+/* ─── Modern Palette (Default) ──────────────────────────────────── */
+[data-palette="modern"] {
+  /* Uses the root variables from gridui-usx-theme.css */
+}

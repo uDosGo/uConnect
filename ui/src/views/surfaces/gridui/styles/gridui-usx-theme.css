@@ -1,0 +1,206 @@
+/* ═══════════════════════════════════════════════════════════════════
+   gridui — USX Style Tokens → M3 CSS Custom Properties
+   Merges USX style spec (usx-style.md) with Material 3 design tokens
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── USX Core Tokens ─────────────────────────────────────────── */
+  --usx-ink: #00FF00;
+  --usx-paper: #000000;
+  --usx-grid: #1A1A1A;
+  --usx-accent: #00FF00;
+  --usx-error: #FF0000;
+  --usx-warning: #FFCC00;
+
+  /* ─── M3 Color Tokens ─────────────────────────────────────────── */
+  --md-sys-color-primary: #6750A4;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #EADDFF;
+  --md-sys-color-on-primary-container: #21005D;
+  --md-sys-color-secondary: #625B71;
+  --md-sys-color-on-secondary: #FFFFFF;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+  --md-sys-color-tertiary: #7D5260;
+  --md-sys-color-on-tertiary: #FFFFFF;
+  --md-sys-color-tertiary-container: #FFD8E4;
+  --md-sys-color-on-tertiary-container: #31111D;
+  --md-sys-color-error: #B3261E;
+  --md-sys-color-on-error: #FFFFFF;
+  --md-sys-color-error-container: #F9DEDC;
+  --md-sys-color-on-error-container: #410E0B;
+  --md-sys-color-surface: #FFFBFE;
+  --md-sys-color-on-surface: #1C1B1F;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-surface-tint: #6750A4;
+  --md-sys-color-inverse-surface: #313033;
+  --md-sys-color-inverse-on-surface: #F4EFF4;
+  --md-sys-color-inverse-primary: #D0BCFF;
+  --md-sys-color-background: #FFFBFE;
+  --md-sys-color-on-background: #1C1B1F;
+
+  /* ─── M3 Shape Tokens ─────────────────────────────────────────── */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* ─── M3 Elevation Tokens ─────────────────────────────────────── */
+  --md-sys-elevation-level0: 0px 0px 0px 0px rgba(0,0,0,0);
+  --md-sys-elevation-level1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level2: 0px 2px 6px 2px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0,0,0,0.15), 0px 2px 3px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 4px 0px rgba(0,0,0,0.30);
+
+  /* ─── M3 Typography Tokens ────────────────────────────────────── */
+  --md-sys-typescale-display-large-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-display-medium-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-display-small-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-large-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-medium-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-small-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-large-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-medium-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-small-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-body-large-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-body-medium-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-body-small-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-large-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-medium-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-small-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-medium-size: 45px;
+  --md-sys-typescale-display-small-size: 36px;
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-medium-size: 28px;
+  --md-sys-typescale-headline-small-size: 24px;
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-small-size: 14px;
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-medium-size: 14px;
+  --md-sys-typescale-body-small-size: 12px;
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-medium-size: 12px;
+  --md-sys-typescale-label-small-size: 11px;
+
+  /* ─── USX Grid Tokens ─────────────────────────────────────────── */
+  --usx-grid-cell-width: 24px;
+  --usx-grid-cell-height: 24px;
+  --usx-grid-gap: 2px;
+  --usx-grid-visible: true;
+
+  /* ─── gridui Surface Tokens ───────────────────────────────────── */
+  --gridui-bg: #1C1B1F;
+  --gridui-surface: #2B2930;
+  --gridui-surface-elevated: #332F38;
+  --gridui-text: #E6E1E5;
+  --gridui-text-muted: #938F99;
+  --gridui-text-subtle: #6B6872;
+  --gridui-border: #48464C;
+  --gridui-accent: #D0BCFF;
+  --gridui-accent-hover: #C7B0FF;
+  --gridui-nav-rail-bg: #2B2930;
+  --gridui-nav-rail-width: 80px;
+  --gridui-nav-rail-collapsed-width: 56px;
+  --gridui-chat-width: 320px;
+  --gridui-header-height: 48px;
+}
+
+/* ─── Dark Theme Overrides ──────────────────────────────────────── */
+:root.gridui-dark {
+  --md-sys-color-primary: #D0BCFF;
+  --md-sys-color-on-primary: #381E72;
+  --md-sys-color-primary-container: #4F378B;
+  --md-sys-color-on-primary-container: #EADDFF;
+  --md-sys-color-secondary: #CCC2DC;
+  --md-sys-color-on-secondary: #332D41;
+  --md-sys-color-secondary-container: #4A4458;
+  --md-sys-color-on-secondary-container: #E8DEF8;
+  --md-sys-color-tertiary: #EFB8C8;
+  --md-sys-color-on-tertiary: #492532;
+  --md-sys-color-tertiary-container: #633B48;
+  --md-sys-color-on-tertiary-container: #FFD8E4;
+  --md-sys-color-error: #F2B8B5;
+  --md-sys-color-on-error: #601410;
+  --md-sys-color-error-container: #8C1D18;
+  --md-sys-color-on-error-container: #F9DEDC;
+  --md-sys-color-surface: #1C1B1F;
+  --md-sys-color-on-surface: #E6E1E5;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-outline: #938F99;
+  --md-sys-color-outline-variant: #49454F;
+  --md-sys-color-inverse-surface: #E6E1E5;
+  --md-sys-color-inverse-on-surface: #1C1B1F;
+  --md-sys-color-inverse-primary: #6750A4;
+  --md-sys-color-background: #1C1B1F;
+  --md-sys-color-on-background: #E6E1E5;
+
+  --gridui-bg: #1C1B1F;
+  --gridui-surface: #2B2930;
+  --gridui-surface-elevated: #332F38;
+  --gridui-text: #E6E1E5;
+  --gridui-text-muted: #938F99;
+  --gridui-text-subtle: #6B6872;
+  --gridui-border: #48464C;
+  --gridui-accent: #D0BCFF;
+  --gridui-accent-hover: #C7B0FF;
+  --gridui-nav-rail-bg: #2B2930;
+}
+
+/* ─── Panel-specific USX Style Overrides ────────────────────────── */
+[data-panel="terminal"] {
+  --usx-ink: #00FF00;
+  --usx-paper: #1a1a2e;
+  --usx-accent: #533483;
+  --md-sys-color-primary: #533483;
+  --md-sys-color-primary-container: #3A2560;
+  --md-sys-color-surface: #1a1a2e;
+}
+
+[data-panel="teledesk"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #000000;
+  --usx-accent: #FFFF00;
+  --md-sys-color-primary: #FFFF00;
+  --md-sys-color-primary-container: #333300;
+  --md-sys-color-surface: #000000;
+  --md-sys-color-on-surface: #FFFFFF;
+}
+
+[data-panel="dashboard"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #212529;
+  --usx-accent: #5040a0;
+  --md-sys-color-primary: #5040a0;
+  --md-sys-color-primary-container: #3A2E80;
+  --md-sys-color-surface: #212529;
+}
+
+[data-panel="vault"] {
+  --usx-ink: #00FFFF;
+  --usx-paper: #0D1117;
+  --usx-accent: #00FFFF;
+  --md-sys-color-primary: #00FFFF;
+  --md-sys-color-primary-container: #003333;
+  --md-sys-color-surface: #0D1117;
+}
+
+[data-panel="maps"] {
+  --usx-ink: #00FF00;
+  --usx-paper: #0A0A0A;
+  --usx-accent: #00FF00;
+  --md-sys-color-primary: #00FF00;
+  --md-sys-color-primary-container: #003300;
+  --md-sys-color-surface: #0A0A0A;
+}

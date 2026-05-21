@@ -20,6 +20,14 @@ Welcome to the uDos documentation hub. Here you'll find comprehensive guides, AP
 - **[Courses](../courses/)**: Structured learning paths
 - **[Scripts](../scripts/)**: Utility scripts for development
 
+## Cross-Repo Documentation Index
+
+A complete index of all documentation across the uDos ecosystem is available at:
+
+👉 **[`../docs/shared/DOC_INDEX.md`](../docs/shared/DOC_INDEX.md)**
+
+This index maps docs by topic across uConnect, uCode1, uCode2, uCode3, and uCode4.
+
 ## Documentation Source of Truth
 
 **Important:** This repository contains a **read-only mirror** of the documentation. The **source of truth** for all uDos documentation is located in `~/Vault/documentation/`.

@@ -138,26 +138,21 @@ function navigateToSurface(surfaceId: string) {
 onMounted(() => {
   surfaces.value = [
     // ═══ uCode Surfaces ═══
-    { id: 'ucode1teledesk', title: 'uCode1 Teledesk', path: '/surface/ucode1teledesk', section: 'ucode' },
-    { id: 'ucode1', title: 'uCode1 Terminal', path: '/surface/ucode1', section: 'ucode' },
     { id: 'ucode2reasoning', title: 'uCode2 Reasoning', path: '/surface/ucode2reasoning', section: 'ucode' },
     { id: 'ucode2', title: 'uCode2 Publish', path: '/surface/ucode2', section: 'ucode' },
-    { id: 'ucode3', title: 'uCode3 Surface', path: '/surface/ucode3', section: 'ucode' },
-    { id: 'ucode4', title: 'uCode4 Wireframe', path: '/surface/ucode4', section: 'ucode' },
     // Core Surfaces
-    { id: 'dashboard', title: 'Dashboard', path: '/surface/dashboard', section: 'core' },
     { id: 'vibe', title: 'Vibe TUI', path: '/surface/vibe', section: 'core' },
     { id: 'vault', title: 'Vault Browser', path: '/surface/vault', section: 'core' },
     { id: 'workflow', title: 'Task/Workflow Board', path: '/surface/workflow', section: 'core' },
     { id: 'tools', title: 'Tool Builder', path: '/surface/tools', section: 'core' },
     { id: 'usxd', title: 'USXD Renderer', path: '/surface/usxd', section: 'core' },
-    // Story Wizard is now a tab within uCode2 Publish
     // Integrations
     { id: 'github', title: 'GitHub Sync', path: '/surface/github', section: 'integrations' },
     { id: 'wordpress', title: 'WordPress Adaptor', path: '/surface/wordpress', section: 'integrations' },
     // Dev
     { id: 'dev', title: 'Dev Dashboard', path: '/surface/dev', section: 'dev' },
   ];
+  // uCode1 Teledesk, uCode1 Terminal, NES Dashboard, and gridui moved to standalone gridui app
 
   // Check services on mount
   checkAllServices();

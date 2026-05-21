@@ -39,6 +39,46 @@
 		{
 			"name": "Rust Core",
 			"path": "src"
+		},
+		{
+			"name": "uCode1",
+			"path": "../uCode1"
+		},
+		{
+			"name": "uCode2",
+			"path": "../uCode2"
+		},
+		{
+			"name": "uCode3",
+			"path": "../uCode3"
+		},
+		{
+			"name": "uCode4",
+			"path": "../uCode4"
+		},
+		{
+			"name": "uDosGo / uPlace",
+			"path": "../uPlace"
+		},
+		{
+			"name": "uDosGo / uScript",
+			"path": "../uScript"
+		},
+		{
+			"name": "uDosGo / uServer",
+			"path": "../uServer"
+		},
+		{
+			"name": "uDosGo / uSystem",
+			"path": "../uSystem"
+		},
+		{
+			"name": "uDosGo / Groovebox",
+			"path": "../Groovebox"
+		},
+		{
+			"name": "uDosGo / SonicScrewdriver",
+			"path": "../SonicScrewdriver"
 		}
 	],
 	"settings": {

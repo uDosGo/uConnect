@@ -1,0 +1,1148 @@
+/* ═══════════════════════════════════════════════════════════════════
+   gridui — USX Style Tokens → M3 CSS Custom Properties
+   Merges USX style spec with Material Design 3 colour basemap
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Light Theme (default) ──────────────────────────────────────── */
+:root {
+
+  /* ===== PRIMARY ===== */
+  --usx-color-primary: #6750A4;
+  --usx-color-on-primary: #FFFFFF;
+  --usx-color-primary-container: #EADDFF;
+  --usx-color-on-primary-container: #21005E;
+  --usx-color-fixed-primary: #EADDFF;
+  --usx-color-on-fixed-primary: #21005E;
+
+  /* ===== SECONDARY ===== */
+  --usx-color-secondary: #625B71;
+  --usx-color-on-secondary: #FFFFFF;
+  --usx-color-secondary-container: #E8DEF8;
+  --usx-color-on-secondary-container: #1E192B;
+  --usx-color-fixed-secondary: #E8DEF8;
+  --usx-color-on-fixed-secondary: #1E192B;
+
+  /* ===== TERTIARY ===== */
+  --usx-color-tertiary: #7D5260;
+  --usx-color-on-tertiary: #FFFFFF;
+  --usx-color-tertiary-container: #FFD8E4;
+  --usx-color-on-tertiary-container: #31111D;
+  --usx-color-fixed-tertiary: #FFD8E4;
+  --usx-color-on-fixed-tertiary: #31111D;
+
+  /* ===== NEUTRAL ===== */
+  --usx-color-background: #FFFBFE;
+  --usx-color-on-background: #1C1B1F;
+  --usx-color-surface: #FFFBFE;
+  --usx-color-on-surface: #1C1B1F;
+  --usx-color-surface-variant: #E7E0EC;
+  --usx-color-on-surface-variant: #49454F;
+  --usx-color-outline: #79747E;
+  --usx-color-outline-variant: #CAC4D0;
+  --usx-color-inverse-surface: #313033;
+  --usx-color-inverse-on-surface: #F4EFF4;
+
+  /* ===== ERROR ===== */
+  --usx-color-error: #BA1A1A;
+  --usx-color-on-error: #FFFFFF;
+  --usx-color-error-container: #FFDAD6;
+  --usx-color-on-error-container: #410E0B;
+
+  /* ===== STATIC COLORS ===== */
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+
+  /* ===== TONE-BASED SURFACE ===== */
+  --usx-color-surface-dim: #DED8E3;
+  --usx-color-surface-bright: #FFFBFE;
+  --usx-color-surface-container-lowest: #FFFFFF;
+  --usx-color-surface-container-low: #F7F2FA;
+  --usx-color-surface-container: #F3EDF7;
+  --usx-color-surface-container-high: #ECE6F0;
+  --usx-color-surface-container-highest: #E6E0E9;
+
+  /* ─── USX Core Tokens ─────────────────────────────────────────── */
+  --usx-ink: #00FF00;
+  --usx-paper: #000000;
+  --usx-grid: #1A1A1A;
+  --usx-accent: #00FF00;
+  --usx-error: #FF0000;
+  --usx-warning: #FFCC00;
+
+  /* ─── M3 Shape Tokens ─────────────────────────────────────────── */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* ─── M3 Elevation Tokens ─────────────────────────────────────── */
+  --md-sys-elevation-level0: 0px 0px 0px 0px rgba(0,0,0,0);
+  --md-sys-elevation-level1: 0px 1px 3px 1px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level2: 0px 2px 6px 2px rgba(0,0,0,0.15), 0px 1px 2px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0,0,0,0.15), 0px 2px 3px 0px rgba(0,0,0,0.30);
+  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 4px 0px rgba(0,0,0,0.30);
+
+  /* ─── M3 Motion Tokens ────────────────────────────────────────── */
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-medium1: 200ms;
+  --md-sys-motion-duration-medium2: 250ms;
+  --md-sys-motion-duration-medium3: 300ms;
+  --md-sys-motion-duration-long1: 350ms;
+  --md-sys-motion-duration-long2: 400ms;
+  --md-sys-motion-duration-long3: 500ms;
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.0);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0.0, 0.8, 0.15);
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
+  --md-sys-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+
+  /* ─── M3 Typography Tokens ────────────────────────────────────── */
+  --md-sys-typescale-display-large-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-display-medium-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-display-small-family: 'Monaspace Argon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-large-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-medium-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-headline-small-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-large-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-medium-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-title-small-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  --md-sys-typescale-body-large-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-body-medium-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-body-small-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-large-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-medium-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+  --md-sys-typescale-label-small-family: 'Monaspace Krypton', 'JetBrains Mono', 'Courier New', monospace;
+
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-medium-size: 45px;
+  --md-sys-typescale-display-small-size: 36px;
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-medium-size: 28px;
+  --md-sys-typescale-headline-small-size: 24px;
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-medium-size: 16px;
+  --md-sys-typescale-title-small-size: 14px;
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-medium-size: 14px;
+  --md-sys-typescale-body-small-size: 12px;
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-medium-size: 12px;
+  --md-sys-typescale-label-small-size: 11px;
+
+  /* ─── USX Grid Tokens ─────────────────────────────────────────── */
+  --usx-grid-cell-width: 24px;
+  --usx-grid-cell-height: 24px;
+  --usx-grid-gap: 2px;
+  --usx-grid-visible: true;
+
+  /* ─── gridui Layout Tokens ────────────────────────────────────── */
+  --gridui-nav-rail-width: 80px;
+  --gridui-nav-rail-collapsed-width: 56px;
+  --gridui-chat-width: 320px;
+  --gridui-header-height: calc(var(--gridui-font-size, 14px) * 3.4);
+}
+
+/* ─── Dark Theme Overrides ──────────────────────────────────────── */
+.gridui-dark {
+  --usx-color-primary: #D0BCFF;
+  --usx-color-on-primary: #381E72;
+  --usx-color-primary-container: #4F378B;
+  --usx-color-on-primary-container: #EADDFF;
+
+  --usx-color-secondary: #CCC2DC;
+  --usx-color-on-secondary: #332D41;
+  --usx-color-secondary-container: #4A4458;
+  --usx-color-on-secondary-container: #E8DEF8;
+
+  --usx-color-tertiary: #EFB8C8;
+  --usx-color-on-tertiary: #492532;
+  --usx-color-tertiary-container: #633B48;
+  --usx-color-on-tertiary-container: #FFD8E4;
+
+  --usx-color-background: #1C1B1F;
+  --usx-color-on-background: #E6E1E5;
+  --usx-color-surface: #1C1B1F;
+  --usx-color-on-surface: #E6E1E5;
+  --usx-color-surface-variant: #49454F;
+  --usx-color-on-surface-variant: #CAC4D0;
+  --usx-color-outline: #938F99;
+  --usx-color-outline-variant: #49454F;
+  --usx-color-inverse-surface: #E6E1E5;
+  --usx-color-inverse-on-surface: #313033;
+
+  --usx-color-error: #F2B8B5;
+  --usx-color-on-error: #601410;
+  --usx-color-error-container: #8C1D18;
+  --usx-color-on-error-container: #FFDAD6;
+
+  --usx-color-surface-dim: #141218;
+  --usx-color-surface-bright: #3B383E;
+  --usx-color-surface-container-lowest: #0F0D13;
+  --usx-color-surface-container-low: #1C1B1F;
+  --usx-color-surface-container: #211F26;
+  --usx-color-surface-container-high: #2B2930;
+  --usx-color-surface-container-highest: #36343B;
+}
+
+/* ─── Contrast Level Overrides ──────────────────────────────────── */
+[data-contrast="medium"] {
+  --usx-color-primary: #4F378B;
+  --usx-color-on-primary: #FFFFFF;
+  --usx-color-secondary: #4A4458;
+  --usx-color-on-secondary: #FFFFFF;
+}
+
+[data-contrast="high"] {
+  --usx-color-primary: #381E72;
+  --usx-color-on-primary: #FFFFFF;
+  --usx-color-secondary: #332D41;
+  --usx-color-on-secondary: #FFFFFF;
+  --usx-color-outline: #000000;
+}
+
+/* ─── Panel-specific USX Style Overrides ────────────────────────── */
+[data-panel="terminal"] {
+  --usx-ink: #00FF00;
+  --usx-paper: #1a1a2e;
+  --usx-accent: #533483;
+  --usx-color-primary: #533483;
+  --usx-color-primary-container: #3A2560;
+  --usx-color-surface: #1a1a2e;
+}
+
+[data-panel="teledesk"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #000000;
+  --usx-accent: #FFFF00;
+  --usx-color-primary: #FFFF00;
+  --usx-color-primary-container: #333300;
+  --usx-color-surface: #000000;
+  --usx-color-on-surface: #FFFFFF;
+}
+
+[data-panel="dashboard"] {
+  --usx-ink: #FFFFFF;
+  --usx-paper: #212529;
+  --usx-accent: #5040a0;
+  --usx-color-primary: #5040a0;
+  --usx-color-primary-container: #3A2E80;
+  --usx-color-surface: #212529;
+}
+
+[data-panel="vault"] {
+  --usx-ink: #00FFFF;
+  --usx-paper: #0D1117;
+  --usx-accent: #00FFFF;
+  --usx-color-primary: #00FFFF;
+  --usx-color-primary-container: #003333;
+  --usx-color-surface: #0D1117;
+}
+
+[data-panel="maps"] {
+  --usx-ink: #00FF00;
+  --usx-paper: #0A0A0A;
+  --usx-accent: #00FF00;
+  --usx-color-primary: #00FF00;
+  --usx-color-primary-container: #003300;
+  --usx-color-surface: #0A0A0A;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   USX Component Colour Mapping (M3 → USX)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── USX Button Variants ───────────────────────────────────────── */
+.usx-btn--filled {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+}
+
+.usx-btn--filled:hover {
+  background: color-mix(in srgb, var(--usx-color-primary) 92%, var(--usx-color-shadow));
+}
+
+.usx-btn--tonal {
+  background: var(--usx-color-secondary-container);
+  color: var(--usx-color-on-secondary-container);
+}
+
+.usx-btn--outlined {
+  border-color: var(--usx-color-outline);
+  color: var(--usx-color-primary);
+}
+
+.usx-btn--text {
+  color: var(--usx-color-primary);
+}
+
+.usx-btn--elevated {
+  background: var(--usx-color-surface-container-low);
+  color: var(--usx-color-primary);
+  box-shadow: 0 1px 2px var(--usx-color-shadow);
+}
+
+/* ─── USX Card Variants ─────────────────────────────────────────── */
+.usx-card {
+  background: var(--usx-color-surface);
+  color: var(--usx-color-on-surface);
+}
+
+.usx-card--elevated {
+  background: var(--usx-color-surface-container-low);
+  box-shadow: 0 1px 2px var(--usx-color-shadow);
+}
+
+.usx-card--filled {
+  background: var(--usx-color-surface-container-highest);
+}
+
+.usx-card--outlined {
+  border: 1px solid var(--usx-color-outline-variant);
+}
+
+/* ─── USX Surface Hierarchy ─────────────────────────────────────── */
+.usx-surface {
+  background: var(--usx-color-surface);
+  color: var(--usx-color-on-surface);
+}
+
+.usx-surface--dim {
+  background: var(--usx-color-surface-dim);
+}
+
+.usx-surface--bright {
+  background: var(--usx-color-surface-bright);
+}
+
+.usx-surface--container {
+  background: var(--usx-color-surface-container);
+}
+
+.usx-surface--container-low {
+  background: var(--usx-color-surface-container-low);
+}
+
+.usx-surface--container-high {
+  background: var(--usx-color-surface-container-high);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   uCode1 Teletext Grid Styles (40×24)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── 40×24 Teletext Grid ───────────────────────────────────────── */
+.usx-grid {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  grid-template-rows: repeat(24, auto);
+  gap: 0;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-ink, #00FF00);
+  font-family: 'Teletext50', 'Source Code Pro', 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 16px;
+  line-height: 1.2;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  aspect-ratio: 40 / 24;
+  position: relative;
+}
+
+.usx-grid-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.usx-grid-row {
+  display: contents;
+}
+
+/* ─── Grid Display Modes ────────────────────────────────────────── */
+[data-grid-mode="mono"] .usx-grid {
+  background: #000000;
+  color: #00FF00;
+}
+
+[data-grid-mode="teletext"] .usx-grid {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+[data-grid-mode="wireframe"] .usx-grid {
+  background: #FFFFFF;
+  color: #000000;
+}
+
+/* ─── Grid Regions ──────────────────────────────────────────────── */
+.usx-grid-header {
+  grid-row: 1 / 3;
+  grid-column: 1 / 41;
+  font-family: 'Teletext50 Extended', 'Source Code Pro', monospace;
+  font-size: 20px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-accent, #FFFF00);
+  border-bottom: 1px solid var(--usx-ink, #00FF00);
+  padding: 0.25rem;
+}
+
+.usx-grid-nav {
+  grid-row: 3 / 4;
+  grid-column: 1 / 41;
+  font-family: 'Teletext50 Semi Condensed', 'Source Code Pro', monospace;
+  font-size: 14px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-color-secondary, #00FFFF);
+  border-bottom: 1px solid var(--usx-ink, #00FF00);
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem;
+}
+
+.usx-grid-sidebar {
+  grid-row: 4 / 21;
+  grid-column: 1 / 13;
+  font-family: 'Teletext50 Condensed', 'Source Code Pro', monospace;
+  font-size: 14px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-ink, #00FF00);
+  border-right: 1px solid var(--usx-ink, #00FF00);
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.usx-grid-main {
+  grid-row: 4 / 21;
+  grid-column: 13 / 41;
+  font-family: 'Teletext50', 'Source Code Pro', monospace;
+  font-size: 16px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-ink, #00FF00);
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.usx-grid-status {
+  grid-row: 21 / 23;
+  grid-column: 1 / 41;
+  font-family: 'Teletext50 Ultra Condensed', 'Source Code Pro', monospace;
+  font-size: 10px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-color-outline, #808080);
+  border-top: 1px solid var(--usx-ink, #00FF00);
+  border-bottom: 1px solid var(--usx-ink, #00FF00);
+  padding: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.usx-grid-footer {
+  grid-row: 23 / 25;
+  grid-column: 1 / 41;
+  font-family: 'Teletext50 Semi Condensed', 'Source Code Pro', monospace;
+  font-size: 14px;
+  background: var(--usx-paper, #000000);
+  color: var(--usx-accent, #FFFF00);
+  padding: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ─── Teletext Buttons ──────────────────────────────────────────── */
+.usx-teletext-btn {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--usx-ink, #00FF00);
+  color: var(--usx-ink, #00FF00);
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  font-family: 'Teletext50 Condensed', 'Source Code Pro', monospace;
+  font-size: 14px;
+}
+
+.usx-teletext-btn:hover {
+  background: var(--usx-ink, #00FF00);
+  color: var(--usx-paper, #000000);
+}
+
+.usx-teletext-btn:active {
+  transform: scale(0.98);
+}
+
+.usx-teletext-btn--primary {
+  border-color: var(--usx-accent, #FFFF00);
+  color: var(--usx-accent, #FFFF00);
+}
+
+.usx-teletext-btn--primary:hover {
+  background: var(--usx-accent, #FFFF00);
+  color: var(--usx-paper, #000000);
+}
+
+.usx-teletext-btn--secondary {
+  border-color: var(--usx-color-secondary, #00FFFF);
+  color: var(--usx-color-secondary, #00FFFF);
+}
+
+.usx-teletext-btn--danger {
+  border-color: var(--usx-error, #FF0000);
+  color: var(--usx-error, #FF0000);
+}
+
+/* ─── Teletext Panels ───────────────────────────────────────────── */
+.usx-teletext-panel {
+  border: 1px solid var(--usx-ink, #00FF00);
+  background: var(--usx-paper, #000000);
+  margin-bottom: 0.5rem;
+}
+
+.usx-teletext-panel-title {
+  font-family: 'Teletext50 Condensed', 'Source Code Pro', monospace;
+  font-size: 14px;
+  background: var(--usx-ink, #00FF00);
+  color: var(--usx-paper, #000000);
+  padding: 0.25rem 0.5rem;
+  margin: 0;
+}
+
+.usx-teletext-panel-body {
+  font-family: 'Teletext50', 'Source Code Pro', monospace;
+  font-size: 14px;
+  padding: 0.5rem;
+}
+
+/* ─── Teletext Forms ────────────────────────────────────────────── */
+.usx-teletext-input {
+  font-family: 'Teletext50', 'Source Code Pro', monospace;
+  font-size: 14px;
+  background: var(--usx-paper, #000000);
+  border: 1px solid var(--usx-ink, #00FF00);
+  color: var(--usx-ink, #00FF00);
+  padding: 0.25rem 0.5rem;
+}
+
+.usx-teletext-input:focus {
+  outline: none;
+  border-color: var(--usx-accent, #FFFF00);
+  color: var(--usx-accent, #FFFF00);
+}
+
+.usx-teletext-label {
+  font-family: 'Teletext50 Condensed', 'Source Code Pro', monospace;
+  font-size: 12px;
+  color: var(--usx-color-outline, #808080);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   M3 Component Styles (legacy — uses --usx-color-* tokens)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── M3 State Layer (Ripple) ──────────────────────────────────── */
+.m3-state-layer {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.m3-state-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+}
+
+.m3-state-layer:hover::after {
+  opacity: 0.08;
+}
+
+.m3-state-layer:focus-visible::after {
+  opacity: 0.12;
+}
+
+.m3-state-layer:active::after {
+  opacity: 0.16;
+}
+
+/* ─── M3 Elevation Utility Classes ──────────────────────────────── */
+.m3-elevation-0 { box-shadow: var(--md-sys-elevation-level0); }
+.m3-elevation-1 { box-shadow: var(--md-sys-elevation-level1); }
+.m3-elevation-2 { box-shadow: var(--md-sys-elevation-level2); }
+.m3-elevation-3 { box-shadow: var(--md-sys-elevation-level3); }
+.m3-elevation-4 { box-shadow: var(--md-sys-elevation-level4); }
+.m3-elevation-5 { box-shadow: var(--md-sys-elevation-level5); }
+
+/* ─── M3 Card ───────────────────────────────────────────────────── */
+.m3-card {
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  overflow: hidden;
+  transition: box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3-card--elevated {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3-card--elevated:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+  transform: translateY(-1px);
+}
+
+.m3-card--filled {
+  background: var(--usx-color-surface-variant);
+  border: none;
+}
+
+.m3-card--outlined {
+  background: transparent;
+}
+
+/* ─── M3 FAB (Floating Action Button) ───────────────────────────── */
+.m3-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--usx-color-primary-container);
+  color: var(--usx-color-on-primary-container);
+  box-shadow: var(--md-sys-elevation-level3);
+  cursor: pointer;
+  transition: box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+  position: relative;
+  overflow: hidden;
+}
+
+.m3-fab:hover {
+  box-shadow: var(--md-sys-elevation-level4);
+  transform: translateY(-2px);
+}
+
+.m3-fab:active {
+  box-shadow: var(--md-sys-elevation-level2);
+  transform: translateY(0);
+}
+
+.m3-fab--small {
+  width: 40px;
+  height: 40px;
+}
+
+.m3-fab--large {
+  width: 72px;
+  height: 72px;
+}
+
+.m3-fab--extended {
+  width: auto;
+  padding: 0 20px;
+  gap: 8px;
+}
+
+/* ─── M3 Divider ────────────────────────────────────────────────── */
+.m3-divider {
+  border: none;
+  height: 1px;
+  background: var(--usx-color-outline-variant);
+  margin: 8px 0;
+}
+
+.m3-divider--inset {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+/* ─── M3 Chip ───────────────────────────────────────────────────── */
+.m3-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  background: transparent;
+  color: var(--usx-color-on-surface);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.m3-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.m3-chip--active {
+  background: var(--usx-color-secondary-container);
+  color: var(--usx-color-on-secondary-container);
+  border-color: var(--usx-color-secondary-container);
+}
+
+.m3-chip--active:hover {
+  background: var(--usx-color-secondary-container);
+  filter: brightness(1.1);
+}
+
+/* ─── M3 Switch ─────────────────────────────────────────────────── */
+.m3-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.m3-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.m3-switch-track {
+  width: 36px;
+  height: 20px;
+  background: var(--usx-color-outline-variant);
+  border-radius: 10px;
+  transition: background var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+  position: relative;
+}
+
+.m3-switch input:checked + .m3-switch-track {
+  background: var(--usx-color-primary);
+}
+
+.m3-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--usx-color-on-surface);
+  border-radius: 50%;
+  transition: transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate),
+              background var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+.m3-switch input:checked + .m3-switch-track .m3-switch-thumb {
+  transform: translateX(16px);
+  background: var(--usx-color-on-primary);
+}
+
+/* ─── M3 Linear Progress ────────────────────────────────────────── */
+.m3-linear-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--usx-color-outline-variant);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.m3-linear-progress-bar {
+  height: 100%;
+  background: var(--usx-color-primary);
+  border-radius: 2px;
+  transition: width var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.m3-linear-progress--indeterminate .m3-linear-progress-bar {
+  width: 40%;
+  animation: m3-linear-progress-indeterminate 2s ease-in-out infinite;
+}
+
+@keyframes m3-linear-progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(150%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ─── M3 Circular Progress ──────────────────────────────────────── */
+.m3-circular-progress {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--usx-color-outline-variant);
+  border-top-color: var(--usx-color-primary);
+  border-radius: 50%;
+  animation: m3-circular-progress-spin 0.8s linear infinite;
+}
+
+@keyframes m3-circular-progress-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── M3 Snackbar ───────────────────────────────────────────────── */
+.m3-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  min-width: 280px;
+  max-width: 560px;
+  padding: 12px 16px;
+  background: var(--usx-color-inverse-surface);
+  color: var(--usx-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  box-shadow: var(--md-sys-elevation-level3);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  opacity: 0;
+  transition: transform var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate),
+              opacity var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+}
+
+.m3-snackbar--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.m3-snackbar-action {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-inverse-primary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.m3-snackbar-action:hover {
+  text-decoration: underline;
+}
+
+/* ─── M3 Dialog ─────────────────────────────────────────────────── */
+.m3-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  animation: m3-dialog-fade-in var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+@keyframes m3-dialog-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.m3-dialog {
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level3);
+  padding: 24px;
+  width: 360px;
+  max-width: 90vw;
+  animation: m3-dialog-scale-in var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes m3-dialog-scale-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.m3-dialog-title {
+  font-family: 'Monaspace Neon', 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin-bottom: 16px;
+}
+
+.m3-dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* ─── M3 Button ─────────────────────────────────────────────────── */
+.m3-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              background var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.m3-btn--filled {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.m3-btn--filled:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.m3-btn--tonal {
+  background: var(--usx-color-secondary-container);
+  color: var(--usx-color-on-secondary-container);
+}
+
+.m3-btn--outlined {
+  background: transparent;
+  color: var(--usx-color-primary);
+  border: 1px solid var(--usx-color-outline-variant);
+}
+
+.m3-btn--text {
+  background: transparent;
+  color: var(--usx-color-primary);
+  padding: 8px 12px;
+}
+
+.m3-btn--icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+/* ─── M3 Text Field ─────────────────────────────────────────────── */
+.m3-text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.m3-text-field-label {
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--usx-color-on-surface-variant);
+}
+
+.m3-text-field-input {
+  padding: 10px 12px;
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 13px;
+  outline: none;
+  transition: border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3-text-field-input:focus {
+  border-color: var(--usx-color-primary);
+  border-width: 2px;
+  padding: 9px 11px;
+}
+
+.m3-text-field-input::placeholder {
+  color: var(--usx-color-on-surface-variant);
+}
+
+/* ─── M3 Select ─────────────────────────────────────────────────── */
+.m3-select {
+  padding: 8px 12px;
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.m3-select:focus {
+  border-color: var(--usx-color-primary);
+}
+
+/* ─── M3 Badge ──────────────────────────────────────────────────── */
+.m3-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--usx-color-error);
+  color: var(--usx-color-on-error);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ─── M3 Tooltip ────────────────────────────────────────────────── */
+.m3-tooltip {
+  position: relative;
+}
+
+.m3-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  padding: 4px 8px;
+  background: var(--usx-color-inverse-surface);
+  color: var(--usx-color-inverse-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  font-family: 'Monaspace Krypton', 'JetBrains Mono', monospace;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized-decelerate);
+  z-index: 1000;
+}
+
+.m3-tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* ─── M3 Typography Utility Classes ─────────────────────────────── */
+.m3-display-large {
+  font-family: var(--md-sys-typescale-display-large-family);
+  font-size: var(--md-sys-typescale-display-large-size);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.m3-display-medium {
+  font-family: var(--md-sys-typescale-display-medium-family);
+  font-size: var(--md-sys-typescale-display-medium-size);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.m3-display-small {
+  font-family: var(--md-sys-typescale-display-small-family);
+  font-size: var(--md-sys-typescale-display-small-size);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.m3-headline-large {
+  font-family: var(--md-sys-typescale-headline-large-family);
+  font-size: var(--md-sys-typescale-headline-large-size);
+  font-weight: 400;
+  line-height: 1.3;
+}
+.m3-headline-medium {
+  font-family: var(--md-sys-typescale-headline-medium-family);
+  font-size: var(--md-sys-typescale-headline-medium-size);
+  font-weight: 400;
+  line-height: 1.3;
+}
+.m3-headline-small {
+  font-family: var(--md-sys-typescale-headline-small-family);
+  font-size: var(--md-sys-typescale-headline-small-size);
+  font-weight: 400;
+  line-height: 1.3;
+}
+.m3-title-large {
+  font-family: var(--md-sys-typescale-title-large-family);
+  font-size: var(--md-sys-typescale-title-large-size);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.m3-title-medium {
+  font-family: var(--md-sys-typescale-title-medium-family);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.m3-title-small {
+  font-family: var(--md-sys-typescale-title-small-family);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.m3-body-large {
+  font-family: var(--md-sys-typescale-body-large-family);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.m3-body-medium {
+  font-family: var(--md-sys-typescale-body-medium-family);
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.m3-body-small {
+  font-family: var(--md-sys-typescale-body-small-family);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.m3-label-large {
+  font-family: var(--md-sys-typescale-label-large-family);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.1px;
+}
+.m3-label-medium {
+  font-family: var(--md-sys-typescale-label-medium-family);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+.m3-label-small {
+  font-family: var(--md-sys-typescale-label-small-family);
+  font-size: var(--md-sys-typescale-label-small-size);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+
+ 
