@@ -1,0 +1,62 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/snackbar — USX Snackbar (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  min-width: 280px;
+  max-width: 560px;
+  padding: 12px 16px;
+  background: var(--usx-color-inverse-surface);
+  color: var(--usx-color-inverse-on-surface);
+  border-radius: var(--usx-shape-corner-extra-small);
+  box-shadow: var(--usx-elevation-level3);
+  font-family: var(--usx-typescale-body-medium-family);
+  font-size: var(--usx-typescale-body-medium-size);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  opacity: 0;
+  transition: transform var(--usx-motion-duration-medium3) var(--usx-motion-easing-emphasized-decelerate),
+              opacity var(--usx-motion-duration-medium3) var(--usx-motion-easing-standard);
+  pointer-events: none;
+}
+
+.usx-snackbar--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.usx-snackbar--info { border-left: 4px solid var(--usx-color-primary); }
+.usx-snackbar--success { border-left: 4px solid #2a9d8f; }
+.usx-snackbar--error { border-left: 4px solid var(--usx-color-error); }
+.usx-snackbar--warning { border-left: 4px solid #e9c46a; }
+
+.usx-snackbar-action {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-inverse-primary);
+  font-family: inherit;
+  font-size: var(--usx-typescale-label-large-size);
+  font-weight: var(--usx-typescale-label-large-weight);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--usx-shape-corner-extra-small);
+}
+
+.usx-snackbar-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-snackbar { @extend .usx-snackbar; }
+.m3-snackbar--visible { @extend .usx-snackbar--visible; }
+.m3-snackbar-action { @extend .usx-snackbar-action; }

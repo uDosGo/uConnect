@@ -1,0 +1,45 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/palettes/proseui.css — ProseUI Palettes
+   Simplified 6-field palette system (bg, fg, accent, muted, surface, border)
+   Used by proseui for document-oriented surfaces.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Palette: Paper (cream/ink) ────────────────────────────────── */
+.palette-paper {
+  --usx-bg: #f5f0e8;
+  --usx-fg: #2c2416;
+  --usx-accent: #8b5e3c;
+  --usx-muted: #9c9278;
+  --usx-surface: #ede4d3;
+  --usx-border: #d4c9b4;
+}
+
+/* ─── Palette: Parchment (sepia) ────────────────────────────────── */
+.palette-parchment {
+  --usx-bg: #faf3e0;
+  --usx-fg: #3a2a1a;
+  --usx-accent: #a0522d;
+  --usx-muted: #b8a88a;
+  --usx-surface: #f0e6cc;
+  --usx-border: #dcc8a8;
+}
+
+/* ─── Palette: Modern (white/dark) ──────────────────────────────── */
+.palette-modern {
+  --usx-bg: #ffffff;
+  --usx-fg: #1a1a2e;
+  --usx-accent: #4361ee;
+  --usx-muted: #8d99ae;
+  --usx-surface: #f8f9fa;
+  --usx-border: #dee2e6;
+}
+
+/* ─── Palette: Dark ─────────────────────────────────────────────── */
+.palette-dark {
+  --usx-bg: #0f172a;
+  --usx-fg: #e2e8f0;
+  --usx-accent: #60a5fa;
+  --usx-muted: #64748b;
+  --usx-surface: #1e293b;
+  --usx-border: #334155;
+}

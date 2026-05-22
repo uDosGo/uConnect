@@ -1,0 +1,36 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/card — USX Card (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-card {
+  background: var(--usx-color-surface);
+  color: var(--usx-color-on-surface);
+  border-radius: var(--usx-shape-corner-medium);
+  overflow: hidden;
+  transition: box-shadow var(--usx-motion-duration-medium2) var(--usx-motion-easing-standard),
+              transform var(--usx-motion-duration-medium2) var(--usx-motion-easing-emphasized-decelerate);
+}
+
+.usx-card--elevated {
+  box-shadow: var(--usx-elevation-level1);
+}
+.usx-card--elevated:hover {
+  box-shadow: var(--usx-elevation-level2);
+  transform: translateY(-1px);
+}
+
+.usx-card--filled {
+  background: var(--usx-color-surface-variant);
+  border: none;
+}
+
+.usx-card--outlined {
+  background: transparent;
+  border: 1px solid var(--usx-color-outline-variant);
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-card { background: var(--usx-color-surface); border-radius: var(--usx-shape-corner-medium); overflow: hidden; }
+.m3-card--elevated { box-shadow: var(--usx-elevation-level1); }
+.m3-card--filled { background: var(--usx-color-surface-variant); }
+.m3-card--outlined { background: transparent; border: 1px solid var(--usx-color-outline-variant); }

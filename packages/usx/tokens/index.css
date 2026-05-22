@@ -1,0 +1,10 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/tokens — Master Import
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import './colors.css';
+@import './typography.css';
+@import './shapes.css';
+@import './elevation.css';
+@import './motion.css';
+@import './spacing.css';

@@ -1,13 +1,18 @@
 <template>
-  <div class="code3ui-surface" :class="{ 'code3ui-dark': store.isDark }">
-    <!-- Import theme -->
-    <link rel="stylesheet" href="./styles/code3ui-theme.css" />
-
+  <div
+    class="code3ui-surface"
+    :class="[
+      `palette-${store.palette}`,
+      `font-${store.fontStyle}`,
+      store.isDark ? 'code3ui-dark' : '',
+    ]"
+    :style="{ '--code3ui-font-size': store.fontSize + 'px' }"
+  >
     <!-- Surface Header (USX Toolbar Style) -->
     <header class="surface-header">
       <div class="header-left">
         <button class="header-btn" @click="store.toggleSidebar" title="Toggle sidebar">
-          <span class="material-symbol">menu</span>
+          <span class="material-symbols-outlined" style="font-size: 1.2rem">menu</span>
         </button>
         <h1 class="header-title">code3ui</h1>
         <span class="header-badge">Jotion Workspace</span>
@@ -20,11 +25,33 @@
         </div>
       </div>
       <div class="header-right">
+        <!-- Palette dot -->
+        <span
+          class="palette-dot"
+          :style="{ background: store.paletteColors.bg, borderColor: store.paletteColors.accent }"
+          @click="cyclePalette"
+          title="Cycle colour palette"
+        ></span>
+
+        <!-- Font size -->
+        <button class="header-btn" @click="store.decreaseFont()" title="Decrease font size">
+          <span class="material-symbols-outlined" style="font-size: 1rem">text_decrease</span>
+        </button>
+        <span class="text-xs" style="min-width: 2rem; text-align: center; color: var(--usx-color-on-surface-variant)">{{ store.fontSize }}</span>
+        <button class="header-btn" @click="store.increaseFont()" title="Increase font size">
+          <span class="material-symbols-outlined" style="font-size: 1rem">text_increase</span>
+        </button>
+
+        <!-- Font style -->
+        <button class="header-btn" @click="store.cycleFontStyle()" title="Cycle font style">
+          <span class="material-symbols-outlined" style="font-size: 1rem">format_size</span>
+        </button>
+
         <button class="header-btn" @click="store.toggleChat" :title="store.chatOpen ? 'Close chat' : 'Open chat'">
-          <span class="material-symbol">chat</span>
+          <span class="material-symbols-outlined" style="font-size: 1.2rem">chat</span>
         </button>
         <button class="header-btn" @click="store.toggleTheme" :title="store.isDark ? 'Light mode' : 'Dark mode'">
-          <span class="material-symbol">{{ store.isDark ? 'light_mode' : 'dark_mode' }}</span>
+          <span class="material-symbols-outlined" style="font-size: 1.2rem">{{ store.isDark ? 'light_mode' : 'dark_mode' }}</span>
         </button>
       </div>
     </header>
@@ -317,6 +344,17 @@ import Code3UINavRail from './Code3UINavRail.vue'
 import Code3UIChatSheet from './Code3UIChatSheet.vue'
 
 const store = useCode3UIStore()
+
+// ─── Palette cycling ────────────────────────────────────────────
+const paletteOrder = ['notion', 'paper', 'parchment', 'modern', 'dark'] as const
+
+function cyclePalette() {
+  const current = store.palette
+  const idx = paletteOrder.indexOf(current)
+  const next = paletteOrder[(idx + 1) % paletteOrder.length]
+  console.log('cyclePalette: current=', current, 'idx=', idx, 'next=', next)
+  store.setPalette(next)
+}
 
 // ─── Types ──────────────────────────────────────────────────────
 interface EditorBlock {
@@ -722,6 +760,22 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Palette dot */
+.palette-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid;
+  cursor: pointer;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.palette-dot:hover {
+  transform: scale(1.2);
 }
 
 /* ─── Workspace Layout ───────────────────────────────────────── */

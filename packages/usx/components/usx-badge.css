@@ -1,0 +1,22 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/badge — USX Badge (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--usx-shape-corner-full);
+  background: var(--usx-color-error);
+  color: var(--usx-color-on-error);
+  font-family: var(--usx-typescale-label-small-family);
+  font-size: 11px;
+  font-weight: var(--usx-typescale-label-small-weight);
+  line-height: 1;
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-badge { @extend .usx-badge; }

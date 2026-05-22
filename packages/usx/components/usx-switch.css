@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/switch — USX Switch (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  user-select: none;
+}
+
+.usx-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.usx-switch-track {
+  width: 36px;
+  height: 20px;
+  background: var(--usx-color-outline-variant);
+  border-radius: 10px;
+  transition: background var(--usx-motion-duration-medium2) var(--usx-motion-easing-standard);
+  position: relative;
+}
+
+.usx-switch input:checked + .usx-switch-track {
+  background: var(--usx-color-primary);
+}
+
+.usx-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--usx-color-on-surface);
+  border-radius: 50%;
+  transition: transform var(--usx-motion-duration-medium2) var(--usx-motion-easing-emphasized-decelerate),
+              background var(--usx-motion-duration-medium2) var(--usx-motion-easing-standard);
+}
+
+.usx-switch input:checked + .usx-switch-track .usx-switch-thumb {
+  transform: translateX(16px);
+  background: var(--usx-color-on-primary);
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-switch { @extend .usx-switch; }
+.m3-switch-track { @extend .usx-switch-track; }
+.m3-switch-thumb { @extend .usx-switch-thumb; }

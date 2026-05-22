@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/palettes/gridui.css — gridui-specific Palettes
+   Retro/teletext-inspired colour schemes
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Palette: C64 ──────────────────────────────────────────────── */
+.palette-c64 {
+  --usx-color-primary: #7B5EA7;
+  --usx-color-on-primary: #FFFFFF;
+  --usx-color-primary-container: #533483;
+  --usx-color-on-primary-container: #EADDFF;
+  --usx-color-secondary: #9E8EC0;
+  --usx-color-on-secondary: #FFFFFF;
+  --usx-color-secondary-container: #3A2560;
+  --usx-color-on-secondary-container: #E8DEF8;
+  --usx-color-tertiary: #7D5260;
+  --usx-color-on-tertiary: #FFFFFF;
+  --usx-color-tertiary-container: #31111D;
+  --usx-color-on-tertiary-container: #FFD8E4;
+  --usx-color-background: #1a1a2e;
+  --usx-color-on-background: #E0E0FF;
+  --usx-color-surface: #1a1a2e;
+  --usx-color-on-surface: #E0E0FF;
+  --usx-color-surface-variant: #16213e;
+  --usx-color-on-surface-variant: #C4B8D8;
+  --usx-color-surface-container-low: #16213e;
+  --usx-color-surface-container: #1E2A4A;
+  --usx-color-surface-container-high: #2A1F3E;
+  --usx-color-outline: #533483;
+  --usx-color-outline-variant: #2A1F3E;
+  --usx-color-inverse-surface: #E0E0FF;
+  --usx-color-inverse-on-surface: #1a1a2e;
+  --usx-color-error: #FF4444;
+  --usx-color-on-error: #FFFFFF;
+  --usx-color-error-container: #4A0000;
+  --usx-color-on-error-container: #FFDAD6;
+
+  /* Legacy aliases */
+  --usx-ink: #E0E0FF;
+  --usx-paper: #1a1a2e;
+  --usx-grid: #16213e;
+  --usx-accent: #533483;
+  --usx-error: #FF4444;
+  --usx-warning: #FFCC00;
+}
+
+/* ─── Palette: Teletext ─────────────────────────────────────────── */
+.palette-teletext {
+  --usx-color-primary: #FFFF00;
+  --usx-color-on-primary: #000000;
+  --usx-color-primary-container: #333300;
+  --usx-color-on-primary-container: #FFFFCC;
+  --usx-color-secondary: #00FF00;
+  --usx-color-on-secondary: #000000;
+  --usx-color-secondary-container: #003300;
+  --usx-color-on-secondary-container: #CCFFCC;
+  --usx-color-tertiary: #00FFFF;
+  --usx-color-on-tertiary: #000000;
+  --usx-color-tertiary-container: #003333;
+  --usx-color-on-tertiary-container: #CCFFFF;
+  --usx-color-background: #000000;
+  --usx-color-on-background: #FFFFFF;
+  --usx-color-surface: #000000;
+  --usx-color-on-surface: #FFFFFF;
+  --usx-color-surface-variant: #1A1A1A;
+  --usx-color-on-surface-variant: #CCCCCC;
+  --usx-color-surface-container-low: #0A0A0A;
+  --usx-color-surface-container: #141414;
+  --usx-color-surface-container-high: #1A1A1A;
+  --usx-color-outline: #333333;
+  --usx-color-outline-variant: #333333;
+  --usx-color-inverse-surface: #FFFFFF;
+  --usx-color-inverse-on-surface: #000000;
+  --usx-color-error: #FF0000;
+  --usx-color-on-error: #FFFFFF;
+  --usx-color-error-container: #330000;
+  --usx-color-on-error-container: #FFCCCC;
+
+  /* Legacy aliases */
+  --usx-ink: #FFFFFF;
+  --usx-paper: #000000;
+  --usx-grid: #1A1A1A;
+  --usx-accent: #FFFF00;
+  --usx-error: #FF0000;
+  --usx-warning: #FFCC00;
+}
+
+/* ─── Palette: NES ──────────────────────────────────────────────── */
+.palette-nes {
+  --usx-color-primary: #7B6BC0;
+  --usx-color-on-primary: #FFFFFF;
+  --usx-color-primary-container: #5040a0;
+  --usx-color-on-primary-container: #E8E0FF;
+  --usx-color-secondary: #E76F51;
+  --usx-color-on-secondary: #FFFFFF;
+  --usx-color-secondary-container: #4A2010;
+  --usx-color-on-secondary-container: #FFD0C0;
+  --usx-color-tertiary: #E9C46A;
+  --usx-color-on-tertiary: #000000;
+  --usx-color-tertiary-container: #4A3A10;
+  --usx-color-on-tertiary-container: #FFE8A0;
+  --usx-color-background: #212529;
+  --usx-color-on-background: #FFFFFF;
+  --usx-color-surface: #212529;
+  --usx-color-on-surface: #FFFFFF;
+  --usx-color-surface-variant: #2A2A2A;
+  --usx-color-on-surface-variant: #CCCCCC;
+  --usx-color-surface-container-low: #2A2D33;
+  --usx-color-surface-container: #33363D;
+  --usx-color-surface-container-high: #3A3D44;
+  --usx-color-outline: #5040a0;
+  --usx-color-outline-variant: #3A3D44;
+  --usx-color-inverse-surface: #FFFFFF;
+  --usx-color-inverse-on-surface: #212529;
+  --usx-color-error: #E76F51;
+  --usx-color-on-error: #FFFFFF;
+  --usx-color-error-container: #4A2010;
+  --usx-color-on-error-container: #FFD0C0;
+
+  /* Legacy aliases */
+  --usx-ink: #FFFFFF;
+  --usx-paper: #212529;
+  --usx-grid: #2A2A2A;
+  --usx-accent: #5040a0;
+  --usx-error: #E76F51;
+  --usx-warning: #E9C46A;
+}

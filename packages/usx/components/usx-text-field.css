@@ -1,0 +1,47 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/text-field — USX Text Field (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-text-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.usx-text-field-label {
+  font-family: var(--usx-typescale-body-small-family);
+  font-size: var(--usx-typescale-body-small-size);
+  color: var(--usx-color-on-surface-variant);
+}
+
+.usx-text-field-input {
+  padding: 10px 12px;
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--usx-shape-corner-extra-small);
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  font-family: var(--usx-typescale-body-medium-family);
+  font-size: var(--usx-typescale-body-medium-size);
+  outline: none;
+  transition: border-color var(--usx-motion-duration-short3) var(--usx-motion-easing-standard);
+}
+
+.usx-text-field-input:focus {
+  border-color: var(--usx-color-primary);
+  border-width: 2px;
+  padding: 9px 11px;
+}
+
+.usx-text-field-input::placeholder {
+  color: var(--usx-color-on-surface-variant);
+}
+
+.usx-text-field-input:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-text-field { @extend .usx-text-field; }
+.m3-text-field-label { @extend .usx-text-field-label; }
+.m3-text-field-input { @extend .usx-text-field-input; }

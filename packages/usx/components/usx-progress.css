@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/progress — USX Progress Indicators (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Linear Progress ───────────────────────────────────────────── */
+.usx-linear-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--usx-color-outline-variant);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.usx-linear-progress-bar {
+  height: 100%;
+  background: var(--usx-color-primary);
+  border-radius: 2px;
+  transition: width var(--usx-motion-duration-long2) var(--usx-motion-easing-emphasized-decelerate);
+}
+
+.usx-linear-progress--indeterminate .usx-linear-progress-bar {
+  width: 40%;
+  animation: usx-linear-progress-indeterminate 2s ease-in-out infinite;
+}
+
+@keyframes usx-linear-progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(150%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ─── Circular Progress ─────────────────────────────────────────── */
+.usx-circular-progress {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--usx-color-outline-variant);
+  border-top-color: var(--usx-color-primary);
+  border-radius: 50%;
+  animation: usx-circular-progress-spin 0.8s linear infinite;
+}
+
+@keyframes usx-circular-progress-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-linear-progress { @extend .usx-linear-progress; }
+.m3-linear-progress-bar { @extend .usx-linear-progress-bar; }
+.m3-linear-progress--indeterminate { @extend .usx-linear-progress--indeterminate; }
+.m3-circular-progress { @extend .usx-circular-progress; }

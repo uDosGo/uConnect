@@ -29,10 +29,6 @@
 			"path": "udo"
 		},
 		{
-			"name": "UDO UI Extensions",
-			"path": "udoui"
-		},
-		{
 			"name": "Stories",
 			"path": "stories"
 		},

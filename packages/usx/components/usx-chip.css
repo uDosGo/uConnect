@@ -1,0 +1,41 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/chip — USX Chip (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--usx-shape-corner-small);
+  background: transparent;
+  color: var(--usx-color-on-surface);
+  font-family: var(--usx-typescale-label-small-family);
+  font-size: var(--usx-typescale-label-small-size);
+  font-weight: var(--usx-typescale-label-small-weight);
+  cursor: pointer;
+  transition: background var(--usx-motion-duration-short3) var(--usx-motion-easing-standard),
+              border-color var(--usx-motion-duration-short3) var(--usx-motion-easing-standard);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.usx-chip:hover {
+  background: rgba(128, 128, 128, 0.06);
+}
+
+.usx-chip--active {
+  background: var(--usx-color-secondary-container);
+  color: var(--usx-color-on-secondary-container);
+  border-color: var(--usx-color-secondary-container);
+}
+
+.usx-chip--active:hover {
+  filter: brightness(1.1);
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-chip { @extend .usx-chip; }
+.m3-chip--active { @extend .usx-chip--active; }

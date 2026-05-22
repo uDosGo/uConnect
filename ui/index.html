@@ -3,12 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>uDosConnect GUI</title>
+  <title>uDosConnect — UI Hub</title>
   <meta name="description" content="uDosConnect - Universal Device Operating Surface">
-  <link rel="stylesheet" href="/src/assets/tailwind.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔗</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #0d1117; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .card-glow:hover { box-shadow: 0 0 30px rgba(0, 255, 157, 0.15); }
+  </style>
 </head>
-<body class="bg-gray-900 text-white">
-  <div id="app"></div>
-  <script type="module" src="/src/main.ts"></script>
+<body>
+  <div id="app" class="w-full max-w-6xl"></div>
+  <script>
+    const cards = [
+      {
+        title: 'uCode 1 — GridUI',
+        subtitle: 'Surface Grid & Dashboard',
+        description: 'Chat sheets, nav rails, teledesk panels, terminal, vault docs, and maps layers — the grid-based operating surface.',
+        port: 5173,
+        url: 'http://localhost:5173',
+        color: '#00ff9d',
+        icon: '⊞'
+      },
+      {
+        title: 'uCode 2 — ProseUI',
+        subtitle: 'Document Surface',
+        description: 'Kanban boards, rich text editor, prose views, GitHub integration — the document-centric workspace.',
+        port: 5177,
+        url: 'http://localhost:5177',
+        color: '#00b4d8',
+        icon: '¶'
+      },
+      {
+        title: 'uCode 3 — Code3UI',
+        subtitle: 'Jotion Surface',
+        description: 'Notion-style blocks, collaborative editing, structured content management.',
+        port: 5174,
+        url: 'http://localhost:5174',
+        color: '#f97583',
+        icon: '⋮'
+      },
+      {
+        title: 'uCode 4 — Code4UI',
+        subtitle: 'Wireframe Surface',
+        description: 'Wireframing tools, layout prototyping, component scaffolding for rapid UI development.',
+        port: 5175,
+        url: 'http://localhost:5175',
+        color: '#d2a8ff',
+        icon: '◇'
+      }
+    ]
+
+    function render() {
+      const app = document.getElementById('app')
+      app.innerHTML = `
+        <div class="space-y-10">
+          <header class="text-center space-y-3">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+              <span style="color:#00ff9d">uDos</span>
+              <span style="color:#fff">Connect</span>
+            </h1>
+            <p style="color:#8b949e" class="text-lg max-w-xl mx-auto">
+              Universal Device Operating Surface — choose your workspace
+            </p>
+          </header>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            ${cards.map(card => `
+              <a href="${card.url}" target="_blank" rel="noopener noreferrer"
+                 class="card-glow block rounded-2xl p-6 md:p-8 transition-all duration-300 group"
+                 style="background:#161b22; border:1px solid #30363d"
+                 onmouseover="this.style.background='#1c2333'; this.style.transform='scale(1.02)'; this.style.borderColor='${card.color}'"
+                 onmouseout="this.style.background='#161b22'; this.style.transform='scale(1)'; this.style.borderColor='#30363d'">
+                <div class="flex items-start gap-4">
+                  <div class="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl font-bold"
+                       style="background:${card.color}20; color:${card.color}">
+                    ${card.icon}
+                  </div>
+                  <div class="flex-1 min-w-0 space-y-2">
+                    <h2 class="text-xl font-bold" style="color:#e1e4e8"
+                        onmouseover="this.style.color='${card.color}'"
+                        onmouseout="this.style.color='#e1e4e8'">
+                      ${card.title}
+                    </h2>
+                    <p class="text-sm font-medium" style="color:#00b4d8">${card.subtitle}</p>
+                    <p class="text-sm leading-relaxed" style="color:#8b949e">${card.description}</p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <span class="inline-flex items-center gap-1.5 text-xs font-mono" style="color:#8b949e">
+                        <span class="w-2 h-2 rounded-full" style="background:#4ade80; display:inline-block"></span>
+                        :${card.port}
+                      </span>
+                      <span class="text-xs transition-opacity" style="color:#00ff9d; opacity:0"
+                            onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                        Open →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            `).join('')}
+          </div>
+
+          <footer class="text-center pb-4">
+            <p style="color:#8b949e" class="text-xs">uDosConnect · uCode Surface Hub</p>
+          </footer>
+        </div>
+      `
+    }
+
+    render()
+  </script>
 </body>
 </html>

@@ -1,0 +1,64 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/dialog — USX Dialog (M3-inspired)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.usx-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  animation: usx-dialog-fade-in var(--usx-motion-duration-medium2) var(--usx-motion-easing-standard);
+}
+
+@keyframes usx-dialog-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.usx-dialog {
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline-variant);
+  border-radius: var(--usx-shape-corner-large);
+  box-shadow: var(--usx-elevation-level3);
+  padding: 24px;
+  min-width: 280px;
+  max-width: 560px;
+  max-width: 90vw;
+  animation: usx-dialog-scale-in var(--usx-motion-duration-medium3) var(--usx-motion-easing-emphasized-decelerate);
+}
+
+@keyframes usx-dialog-scale-in {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.usx-dialog-title {
+  font-family: var(--usx-typescale-headline-small-family);
+  font-size: var(--usx-typescale-headline-small-size);
+  font-weight: var(--usx-typescale-headline-small-weight);
+  color: var(--usx-color-on-surface);
+  margin-bottom: 16px;
+}
+
+.usx-dialog-content {
+  color: var(--usx-color-on-surface-variant);
+  font-family: var(--usx-typescale-body-medium-family);
+  font-size: var(--usx-typescale-body-medium-size);
+  line-height: 1.5;
+}
+
+.usx-dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* ─── M3 Legacy ─────────────────────────────────────────────────── */
+.m3-dialog-overlay { @extend .usx-dialog-overlay; }
+.m3-dialog { @extend .usx-dialog; }
+.m3-dialog-title { @extend .usx-dialog-title; }
+.m3-dialog-actions { @extend .usx-dialog-actions; }

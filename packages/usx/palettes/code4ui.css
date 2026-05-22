@@ -1,0 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/palettes/code4ui.css — code4ui-specific Palettes
+   Wireframe/blueprint/terminal colour schemes
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Palette: Wireframe (default) ──────────────────────────────── */
+.palette-wireframe {
+  --usx-color-primary: #333333;
+  --usx-color-on-primary: #ffffff;
+  --usx-color-primary-container: #f0f0f0;
+  --usx-color-on-primary-container: #1a1a1a;
+  --usx-color-secondary: #666666;
+  --usx-color-on-secondary: #ffffff;
+  --usx-color-secondary-container: #e8e8e8;
+  --usx-color-on-secondary-container: #1a1a1a;
+  --usx-color-tertiary: #4a4a4a;
+  --usx-color-on-tertiary: #ffffff;
+  --usx-color-tertiary-container: #e0e0e0;
+  --usx-color-on-tertiary-container: #1a1a1a;
+  --usx-color-error: #d32f2f;
+  --usx-color-on-error: #ffffff;
+  --usx-color-error-container: #fce4e4;
+  --usx-color-on-error-container: #5c1010;
+  --usx-color-background: #ffffff;
+  --usx-color-on-background: #1a1a1a;
+  --usx-color-surface: #ffffff;
+  --usx-color-on-surface: #1a1a1a;
+  --usx-color-surface-variant: #f5f5f5;
+  --usx-color-on-surface-variant: #666666;
+  --usx-color-surface-container: #f0f0f0;
+  --usx-color-surface-container-high: #e8e8e8;
+  --usx-color-outline: #cccccc;
+  --usx-color-outline-variant: #e0e0e0;
+  --usx-color-inverse-surface: #1a1a1a;
+  --usx-color-inverse-on-surface: #ffffff;
+  --usx-color-inverse-primary: #cccccc;
+}
+
+/* ─── Palette: Blueprint ────────────────────────────────────────── */
+.palette-blueprint {
+  --usx-color-primary: #1565c0;
+  --usx-color-on-primary: #ffffff;
+  --usx-color-primary-container: #d4e4f7;
+  --usx-color-on-primary-container: #0d47a1;
+  --usx-color-secondary: #546e7a;
+  --usx-color-on-secondary: #ffffff;
+  --usx-color-secondary-container: #e0e8ec;
+  --usx-color-on-secondary-container: #37474f;
+  --usx-color-tertiary: #00838f;
+  --usx-color-on-tertiary: #ffffff;
+  --usx-color-tertiary-container: #cceff2;
+  --usx-color-on-tertiary-container: #006064;
+  --usx-color-error: #d32f2f;
+  --usx-color-on-error: #ffffff;
+  --usx-color-error-container: #fce4e4;
+  --usx-color-on-error-container: #5c1010;
+  --usx-color-background: #f5f9ff;
+  --usx-color-on-background: #0d1b2a;
+  --usx-color-surface: #f5f9ff;
+  --usx-color-on-surface: #0d1b2a;
+  --usx-color-surface-variant: #e8f0fe;
+  --usx-color-on-surface-variant: #546e7a;
+  --usx-color-surface-container: #dce8f5;
+  --usx-color-surface-container-high: #d0dcec;
+  --usx-color-outline: #90a4ae;
+  --usx-color-outline-variant: #b0bec5;
+  --usx-color-inverse-surface: #0d1b2a;
+  --usx-color-inverse-on-surface: #f5f9ff;
+  --usx-color-inverse-primary: #90caf9;
+}
+
+/* ─── Palette: Terminal ─────────────────────────────────────────── */
+.palette-terminal {
+  --usx-color-primary: #00ff00;
+  --usx-color-on-primary: #000000;
+  --usx-color-primary-container: #003300;
+  --usx-color-on-primary-container: #00ff00;
+  --usx-color-secondary: #00cc00;
+  --usx-color-on-secondary: #000000;
+  --usx-color-secondary-container: #002200;
+  --usx-color-on-secondary-container: #00cc00;
+  --usx-color-tertiary: #33ff33;
+  --usx-color-on-tertiary: #000000;
+  --usx-color-tertiary-container: #004400;
+  --usx-color-on-tertiary-container: #33ff33;
+  --usx-color-error: #ff0000;
+  --usx-color-on-error: #000000;
+  --usx-color-error-container: #330000;
+  --usx-color-on-error-container: #ff0000;
+  --usx-color-background: #0a0a0a;
+  --usx-color-on-background: #00ff00;
+  --usx-color-surface: #0a0a0a;
+  --usx-color-on-surface: #00ff00;
+  --usx-color-surface-variant: #111111;
+  --usx-color-on-surface-variant: #008800;
+  --usx-color-surface-container: #1a1a1a;
+  --usx-color-surface-container-high: #222222;
+  --usx-color-outline: #004400;
+  --usx-color-outline-variant: #003300;
+  --usx-color-inverse-surface: #00ff00;
+  --usx-color-inverse-on-surface: #0a0a0a;
+  --usx-color-inverse-primary: #00ff00;
+}

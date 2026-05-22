@@ -7,6 +7,9 @@ export interface SnackbarMessage {
   action?: string
 }
 
+export type PaletteId = 'notion' | 'paper' | 'parchment' | 'modern' | 'dark'
+export type FontStyle = 'sans' | 'serif' | 'mono'
+
 export const useCode3UIStore = defineStore('code3ui', () => {
   // ─── Theme ────────────────────────────────────────────────────
   const isDark = ref(false)
@@ -14,6 +17,47 @@ export const useCode3UIStore = defineStore('code3ui', () => {
   function toggleTheme() {
     isDark.value = !isDark.value
     document.documentElement.classList.toggle('code3ui-dark', isDark.value)
+  }
+
+  // ─── Colour Palette ───────────────────────────────────────────
+  const palette = ref<PaletteId>('notion')
+
+  const paletteColors = ref({
+    bg: '#37352f',
+    accent: '#e8e7e4',
+  })
+
+  function setPalette(p: PaletteId) {
+    palette.value = p
+    // Update palette dot colors
+    const colors: Record<PaletteId, { bg: string; accent: string }> = {
+      notion: { bg: '#37352f', accent: '#e8e7e4' },
+      paper: { bg: '#f5f0e8', accent: '#8b7355' },
+      parchment: { bg: '#e8dcc8', accent: '#8b6914' },
+      modern: { bg: '#ffffff', accent: '#1a73e8' },
+      dark: { bg: '#1a1a1a', accent: '#bb86fc' },
+    }
+    paletteColors.value = colors[p]
+  }
+
+  // ─── Font Size ────────────────────────────────────────────────
+  const fontSize = ref(14)
+
+  function increaseFont() {
+    if (fontSize.value < 24) fontSize.value++
+  }
+
+  function decreaseFont() {
+    if (fontSize.value > 10) fontSize.value--
+  }
+
+  // ─── Font Style ───────────────────────────────────────────────
+  const fontStyle = ref<FontStyle>('sans')
+
+  function cycleFontStyle() {
+    const order: FontStyle[] = ['sans', 'serif', 'mono']
+    const idx = order.indexOf(fontStyle.value)
+    fontStyle.value = order[(idx + 1) % order.length]
   }
 
   // ─── Sidebar ──────────────────────────────────────────────────
@@ -55,6 +99,14 @@ export const useCode3UIStore = defineStore('code3ui', () => {
   return {
     isDark,
     toggleTheme,
+    palette,
+    paletteColors,
+    setPalette,
+    fontSize,
+    increaseFont,
+    decreaseFont,
+    fontStyle,
+    cycleFontStyle,
     sidebarCollapsed,
     toggleSidebar,
     chatOpen,
