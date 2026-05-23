@@ -148,6 +148,41 @@ export {
   handleDevShell,
 } from './commands/dev.ts'
 
+export {
+  handleBenchRun,
+  handleBenchList,
+  handleBenchCategories,
+} from './commands/bench.ts'
+export type { BenchResult, BenchSuite, BenchDefinition, BenchRunOptions } from './commands/bench.ts'
+
+export {
+  handleCondense,
+  handleCondenseBatch,
+  handleCondenseStrategies,
+} from './commands/condense.ts'
+export type { CondenseOptions, CondenseResult, CondenseReport } from './commands/condense.ts'
+
+export {
+  handleDevModeStart,
+  handleDevModeStop,
+  handleDevModeStatus,
+  handleDevModeBuild,
+} from './commands/devmode.ts'
+export type { DevModeOptions, DevModeStatus, BuildResult } from './commands/devmode.ts'
+export { DevModeEngine } from './commands/devmode.ts'
+
+export {
+  handleStoryRun,
+  handleStoryValidate,
+  handleStoryList,
+  handleStoryTemplate,
+  parseStory,
+  loadStory,
+  saveStory,
+  executeStory,
+} from './commands/story.ts'
+export type { Story, StoryStep, StoryAction, StoryExecution, StoryOptions, StoryStepResult, StoryActionResult } from './commands/story.ts'
+
 // ─── Initialization ──────────────────────────────────────────────
 
 export interface UDOInitOptions {

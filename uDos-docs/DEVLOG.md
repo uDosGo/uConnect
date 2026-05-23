@@ -5,6 +5,54 @@
 
 ---
 
+## v1.2.0 (2026-05-23) — Roadmap Consolidation & Naming Evolution
+
+### 🎯 Major Achievements
+
+#### 1. **OBF→USX/UDO Naming Evolution Documented** ✅
+- Phase 4 documentation updated across 5 files to reflect the split of OBF (Open Box Format) into:
+  - **USX** (Unified Surface eXchange) — style/design/surface format. Canonical specs: `uCode1/docs/specs/usx/`
+  - **UDO** (Unified Document Object) — system-layer document format. Canonical specs: `uCode1/docs/specs/udo/`
+- Legacy OBF/USXD redirect stubs preserved at `uCode1/docs/specs/usxd/`
+- ThinUI clarified as Python bridge + API server (transport layer), not a desktop app
+- External GUI app identified as **UniversalSurfaceXD USXD-app** (Electron)
+
+#### 2. **Roadmap Condensed & Consolidated** ✅
+- Roadmap reduced from 605 lines to ~200 lines
+- Verbose completed-phase details (ASCII architecture diagrams, per-item checklists) archived to `uDos-docs/roadmap/phase{1-4}-complete.md`
+- Completed phases now show concise summaries with links to archived detail
+- Active/incomplete items remain detailed in main roadmap
+- Release plan converted to table format for readability
+
+#### 3. **Ecosystem Map Updated** ✅
+- `docs/shared/ECOSYSTEM_MAP.md` updated: USXD→UniversalSurfaceXD in diagram, tables, and release pipeline
+- Documentation policy updated to reference USX/UDO instead of OBF
+
+### 📊 Repository Health
+
+| Repo | Status | Notes |
+|------|--------|-------|
+| uCode1 | ✅ Clean | Python core, vault, CLI |
+| uCode2 | ✅ Clean | AMOS terminal surface |
+| uCode3 | ✅ Clean | Rust performance components |
+| uCode4 | ✅ Clean | Spatial/3D computing |
+| Groovebox | ✅ Clean | Audio production |
+| SonicScrewdriver | ✅ Clean | API hub, secrets, containers |
+| Connect | ✅ Clean | Shared infra hub |
+| DevStudio | ✅ Clean | Meta-orchestration |
+
+### 📝 Changelog
+
+**v1.2.0 (2026-05-23)**
+- OBF→USX/UDO naming evolution documented across 5 files
+- ThinUI clarified as transport layer (not Tauri/desktop app)
+- UniversalSurfaceXD identified as external Electron desktop app
+- Roadmap condensed from 605→200 lines, verbose details archived
+- Ecosystem map updated with correct component names
+- Documentation policy updated to reference USX/UDO
+
+---
+
 ## v1.1.1 (2026-05-10) — Ecosystem Cleanup & Consolidation
 
 ### 🎯 Major Achievements
@@ -170,4 +218,4 @@ Connect now serves as the **shared infrastructure hub** for the ecosystem:
 
 ---
 
-*Last Updated: 2026-05-10*
+*Last Updated: 2026-05-23*

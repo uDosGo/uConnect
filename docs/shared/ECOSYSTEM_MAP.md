@@ -52,9 +52,9 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 │  └──────────────────────────────────────────────────────────┘    │
 │                                                                   │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐    │
-│  │ Snackbar │  │ USXD     │  │DevStudio │  │ PublishLane  │    │
-│  │ (Rust)   │  │(Electron)│  │ (Bash)   │  │ (TypeScript) │    │
-│  │ Daemon   │  │ Desktop  │  │Automation│  │ Publishing   │    │
+│  │ Snackbar │  │Universal │  │DevStudio │  │ PublishLane  │    │
+│  │ (Rust)   │  │SurfaceXD │  │ (Bash)   │  │ (TypeScript) │    │
+│  │ Daemon   │  │(Electron)│  │Automation│  │ Publishing   │    │
 │  └──────────┘  └──────────┘  └──────────┘  └──────────────┘    │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
@@ -76,7 +76,7 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 | Component | Language | Role | MCP Role |
 |-----------|----------|------|----------|
 | **Snackbar** | Rust | Universal runtime & container workflow orchestrator (macOS + Linux) | **Server** (Unix socket) |
-| **USXD** | Electron/React | Desktop app — surfaces for all uCode layers | **Client** (MCP) |
+| **UniversalSurfaceXD** | Electron/React | Desktop app — surfaces for all uCode layers (external repo) | **Client** (MCP) |
 | **DevStudio** | Bash | Development automation, agentic workflows | **Client** (MCP) |
 | **OkGuide** | Python | Local LLM assistant (→ uCode1) | **Client** (uses uCode1) |
 | **PublishLane** | TypeScript | Publishing pipeline (→ uCode2) | **Client** (MCP to uCode2) |
@@ -124,8 +124,8 @@ All MCP traffic flows through a **single Unix socket** — the uCode2 MCP Gatewa
                           ┌───────┼──────────┐
                           │       │          │
                     ┌─────▼──┐ ┌──▼───┐ ┌───▼─────┐
-                    │USXD    │ │Dev   │ │Publish   │
-                    │(Elect) │ │Studio│ │Lane      │
+                    │Univ    │ │Dev   │ │Publish   │
+                    │Surf XD │ │Studio│ │Lane      │
                     └────────┘ └──────┘ └─────────┘
 ```
 
@@ -166,7 +166,7 @@ release all v1.0.0    # Tags + pushes all components
 | uCode3 | `ucode3-*` | Python + Rust | `release-python.yaml` + `release-rust.yaml` |
 | uCode4 | `ucode4-*` | Python wheel | `release-python.yaml` |
 | Snackbar | `snackbar-*` | Rust binary | `release-rust.yaml` |
-| USXD | `usxd-*` | Electron app | `release-node.yaml` |
+| UniversalSurfaceXD | `usxd-*` | Electron app | `release-node.yaml` |
 | OkGuide | `okguide-*` | Python wheel | `release-python.yaml` |
 | PublishLane | `publishlane-*` | npm tarball | `release-node.yaml` |
 | uSystem | `usystem-*` | Rust crate | `release-rust.yaml` |

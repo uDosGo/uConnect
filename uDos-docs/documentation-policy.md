@@ -11,7 +11,7 @@ slot: 5
 
 1. **Every doc has a tag.** Audience and publishing intent are explicit (see [specs/audience-tags.md](specs/audience-tags.md) and [specs/publishing-slots.md](specs/publishing-slots.md)).
 2. **Every tag has an audience.** Folder layout mirrors visibility: `docs/public/`, `docs/student/`, `docs/contributor/`, plus `dev/` for `--devonly` and `dev/local/` for `--draft`.
-3. **Every UI is a text code block.** **Open Box Format (OBF)** only: if it is not in a markdown fenced block, it is not open box (see [specs/open-box-format.md](specs/open-box-format.md)).
+3. **Every UI is a text code block.** **USX** (Unified Surface eXchange) format only: if it is not in a markdown fenced block, it is not a surface definition. USX supersedes the former OBF (Open Box Format). For system-layer documents (skills, tasks, workflows), see **UDO** (Unified Document Object). See canonical specs at [`uCode1/docs/specs/usx/`](../../../uCode1/docs/specs/usx/) and [`uCode1/docs/specs/udo/`](../../../uCode1/docs/specs/udo/).
 
 **Audience boundaries (locked)**
 

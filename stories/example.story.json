@@ -1,0 +1,86 @@
+{
+  "id": "example-story",
+  "version": "1.0",
+  "title": "Example Story",
+  "description": "A template story demonstrating the Story format with save_binder actions, execution tracking, and error handling",
+  "author": "uDos",
+  "tags": ["example", "template", "binder"],
+  "binder_target": "stories",
+  "created_at": "2026-05-23T12:00:00.000Z",
+  "updated_at": "2026-05-23T12:00:00.000Z",
+  "steps": [
+    {
+      "id": "step-1",
+      "name": "Save initial data to binder",
+      "description": "Saves example data to the binder namespace",
+      "actions": [
+        {
+          "type": "save_binder",
+          "params": {
+            "key": "example-data",
+            "value": {
+              "message": "Hello from Story!",
+              "timestamp": "2026-05-23T12:00:00.000Z",
+              "version": 1
+            },
+            "namespace": "stories",
+            "tags": ["example", "initial"]
+          }
+        }
+      ],
+      "on_success": [
+        {
+          "type": "log",
+          "params": { "level": "info", "message": "Step 1 completed successfully" }
+        }
+      ],
+      "on_error": [
+        {
+          "type": "log",
+          "params": { "level": "error", "message": "Step 1 failed" }
+        }
+      ]
+    },
+    {
+      "id": "step-2",
+      "name": "Process and save results",
+      "description": "Saves processed results back to the binder",
+      "actions": [
+        {
+          "type": "save_binder",
+          "params": {
+            "key": "processed-results",
+            "value": {
+              "status": "done",
+              "timestamp": "2026-05-23T12:00:00.000Z",
+              "items_processed": 42
+            },
+            "namespace": "stories",
+            "tags": ["processed", "results"]
+          }
+        }
+      ],
+      "on_success": [
+        {
+          "type": "log",
+          "params": { "level": "info", "message": "Step 2 completed successfully" }
+        }
+      ]
+    },
+    {
+      "id": "step-3",
+      "name": "Emit completion event",
+      "description": "Emits an event to notify listeners that the story has completed",
+      "actions": [
+        {
+          "type": "emit_event",
+          "params": {
+            "event": "story.completed",
+            "story_id": "example-story",
+            "status": "success"
+          }
+        }
+      ]
+    }
+  ]
+}

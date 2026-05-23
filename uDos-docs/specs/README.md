@@ -9,6 +9,13 @@ slot: 5
 
 Locked reference material for **Open Box Format (OBF)**, **grid**, **display sizes**, **audience tags**, and **publishing slots**. All files here are **`--public`** (technical, no login required to read the spec text).
 
+> **Naming Evolution:** The former OBF (Open Box Format) has been superseded by two canonical formats:
+> - **USX** (Unified Surface eXchange) — style/design/surface format (UI components, themes, grids, surfaces, story format). Canonical specs: [`uCode1/docs/specs/usx/`](../../../uCode1/docs/specs/usx/)
+> - **UDO** (Unified Document Object) — system-layer document format (skills, tasks, workflows, agents, variables, publishing). Canonical specs: [`uCode1/docs/specs/udo/`](../../../uCode1/docs/specs/udo/)
+> Legacy OBF/USXD redirect stubs: [`uCode1/docs/specs/usxd/`](../../../uCode1/docs/specs/usxd/)
+>
+> **ThinUI** is a Python bridge + API server (transport layer), not a desktop app. The external GUI app is **UniversalSurfaceXD USXD-app** (Electron).
+
 ## v1.4 (Alpha) Specifications
 
 See [v4/README.md](v4/README.md) for **spatial algebra**, **Tower of Knowledge**, and **uCell ↔ voxel mapping**.
