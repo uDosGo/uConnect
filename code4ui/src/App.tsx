@@ -19,8 +19,6 @@ const paletteColors: Record<string, string> = {
   paper: '#8D6E63',
 }
 
-const paletteOrder = ['wireframe', 'blueprint', 'terminal', 'paper'] as const
-
 // ─── Sidebar Tabs ────────────────────────────────────────────────
 const sidebarTabs = [
   { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
@@ -288,18 +286,6 @@ export default function App() {
   const store = useCode4UIStore()
   const [activeTab, setActiveTab] = useState('dashboard')
 
-  const activeTabLabel = sidebarTabs.find(t => t.id === activeTab)?.label || 'Dashboard'
-
-  const fontStyleIcon = (() => {
-    switch (store.fontStyle) {
-      case 'serif': return 'format_italic'
-      case 'sans': return 'text_fields'
-      case 'mono': return 'code'
-    }
-  })()
-
-  const currentSwatchColor = paletteColors[store.currentPalette] || '#cccccc'
-
   return (
     <div
       className={`code4ui-surface ${store.isDark ? 'code4ui-dark' : ''}`}
@@ -307,30 +293,6 @@ export default function App() {
       data-palette={store.currentPalette}
       style={{ '--code4ui-font-size': `${store.fontSize}px` } as React.CSSProperties}
     >
-      {/* Surface Header — minimal: home + breadcrumb only */}
-      <header className="surface-header">
-        <div className="header-left">
-          <a
-            href="http://localhost:5173"
-            className="header-btn"
-            title="Back to UI Hub"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="material-symbols-outlined">home</span>
-          </a>
-        </div>
-        <div className="header-center">
-          <div className="header-breadcrumb">
-            <span className="breadcrumb-item">Bedstead</span>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-item breadcrumb-current">{activeTabLabel}</span>
-          </div>
-        </div>
-        <div className="header-right">
-        </div>
-      </header>
-
       {/* Workspace Layout */}
       <div className="workspace-layout">
         <Code4UINavRail
