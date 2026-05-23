@@ -84,12 +84,83 @@ export interface Surface {
   status: 'running' | 'stopped' | 'error'
 }
 
-// ─── Vault Types ─────────────────────────────────────────────────
+// ─── Vault Types (v3.0 Layered Architecture) ────────────────────
+export type VaultLayer = 'user' | 'shared' | 'global'
+
+export interface VaultLayerConfig {
+  name: string
+  repo: string
+  path: string
+  layer: VaultLayer
+  priority: number
+  mergeStrategy: 'overlay' | 'merge' | 'reference'
+  sync: 'mirror' | 'conditional' | 'pull-only'
+  readOnly: boolean
+}
+
 export interface VaultEntry {
   path: string
   value: unknown
-  type: 'string' | 'number' | 'boolean' | 'json' | 'file'
+  type: 'string' | 'number' | 'boolean' | 'json' | 'file' | 'markdown'
   updated_at: string
+  sourceLayer: VaultLayer
+  originRepo?: string
+}
+
+export interface Orb {
+  id: string
+  name: string
+  canonical: string
+  sourceLayer: VaultLayer
+  originRepo?: string
+  description: string
+  keywords: string[]
+  category?: string
+  subcategory?: string
+  parents: string[]
+  children: string[]
+  related: string[]
+  synced: string
+  mcpOperations: string[]
+  githubnext?: {
+    semanticSearch: boolean
+    llmContextPack: boolean
+    codeReferences: boolean
+  }
+}
+
+export interface GlobalCategory {
+  id: string
+  name: string
+  icon: string
+  subcategories: string[]
+}
+
+export interface VaultUnionConfig {
+  virtualPath: string
+  layers: VaultLayerConfig[]
+  behavior: {
+    read: 'union'
+    write: 'copy-up'
+    delete: 'whiteout'
+  }
+  conflictStrategy: 'highest-priority-wins'
+  whiteoutSuffix: string
+}
+
+export interface PublishRequest {
+  sourcePath: string
+  sourceLayer: VaultLayer
+  targetLayer: VaultLayer
+  targetPath: string
+  visibility: 'public' | 'conditional' | 'global'
+  rules?: PublishRule[]
+}
+
+export interface PublishRule {
+  type: 'single-use' | 'time-bound' | 'user-limited' | 'group-limited'
+  value?: string
+  expiresAt?: string
 }
 
 // ─── MCP Types ───────────────────────────────────────────────────
