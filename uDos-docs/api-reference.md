@@ -71,9 +71,6 @@ BinderResource(id, name, resource_type, data=None, path=None)
 from core_py.usxd import (
     USXDDocument, USXDMetadata, USXDSection, USXDRegistry, USXDFormat,
     ASCIIGridParser, ParsedGrid, GridCell, GridComponent, GridFormat,
-    ComponentMapper, ComponentMapping, ComponentType, ThinUIProperties,
-    GridRenderer, Style, ColorMode, TerminalUI,
-    section_to_cell, cell_to_section, archive_document_sections,
     add_cell_references_to_doc, restore_sections_from_cells, link_doc_to_cell_address,
 )
 ```
@@ -86,20 +83,6 @@ parsed.rows, parsed.cols, parsed.grid, parsed.components
 parsed.to_ascii()      # → str
 parsed.to_dict()       # → dict
 parsed.get_cell(r, c)  # → GridCell | None
-```
-
-### Component Mapper
-```python
-mapper = ComponentMapper()
-mapper.parse_grid(parsed)  # → List[ComponentMapping]
-mapper.add_mapping(grid_component_id, thinui_type, properties)
-```
-
-### Grid Renderer
-```python
-renderer = GridRenderer()
-renderer.render_simple(parsed)                    # ANSI terminal output
-renderer.render_curses(stdscr, parsed, config)    # curses-based TUI
 ```
 
 ### Cell Mapping
@@ -206,6 +189,23 @@ bridge.map_to_thinui(parsed)                 # → ThinUIGridData
 # API server (Flask)
 from core_py.thinui.api import create_api_server, run_api_server
 run_api_server(host="127.0.0.1", port=8001)
+
+### Component Mapper
+```python
+from core_py.thinui.component_mapper import ComponentMapper, ComponentMapping
+
+mapper = ComponentMapper()
+mapper.parse_grid(parsed)  # → List[ComponentMapping]
+mapper.add_mapping(grid_component_id, thinui_type, properties)
+```
+
+### Grid Renderer
+```python
+from core_py.thinui.grid_renderer import GridRenderer
+
+renderer = GridRenderer()
+renderer.render_simple(parsed)                    # ANSI terminal output
+renderer.render_curses(stdscr, parsed, config)    # curses-based TUI
 ```
 
 ---

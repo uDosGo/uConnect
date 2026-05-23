@@ -1,8 +1,9 @@
 # uDos Feed Format Specification
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Active
 **Purpose:** Standardize JSON feeds across all uDos domains
+**Supersedes:** obf-grid-spec.md (feed/event section), grid-spec.md (feed/event section)
 
 ---
 
@@ -230,7 +231,57 @@ All uDos feeds follow a common structure:
 
 ---
 
-### 3.6. Wiki Feed (`wiki/wiki.json`)
+### 3.7. Grid Feed (`grid/grid.json`)
+
+**Purpose:** Track grid layout changes, renders, and exports.
+
+**Event Types:**
+- `grid.render`: Grid rendered to terminal or file
+- `grid.export`: Grid exported to a format (ascii, grid, svg, png)
+- `grid.validate`: Grid validation result
+- `grid.edit`: Grid edited
+- `grid.resize`: Grid resized
+- `grid.rotate`: Grid rotated
+- `grid.layer`: Layer operation (merge, reorder)
+
+**Example:**
+```json
+{
+  "version": "1.0",
+  "type": "feed",
+  "source": "udos.grid",
+  "items": [
+    {
+      "id": "grid-001",
+      "timestamp": "2026-05-23T10:00:00Z",
+      "type": "grid.render",
+      "summary": "Rendered dashboard grid to terminal",
+      "payload": {
+        "file": "dashboards/main.grid.md",
+        "mode": "teletext",
+        "size": "12x12",
+        "duration_ms": 12
+      }
+    },
+    {
+      "id": "grid-002",
+      "timestamp": "2026-05-23T10:05:00Z",
+      "type": "grid.export",
+      "summary": "Exported grid to SVG",
+      "payload": {
+        "file": "dashboards/main.grid.md",
+        "format": "svg",
+        "output": "exports/main.svg",
+        "duration_ms": 45
+      }
+    }
+  ]
+}
+```
+
+---
+
+### 3.8. Wiki Feed (`wiki/wiki.json`)
 
 **Purpose:** Track wiki page edits and structure changes.
 
@@ -273,6 +324,7 @@ Feeds can be spoolable based on their type and age:
 | `tasks.json` | Vector | For AI task suggestions |
 | `docs.json` | Archive | Quarterly |
 | `courses.json` | Compress | After course completion |
+| `grid.json` | Compress | Monthly (grid renders are ephemeral) |
 | `wiki.json` | Clean | Monthly |
 
 ---
@@ -359,6 +411,13 @@ udo docs list --type update --since 2026-04-01
 udo course list --in-progress
 udo course complete 02-local-first-dev --score 92
 udo course spool --archive --completed-before 2026-01-01
+
+# Grid
+udo grid render dashboards/main.grid.md --mode teletext
+udo grid export dashboards/main.grid.md --format svg --output exports/main.svg
+udo grid validate dashboards/main.grid.md
+udo grid feed list --type grid.render --since 2026-05-01
+udo grid feed spool --compress --older-than 30d
 
 # Wiki
 udo wiki edit Home.md --message "Updated architecture"

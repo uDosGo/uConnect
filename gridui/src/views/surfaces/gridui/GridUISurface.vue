@@ -68,9 +68,11 @@
       <main class="gridui-main">
         <TerminalPanel v-if="store.activePanel === 'terminal'" />
         <TeledeskPanel v-if="store.activePanel === 'teledesk'" />
+        <CeefaxSurface v-if="store.activePanel === 'ceefax'" />
         <DashboardPanel v-if="store.activePanel === 'dashboard'" />
         <VaultDocsPanel v-if="store.activePanel === 'vault'" />
         <MapsLayersPanel v-if="store.activePanel === 'maps'" />
+
       </main>
 
       <!-- Chat Sheet -->
@@ -100,9 +102,11 @@ import GridUINavRail from './GridUINavRail.vue'
 import GridUIChatSheet from './GridUIChatSheet.vue'
 import TerminalPanel from './panels/TerminalPanel.vue'
 import TeledeskPanel from './panels/TeledeskPanel.vue'
+import CeefaxSurface from './panels/CeefaxSurface.vue'
 import DashboardPanel from './panels/DashboardPanel.vue'
 import VaultDocsPanel from './panels/VaultDocsPanel.vue'
 import MapsLayersPanel from './panels/MapsLayersPanel.vue'
+
 
 const store = useGridUIStore()
 

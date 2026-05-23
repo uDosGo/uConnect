@@ -1,9 +1,10 @@
 # UDX Format Specification
 # Universal Document eXchange - Code Atlas Format
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Final
-**Last Updated:** 2024-04-24
+**Last Updated:** 2026-05-23
+**Supersedes:** obf-grid-spec.md (UDX/atlas mapping section), grid-spec.md (UDX/atlas mapping section)
 
 ## 📋 Overview
 
@@ -113,6 +114,82 @@ UDX (Universal Document eXchange) is a JSON-based format for organizing code, do
 **Properties:**
 - `content`: Footer text
 - `links`: Array of link objects
+
+## 🧩 Grid Section Type
+
+UDX supports a dedicated **grid** section type for embedding teletext/ASCII grid layouts, superseding the previous OBF grid format.
+
+### Grid Section Structure
+
+```json
+{
+  "id": "grid-layout",
+  "type": "grid",
+  "title": "Grid Layout Title",
+  "grid": {
+    "size": "12x12",
+    "mode": "teletext",
+    "format": "compact",
+    "data": [
+      "████████████",
+      "█░░░░░░░░░░█",
+      "█░░▒▒░░░░░░█"
+    ]
+  }
+}
+```
+
+### Grid Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `size` | string | Yes | Grid dimensions as `WxH` (e.g. `"12x12"`, `"40x25"`) |
+| `mode` | string | Yes | Display mode: `"teletext"`, `"mono"`, or `"wireframe"` |
+| `format` | string | Yes | Data format: `"compact"` (one char per cell) or `"coordinate"` (`[x,y]char` tokens) |
+| `data` | array | Yes | Array of strings (compact) or array of coordinate tokens (coordinate) |
+
+### Coordinate Format Data
+
+```json
+{
+  "id": "grid-coords",
+  "type": "grid",
+  "grid": {
+    "size": "12x12",
+    "mode": "teletext",
+    "format": "coordinate",
+    "data": [
+      "[0,0]█ [0,1]█ [0,2]█",
+      "[1,0]█ [1,1]░ [1,2]░"
+    ]
+  }
+}
+```
+
+### Grid Atlas Mappings
+
+Grid sections can be mapped to code entities via the code atlas:
+
+```json
+{
+  "codeAtlas": {
+    "version": "1.0",
+    "mappings": {
+      "grid-layout": "code:gridui:teledesk-panel",
+      "grid-coords": "code:usxd:grid-parser"
+    }
+  }
+}
+```
+
+### Validation Rules
+
+1. Grid `data` rows must have consistent lengths matching the `size` width
+2. Coordinate format tokens must use zero-based `[x,y]` indices
+3. Characters must be from the 128-slot uCode1 character set (see [ucode1-128-char-spec.md](ucode1-128-char-spec.md))
+4. Grid dimensions must be within the valid range (20-80 cols, 10-48 rows)
+
+---
 
 ## 🧭 Code Atlas System
 

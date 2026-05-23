@@ -33,7 +33,7 @@
     </div>
 
     <!-- Page Number Input -->
-    <div v-if="showPageInput" class="teledesk-page-input">
+    <div v-if="pageInputVisible" class="teledesk-page-input">
       <span class="page-input-label">PAGE:</span>
       <input
         ref="pageInputRef"
@@ -42,9 +42,10 @@
         maxlength="3"
         class="page-input-field"
         @keydown.enter="submitPage"
-        @keydown.escape="showPageInput = false"
+        @keydown.escape="pageInputVisible = false"
         @blur="submitPage"
       />
+
     </div>
   </div>
 </template>
@@ -54,7 +55,8 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 
 const currentPage = ref(100)
 const currentTime = ref('')
-const showPageInput = ref(false)
+const pageInputVisible = ref(false)
+
 const pageInputBuffer = ref('')
 const pageInputRef = ref<HTMLInputElement | null>(null)
 const contentRef = ref<HTMLDivElement | null>(null)
@@ -242,9 +244,10 @@ function openArticle() {
 function submitPage() {
   const num = parseInt(pageInputBuffer.value, 10)
   if (!isNaN(num) && num >= 100 && num <= 999) gotoPage(num)
-  showPageInput.value = false
+  pageInputVisible.value = false
   pageInputBuffer.value = ''
 }
+
 
 function fetchArticles(pageNum: number) {
   const page = pages.value[pageNum]
@@ -288,8 +291,8 @@ function fetchArticles(pageNum: number) {
 
 function handleKeyDown(e: KeyboardEvent) {
   if (/^[0-9]$/.test(e.key)) {
-    if (!showPageInput) {
-      showPageInput.value = true
+    if (!pageInputVisible.value) {
+      pageInputVisible.value = true
       pageInputBuffer.value = e.key
       nextTick(() => pageInputRef.value?.focus())
     }
@@ -319,10 +322,11 @@ function handleKeyDown(e: KeyboardEvent) {
       break
     case 'o': case 'O': e.preventDefault(); openArticle(); break
     case 'r': case 'R': e.preventDefault(); fetchArticles(currentPage.value); break
-    case 'Enter': e.preventDefault(); if (showPageInput) submitPage(); break
-    case 'Escape': showPageInput.value = false; pageInputBuffer.value = ''; break
+    case 'Enter': e.preventDefault(); if (pageInputVisible.value) submitPage(); break
+    case 'Escape': pageInputVisible.value = false; pageInputBuffer.value = ''; break
   }
 }
+
 
 let clockInterval: ReturnType<typeof setInterval> | null = null
 

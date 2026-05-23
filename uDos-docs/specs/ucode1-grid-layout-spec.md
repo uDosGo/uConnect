@@ -1,9 +1,9 @@
 # uCode1 Grid & Layout Specification
 
-**Version:** 1.0 (Final)
+**Version:** 1.1
 **Status:** LOCKED
-**Last Updated:** 2026-04-30
-**Supersedes:** UDO_FORMAT.md, ucode1-128-char-spec.md, UDX_FORMAT.md, display.css conventions
+**Last Updated:** 2026-05-23
+**Supersedes:** UDO_FORMAT.md, ucode1-128-char-spec.md, UDX_FORMAT.md, display.css conventions, obf-grid-spec.md, grid-spec.md
 
 ---
 
@@ -33,7 +33,22 @@ The uCode1 grid is a **character-cell grid** where every cell occupies exactly o
 
 The **Ceefax teletext standard (40×25)** is the design baseline for all surfaces.
 
-### 1.2 Grid Formats (USXD)
+### 1.2 Two Grid Models
+
+Two grid models are valid, serving different purposes:
+
+1. **Text / Teletext cell** — **2×6 characters** per cell: ` ```grid ` fenced blocks, monospace terminals. Default display **12×12** cells (144 per screen). Used for teletext-style layouts, dashboards, and terminal UIs.
+
+2. **Pixel / QR storage cell** — **24×24 px** default, **8×8** QR modules, **3×3** QR per cell — locked maths, cubes, bricks: **[grid-cell-cube-maths.md](grid-cell-cube-maths.md)**.
+
+| Property | Text/Teletext Model | Pixel/QR Model |
+|----------|-------------------|----------------|
+| **Cell size** | 2×6 characters | 24×24 px |
+| **Default display** | 12×12 cells | Variable |
+| **Total cells (default)** | 144 per screen | Variable |
+| **Character set** | ASCII + block glyphs (`█ ░ ▒ ▓ ■ □`) | QR modules |
+
+### 1.3 Grid Formats (USXD)
 
 ```python
 class GridFormat(Enum):
@@ -44,12 +59,14 @@ class GridFormat(Enum):
     CSV          = "csv"           # comma,separated,values
 ```
 
-### 1.3 Coordinate System
+### 1.4 Coordinate System
 
 - Origin: `(0, 0)` at top-left
 - X-axis: column (increasing right)
 - Y-axis: row (increasing down)
 - Units: character cells (1 cell = 1 character)
+- **uTile** = one **2×6** cell region (e.g. for QR or storage layout)
+- Logical model: `grid[x][y]` with origin top-left unless a renderer specifies otherwise
 
 ```python
 @dataclass
@@ -59,7 +76,7 @@ class Coordinate:
     system: CoordSystem = CoordSystem.CARTESIAN
 ```
 
-### 1.4 Grid Data Model
+### 1.5 Grid Data Model
 
 ```python
 @dataclass
@@ -78,6 +95,67 @@ class Grid:
     cells: List[List[GridCell]]
     format: GridFormat
 ```
+
+### 1.6 Fence Syntax (Grid Blocks in Markdown)
+
+Grids are defined as **text inside a markdown fenced block**. No GUI builder: edit the grid block, render in the terminal or export.
+
+````markdown
+```grid [options]
+…cell data…
+```
+````
+
+#### Options (header line)
+
+| Option | Values | Default |
+| --- | --- | --- |
+| `size` | `WxH` cells | `12x12` (coordinate mode) or inferred (compact) |
+| `mode` | `teletext` \| `mono` \| `wireframe` | `teletext` |
+| `cell_size` | e.g. `2x6` chars | documentation only in VA1 parser |
+| `show_coords` | `true` \| `false` | `false` |
+| `editable` | `true` \| `false` | `true` |
+| `compact` | flag or `compact=true` | off |
+
+#### Display Modes
+
+| Mode | Description |
+| --- | --- |
+| **mono** | Black background, green text (`#00FF00`) |
+| **teletext** | Black background, coloured blocks (Teletext palette) |
+| **wireframe** | White background, black text |
+
+#### Coordinate Format
+
+Each token: `[x,y]<char>` with zero-based indices.
+
+```grid size="12x12" mode="teletext" show_coords="true"
+[0,0]█ [0,1]█ [0,2]█
+```
+
+#### Compact Format
+
+Add **`compact`** to the header. One character per column; one row per line:
+
+```grid size="12x6" mode="teletext" compact
+████████████
+█░░░░░░░░░░█
+█░░▒▒░░░░░░█
+```
+
+#### Character Set (locked)
+
+| Char | Notes |
+| --- | --- |
+| `█` `▓` `▒` `░` | Blocks / shades |
+| `□` `■` | Boxes |
+| space | Empty (render may show `·` in terminal) |
+
+Full 128-slot character set (including CP437 teletext blocks, emoji overlays, word aliases) is defined in [ucode1-128-char-spec.md](ucode1-128-char-spec.md).
+
+#### File Conventions
+
+- Embed in any **`.md`** file, or use a dedicated **`.grid.md`** / **`.grid`** file containing a fence or raw compact art.
 
 ---
 
@@ -174,7 +252,7 @@ rows      = Math.floor(viewport_height / fontSize) - chromeRows
 - Font +/- adjusts font size and recalculates grid dimensions
 - Content clips at the calculated grid boundary
 
-Used by: Ceefax teletext surface.
+Used by: Ceefax teletext surface (gridui Teledesk panel).
 
 ### 3.2 Font Aspect Ratios
 
@@ -238,7 +316,7 @@ JSON-based block layout format for teletext-inspired interfaces.
 
 ### 4.2 UDX (Universal Document eXchange)
 
-JSON-based code atlas format for mapping ASCII grids to components.
+JSON-based code atlas format for mapping ASCII grids to components. See [UDX_FORMAT.md](UDX_FORMAT.md) for full specification.
 
 ```json
 {
@@ -330,7 +408,7 @@ Fonts are stored alongside their theme:
 
 ## 6. Surfaces
 
-### 6.1 Ceefax Teletext (Primary Surface)
+### 6.1 Ceefax Teletext (Primary Surface — gridui Teledesk Panel)
 
 | Property | Value |
 |----------|-------|
@@ -372,7 +450,26 @@ Fonts are stored alongside their theme:
 
 ## 7. Implementation Reference
 
-### 7.1 File Structure
+### 7.1 CLI Commands
+
+| Command | Description |
+| --- | --- |
+| `udo grid render <file> [--mode]` | Terminal ANSI (teletext / mono / wireframe) |
+| `udo grid export <file> --format ascii\|grid` | Plain text or fenced grid block |
+| `udo grid export --format svg\|png` | **P1** — not yet |
+| `udo grid validate <file>` | Dimension check |
+| `udo grid edit <file>` | Opens `$EDITOR`; creates minimal grid if missing |
+| `udo grid resize` / `rotate` / `layer …` | **P1** — planned |
+| `udo grid parse --text "<ascii>"` | Parse ASCII grid |
+| `udo grid to-usxd <file> --output <path>` | Convert to USXD |
+
+Full-screen **h/j/k/l** TUI is **planned**; until then, editing is **plain text** (open box).
+
+### 7.2 Layers
+
+Multi-layer grids (`layers="3"`, merge, z-order) are **P1** — see implementation tasks in repo issues / future spec revision.
+
+### 7.3 File Structure
 
 ```
 uCode1/
@@ -404,24 +501,16 @@ uCode1/
       monodraw.py           # Monodraw integration
 ```
 
-### 7.2 Key CLI Commands
-
-```bash
-ucode grid parse --text "<ascii>"           # Parse ASCII grid
-ucode grid render <file>                    # Render to terminal
-ucode grid to-usxd <file> --output <path>   # Convert to USXD
-ucode grid edit                             # Edit in Monodraw
-```
-
-### 7.3 Validation Rules
+### 7.4 Validation Rules
 
 1. All UDO documents must be valid JSON
 2. Block IDs must be unique within a document
 3. `span` values must sum to ≤ 12 per row in grid-12 layout
 4. Teletext page lines must be exactly 40 characters wide
 5. Font files must be served alongside their theme directory
+6. Grid fence blocks must have consistent row lengths matching `size` attribute
 
-### 7.4 Quick Reference
+### 7.5 Quick Reference
 
 ```yaml
 # Canonical teletext page structure (40 columns × 25 rows)

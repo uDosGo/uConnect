@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export type GridPanelId = 'terminal' | 'teledesk' | 'dashboard' | 'vault' | 'maps'
+export type GridPanelId = 'terminal' | 'teledesk' | 'dashboard' | 'vault' | 'maps' | 'ceefax'
 
 export interface GridPanel {
   id: GridPanelId
@@ -46,10 +46,12 @@ export interface SnackbarMessage {
 export const PANELS: GridPanel[] = [
   { id: 'terminal', label: 'Terminal', icon: 'terminal', description: 'C64 BASIC terminal' },
   { id: 'teledesk', label: 'Teledesk', icon: 'live_tv', description: 'Ceefax teletext 40×24' },
+  { id: 'ceefax', label: 'Ceefax', icon: 'stadia_controller', description: 'Mode 7 Canvas teletext' },
   { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', description: 'System stats & tasks' },
   { id: 'vault', label: 'Vault', icon: 'folder', description: 'Ceetex document viewer' },
   { id: 'maps', label: 'Maps', icon: 'map', description: 'USX grid layers & maps' },
 ]
+
 
 export const useGridUIStore = defineStore('gridUI', () => {
   // ─── Active Panel ──────────────────────────────────────────────

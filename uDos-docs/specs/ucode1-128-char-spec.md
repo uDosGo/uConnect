@@ -1,7 +1,8 @@
 # uCode1 Complete 128-Character ANSI Set + 128 Emoji Overlays + 128 Word Aliases
 
-**Version:** 1.0 (uCode1)  
+**Version:** 1.1 (uCode1)  
 **Status:** LOCKED  
+**Supersedes:** obf-grid-spec.md (character set section), grid-spec.md (character set section)  
 **Core Principle:** We have **128 slots** (0-127). Each slot contains:
 1. **One ANSI character** (printable, includes uppercase, lowercase, digits, punctuation, symbols)
 2. **One emoji overlay** (optional, maps to same slot)

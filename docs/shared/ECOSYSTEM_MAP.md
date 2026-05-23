@@ -88,7 +88,7 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 |-----------|--------|-------------|
 | **Hivemind** | MCP gateway — Snackbar replaces | Snackbar |
 | **Re3Engine** | Reasoning engine — MCP tools direct in apps | `udo` CLI |
-| **ThinUI** | Tauri desktop wrapper — absorbed into USXD | USXD desktop app |
+| **ThinUI** | Python UI bridge + API server — merged into uCode1 core_py | `core_py.thinui` |
 | **RusTui** | Terminal UI — doesn't fit any uCode surface | Archived |
 | **MCPGateway** | Node.js MCP gateway — Snackbar replaces | Snackbar |
 
