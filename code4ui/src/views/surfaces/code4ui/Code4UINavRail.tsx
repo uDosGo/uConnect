@@ -24,6 +24,15 @@ export default function Code4UINavRail({ activeTab, tabs, onTabChange }: Code4UI
     <aside className={`code4ui-nav-rail ${store.sidebarCollapsed ? 'collapsed' : ''}`}>
       {/* Top Actions */}
       <div className="nav-rail-top">
+        <a
+          href="http://localhost:5173"
+          className="nav-rail-btn"
+          title="Back to UI Hub"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="material-symbols-outlined">home</span>
+        </a>
         <button className="nav-rail-btn" onClick={store.toggleSidebar} title="Toggle sidebar">
           <span className="material-symbols-outlined">menu</span>
         </button>
@@ -46,15 +55,6 @@ export default function Code4UINavRail({ activeTab, tabs, onTabChange }: Code4UI
 
       {/* Bottom Actions */}
       <div className="nav-rail-bottom">
-        <a
-          href="http://localhost:5173"
-          className="nav-rail-btn"
-          title="Back to UI Hub"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="material-symbols-outlined">home</span>
-        </a>
         <button className="nav-rail-btn" onClick={store.toggleChat} title={store.chatOpen ? 'Close chat' : 'Open chat'}>
           <span className="material-symbols-outlined">chat</span>
         </button>
