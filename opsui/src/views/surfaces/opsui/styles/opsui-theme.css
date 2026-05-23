@@ -864,7 +864,7 @@
   background: var(--ops-bg-hover);
 }
 
-/* ─── Snackbar ────────────────────────────────────────────────── */
+/* ─── Snackbar — M3-style with Material Symbols icon ──────────── */
 .opsui-surface .m3-snackbar {
   position: fixed;
   bottom: 16px;
@@ -872,7 +872,7 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 10px 16px;
   background: var(--ops-bg-card);
   border: 1px solid var(--ops-border);
@@ -882,6 +882,8 @@
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: ops-snackbar-in 200ms ease;
+  min-width: 280px;
+  max-width: 480px;
 }
 
 @keyframes ops-snackbar-in {
@@ -907,7 +909,35 @@
   border-color: var(--ops-accent);
 }
 
+.opsui-surface .m3-snackbar-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.opsui-surface .m3-snackbar--success .m3-snackbar-icon {
+  color: var(--ops-success);
+}
+
+.opsui-surface .m3-snackbar--error .m3-snackbar-icon {
+  color: var(--ops-error);
+}
+
+.opsui-surface .m3-snackbar--info .m3-snackbar-icon {
+  color: var(--ops-accent);
+}
+
+.opsui-surface .m3-snackbar-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
 .opsui-surface .m3-snackbar-action {
+  flex-shrink: 0;
   padding: 4px 8px;
   border: none;
   background: transparent;
@@ -917,6 +947,9 @@
   font-family: inherit;
   font-weight: 500;
   border-radius: var(--ops-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background var(--ops-transition);
 }
 
 .opsui-surface .m3-snackbar-action:hover {

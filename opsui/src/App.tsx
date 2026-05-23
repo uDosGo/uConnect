@@ -555,10 +555,14 @@ export default function App() {
         <OpsUIChatSheet />
       </div>
 
-      {/* Snackbar */}
+      {/* Snackbar — M3-style with Material Symbols icon */}
       {store.snackbar && (
         <div className={`m3-snackbar m3-snackbar--${store.snackbar.type}`}>
-          <span>{store.snackbar.message}</span>
+          <span className="m3-snackbar-icon material-symbols-outlined">
+            {store.snackbar.type === 'success' ? 'check_circle' :
+             store.snackbar.type === 'error' ? 'error' : 'info'}
+          </span>
+          <span className="m3-snackbar-text">{store.snackbar.message}</span>
           {store.snackbar.action && (
             <button className="m3-snackbar-action" onClick={store.dismissSnackbar}>
               {store.snackbar.action}
