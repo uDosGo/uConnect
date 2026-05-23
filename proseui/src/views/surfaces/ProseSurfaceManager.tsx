@@ -22,6 +22,7 @@ const MORE_TABS = [
   { id: 'vibe', icon: 'school', label: 'Vibe Terminal' },
   { id: 'vault', icon: 'folder_open', label: 'Vault Browser' },
   { id: 'workflow', icon: 'account_tree', label: 'Workflow Manager' },
+  { id: 'tools', icon: 'tune', label: 'Tool Builder' },
 ]
 
 const ProseSurfaceManager: React.FC = () => {
