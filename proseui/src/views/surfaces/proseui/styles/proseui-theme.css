@@ -385,6 +385,67 @@ html, body, #app {
   flex: 1;
 }
 
+/* ─── Settings Panel Sections ──────────────────────────────────── */
+.proseui-settings-section {
+  margin-bottom: 0.5rem;
+}
+
+.proseui-settings-heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--usx-color-on-surface-variant);
+  margin: 0 0 0.35rem 0;
+  padding: 0.35rem 0.5rem 0;
+}
+
+.proseui-settings-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: all var(--usx-transition);
+  width: 100%;
+  text-align: left;
+}
+
+.proseui-settings-row:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+}
+
+.proseui-settings-btn-group {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+
+.proseui-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all var(--usx-transition);
+}
+
+.proseui-settings-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
 /* ─── Body Layout ──────────────────────────────────────────────── */
 .proseui-surface-body {
   display: flex;

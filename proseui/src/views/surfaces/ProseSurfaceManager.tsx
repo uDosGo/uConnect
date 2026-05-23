@@ -149,69 +149,22 @@ const ProseSurfaceManager: React.FC = () => {
         </div>
 
         <div className="proseui-header-controls">
-          {/* M3-style toolbar group for font/size/theme */}
-          <div className="proseui-header-toolbar">
-            <button
-              className="proseui-toolbar-btn"
-              onClick={store.decreaseFont}
-              title="Decrease font size"
-            >
-              <Icon name="text_decrease" size={18} />
-            </button>
-            <button
-              className="proseui-toolbar-btn"
-              onClick={store.increaseFont}
-              title="Increase font size"
-            >
-              <Icon name="text_increase" size={18} />
-            </button>
-            <span className="proseui-toolbar-divider" />
-            <button
-              className="proseui-toolbar-btn"
-              onClick={store.cycleFontStyle}
-              title="Cycle font style"
-            >
-              <Icon name="format_size" size={18} />
-            </button>
-            <span className="proseui-toolbar-divider" />
-            <button
-              className="proseui-toolbar-btn"
-              onClick={store.toggleTheme}
-              title="Toggle light/dark"
-            >
-              <Icon
-                name={store.themeMode === "light" ? "dark_mode" : "light_mode"}
-                size={18}
-              />
-            </button>
-          </div>
-
-          <span className="proseui-header-sep" />
-          {/* Chat panel toggle */}
-          <button
-            className="proseui-header-btn"
-            onClick={store.toggleChat}
-            title="Toggle chat panel"
-          >
-            <Icon name={store.chatOpen ? "chat" : "chat"} size={18} />
-          </button>
-          <span className="proseui-header-sep" />
-          {/* Scheme picker — opens slide-out */}
+          {/* Settings — opens slide-out panel */}
           <button
             onClick={() => setPanelOpen((prev) => !prev)}
             className="proseui-header-btn proseui-header-btn-round"
-            title="Colour schemes"
+            title="Settings"
           >
-            <Icon name="palette" size={20} />
+            <Icon name="settings" size={20} />
           </button>
         </div>
       </header>
 
-      {/* ═══ Slide-out Scheme Picker ═══ */}
+      {/* ═══ Slide-out Settings Panel ═══ */}
       {panelOpen && (
         <div className="proseui-control-panel" ref={panelRef}>
           <div className="proseui-control-panel-header">
-            <span className="proseui-control-panel-title">Colour Schemes</span>
+            <span className="proseui-control-panel-title">Settings</span>
             <button
               className="proseui-control-panel-close"
               onClick={() => setPanelOpen(false)}
@@ -221,40 +174,91 @@ const ProseSurfaceManager: React.FC = () => {
             </button>
           </div>
           <div className="proseui-control-panel-body">
-            {store.palettes.map((p) => {
-              const active = p.id === store.palette.id;
-              return (
-                <button
-                  key={p.id}
-                  className={`proseui-scheme-btn ${active ? "active" : ""}`}
-                  onClick={() => {
-                    store.setPalette(p);
-                    setPanelOpen(false);
-                  }}
-                >
-                  <div className="proseui-scheme-swatches">
-                    <span
-                      className="proseui-scheme-swatch"
-                      style={{ background: p.lightBg }}
-                    />
-                    <span
-                      className="proseui-scheme-swatch"
-                      style={{ background: p.lightAccent }}
-                    />
-                    <span
-                      className="proseui-scheme-swatch"
-                      style={{ background: p.darkBg }}
-                    />
-                    <span
-                      className="proseui-scheme-swatch"
-                      style={{ background: p.darkAccent }}
-                    />
-                  </div>
-                  <span className="proseui-scheme-label">{p.label}</span>
-                  {active && <Icon name="check" size={14} />}
+            {/* Appearance */}
+            <div className="proseui-settings-section">
+              <h4 className="proseui-settings-heading">Appearance</h4>
+              <button
+                className="proseui-settings-row"
+                onClick={store.toggleTheme}
+              >
+                <Icon name={store.themeMode === "light" ? "dark_mode" : "light_mode"} size={18} />
+                <span>{store.themeMode === "light" ? "Dark Mode" : "Light Mode"}</span>
+              </button>
+            </div>
+
+            {/* Font */}
+            <div className="proseui-settings-section">
+              <h4 className="proseui-settings-heading">Font</h4>
+              <div className="proseui-settings-row">
+                <Icon name="format_size" size={18} />
+                <span>Style: {store.fontStyle}</span>
+                <button className="proseui-settings-btn" onClick={store.cycleFontStyle} title="Cycle font style">
+                  <Icon name="sync" size={16} />
                 </button>
-              );
-            })}
+              </div>
+              <div className="proseui-settings-row">
+                <Icon name="text_decrease" size={18} />
+                <span>Size: {store.fontSize}px</span>
+                <div className="proseui-settings-btn-group">
+                  <button className="proseui-settings-btn" onClick={store.decreaseFont} title="Decrease">
+                    <Icon name="remove" size={16} />
+                  </button>
+                  <button className="proseui-settings-btn" onClick={store.increaseFont} title="Increase">
+                    <Icon name="add" size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Chat */}
+            <div className="proseui-settings-section">
+              <h4 className="proseui-settings-heading">Chat</h4>
+              <button
+                className="proseui-settings-row"
+                onClick={store.toggleChat}
+              >
+                <Icon name="chat" size={18} />
+                <span>{store.chatOpen ? "Close Chat Panel" : "Open Chat Panel"}</span>
+              </button>
+            </div>
+
+            {/* Colour Schemes */}
+            <div className="proseui-settings-section">
+              <h4 className="proseui-settings-heading">Colour Schemes</h4>
+              {store.palettes.map((p) => {
+                const active = p.id === store.palette.id;
+                return (
+                  <button
+                    key={p.id}
+                    className={`proseui-scheme-btn ${active ? "active" : ""}`}
+                    onClick={() => {
+                      store.setPalette(p);
+                    }}
+                  >
+                    <div className="proseui-scheme-swatches">
+                      <span
+                        className="proseui-scheme-swatch"
+                        style={{ background: p.lightBg }}
+                      />
+                      <span
+                        className="proseui-scheme-swatch"
+                        style={{ background: p.lightAccent }}
+                      />
+                      <span
+                        className="proseui-scheme-swatch"
+                        style={{ background: p.darkBg }}
+                      />
+                      <span
+                        className="proseui-scheme-swatch"
+                        style={{ background: p.darkAccent }}
+                      />
+                    </div>
+                    <span className="proseui-scheme-label">{p.label}</span>
+                    {active && <Icon name="check" size={14} />}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
