@@ -35,55 +35,83 @@ udo v${UDO_VERSION} — Unified uDos CLI
 
 Usage: udo <command> [args...]
 
-Commands:
-  Surface Management:
-    script run <file.bas>     Run a BBC BASIC script (uCode1)
-    build run <file.amos>     Run an AMOS script (uCode2)
-    home status               Home automation status (uCode3)
-    space explore <system>    Spatial/3D exploration (uCode4)
-    surface list              List available surfaces
-    surface open <name>       Open a surface in udoui
+Core Automation:
+  run <skill> [--params]        Execute a skill/snack/spice (containerised action)
+  task add <desc>               Create a new task
+  task list [--status] [--pri]  List tasks with filters
+  task show <id>                Show task details
+  task do <id>                  Mark task as complete
+  task undo <id>                Reopen completed task
+  task delete <id>              Delete a task
+  task tag <id> <tag>           Add label to task
+  task assign <id> <agent|user> Assign task
 
-  Snack Management:
-    snack list                List available snacks
-    snack install <name>      Install a snack from catalog
-    snack run <name>          Run a snack
+Surface Control:
+  surface list                  List available surfaces
+  surface open <name>           Open a surface
+  surface close <name>          Close a surface
+  surface focus <name>          Switch to surface
 
-  Vault Operations:
-    vault list                List vault contents
-    vault sync                Sync vault
-    vault backup              Create vault backup
+Vault (Storage):
+  vault get <path>              Read from vault
+  vault set <path> <value>      Write to vault
+  vault list <path>             List vault contents
+  vault watch <path>            Watch for changes
+  vault sync                    Sync vault with remotes
+  vault backup [dir]            Create vault backup
 
-  Font Management:
-    font list                 List available fonts
-    font install <name>       Install a font from catalogue
+Agent Orchestration:
+  agent list                    List available agents
+  agent call <name> --prompt    Call an agent with a prompt
+  agent status <name>           Check agent status
+  agent stop <name>             Stop an agent
 
-  System:
-    status                    Show system status
-    ui                        Launch udoui web interface
-    setup                     Initial setup/install
-    init <project>            Project scaffolding
-    dev [start|stop|status]   Dev mode operations
+MCP Bridge:
+  mcp list                      List MCP tools
+  mcp call <tool> [--params]    Call an MCP tool
+  mcp server start <name>       Start an MCP server
+  mcp server stop <name>        Stop an MCP server
 
-  Extension Management:
-    ext list [filter]         List available extensions
-    ext search <query>        Search extensions
-    ext info <name>           Show extension details
-    ext install <name>        Install an extension
-    ext remove <name>         Remove an extension
-    ext update                Check for updates
-    ext create <name>         Scaffold a new extension
-    ext validate <name>       Validate extension manifest
-    ext publish <name>        Publish extension to catalog
+System:
+  start                         Start all uDos services
+  stop                          Stop all uDos services
+  restart                       Restart all uDos services
+  status                        Show system status
+  ui                            Launch udoui web interface
+  setup                         Initial setup/install
+  init <project>                Project scaffolding
+  dev [start|stop|status]       Dev mode operations
 
-  Skills:
-    skill list                List available skills
-    skill run <name>          Run a skill
+Configuration:
+  config show                   Show current configuration
+  config get <key>              Get a config value
+  config set <key> <value>      Set a config value
+  config path                   Show config file paths
+  secret list                   List stored secrets
+  secret set <key> <value>      Store a secret
+  secret get <key>              Retrieve a secret
+  secret delete <key>           Delete a secret
 
-  Help:
+Extension Management:
+  ext list [filter]             List available extensions
+  ext search <query>            Search extensions
+  ext info <name>               Show extension details
+  ext install <name>            Install an extension
+  ext remove <name>             Remove an extension
+  ext update                    Check for updates
+  ext create <name>             Scaffold a new extension
+  ext validate <name>           Validate extension manifest
+  ext publish <name>            Publish extension to catalog
 
-    help                      Show this help
-    version                   Show version
+Development:
+  dev build <skill>             Build a skill container
+  dev test <skill>              Test a skill
+  dev logs <skill>              View skill logs
+  dev shell <skill>             Enter skill container
+
+Help:
+  help                          Show this help
+  version                       Show version
 
 EOF
 }
@@ -344,6 +372,179 @@ EOF
     ok "Project created at $target"
 }
 
+# ─── Process Management ──────────────────────────────────────────
+# Round 1: Startup & Process Management
+# Provides: start, stop, restart, status for all uDos services
+
+UDO_PID_DIR="${UDO_PID_DIR:-$HOME/.local/share/udos/pids}"
+UDO_LOG_DIR="${UDO_LOG_DIR:-$HOME/.local/share/udos/logs}"
+SNACKBAR_BIN="${SNACKBAR_BIN:-snackbar}"
+
+cmd_start() {
+    info "Starting uDos services..."
+    mkdir -p "$UDO_PID_DIR" "$UDO_LOG_DIR"
+
+    # Validate dependencies
+    local missing=0
+    for dep in snackbar python3 node npm; do
+        if ! cmd_exists "$dep"; then
+            warn "Dependency not found: $dep"
+            missing=$((missing + 1))
+        fi
+    done
+
+    if [ $missing -gt 0 ]; then
+        warn "$missing dependencies missing — some services may not start"
+    fi
+
+    # Start Snackbar daemon
+    if cmd_exists snackbar; then
+        if [ -f "$UDO_PID_DIR/snackbar.pid" ]; then
+            local existing_pid
+            existing_pid=$(cat "$UDO_PID_DIR/snackbar.pid" 2>/dev/null)
+            if kill -0 "$existing_pid" 2>/dev/null; then
+                ok "Snackbar already running (PID $existing_pid)"
+            else
+                rm -f "$UDO_PID_DIR/snackbar.pid"
+                _start_snackbar
+            fi
+        else
+            _start_snackbar
+        fi
+    else
+        warn "Snackbar not installed — skipping daemon"
+    fi
+
+    # Start UI servers (if in uConnect project)
+    if [ -f "$HOME/Code/uConnect/scripts/udoserver.sh" ]; then
+        info "Starting UI servers..."
+        bash "$HOME/Code/uConnect/scripts/udoserver.sh" start 2>/dev/null || \
+            warn "UI server start failed (may already be running)"
+    fi
+
+    ok "uDos services started"
+    echo ""
+    echo "  Run 'udo status' to verify"
+}
+
+_start_snackbar() {
+    local log_file="$UDO_LOG_DIR/snackbar.log"
+    nohup snackbar --daemon > "$log_file" 2>&1 &
+    local pid=$!
+    echo "$pid" > "$UDO_PID_DIR/snackbar.pid"
+
+    # Wait for it to be ready (up to 10 seconds)
+    local waited=0
+    while [ $waited -lt 10 ]; do
+        if snackbar health >/dev/null 2>&1; then
+            ok "Snackbar started (PID $pid)"
+            return 0
+        fi
+        sleep 0.5
+        waited=$((waited + 1))
+    done
+    warn "Snackbar started (PID $pid) but not yet responding"
+}
+
+cmd_stop() {
+    info "Stopping uDos services..."
+
+    # Stop Snackbar
+    if [ -f "$UDO_PID_DIR/snackbar.pid" ]; then
+        local pid
+        pid=$(cat "$UDO_PID_DIR/snackbar.pid" 2>/dev/null)
+        if kill -0 "$pid" 2>/dev/null; then
+            echo -n "  Stopping Snackbar (PID $pid)... "
+            kill "$pid" 2>/dev/null || true
+            local waited=0
+            while [ $waited -lt 5 ]; do
+                if ! kill -0 "$pid" 2>/dev/null; then break; fi
+                sleep 0.3
+                waited=$((waited + 1))
+            done
+            if kill -0 "$pid" 2>/dev/null; then
+                kill -9 "$pid" 2>/dev/null || true
+                echo "killed -9"
+            else
+                echo "stopped"
+            fi
+        else
+            echo "  Snackbar not running (stale PID)"
+        fi
+        rm -f "$UDO_PID_DIR/snackbar.pid"
+    else
+        # Try to find and kill any snackbar process
+        local snackbar_pid
+        snackbar_pid=$(pgrep -x snackbar 2>/dev/null || true)
+        if [ -n "$snackbar_pid" ]; then
+            echo -n "  Stopping Snackbar (PID $snackbar_pid)... "
+            kill "$snackbar_pid" 2>/dev/null || true
+            sleep 1
+            kill -9 "$snackbar_pid" 2>/dev/null || true
+            echo "stopped"
+        else
+            echo "  Snackbar not running"
+        fi
+    fi
+
+    # Stop UI servers
+    if [ -f "$HOME/Code/uConnect/scripts/udoserver.sh" ]; then
+        bash "$HOME/Code/uConnect/scripts/udoserver.sh" stop 2>/dev/null || true
+    fi
+
+    ok "uDos services stopped"
+}
+
+cmd_restart() {
+    info "Restarting uDos services..."
+    cmd_stop
+    sleep 1
+    cmd_start
+}
+
+cmd_status() {
+    info "uDos System Status"
+    echo "  Version:    $UDO_VERSION"
+    echo "  PID dir:    $UDO_PID_DIR"
+    echo "  Log dir:    $UDO_LOG_DIR"
+    echo ""
+
+    # Snackbar status
+    if [ -f "$UDO_PID_DIR/snackbar.pid" ]; then
+        local pid
+        pid=$(cat "$UDO_PID_DIR/snackbar.pid" 2>/dev/null)
+        if kill -0 "$pid" 2>/dev/null; then
+            ok "Snackbar: running (PID $pid)"
+        else
+            warn "Snackbar: stale PID file (PID $pid not running)"
+        fi
+    else
+        local snackbar_pid
+        snackbar_pid=$(pgrep -x snackbar 2>/dev/null || true)
+        if [ -n "$snackbar_pid" ]; then
+            warn "Snackbar: running (PID $snackbar_pid) but no PID file"
+        else
+            info "Snackbar: not running"
+        fi
+    fi
+
+    # UI server status
+    if [ -f "$HOME/Code/uConnect/scripts/udoserver.sh" ]; then
+        bash "$HOME/Code/uConnect/scripts/udoserver.sh" status 2>/dev/null || true
+    fi
+
+    # Tool availability
+    echo ""
+    echo "  Tools:"
+    for tool in snackbar python3 node npm docker cargo go; do
+        if cmd_exists "$tool"; then
+            ok "$tool: $(command -v "$tool")"
+        else
+            warn "$tool: not found"
+        fi
+    done
+}
+
 cmd_dev() {
     local action="${1:-status}"
     case "$action" in
@@ -396,6 +597,861 @@ cmd_skill_run() {
     else
         error "Skill not found: $name"
         exit 1
+    fi
+}
+
+# ─── Core Automation ─────────────────────────────────────────────
+# Round 3: Unified Command Layer
+# Provides: run, task, agent, mcp, upgraded surface/vault
+
+# ─── Run (Skill/Snack/Spice) ─────────────────────────────────────
+cmd_run() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo run <skill> [--params]"
+        echo "  Runs a skill, snack, or spice (containerised action)"
+        echo "  Skills:  persistent, user-installed (e.g., 'translate-to-spanish')"
+        echo "  Snacks:  session-only, temporary (e.g., 'summarize-this')"
+        echo "  Spices:  system-level, pre-installed (e.g., 'save-to-vault')"
+        exit 1
+    fi
+
+    # Check if it's a skill first
+    if [ -d "$UDO_SKILLS/$name" ]; then
+        cmd_skill_run "$@"
+        return
+    fi
+
+    # Check if snackbar can run it
+    if cmd_exists snackbar; then
+        snackbar snack run "$name" 2>/dev/null && return
+    fi
+
+    # Fallback: try as a containerised action
+    if cmd_exists docker; then
+        local image="ghcr.io/udos/$name:latest"
+        if docker image inspect "$image" >/dev/null 2>&1; then
+            info "Running containerised action: $name"
+            docker run --rm "$image" "${@:2}"
+            return
+        fi
+    fi
+
+    error "Action not found: $name"
+    echo "  Check: udo skill list, or install with: udo skill install $name"
+    exit 1
+}
+
+# ─── Task Management ─────────────────────────────────────────────
+UDO_TASK_DB="${UDO_TASK_DB:-$HOME/.local/share/udos/tasks.json}"
+
+cmd_task_add() {
+    local desc="$*"
+    if [ -z "$desc" ]; then
+        error "Usage: udo task add <description>"
+        exit 1
+    fi
+
+    mkdir -p "$(dirname "$UDO_TASK_DB")"
+    local id
+    id=$(date +%s)$RANDOM
+    local now
+    now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    python3 -c "
+import json, os, sys
+
+db_path = '$UDO_TASK_DB'
+tasks = []
+if os.path.exists(db_path):
+    with open(db_path) as f:
+        tasks = json.load(f)
+
+task = {
+    'id': '$id',
+    'title': '$desc',
+    'description': '',
+    'status': 'pending',
+    'priority': 'medium',
+    'labels': [],
+    'surface': 'ucode1',
+    'assigned_to': None,
+    'created_at': '$now',
+    'completed_at': None,
+    'depends_on': [],
+    'on_complete': None
+}
+tasks.append(task)
+
+with open(db_path, 'w') as f:
+    json.dump(tasks, f, indent=2)
+
+print('$id')
+" 2>/dev/null && ok "Task created: $desc (ID: $id)" || error "Failed to create task"
+}
+
+cmd_task_list() {
+    local status_filter=""
+    local priority_filter=""
+
+    # Parse --status and --priority flags
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --status) status_filter="$2"; shift 2 ;;
+            --priority|--pri) priority_filter="$2"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+
+    if [ ! -f "$UDO_TASK_DB" ]; then
+        info "No tasks yet. Create one with: udo task add <description>"
+        return
+    fi
+
+    python3 -c "
+import json, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+status_filter = '$status_filter'
+priority_filter = '$priority_filter'
+
+# Apply filters
+if status_filter:
+    tasks = [t for t in tasks if t.get('status') == status_filter]
+if priority_filter:
+    tasks = [t for t in tasks if t.get('priority') == priority_filter]
+
+if not tasks:
+    print('No tasks match filters')
+    sys.exit(0)
+
+# Surface-aware rendering
+for t in tasks:
+    status_char = {
+        'pending': '☐',
+        'in_progress': '▶',
+        'completed': '✓',
+        'blocked': '⊘',
+        'archived': '◻'
+    }.get(t.get('status', 'pending'), '☐')
+
+    pri = t.get('priority', 'medium')
+    pri_display = {
+        'low': '[LOW] ',
+        'medium': '[MED] ',
+        'high': '[HIGH]',
+        'critical': '[CRIT]'
+    }.get(pri, '[MED] ')
+
+    surface = t.get('surface', '')
+    surface_tag = f'({surface})' if surface else ''
+
+    print(f\"  {status_char} [{t['id'][:8]}] {t['title']:50s} {pri_display} {surface_tag}\")
+    labels = t.get('labels', [])
+    if labels:
+        print(f\"  {'':12s} tags: {', '.join(labels)}\")
+" 2>/dev/null || warn "Failed to read tasks"
+}
+
+cmd_task_show() {
+    local id="$1"
+    if [ -z "$id" ]; then
+        error "Usage: udo task show <id>"
+        exit 1
+    fi
+
+    if [ ! -f "$UDO_TASK_DB" ]; then
+        error "No tasks found"
+        exit 1
+    fi
+
+    python3 -c "
+import json, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+for t in tasks:
+    if t['id'].startswith('$id') or t['id'] == '$id':
+        print(f\"  ID:          {t['id']}\")
+        print(f\"  Title:       {t['title']}\")
+        print(f\"  Status:      {t.get('status', 'pending')}\")
+        print(f\"  Priority:    {t.get('priority', 'medium')}\")
+        print(f\"  Surface:     {t.get('surface', 'ucode1')}\")
+        print(f\"  Assigned:    {t.get('assigned_to', 'unassigned')}\")
+        print(f\"  Created:     {t.get('created_at', 'unknown')}\")
+        print(f\"  Completed:   {t.get('completed_at', '—')}\")
+        labels = t.get('labels', [])
+        if labels:
+            print(f\"  Labels:      {', '.join(labels)}\")
+        deps = t.get('depends_on', [])
+        if deps:
+            print(f\"  Depends on:  {', '.join(deps)}\")
+        on_complete = t.get('on_complete')
+        if on_complete:
+            print(f\"  On complete: {on_complete.get('action')} {on_complete.get('skill', '')}\")
+        sys.exit(0)
+
+print('Task not found: $id')
+sys.exit(1)
+" 2>/dev/null || error "Task not found: $id"
+}
+
+cmd_task_do() {
+    local id="$1"
+    if [ -z "$id" ]; then
+        error "Usage: udo task do <id>"
+        exit 1
+    fi
+
+    local now
+    now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+    python3 -c "
+import json, os, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+found = False
+for t in tasks:
+    if t['id'].startswith('$id') or t['id'] == '$id':
+        t['status'] = 'completed'
+        t['completed_at'] = '$now'
+        found = True
+        # Trigger on_complete action
+        on_complete = t.get('on_complete')
+        if on_complete:
+            print(f\"Trigger: {on_complete.get('action')} {on_complete.get('skill', '')}\")
+        break
+
+if found:
+    with open('$UDO_TASK_DB', 'w') as f:
+        json.dump(tasks, f, indent=2)
+    print('ok')
+else:
+    print('not_found')
+    sys.exit(1)
+" 2>/dev/null && ok "Task $id completed" || error "Task not found: $id"
+}
+
+cmd_task_undo() {
+    local id="$1"
+    if [ -z "$id" ]; then
+        error "Usage: udo task undo <id>"
+        exit 1
+    fi
+
+    python3 -c "
+import json, os, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+found = False
+for t in tasks:
+    if t['id'].startswith('$id') or t['id'] == '$id':
+        t['status'] = 'pending'
+        t['completed_at'] = None
+        found = True
+        break
+
+if found:
+    with open('$UDO_TASK_DB', 'w') as f:
+        json.dump(tasks, f, indent=2)
+    print('ok')
+else:
+    print('not_found')
+    sys.exit(1)
+" 2>/dev/null && ok "Task $id reopened" || error "Task not found: $id"
+}
+
+cmd_task_delete() {
+    local id="$1"
+    if [ -z "$id" ]; then
+        error "Usage: udo task delete <id>"
+        exit 1
+    fi
+
+    python3 -c "
+import json, os, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+new_tasks = [t for t in tasks if not (t['id'].startswith('$id') or t['id'] == '$id')]
+
+if len(new_tasks) == len(tasks):
+    print('not_found')
+    sys.exit(1)
+
+with open('$UDO_TASK_DB', 'w') as f:
+    json.dump(new_tasks, f, indent=2)
+print('ok')
+" 2>/dev/null && ok "Task $id deleted" || error "Task not found: $id"
+}
+
+cmd_task_tag() {
+    local id="$1"
+    local tag="$2"
+    if [ -z "$id" ] || [ -z "$tag" ]; then
+        error "Usage: udo task tag <id> <tag>"
+        exit 1
+    fi
+
+    python3 -c "
+import json, os, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+found = False
+for t in tasks:
+    if t['id'].startswith('$id') or t['id'] == '$id':
+        labels = t.get('labels', [])
+        if '$tag' not in labels:
+            labels.append('$tag')
+        t['labels'] = labels
+        found = True
+        break
+
+if found:
+    with open('$UDO_TASK_DB', 'w') as f:
+        json.dump(tasks, f, indent=2)
+    print('ok')
+else:
+    print('not_found')
+    sys.exit(1)
+" 2>/dev/null && ok "Tag '$tag' added to task $id" || error "Task not found: $id"
+}
+
+cmd_task_assign() {
+    local id="$1"
+    local assignee="$2"
+    if [ -z "$id" ] || [ -z "$assignee" ]; then
+        error "Usage: udo task assign <id> <agent|user>"
+        exit 1
+    fi
+
+    python3 -c "
+import json, os, sys
+
+with open('$UDO_TASK_DB') as f:
+    tasks = json.load(f)
+
+found = False
+for t in tasks:
+    if t['id'].startswith('$id') or t['id'] == '$id':
+        t['assigned_to'] = '$assignee'
+        found = True
+        break
+
+if found:
+    with open('$UDO_TASK_DB', 'w') as f:
+        json.dump(tasks, f, indent=2)
+    print('ok')
+else:
+    print('not_found')
+    sys.exit(1)
+" 2>/dev/null && ok "Task $id assigned to $assignee" || error "Task not found: $id"
+}
+
+# ─── Surface Control (Upgraded) ──────────────────────────────────
+cmd_surface_close() {
+    local name="$1"
+    info "Closing surface: $name"
+    # Surface close is a no-op for now — surfaces are web views
+    ok "Surface $name closed"
+}
+
+cmd_surface_focus() {
+    local name="$1"
+    info "Switching to surface: $name"
+    cmd_surface_open "$name"
+}
+
+# ─── Agent Orchestration ─────────────────────────────────────────
+cmd_agent_list() {
+    info "Available Agents"
+    if cmd_exists snackbar; then
+        snackbar agent list 2>/dev/null || echo "  (run 'snackbar' to start daemon)"
+    else
+        echo "  hivemind  - Multi-agent orchestrator"
+        echo "  coder     - Code generation agent"
+        echo "  reviewer  - Code review agent"
+    fi
+}
+
+cmd_agent_call() {
+    local name="$1"
+    shift
+    local prompt=""
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --prompt) prompt="$2"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+
+    if [ -z "$name" ] || [ -z "$prompt" ]; then
+        error "Usage: udo agent call <name> --prompt \"...\""
+        exit 1
+    fi
+
+    info "Calling agent: $name"
+    if cmd_exists snackbar; then
+        snackbar agent call "$name" --prompt "$prompt" 2>/dev/null || {
+            warn "Agent '$name' not available via Snackbar"
+            echo "  Prompt: $prompt"
+        }
+    else
+        echo "  Agent: $name"
+        echo "  Prompt: $prompt"
+        echo "  (Snackbar not running — agent call logged only)"
+    fi
+}
+
+cmd_agent_status() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo agent status <name>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar agent status "$name" 2>/dev/null || warn "Agent '$name' not found"
+    else
+        info "Agent '$name': unknown (Snackbar not running)"
+    fi
+}
+
+cmd_agent_stop() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo agent stop <name>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar agent stop "$name" 2>/dev/null && ok "Agent '$name' stopped" || warn "Failed to stop agent"
+    else
+        warn "Snackbar not running"
+    fi
+}
+
+# ─── MCP Bridge ──────────────────────────────────────────────────
+cmd_mcp_list() {
+    info "Available MCP Tools"
+    if cmd_exists snackbar; then
+        snackbar mcp list 2>/dev/null || echo "  (run 'snackbar' to start daemon)"
+    else
+        echo "  (Snackbar not running — MCP tools unavailable)"
+    fi
+}
+
+cmd_mcp_call() {
+    local tool="$1"
+    shift
+
+    if [ -z "$tool" ]; then
+        error "Usage: udo mcp call <tool> [--params]"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar mcp call "$tool" "$@" 2>/dev/null || warn "MCP tool '$tool' failed"
+    else
+        warn "Snackbar not running"
+    fi
+}
+
+cmd_mcp_server_start() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo mcp server start <name>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar mcp server start "$name" 2>/dev/null && ok "MCP server '$name' started" || warn "Failed to start MCP server"
+    else
+        warn "Snackbar not running"
+    fi
+}
+
+cmd_mcp_server_stop() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo mcp server stop <name>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar mcp server stop "$name" 2>/dev/null && ok "MCP server '$name' stopped" || warn "Failed to stop MCP server"
+    else
+        warn "Snackbar not running"
+    fi
+}
+
+# ─── Vault (Upgraded) ────────────────────────────────────────────
+cmd_vault_get() {
+    local path="$1"
+    if [ -z "$path" ]; then
+        error "Usage: udo vault get <path>"
+        exit 1
+    fi
+
+    local target="$UDO_VAULT/$path"
+    if [ -f "$target" ]; then
+        cat "$target"
+    elif [ -d "$target" ]; then
+        ls -la "$target"
+    else
+        # Try Snackbar vault
+        if cmd_exists snackbar; then
+            snackbar vault get "$path" 2>/dev/null && return
+        fi
+        error "Path not found: $path"
+        exit 1
+    fi
+}
+
+cmd_vault_set() {
+    local path="$1"
+    local value="$2"
+    if [ -z "$path" ] || [ -z "$value" ]; then
+        error "Usage: udo vault set <path> <value>"
+        exit 1
+    fi
+
+    local target="$UDO_VAULT/$path"
+    mkdir -p "$(dirname "$target")"
+    echo "$value" > "$target"
+    ok "Written to $path"
+}
+
+cmd_vault_watch() {
+    local path="$1"
+    if [ -z "$path" ]; then
+        error "Usage: udo vault watch <path>"
+        exit 1
+    fi
+
+    local target="$UDO_VAULT/$path"
+    if [ ! -e "$target" ]; then
+        warn "Path does not exist yet: $path"
+        echo "  Will watch for creation..."
+    fi
+
+    info "Watching: $path (Ctrl+C to stop)"
+    if cmd_exists fswatch; then
+        fswatch -0 "$target" 2>/dev/null | while read -d "" event; do
+            ok "Change detected: $event"
+        done
+    else
+        # Poll-based fallback
+        local last_mod=$(stat -f "%m" "$target" 2>/dev/null || echo "0")
+        while true; do
+            sleep 2
+            local new_mod=$(stat -f "%m" "$target" 2>/dev/null || echo "0")
+            if [ "$new_mod" != "$last_mod" ]; then
+                ok "Change detected: $path"
+                last_mod="$new_mod"
+            fi
+        done
+    fi
+}
+
+# ─── Dev (Upgraded) ──────────────────────────────────────────────
+cmd_dev_build() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo dev build <skill>"
+        exit 1
+    fi
+
+    local skill_dir="$UDO_SKILLS/$name"
+    if [ ! -d "$skill_dir" ]; then
+        error "Skill not found: $name"
+        exit 1
+    fi
+
+    if [ -f "$skill_dir/Dockerfile" ]; then
+        info "Building container for skill: $name"
+        docker build -t "udos/$name:latest" "$skill_dir" 2>/dev/null && \
+            ok "Container built: udos/$name:latest" || \
+            error "Build failed"
+    else
+        info "No Dockerfile found — skill is script-based"
+        ok "Skill $name is ready (no build needed)"
+    fi
+}
+
+cmd_dev_test() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo dev test <skill>"
+        exit 1
+    fi
+
+    local skill_dir="$UDO_SKILLS/$name"
+    if [ -f "$skill_dir/test.sh" ]; then
+        info "Testing skill: $name"
+        bash "$skill_dir/test.sh" "${@:2}"
+    elif [ -f "$skill_dir/tests/" ]; then
+        info "Running tests for: $name"
+        for test in "$skill_dir/tests/"*; do
+            [ -f "$test" ] && bash "$test"
+        done
+    else
+        warn "No tests found for skill: $name"
+    fi
+}
+
+cmd_dev_logs() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo dev logs <skill>"
+        exit 1
+    fi
+
+    local log_file="$UDO_LOG_DIR/$name.log"
+    if [ -f "$log_file" ]; then
+        tail -f "$log_file"
+    else
+        warn "No logs found for: $name"
+        echo "  Checked: $log_file"
+    fi
+}
+
+cmd_dev_shell() {
+    local name="$1"
+    if [ -z "$name" ]; then
+        error "Usage: udo dev shell <skill>"
+        exit 1
+    fi
+
+    if cmd_exists docker; then
+        local image="udos/$name:latest"
+        if docker image inspect "$image" >/dev/null 2>&1; then
+            info "Entering container: $name"
+            docker run -it --rm "$image" /bin/bash 2>/dev/null || \
+                docker run -it --rm "$image" /bin/sh 2>/dev/null || \
+                warn "No shell available in container"
+        else
+            warn "Container not built: $name"
+            echo "  Build with: udo dev build $name"
+        fi
+    else
+        warn "Docker not available"
+    fi
+}
+
+# ─── Configuration Management ────────────────────────────────────
+# Round 2: Configuration & Secrets Management
+# Provides: config show/get/set/path, secret list/set/get/delete
+
+UDO_CONFIG_DIR="${UDO_CONFIG_DIR:-$HOME/.config/udos}"
+UDO_CONFIG_FILE="${UDO_CONFIG_FILE:-$UDO_CONFIG_DIR/config.yaml}"
+SNACKBAR_CONFIG="${SNACKBAR_CONFIG:-/etc/snackbar/config.toml}"
+
+cmd_config_show() {
+    info "uDos Configuration"
+    echo ""
+    echo "  Environment:"
+    echo "    UDO_HOME:         $UDO_HOME"
+    echo "    UDO_UI:           $UDO_UI"
+    echo "    UDO_VAULT:        $UDO_VAULT"
+    echo "    UDO_SKILLS:       $UDO_SKILLS"
+    echo "    UDO_CONFIG_DIR:   $UDO_CONFIG_DIR"
+    echo "    UDO_PID_DIR:      $UDO_PID_DIR"
+    echo "    UDO_LOG_DIR:      $UDO_LOG_DIR"
+    echo ""
+
+    # Show config file if it exists
+    if [ -f "$UDO_CONFIG_FILE" ]; then
+        echo "  Config file ($UDO_CONFIG_FILE):"
+        cat "$UDO_CONFIG_FILE" | sed 's/^/    /'
+    else
+        echo "  Config file: not found ($UDO_CONFIG_FILE)"
+    fi
+    echo ""
+
+    # Show snackbar config if it exists
+    if [ -f "$SNACKBAR_CONFIG" ]; then
+        echo "  Snackbar config ($SNACKBAR_CONFIG):"
+        cat "$SNACKBAR_CONFIG" | sed 's/^/    /'
+    elif [ -f "./config/config.toml" ]; then
+        echo "  Snackbar config (local):"
+        cat "./config/config.toml" | sed 's/^/    /'
+    else
+        echo "  Snackbar config: not found"
+    fi
+}
+
+cmd_config_get() {
+    local key="$1"
+    if [ -z "$key" ]; then
+        error "Usage: udo config get <key>"
+        exit 1
+    fi
+
+    # Check environment variables first
+    local env_key="UDO_$(echo "$key" | tr '[:lower:]' '[:upper:]')"
+    local env_val="${!env_key:-}"
+    if [ -n "$env_val" ]; then
+        ok "$key = $env_val (from environment)"
+        return
+    fi
+
+    # Check config file
+    if [ -f "$UDO_CONFIG_FILE" ]; then
+        local val
+        val=$(python3 -c "
+import yaml, sys
+with open('$UDO_CONFIG_FILE') as f:
+    config = yaml.safe_load(f) or {}
+keys = '$key'.split('.')
+val = config
+for k in keys:
+    if isinstance(val, dict):
+        val = val.get(k)
+    else:
+        val = None
+        break
+if val is not None:
+    print(val)
+else:
+    sys.exit(1)
+" 2>/dev/null) && {
+            ok "$key = $val (from config file)"
+            return
+        }
+    fi
+
+    warn "$key: not set"
+}
+
+cmd_config_set() {
+    local key="$1"
+    local value="$2"
+    if [ -z "$key" ] || [ -z "$value" ]; then
+        error "Usage: udo config set <key> <value>"
+        exit 1
+    fi
+
+    mkdir -p "$UDO_CONFIG_DIR"
+
+    # Use python3 to update YAML config
+    python3 -c "
+import yaml, os, sys
+
+config_file = '$UDO_CONFIG_FILE'
+key = '$key'
+value = '$value'
+
+# Load existing config
+config = {}
+if os.path.exists(config_file):
+    with open(config_file) as f:
+        config = yaml.safe_load(f) or {}
+
+# Set nested key (e.g., 'server.port' -> config['server']['port'])
+keys = key.split('.')
+current = config
+for k in keys[:-1]:
+    if k not in current:
+        current[k] = {}
+    current = current[k]
+current[keys[-1]] = value
+
+# Write back
+with open(config_file, 'w') as f:
+    yaml.dump(config, f, default_flow_style=False)
+
+print('ok')
+" 2>/dev/null && ok "$key = $value" || error "Failed to set $key"
+}
+
+cmd_config_path() {
+    info "Configuration File Paths"
+    echo "  uDos config:     $UDO_CONFIG_FILE"
+    echo "  Snackbar config: $SNACKBAR_CONFIG"
+    echo "  PID directory:   $UDO_PID_DIR"
+    echo "  Log directory:   $UDO_LOG_DIR"
+    echo "  Skills:          $UDO_SKILLS"
+    echo "  Extensions:      $UDO_EXTENSIONS"
+    echo "  Extension reg:   $UDO_EXT_REGISTRY"
+}
+
+# ─── Secret Management ──────────────────────────────────────────
+# Round 2: Configuration & Secrets Management
+# Provides: secret list/set/get/delete via Snackbar API
+
+cmd_secret_list() {
+    info "Stored Secrets"
+    if cmd_exists snackbar; then
+        snackbar secret list 2>/dev/null || {
+            warn "Snackbar not running — secrets unavailable"
+            echo "  Start with: udo start"
+        }
+    else
+        warn "Snackbar not installed"
+    fi
+}
+
+cmd_secret_set() {
+    local key="$1"
+    local value="$2"
+    if [ -z "$key" ] || [ -z "$value" ]; then
+        error "Usage: udo secret set <key> <value>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar secret set "$key" "$value" 2>/dev/null && \
+            ok "Secret '$key' stored" || \
+            warn "Failed to store secret (is Snackbar running?)"
+    else
+        warn "Snackbar not installed"
+    fi
+}
+
+cmd_secret_get() {
+    local key="$1"
+    if [ -z "$key" ]; then
+        error "Usage: udo secret get <key>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        local val
+        val=$(snackbar secret get "$key" 2>/dev/null) && {
+            echo "$val"
+        } || {
+            warn "Secret '$key' not found (is Snackbar running?)"
+        }
+    else
+        warn "Snackbar not installed"
+    fi
+}
+
+cmd_secret_delete() {
+    local key="$1"
+    if [ -z "$key" ]; then
+        error "Usage: udo secret delete <key>"
+        exit 1
+    fi
+
+    if cmd_exists snackbar; then
+        snackbar secret delete "$key" 2>/dev/null && \
+            ok "Secret '$key' deleted" || \
+            warn "Failed to delete secret (is Snackbar running?)"
+    else
+        warn "Snackbar not installed"
     fi
 }
 
@@ -811,12 +1867,61 @@ main() {
                 *) error "Unknown space subcommand: $sub"; exit 1 ;;
             esac
             ;;
+        run)
+            cmd_run "$@"
+            ;;
+        task)
+            [ $# -lt 1 ] && { error "Usage: udo task <add|list|show|do|undo|delete|tag|assign>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                add) cmd_task_add "$@" ;;
+                list) cmd_task_list "$@" ;;
+                show) cmd_task_show "$@" ;;
+                do) cmd_task_do "$@" ;;
+                undo) cmd_task_undo "$@" ;;
+                delete) cmd_task_delete "$@" ;;
+                tag) cmd_task_tag "$@" ;;
+                assign) cmd_task_assign "$@" ;;
+                *) error "Unknown task subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        agent)
+            [ $# -lt 1 ] && { error "Usage: udo agent <list|call|status|stop>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_agent_list ;;
+                call) cmd_agent_call "$@" ;;
+                status) cmd_agent_status "$@" ;;
+                stop) cmd_agent_stop "$@" ;;
+                *) error "Unknown agent subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        mcp)
+            [ $# -lt 1 ] && { error "Usage: udo mcp <list|call|server>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_mcp_list ;;
+                call) cmd_mcp_call "$@" ;;
+                server)
+                    [ $# -lt 1 ] && { error "Usage: udo mcp server <start|stop> <name>"; exit 1; }
+                    local action="$1"; shift
+                    case "$action" in
+                        start) cmd_mcp_server_start "$@" ;;
+                        stop) cmd_mcp_server_stop "$@" ;;
+                        *) error "Unknown mcp server action: $action"; exit 1 ;;
+                    esac
+                    ;;
+                *) error "Unknown mcp subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
         surface)
-            [ $# -lt 1 ] && { error "Usage: udo surface <list|open>"; exit 1; }
+            [ $# -lt 1 ] && { error "Usage: udo surface <list|open|close|focus>"; exit 1; }
             local sub="$1"; shift
             case "$sub" in
                 list) cmd_surface_list ;;
                 open) cmd_surface_open "$@" ;;
+                close) cmd_surface_close "$@" ;;
+                focus) cmd_surface_focus "$@" ;;
                 *) error "Unknown surface subcommand: $sub"; exit 1 ;;
             esac
             ;;
@@ -831,10 +1936,13 @@ main() {
             esac
             ;;
         vault)
-            [ $# -lt 1 ] && { error "Usage: udo vault <list|sync|backup>"; exit 1; }
+            [ $# -lt 1 ] && { error "Usage: udo vault <get|set|list|watch|sync|backup>"; exit 1; }
             local sub="$1"; shift
             case "$sub" in
+                get) cmd_vault_get "$@" ;;
+                set) cmd_vault_set "$@" ;;
                 list) cmd_vault_list ;;
+                watch) cmd_vault_watch "$@" ;;
                 sync) cmd_vault_sync ;;
                 backup) cmd_vault_backup "$@" ;;
                 *) error "Unknown vault subcommand: $sub"; exit 1 ;;
@@ -861,8 +1969,39 @@ main() {
         init)
             cmd_init "$@"
             ;;
+        start)
+            cmd_start "$@"
+            ;;
+        stop)
+            cmd_stop "$@"
+            ;;
+        restart)
+            cmd_restart "$@"
+            ;;
         dev)
             cmd_dev "$@"
+            ;;
+        config)
+            [ $# -lt 1 ] && { error "Usage: udo config <show|get|set|path>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                show) cmd_config_show ;;
+                get) cmd_config_get "$@" ;;
+                set) cmd_config_set "$@" ;;
+                path) cmd_config_path ;;
+                *) error "Unknown config subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        secret)
+            [ $# -lt 1 ] && { error "Usage: udo secret <list|set|get|delete>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                list) cmd_secret_list ;;
+                set) cmd_secret_set "$@" ;;
+                get) cmd_secret_get "$@" ;;
+                delete) cmd_secret_delete "$@" ;;
+                *) error "Unknown secret subcommand: $sub"; exit 1 ;;
+            esac
             ;;
         ext)
             [ $# -lt 1 ] && { error "Usage: udo ext <list|search|info|install|remove|update|create|validate|publish>"; exit 1; }

@@ -38,6 +38,57 @@ All Phase 1 objectives achieved. The Python core migration, theme system, plugin
 
 ## Phase 2: Snack & Relic System (Month 4-6)
 
+### Ecosystem Boundaries (Updated 2026-05-23)
+
+The Snackbar system has been unified into a single cross-platform component within uServer, with clear boundaries:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Snackbar (uServer Module)                     │
+│  Universal runtime/automator for snacks, skills, and spices     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Snacks (🍎 Mac only)                                   │    │
+│  │  • macOS scripts, shortcuts, single-file automations    │    │
+│  │  • .command files, .workflow, .shortcut                 │    │
+│  │  • Platform: macOS                                      │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Spices (🐧 Linux only)                                 │    │
+│  │  • Linux scripts, systemd units, shell skills           │    │
+│  │  • .sh, .service, .timer, udev rules                    │    │
+│  │  • Platform: Linux                                      │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Skills (🌐 Cross-platform)                              │    │
+│  │  • Python libraries, maintenance tasks, regular actions │    │
+│  │  • .py, .ts, .js — any runtime available on both        │    │
+│  │  • Platform: macOS + Linux                              │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Snackbox (📦 Plug-n-Play Container)                     │    │
+│  │  • Repo or larger app/script collection                 │    │
+│  │  • Skin/Lens connections for data extraction/UI         │    │
+│  │  • Preserves original runtime (or modified for uDos)    │    │
+│  │  • A plugin is also a Snackbox (uDos extensions/tools)  │    │
+│  │  • Also called "Chassis"                                │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  SnackMachine (⚙️ Runtime / Automator)                   │    │
+│  │  • Table list view with actions and triggers            │    │
+│  │  • Surfaces in opsui (Server Operations Surface)        │    │
+│  │  • Snackbar menu panel (toolbar icon)                   │    │
+│  │  • Port 8484 — REST API + MCP + CLI                     │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ### Architecture Overview
 
 ```

@@ -52,6 +52,7 @@ Connect/
 │   ├── QUICKSTART.md
 │   ├── student/     # Beginner-friendly tutorials
 │   └── ...
+├── opsui/           # Server Operations Surface (SnackMachine UI)
 ├── scripts/         # Helpful automation scripts
 ├── src/             # Rust core services
 ├── stories/         # Interactive quests

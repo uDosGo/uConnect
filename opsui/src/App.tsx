@@ -442,6 +442,142 @@ function SettingsTab() {
   )
 }
 
+// ─── Snackbar Menu Panel ─────────────────────────────────────────
+function SnackbarMenuPanel() {
+  const store = useOpsUIStore()
+
+  const enabledSnacks = store.spices.filter(s => s.manifest.spice_type === 'snack' && s.enabled)
+  const enabledSkills = store.spices.filter(s => s.manifest.spice_type === 'skill' && s.enabled)
+  const activeTriggers = store.spices.filter(s => s.manifest.spice_type === 'trigger' && s.enabled)
+  const runningContainers = store.containers.filter(c => c.status === 'running')
+
+  return (
+    <div className="ops-snackbar-menu" onClick={e => e.stopPropagation()}>
+      <div className="ops-snackbar-menu-header">
+        <span className="material-symbols-outlined" style={{ color: 'var(--ops-accent)' }}>restaurant_menu</span>
+        <h3>Snackbar Menu</h3>
+        <button className="ops-action-btn" onClick={store.toggleSnackbarMenu}>
+          <span className="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div className="ops-snackbar-menu-body">
+        {/* Quick Actions */}
+        <div className="ops-snackbar-section">
+          <div className="ops-snackbar-section-title">Quick Actions</div>
+          <div className="ops-snackbar-actions">
+            <button className="ops-snackbar-action-btn" onClick={() => { store.setSpiceTypeFilter('snack'); store.toggleSnackbarMenu() }}>
+              <span className="material-symbols-outlined">restaurant_menu</span>
+              Browse Snacks
+            </button>
+            <button className="ops-snackbar-action-btn" onClick={() => { store.setSpiceTypeFilter('skill'); store.toggleSnackbarMenu() }}>
+              <span className="material-symbols-outlined">psychology</span>
+              Browse Skills
+            </button>
+            <button className="ops-snackbar-action-btn" onClick={() => { store.setSpiceTypeFilter('trigger'); store.toggleSnackbarMenu() }}>
+              <span className="material-symbols-outlined">bolt</span>
+              Browse Triggers
+            </button>
+            <button className="ops-snackbar-action-btn" onClick={store.refreshSpices}>
+              <span className="material-symbols-outlined">refresh</span>
+              Refresh Catalog
+            </button>
+          </div>
+        </div>
+
+        {/* Active Snacks */}
+        <div className="ops-snackbar-section">
+          <div className="ops-snackbar-section-title">
+            Active Snacks
+            <span className="ops-badge" style={{ background: 'var(--ops-accent-dim)', color: 'var(--ops-accent)', fontSize: 10 }}>{enabledSnacks.length}</span>
+          </div>
+          {enabledSnacks.length === 0 ? (
+            <p className="ops-text" style={{ padding: '4px 0', fontSize: 11 }}>No active snacks.</p>
+          ) : (
+            enabledSnacks.slice(0, 5).map(sp => (
+              <div key={sp.manifest.uuid} className="ops-snackbar-item">
+                <span className="ops-snackbar-item-name">{sp.manifest.name}</span>
+                <button
+                  className="ops-spice-btn"
+                  onClick={() => store.runSnack(sp.manifest.uuid)}
+                  title="Run now"
+                  style={{ width: 22, height: 22 }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 14 }}>play_arrow</span>
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Active Skills */}
+        <div className="ops-snackbar-section">
+          <div className="ops-snackbar-section-title">
+            Active Skills
+            <span className="ops-badge" style={{ background: 'var(--ops-accent-dim)', color: 'var(--ops-accent)', fontSize: 10 }}>{enabledSkills.length}</span>
+          </div>
+          {enabledSkills.length === 0 ? (
+            <p className="ops-text" style={{ padding: '4px 0', fontSize: 11 }}>No active skills.</p>
+          ) : (
+            enabledSkills.slice(0, 5).map(sp => (
+              <div key={sp.manifest.uuid} className="ops-snackbar-item">
+                <span className="ops-snackbar-item-name">{sp.manifest.name}</span>
+                <span className="ops-snackbar-item-version">v{sp.manifest.version}</span>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Active Triggers */}
+        <div className="ops-snackbar-section">
+          <div className="ops-snackbar-section-title">
+            Active Triggers
+            <span className="ops-badge" style={{ background: 'var(--ops-accent-dim)', color: 'var(--ops-accent)', fontSize: 10 }}>{activeTriggers.length}</span>
+          </div>
+          {activeTriggers.length === 0 ? (
+            <p className="ops-text" style={{ padding: '4px 0', fontSize: 11 }}>No active triggers.</p>
+          ) : (
+            activeTriggers.slice(0, 5).map(sp => (
+              <div key={sp.manifest.uuid} className="ops-snackbar-item">
+                <span className="ops-snackbar-item-name">{sp.manifest.name}</span>
+                <div className="ops-snackbar-triggers">
+                  {sp.manifest.triggers.map(t => (
+                    <span key={t} className="ops-tag" style={{ fontSize: 9 }}>{t}</span>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Running Containers */}
+        <div className="ops-snackbar-section">
+          <div className="ops-snackbar-section-title">
+            Running Containers
+            <span className="ops-badge" style={{ background: 'rgba(63,185,80,0.15)', color: 'var(--ops-success)', fontSize: 10 }}>{runningContainers.length}</span>
+          </div>
+          {runningContainers.length === 0 ? (
+            <p className="ops-text" style={{ padding: '4px 0', fontSize: 11 }}>No running containers.</p>
+          ) : (
+            runningContainers.slice(0, 5).map(ctr => (
+              <div key={ctr.id} className="ops-snackbar-item">
+                <span className="ops-snackbar-item-name">{ctr.name}</span>
+                <span className="ops-snackbar-item-port">:{ctr.port}</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="ops-snackbar-menu-footer">
+        <span className="ops-text" style={{ fontSize: 10 }}>
+          Snackbar v1.0 · {store.spices.length} spices installed
+        </span>
+      </div>
+    </div>
+  )
+}
+
 // ─── Placeholder Panel ───────────────────────────────────────────
 function PlaceholderPanel({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
@@ -522,6 +658,11 @@ export default function App() {
 
           <div className="header-divider"></div>
 
+          {/* Snackbar Menu Toggle */}
+          <button className="header-btn" onClick={store.toggleSnackbarMenu} title="Snackbar menu">
+            <span className="material-symbols-outlined">restaurant_menu</span>
+          </button>
+
           {/* Chat Toggle */}
           <button className="header-btn" onClick={store.toggleChat} title={store.chatOpen ? 'Close chat' : 'Open chat'}>
             <span className="material-symbols-outlined">chat</span>
@@ -555,6 +696,13 @@ export default function App() {
 
         <OpsUIChatSheet />
       </div>
+
+      {/* Snackbar Menu Panel Overlay */}
+      {store.snackbarMenuOpen && (
+        <div className="ops-snackbar-menu-overlay" onClick={store.toggleSnackbarMenu}>
+          <SnackbarMenuPanel />
+        </div>
+      )}
 
       {/* Snackbar — shared M3-style SurfaceSnackbar */}
       <SurfaceSnackbar

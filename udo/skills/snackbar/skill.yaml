@@ -1,6 +1,6 @@
 name: snackbar
-description: Snackbar Linux management — snacks, workflows, health
-platform: linux
+description: Snackbar management — snacks, workflows, health (cross-platform)
+platform: cross-platform
 version: 1.0.0
 commands:
   - name: status

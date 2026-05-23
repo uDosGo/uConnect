@@ -92,6 +92,7 @@ export interface OpsUIState {
   // Surface state
   sidebarCollapsed: boolean
   chatOpen: boolean
+  snackbarMenuOpen: boolean
   isDark: boolean
   chatMessages: ChatMessage[]
   snackbar: Snackbar | null
@@ -118,6 +119,7 @@ export interface OpsUIState {
   // Actions
   toggleSidebar: () => void
   toggleChat: () => void
+  toggleSnackbarMenu: () => void
   toggleTheme: () => void
   increaseFontSize: () => void
   decreaseFontSize: () => void
@@ -156,7 +158,7 @@ export interface OpsUIState {
 // ─── Default Data ────────────────────────────────────────────────
 
 const defaultServices: ServiceStatus[] = [
-  { name: 'snackbar-linux', status: 'up', port: 8484, uptime: 99.9, type: 'system', description: 'Container orchestrator & workflow runner' },
+  { name: 'snackbar', status: 'up', port: 8484, uptime: 99.9, type: 'system', description: 'Container orchestrator & workflow runner (uServer module)' },
   { name: 'secret-server', status: 'up', port: 30001, uptime: 99.8, type: 'user', description: 'AES-256-GCM encrypted secret vault' },
   { name: 'email-feed', status: 'down', port: 0, uptime: 0, type: 'user', description: 'Email to feed processor (needs IMAP credentials)' },
   { name: 'vault-mcp', status: 'degraded', port: 0, uptime: 95.2, type: 'user', description: 'MCP server for Vault access' },
@@ -165,15 +167,15 @@ const defaultServices: ServiceStatus[] = [
 ]
 
 const defaultLogs: LogEntry[] = [
-  { timestamp: '2026-05-23 16:15:22', service: 'snackbar-linux', level: 'info', message: 'Workflow "daily-docs-sync" completed successfully' },
+  { timestamp: '2026-05-23 16:15:22', service: 'snackbar', level: 'info', message: 'Workflow "daily-docs-sync" completed successfully' },
   { timestamp: '2026-05-23 16:14:00', service: 'hivemind', level: 'info', message: 'Agent "code-reviewer" dispatched to PR #42' },
   { timestamp: '2026-05-23 16:12:45', service: 'secret-server', level: 'info', message: 'Secret retrieved: vault/imap_config' },
   { timestamp: '2026-05-23 16:10:30', service: 'email-feed', level: 'error', message: 'IMAP connection failed: invalid credentials' },
-  { timestamp: '2026-05-23 16:08:00', service: 'snackbar-linux', level: 'warn', message: 'Container "feed-watcher" restarting (OOM)' },
+  { timestamp: '2026-05-23 16:08:00', service: 'snackbar', level: 'warn', message: 'Container "feed-watcher" restarting (OOM)' },
   { timestamp: '2026-05-23 16:05:00', service: 'vault-mcp', level: 'info', message: 'MCP client connected: uCode2 Gateway' },
   { timestamp: '2026-05-23 16:00:00', service: 'feed-spool', level: 'info', message: 'Spool rotation completed: 42 entries archived' },
   { timestamp: '2026-05-23 15:55:00', service: 'hivemind', level: 'info', message: 'Health check: all agents responsive' },
-  { timestamp: '2026-05-23 15:50:00', service: 'snackbar-linux', level: 'info', message: 'Snack "auto-label@devstudio" executed' },
+  { timestamp: '2026-05-23 15:50:00', service: 'snackbar', level: 'info', message: 'Snack "auto-label@devstudio" executed' },
   { timestamp: '2026-05-23 15:45:00', service: 'secret-server', level: 'warn', message: 'Token rotation recommended (30 days since last)' },
 ]
 
@@ -232,6 +234,7 @@ export const useOpsUIStore = create<OpsUIState>((set, get) => ({
   // Initial state
   sidebarCollapsed: false,
   chatOpen: false,
+  snackbarMenuOpen: false,
   isDark: true,
   chatMessages: [],
   snackbar: null,
@@ -258,6 +261,7 @@ export const useOpsUIStore = create<OpsUIState>((set, get) => ({
   // Actions
   toggleSidebar: () => set(s => ({ sidebarCollapsed: !s.sidebarCollapsed })),
   toggleChat: () => set(s => ({ chatOpen: !s.chatOpen })),
+  toggleSnackbarMenu: () => set(s => ({ snackbarMenuOpen: !s.snackbarMenuOpen })),
   toggleTheme: () => set(s => ({ isDark: !s.isDark })),
 
   increaseFontSize: () => {

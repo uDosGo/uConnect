@@ -17,7 +17,7 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 ├── _archived/            # 📦 Archived repos & legacy content (not in active rotation)
 ├── DevStudio/            # 🛠 Development framework & automation (OkAgentDigital)
 ├── uConnect/             # 🔗 Shared infrastructure (udo CLI, udoui, skills, fonts) (uDosGo)
-├── uServer/              # 🖥 Server-side services (Snackbar Linux, monitoring) (uDosGo)
+├── uServer/              # 🖥 Server-side services (Snackbar, monitoring) (uDosGo)
 ├── uPlace/               # 📍 Location-aware services (OkAgentDigital)
 ├── uCode1/               # 🧱 Foundation: BBC BASIC, teletext, local LLM (uDosGo)
 ├── uCode2/               # ⚙️ Services: MCP Gateway, Vault Bridge, Feed Spool (uDosGo)

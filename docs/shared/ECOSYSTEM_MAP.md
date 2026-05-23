@@ -75,7 +75,7 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 
 | Component | Language | Role | MCP Role |
 |-----------|----------|------|----------|
-| **Snackbar Linux** | Rust | Daemon for snack execution, MCP handler, scheduling | **Server** (Unix socket) |
+| **Snackbar** | Rust | Universal runtime & container workflow orchestrator (macOS + Linux) | **Server** (Unix socket) |
 | **USXD** | Electron/React | Desktop app — surfaces for all uCode layers | **Client** (MCP) |
 | **DevStudio** | Bash | Development automation, agentic workflows | **Client** (MCP) |
 | **OkGuide** | Python | Local LLM assistant (→ uCode1) | **Client** (uses uCode1) |
@@ -86,11 +86,11 @@ All repos live directly under `~/Code/` — no nested org folders. Each repo is 
 
 | Component | Reason | Replacement |
 |-----------|--------|-------------|
-| **Hivemind** | MCP gateway — Snackbar replaces | Snackbar Linux |
+| **Hivemind** | MCP gateway — Snackbar replaces | Snackbar |
 | **Re3Engine** | Reasoning engine — MCP tools direct in apps | `udo` CLI |
 | **ThinUI** | Tauri desktop wrapper — absorbed into USXD | USXD desktop app |
 | **RusTui** | Terminal UI — doesn't fit any uCode surface | Archived |
-| **MCPGateway** | Node.js MCP gateway — Snackbar replaces | Snackbar Linux |
+| **MCPGateway** | Node.js MCP gateway — Snackbar replaces | Snackbar |
 
 ## MCP Architecture
 
@@ -165,7 +165,7 @@ release all v1.0.0    # Tags + pushes all components
 | uCode2 | `ucode2-*` | Python package | `release-python.yaml` |
 | uCode3 | `ucode3-*` | Python + Rust | `release-python.yaml` + `release-rust.yaml` |
 | uCode4 | `ucode4-*` | Python wheel | `release-python.yaml` |
-| Snackbar Linux | `snackbar-*` | Rust binary | `release-rust.yaml` |
+| Snackbar | `snackbar-*` | Rust binary | `release-rust.yaml` |
 | USXD | `usxd-*` | Electron app | `release-node.yaml` |
 | OkGuide | `okguide-*` | Python wheel | `release-python.yaml` |
 | PublishLane | `publishlane-*` | npm tarball | `release-node.yaml` |
@@ -218,7 +218,7 @@ All repos live directly under `~/Code/` — no nested org folders.
 | Repo | Path | Description |
 |------|------|-------------|
 | **uConnect** | `~/Code/uConnect/` | Shared infrastructure (udo CLI, USXD, skills, fonts) |
-| **uServer** | `~/Code/uServer/` | Server-side services (Snackbar Linux, monitoring) |
+| **uServer** | `~/Code/uServer/` | Server-side services (Snackbar, monitoring) |
 | **uCode1** | `~/Code/uCode1/` | Foundation: BBC BASIC, teletext, local LLM |
 | **uCode2** | `~/Code/uCode2/` | Services: MCP Gateway, Vault Bridge, Feed Spool |
 | **uCode3** | `~/Code/uCode3/` | Application: HomeNest, HA bridge, kiosk UI |
