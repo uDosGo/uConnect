@@ -1,6 +1,13 @@
 /* ─── code4ui Theme (USX LENS/SKIN) ───────────────────────────── */
 /* Wireframe-style theme with dashed borders and monospace font */
 
+/* ─── Body Reset ────────────────────────────────────────────────── */
+body {
+  margin: 0;
+  padding: 0;
+  background: #121212;
+}
+
 :root {
   /* USX Color Tokens */
   --usx-color-primary: #333333;
