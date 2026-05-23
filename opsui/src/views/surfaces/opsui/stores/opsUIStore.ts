@@ -238,8 +238,8 @@ export const useOpsUIStore = create<OpsUIState>((set, get) => ({
   isDark: true,
   chatMessages: [],
   snackbar: null,
-  fontSize: 13,
-  fontStyle: 'mono',
+  fontSize: 14,
+  fontStyle: 'sans',
   currentPalette: 'ops',
 
   // Ops-specific initial state

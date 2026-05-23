@@ -68,7 +68,7 @@ interface Code3UIState {
 
 export const useCode3UIStore = create<Code3UIState>((set, get) => ({
   // ─── Theme ────────────────────────────────────────────────────
-  isDark: false,
+  isDark: true,
   toggleTheme: () => {
     set(state => {
       const next = !state.isDark

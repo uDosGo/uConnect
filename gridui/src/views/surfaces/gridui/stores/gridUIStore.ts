@@ -112,7 +112,7 @@ export const useGridUIStore = defineStore('gridUI', () => {
   }
 
   // ─── Font Style (3-way toggle: serif / sans / mono) ────────────
-  const fontStyle = ref<'serif' | 'sans' | 'mono'>('mono')
+  const fontStyle = ref<'serif' | 'sans' | 'mono'>('sans')
 
   function cycleFontStyle() {
     const order: Array<typeof fontStyle.value> = ['serif', 'sans', 'mono']

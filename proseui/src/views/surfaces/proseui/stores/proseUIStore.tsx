@@ -164,8 +164,8 @@ export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const initialPalette = saved ? PALETTES.find(p => p.id === saved.paletteId) || PALETTES[2] : PALETTES[2]
   const [palette, setPalette] = useState<PaletteEntry>(initialPalette)
   const [themeMode, setThemeMode] = useState<ThemeMode>(saved?.themeMode ?? 'dark')
-  const [fontSize, setFontSize] = useState(saved?.fontSize ?? 16)
-  const [fontStyle, setFontStyle] = useState<FontStyle>(saved?.fontStyle ?? 'serif')
+  const [fontSize, setFontSize] = useState(saved?.fontSize ?? 14)
+  const [fontStyle, setFontStyle] = useState<FontStyle>(saved?.fontStyle ?? 'sans')
   const [activeView, setActiveView] = useState('kanban')
   const [chatOpen, setChatOpen] = useState(true)
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([

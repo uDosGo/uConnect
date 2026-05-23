@@ -45,11 +45,11 @@ export const useCode4UIStore = create<Code4UIState>((set, get) => ({
   // Initial state
   sidebarCollapsed: false,
   chatOpen: false,
-  isDark: false,
+  isDark: true,
   chatMessages: [],
   snackbar: null,
   fontSize: 14,
-  fontStyle: 'mono',
+  fontStyle: 'sans',
   currentPalette: 'wireframe',
 
   // Actions
