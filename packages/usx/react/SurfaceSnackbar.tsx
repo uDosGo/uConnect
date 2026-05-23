@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
-   @usx/react/surface — SurfaceSnackbar (M3-style)
+   @usx/react/surface — SurfaceSnackbar (mono unicode icons)
    Shared snackbar component for all USX surfaces.
-   Uses Material Symbols icons with color-coded type indicators.
+   Uses unicode mono icons instead of Material Symbols for reliability.
    ═══════════════════════════════════════════════════════════════════ */
 import React from 'react'
 
@@ -17,20 +17,20 @@ export interface SurfaceSnackbarProps {
 }
 
 const snackbarIcons: Record<string, string> = {
-  success: 'check_circle',
-  error: 'error',
-  warning: 'warning',
-  info: 'info',
+  success: '\u2713',   // ✓
+  error:   '\u2715',   // ✕
+  warning: '\u26A0',   // ⚠
+  info:    '\u2139',   // ℹ
 }
 
 export const SurfaceSnackbar: React.FC<SurfaceSnackbarProps> = ({ snackbar, onDismiss }) => {
   if (!snackbar) return null
 
-  const icon = snackbarIcons[snackbar.type] || 'info'
+  const icon = snackbarIcons[snackbar.type] || '\u2139'
 
   return (
     <div className={`usx-snackbar usx-snackbar--${snackbar.type}`}>
-      <span className="usx-snackbar-icon material-symbols-outlined">{icon}</span>
+      <span className="usx-snackbar-icon">{icon}</span>
       <span className="usx-snackbar-text">{snackbar.message}</span>
       {snackbar.action && (
         <button className="usx-snackbar-action" onClick={onDismiss}>

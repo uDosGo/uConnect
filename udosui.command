@@ -9,29 +9,55 @@
 # The terminal window will open, run the launcher, and stay open
 # so you can see logs / shut down with Ctrl+C.
 #
-# Operator Test Mode:
-#   Double-click with Option key held → launches opsui (SnackMachine)
-#   for operator testing of the Snackbar runtime.
+# Flags:
+#   --all       Launch all surfaces + hub + menu bar
+#   --menu-bar  Start only the menu bar app
+#   --ops       Launch opsui (SnackMachine) for operator testing
+#   <surface>   Launch a specific surface (ui, proseui, code3ui, etc.)
 
 cd "$(dirname "$0")"
 
-# Check for Option key (modifier flag via environment)
-if [[ "$MODIFIER_FLAGS" == *"option"* ]] || [[ "$1" == "--ops" ]]; then
-  SURFACE="opsui"
-  LABEL="Server Operations (SnackMachine)"
-else
-  SURFACE="${1:-proseui}"
-  LABEL="${2:-Prose Editor}"
-fi
-
-echo "============================================"
-echo "  uDos / Connect — UI Launcher (macOS)"
-echo "  Surface: $LABEL"
-echo "============================================"
-echo ""
-bash scripts/udosui-launcher.sh "$SURFACE"
-echo ""
-echo "Press Ctrl+C to stop the server."
-echo "============================================"
-# Keep terminal open
-exec bash
+case "${1:-}" in
+  --all|-a)
+    echo "============================================"
+    echo "  uDos / Connect — Launch Everything"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start --all
+    ;;
+  --menu-bar|-m)
+    echo "============================================"
+    echo "  uDos / Connect — Menu Bar App"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs menu-bar
+    echo ""
+    echo "Look for the 🍔 icon in your menu bar."
+    echo "Press Ctrl+C to stop."
+    echo "============================================"
+    exec bash
+    ;;
+  --ops)
+    echo "============================================"
+    echo "  uDos / Connect — Server Operations (opsui)"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start opsui
+    ;;
+  "")
+    # Default: launch everything (hub + all surfaces + menu bar)
+    echo "============================================"
+    echo "  uDos / Connect — Launch Everything"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start --all
+    ;;
+  *)
+    echo "============================================"
+    echo "  uDos / Connect — UI Launcher (macOS)"
+    echo "  Surface: $1"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start "$1"
+    ;;
+esac

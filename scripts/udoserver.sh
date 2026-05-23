@@ -7,12 +7,13 @@
 #   ./scripts/udoserver.sh status      Show server status
 #   ./scripts/udoserver.sh logs <name> Tail logs for a specific server
 #
-# Port assignments:
-#   gridui  → 5173
-#   code3ui → 5174
-#   code4ui → 5175
-#   ui      → 5176
-#   proseui → 5177
+# Unified port scheme (matches udosui-launcher.sh):
+#   ui (hub)  → 5173
+#   proseui   → 5174
+#   code3ui   → 5175
+#   code4ui   → 5176
+#   opsui     → 5177
+#   gridui    → 5178
 
 set -euo pipefail
 
@@ -22,11 +23,12 @@ PID_FILE="${LOG_DIR}/pids"
 mkdir -p "$LOG_DIR"
 
 SERVERS=(
-  "gridui:gridui:5173"
-  "code3ui:code3ui:5174"
-  "code4ui:code4ui:5175"
-  "ui:ui:5176"
-  "proseui:proseui:5177"
+  "ui:ui:5173"
+  "proseui:proseui:5174"
+  "code3ui:code3ui:5175"
+  "code4ui:code4ui:5176"
+  "opsui:opsui:5177"
+  "gridui:gridui:5178"
 )
 
 # ─── Helpers ─────────────────────────────────────────────────────
@@ -39,7 +41,6 @@ load_pids() {
 
 save_pid() {
   local name="$1" pid="$2"
-  # Remove any existing entry for this name, then append
   grep -v "^${name}_pid=" "$PID_FILE" 2>/dev/null > "${PID_FILE}.tmp" || true
   echo "${name}_pid=$pid" >> "${PID_FILE}.tmp"
   mv "${PID_FILE}.tmp" "$PID_FILE"
@@ -78,6 +79,13 @@ cmd_start() {
       continue
     fi
 
+    # Kill any orphan on this port
+    local orphans
+    orphans=$(lsof -ti:"$port" 2>/dev/null || true)
+    if [[ -n "$orphans" ]]; then
+      kill -9 $orphans 2>/dev/null || true
+    fi
+
     echo -n "  Starting $name on port $port... "
     cd "$ROOT/$dir"
     nohup npx vite --port "$port" --host > "$lf" 2>&1 &
@@ -112,7 +120,6 @@ cmd_stop() {
     if is_running "$pid"; then
       echo -n "  Stopping $name (PID $pid)... "
       kill "$pid" 2>/dev/null || true
-      # Wait for it to die
       for i in {1..5}; do
         if ! is_running "$pid"; then break; fi
         sleep 0.3
@@ -128,7 +135,7 @@ cmd_stop() {
     fi
     remove_pid "$name"
   done
-  # Also kill any orphaned vite processes from these dirs
+  # Also kill any orphaned vite processes from these ports
   for entry in "${SERVERS[@]}"; do
     IFS=':' read -r name dir port <<< "$entry"
     local orphans
@@ -194,7 +201,6 @@ cmd_clean() {
   echo "─── Cleaning up stale pidfile and logs ───"
   rm -f "$PID_FILE"
   echo "  Removed $PID_FILE"
-  # Don't remove logs, just pid tracking
   echo "─── Done ───"
 }
 
@@ -216,7 +222,7 @@ case "${1:-help}" in
   logs)
     if [[ -z "${2:-}" ]]; then
       echo "Usage: $0 logs <server_name>"
-      echo "  Servers: gridui, code3ui, code4ui, ui, proseui"
+      echo "  Servers: ui, proseui, code3ui, code4ui, opsui, gridui"
       exit 1
     fi
     cmd_logs "$2"

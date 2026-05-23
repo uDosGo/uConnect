@@ -7,9 +7,11 @@
 // Auto-start: Add to Login Items in System Settings
 //
 // Provides a macOS menu bar icon with:
-//   • Quick launch/stop for all 5 surfaces
+//   • Quick launch/stop for all 6 surfaces + hub
 //   • Status indicators (running/stopped)
-//   • Open in browser, Dev Mode picker, Launch All
+//   • Open in browser, Launch All, Stop All
+//   • On-demand start/stop per surface
+//   • Port management
 //   • Quit option
 // ═══════════════════════════════════════════════════════════════════
 
@@ -27,11 +29,12 @@ struct Surface {
 }
 
 let surfaces: [Surface] = [
-    Surface(name: "proseui", label: "Prose Editor", icon: "📝", port: 5173, directory: "proseui"),
-    Surface(name: "code3ui", label: "Code Editor v3", icon: "💻", port: 5174, directory: "code3ui"),
-    Surface(name: "code4ui", label: "Code Editor v4", icon: "🖥️", port: 5175, directory: "code4ui"),
-    Surface(name: "opsui",   label: "Server Ops",    icon: "⚙️",  port: 5176, directory: "opsui"),
-    Surface(name: "gridui",  label: "Grid Workspace", icon: "📊",  port: 5177, directory: "gridui"),
+    Surface(name: "ui",      label: "UI Hub (Index)",  icon: "🏠", port: 5173, directory: "ui"),
+    Surface(name: "proseui", label: "Prose Editor",    icon: "📝", port: 5174, directory: "proseui"),
+    Surface(name: "code3ui", label: "Code Editor v3",  icon: "💻", port: 5175, directory: "code3ui"),
+    Surface(name: "code4ui", label: "Code Editor v4",  icon: "🖥️", port: 5176, directory: "code4ui"),
+    Surface(name: "opsui",   label: "Server Ops",      icon: "⚙️",  port: 5177, directory: "opsui"),
+    Surface(name: "gridui",  label: "Grid Workspace",  icon: "📊", port: 5178, directory: "gridui"),
 ]
 
 let connectDir = NSString(string: "\(NSHomeDirectory())/Code/uConnect").expandingTildeInPath
@@ -190,7 +193,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = statusItem.button {
-            button.title = "🔄"
+            button.title = "🍔"
             button.action = #selector(showMenu)
             button.target = self
         }
@@ -226,7 +229,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusMenu.addItem(NSMenuItem.separator())
         
         // Actions
-        let openAllItem = NSMenuItem(title: "🌐 Open All in Browser", action: #selector(openAllSurfaces), keyEquivalent: "")
+        let openHubItem = NSMenuItem(title: "🌐 Open Hub in Browser", action: #selector(openHub), keyEquivalent: "")
+        openHubItem.target = self
+        statusMenu.addItem(openHubItem)
+        
+        let openAllItem = NSMenuItem(title: "🌐 Open All Running in Browser", action: #selector(openAllSurfaces), keyEquivalent: "")
         openAllItem.target = self
         statusMenu.addItem(openAllItem)
         
@@ -237,6 +244,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let stopAllItem = NSMenuItem(title: "⏹  Stop All Surfaces", action: #selector(stopAllSurfaces), keyEquivalent: "")
         stopAllItem.target = self
         statusMenu.addItem(stopAllItem)
+        
+        statusMenu.addItem(NSMenuItem.separator())
+        
+        // Port Status
+        let portStatusItem = NSMenuItem(title: "📡 Port Status", action: nil, keyEquivalent: "")
+        portStatusItem.isEnabled = false
+        statusMenu.addItem(portStatusItem)
+        
+        for surface in surfaces {
+            let inUse = isPortInUse(surface.port)
+            let statusStr = inUse ? "🟢 in use" : "⚪ free"
+            let portItem = NSMenuItem(title: "  :\(surface.port)  \(statusStr)  — \(surface.label)", action: nil, keyEquivalent: "")
+            portItem.isEnabled = false
+            statusMenu.addItem(portItem)
+        }
         
         statusMenu.addItem(NSMenuItem.separator())
         
@@ -302,6 +324,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
     }
     
+    @objc func openHub() {
+        openURL("http://localhost:5173")
+    }
+    
     @objc func openAllSurfaces() {
         for surface in surfaces {
             if isPortInUse(surface.port) {
@@ -344,18 +370,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     @objc func showAbout() {
         let alert = NSAlert()
-        alert.messageText = "uDos Menu Bar v1.0"
+        alert.messageText = "uDos Menu Bar v2.0"
         alert.informativeText = """
         macOS menu bar controller for uDos / Connect surfaces.
         
         Surfaces:
-        📝 Prose Editor  :5173
-        💻 Code Editor v3:5174
-        🖥️  Code Editor v4:5175
-        ⚙️  Server Ops    :5176
-        📊 Grid Workspace:5177
+        🏠 UI Hub (Index)  :5173
+        📝 Prose Editor    :5174
+        💻 Code Editor v3  :5175
+        🖥️  Code Editor v4  :5176
+        ⚙️  Server Ops      :5177
+        📊 Grid Workspace  :5178
         
         Click a surface to start/stop/open it.
+        Port status shows which surfaces are running.
         """
         alert.addButton(withTitle: "OK")
         alert.runModal()

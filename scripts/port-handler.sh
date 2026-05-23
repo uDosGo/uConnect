@@ -14,9 +14,15 @@ set -e
 CONNECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ── Port registry: project → default port ──────────────────────
-# (Using indexed arrays for macOS bash 3.2 compatibility)
-PROJECT_NAMES=(proseui code3ui code4ui opsui gridui)
-PROJECT_PORTS=(5173 5174 5175 5176 5177)
+# Unified port scheme (matches udosui-launcher.sh):
+#   ui (hub)  → 5173
+#   proseui   → 5174
+#   code3ui   → 5175
+#   code4ui   → 5176
+#   opsui     → 5177
+#   gridui    → 5178
+PROJECT_NAMES=(ui proseui code3ui code4ui opsui gridui)
+PROJECT_PORTS=(5173 5174 5175 5176 5177 5178)
 
 get_project_port() {
   local name="$1"
@@ -121,10 +127,10 @@ start_project() {
     exit 1
   fi
   
-  # Find a free port starting from the default
-  local port=$(find_free_port "$default_port")
+  # Kill existing on this port first
+  kill_port "$default_port"
   
-  echo "🚀 Starting $project on port $port..."
+  echo "🚀 Starting $project on port $default_port..."
   echo "   Directory: $project_dir"
   echo ""
   
@@ -136,17 +142,12 @@ start_project() {
     npm install
   fi
   
-  # Start vite
-  if [ "$port" != "$default_port" ]; then
-    echo "   ⚠️  Default port $default_port was in use, using $port instead"
-  fi
-  
-  npx vite --port "$port" --open &
+  npx vite --port "$default_port" --open &
   local vite_pid=$!
   
   echo ""
   echo "   ✅ Started (PID: $vite_pid)"
-  echo "   🌐 http://localhost:$port"
+  echo "   🌐 http://localhost:$default_port"
   echo ""
 }
 

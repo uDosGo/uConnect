@@ -1,14 +1,7 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  // CSS/PostCSS handled by separate config
+  // No plugins needed — ui/index.html is a plain HTML/JS page
+  // served directly by Vite's static file server
 })

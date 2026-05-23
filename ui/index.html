@@ -21,40 +21,58 @@
   <script>
     const cards = [
       {
-        title: 'uCode 1 — GridUI',
-        subtitle: 'Surface Grid & Dashboard',
-        description: 'Chat sheets, nav rails, teledesk panels, terminal, vault docs, and maps layers — the grid-based operating surface.',
+        title: 'UI Hub — Index',
+        subtitle: 'Surface Launcher',
+        description: 'The central hub — launch and manage all uDos surfaces from one place.',
         port: 5173,
         url: 'http://localhost:5173',
         color: '#00ff9d',
-        icon: '⊞'
+        icon: '🔗'
       },
       {
-        title: 'uCode 2 — ProseUI',
+        title: 'ProseUI',
         subtitle: 'Document Surface',
         description: 'Kanban boards, rich text editor, prose views, GitHub integration — the document-centric workspace.',
-        port: 5177,
-        url: 'http://localhost:5177',
+        port: 5174,
+        url: 'http://localhost:5174',
         color: '#00b4d8',
         icon: '¶'
       },
       {
-        title: 'uCode 3 — Code3UI',
+        title: 'Code3UI',
         subtitle: 'Jotion Surface',
         description: 'Notion-style blocks, collaborative editing, structured content management.',
-        port: 5174,
-        url: 'http://localhost:5174',
+        port: 5175,
+        url: 'http://localhost:5175',
         color: '#f97583',
         icon: '⋮'
       },
       {
-        title: 'uCode 4 — Code4UI',
+        title: 'Code4UI',
         subtitle: 'Wireframe Surface',
         description: 'Wireframing tools, layout prototyping, component scaffolding for rapid UI development.',
-        port: 5175,
-        url: 'http://localhost:5175',
+        port: 5176,
+        url: 'http://localhost:5176',
         color: '#d2a8ff',
         icon: '◇'
+      },
+      {
+        title: 'OpsUI',
+        subtitle: 'SnackMachine',
+        description: 'Server operations dashboard — monitor services, workflows, logs, and manage the Snackbar runtime.',
+        port: 5177,
+        url: 'http://localhost:5177',
+        color: '#58a6ff',
+        icon: '⚙'
+      },
+      {
+        title: 'GridUI',
+        subtitle: 'Surface Grid & Dashboard',
+        description: 'Chat sheets, nav rails, teledesk panels, terminal, vault docs, and maps layers — the grid-based operating surface.',
+        port: 5178,
+        url: 'http://localhost:5178',
+        color: '#f0883e',
+        icon: '⊞'
       }
     ]
 
@@ -72,7 +90,7 @@
             </p>
           </header>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             ${cards.map(card => `
               <a href="${card.url}" target="_blank" rel="noopener noreferrer"
                  class="card-glow block rounded-2xl p-6 md:p-8 transition-all duration-300 group"
