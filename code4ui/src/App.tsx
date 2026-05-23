@@ -203,6 +203,75 @@ function DashboardTab() {
   )
 }
 
+// ─── Settings Panel ──────────────────────────────────────────────
+function SettingsPanel() {
+  const store = useCode4UIStore()
+
+  const fontStyleIcon = (() => {
+    switch (store.fontStyle) {
+      case 'serif': return 'format_italic'
+      case 'sans': return 'text_fields'
+      case 'mono': return 'code'
+    }
+  })()
+
+  const currentSwatchColor = paletteColors[store.currentPalette] || '#cccccc'
+
+  return (
+    <div className="wf-grid">
+      {/* Appearance */}
+      <div className="wf-card">
+        <div className="wf-card-header"><h3>Appearance</h3></div>
+        <div className="wf-card-content" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {/* Theme */}
+          <div className="wf-action-row" onClick={store.toggleTheme} style={{ cursor: 'pointer' }}>
+            <span className="material-symbols-outlined wf-action-icon">{store.isDark ? 'dark_mode' : 'light_mode'}</span>
+            <span className="wf-action-label">{store.isDark ? 'Dark Mode' : 'Light Mode'}</span>
+          </div>
+          {/* Palette */}
+          <div className="wf-action-row" onClick={store.cyclePalette} style={{ cursor: 'pointer' }}>
+            <span className="swatch-dot" style={{ '--swatch-color': currentSwatchColor } as React.CSSProperties}></span>
+            <span className="wf-action-label">Palette: {store.currentPalette}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Font */}
+      <div className="wf-card">
+        <div className="wf-card-header"><h3>Font</h3></div>
+        <div className="wf-card-content" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {/* Font Style */}
+          <div className="wf-action-row" onClick={store.cycleFontStyle} style={{ cursor: 'pointer' }}>
+            <span className="material-symbols-outlined wf-action-icon">{fontStyleIcon}</span>
+            <span className="wf-action-label">Style: {store.fontStyle}</span>
+          </div>
+          {/* Font Size */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button className="header-btn" onClick={store.decreaseFontSize} title="Smaller font">
+              <span className="material-symbols-outlined">text_decrease</span>
+            </button>
+            <span className="wf-action-label">{store.fontSize}px</span>
+            <button className="header-btn" onClick={store.increaseFontSize} title="Larger font">
+              <span className="material-symbols-outlined">text_increase</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Chat */}
+      <div className="wf-card">
+        <div className="wf-card-header"><h3>Chat</h3></div>
+        <div className="wf-card-content">
+          <div className="wf-action-row" onClick={store.toggleChat} style={{ cursor: 'pointer' }}>
+            <span className="material-symbols-outlined wf-action-icon">chat</span>
+            <span className="wf-action-label">{store.chatOpen ? 'Close Chat Panel' : 'Open Chat Panel'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Placeholder Panel ───────────────────────────────────────────
 function PlaceholderPanel({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
@@ -238,10 +307,9 @@ export default function App() {
       data-palette={store.currentPalette}
       style={{ '--code4ui-font-size': `${store.fontSize}px` } as React.CSSProperties}
     >
-      {/* Surface Header */}
+      {/* Surface Header — minimal: home + breadcrumb only */}
       <header className="surface-header">
         <div className="header-left">
-          {/* Home button — back to UI Hub */}
           <a
             href="http://localhost:5173"
             className="header-btn"
@@ -251,11 +319,6 @@ export default function App() {
           >
             <span className="material-symbols-outlined">home</span>
           </a>
-          <button className="header-btn" onClick={store.toggleSidebar} title="Toggle sidebar">
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-          <h1 className="header-title">code4ui</h1>
-          <span className="header-badge">Wireframe</span>
         </div>
         <div className="header-center">
           <div className="header-breadcrumb">
@@ -265,42 +328,6 @@ export default function App() {
           </div>
         </div>
         <div className="header-right">
-          {/* Colour Cycle */}
-          <button
-            className="header-btn colour-cycle-btn"
-            onClick={store.cyclePalette}
-            title={`Palette: ${store.currentPalette}`}
-          >
-            <span className="swatch-dot" style={{ '--swatch-color': currentSwatchColor } as React.CSSProperties}></span>
-          </button>
-
-          <div className="header-divider"></div>
-
-          {/* Font Size */}
-          <button className="header-btn" onClick={store.decreaseFontSize} title="Smaller font">
-            <span className="material-symbols-outlined">text_decrease</span>
-          </button>
-          <button className="header-btn" onClick={store.increaseFontSize} title="Larger font">
-            <span className="material-symbols-outlined">text_increase</span>
-          </button>
-
-          <div className="header-divider"></div>
-
-          {/* Font Style */}
-          <button className="header-btn" onClick={store.cycleFontStyle} title={`Font: ${store.fontStyle}`}>
-            <span className="material-symbols-outlined">{fontStyleIcon}</span>
-          </button>
-
-          <div className="header-divider"></div>
-
-          {/* Chat Toggle */}
-          <button className="header-btn" onClick={store.toggleChat} title={store.chatOpen ? 'Close chat' : 'Open chat'}>
-            <span className="material-symbols-outlined">chat</span>
-          </button>
-          {/* Theme Toggle */}
-          <button className="header-btn" onClick={store.toggleTheme} title={store.isDark ? 'Light mode' : 'Dark mode'}>
-            <span className="material-symbols-outlined">{store.isDark ? 'dark_mode' : 'light_mode'}</span>
-          </button>
         </div>
       </header>
 
@@ -322,7 +349,7 @@ export default function App() {
             <PlaceholderPanel icon="dashboard_customize" title="Surfaces" description="Surface management panel — coming soon." />
           )}
           {activeTab === 'settings' && (
-            <PlaceholderPanel icon="settings" title="Settings" description="Settings panel — coming soon." />
+            <SettingsPanel />
           )}
         </main>
 
