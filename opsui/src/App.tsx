@@ -10,6 +10,7 @@ import OpsUINavRail from './views/surfaces/opsui/OpsUINavRail'
 import OpsUIChatSheet from './views/surfaces/opsui/OpsUIChatSheet'
 import SnackMachineTab from './views/surfaces/opsui/SnackMachineTab'
 import SnacksTab from './views/surfaces/opsui/SnacksTab'
+import { SurfaceSnackbar } from '../../packages/usx/react/SurfaceSnackbar'
 import './views/surfaces/opsui/styles/opsui-theme.css'
 
 // ─── Palette Colors ──────────────────────────────────────────────
@@ -555,21 +556,11 @@ export default function App() {
         <OpsUIChatSheet />
       </div>
 
-      {/* Snackbar — M3-style with Material Symbols icon */}
-      {store.snackbar && (
-        <div className={`m3-snackbar m3-snackbar--${store.snackbar.type}`}>
-          <span className="m3-snackbar-icon material-symbols-outlined">
-            {store.snackbar.type === 'success' ? 'check_circle' :
-             store.snackbar.type === 'error' ? 'error' : 'info'}
-          </span>
-          <span className="m3-snackbar-text">{store.snackbar.message}</span>
-          {store.snackbar.action && (
-            <button className="m3-snackbar-action" onClick={store.dismissSnackbar}>
-              {store.snackbar.action}
-            </button>
-          )}
-        </div>
-      )}
+      {/* Snackbar — shared M3-style SurfaceSnackbar */}
+      <SurfaceSnackbar
+        snackbar={store.snackbar}
+        onDismiss={store.dismissSnackbar}
+      />
     </div>
   )
 }

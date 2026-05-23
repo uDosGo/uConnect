@@ -18,7 +18,7 @@ export type Palette = 'ops' | 'terminal' | 'wireframe' | 'paper'
 
 export interface Snackbar {
   message: string
-  type: 'info' | 'success' | 'error'
+  type: 'info' | 'success' | 'error' | 'warning'
   action?: string
 }
 

@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════
-   @usx/components/snackbar — USX Snackbar (M3-inspired)
+   @usx/components/snackbar — USX Snackbar (M3-style)
+   Material Design 3 snackbar with icon, text, and action button.
    ═══════════════════════════════════════════════════════════════════ */
 
 .usx-snackbar {
@@ -10,19 +11,19 @@
   min-width: 280px;
   max-width: 560px;
   padding: 12px 16px;
-  background: var(--usx-color-inverse-surface);
-  color: var(--usx-color-inverse-on-surface);
-  border-radius: var(--usx-shape-corner-extra-small);
-  box-shadow: var(--usx-elevation-level3);
-  font-family: var(--usx-typescale-body-medium-family);
-  font-size: var(--usx-typescale-body-medium-size);
+  background: var(--usx-color-inverse-surface, #2d2d2d);
+  color: var(--usx-color-inverse-on-surface, #e0e0e0);
+  border-radius: var(--usx-shape-corner-extra-small, 4px);
+  box-shadow: var(--usx-elevation-level3, 0 4px 12px rgba(0,0,0,0.3));
+  font-family: var(--usx-typescale-body-medium-family, inherit);
+  font-size: var(--usx-typescale-body-medium-size, 14px);
   display: flex;
   align-items: center;
   gap: 12px;
   z-index: 10000;
   opacity: 0;
-  transition: transform var(--usx-motion-duration-medium3) var(--usx-motion-easing-emphasized-decelerate),
-              opacity var(--usx-motion-duration-medium3) var(--usx-motion-easing-standard);
+  transition: transform var(--usx-motion-duration-medium3, 300ms) var(--usx-motion-easing-emphasized-decelerate, cubic-bezier(0.05, 0.7, 0.1, 1.0)),
+              opacity var(--usx-motion-duration-medium3, 300ms) var(--usx-motion-easing-standard, ease);
   pointer-events: none;
 }
 
@@ -32,31 +33,104 @@
   pointer-events: auto;
 }
 
-.usx-snackbar--info { border-left: 4px solid var(--usx-color-primary); }
+/* ─── Type Indicators (left border accent) ────────────────────── */
+.usx-snackbar--info { border-left: 4px solid var(--usx-color-primary, #58a6ff); }
 .usx-snackbar--success { border-left: 4px solid #2a9d8f; }
-.usx-snackbar--error { border-left: 4px solid var(--usx-color-error); }
+.usx-snackbar--error { border-left: 4px solid var(--usx-color-error, #f85149); }
 .usx-snackbar--warning { border-left: 4px solid #e9c46a; }
 
+/* ─── Icon ─────────────────────────────────────────────────────── */
+.usx-snackbar-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.usx-snackbar--info .usx-snackbar-icon { color: var(--usx-color-primary, #58a6ff); }
+.usx-snackbar--success .usx-snackbar-icon { color: #2a9d8f; }
+.usx-snackbar--error .usx-snackbar-icon { color: var(--usx-color-error, #f85149); }
+.usx-snackbar--warning .usx-snackbar-icon { color: #e9c46a; }
+
+/* ─── Text ─────────────────────────────────────────────────────── */
+.usx-snackbar-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ─── Action Button (M3 spec: uppercase, letter-spacing) ──────── */
 .usx-snackbar-action {
   margin-left: auto;
   padding: 4px 8px;
   border: none;
   background: transparent;
-  color: var(--usx-color-inverse-primary);
+  color: var(--usx-color-inverse-primary, #58a6ff);
   font-family: inherit;
-  font-size: var(--usx-typescale-label-large-size);
-  font-weight: var(--usx-typescale-label-large-weight);
+  font-size: var(--usx-typescale-label-large-size, 13px);
+  font-weight: var(--usx-typescale-label-large-weight, 500);
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-radius: var(--usx-shape-corner-extra-small);
+  border-radius: var(--usx-shape-corner-extra-small, 4px);
+  white-space: nowrap;
 }
 
 .usx-snackbar-action:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ─── M3 Legacy ─────────────────────────────────────────────────── */
-.m3-snackbar { @extend .usx-snackbar; }
-.m3-snackbar--visible { @extend .usx-snackbar--visible; }
-.m3-snackbar-action { @extend .usx-snackbar-action; }
+/* ─── M3 Legacy Aliases ────────────────────────────────────────── */
+.m3-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  min-width: 280px;
+  max-width: 560px;
+  padding: 12px 16px;
+  background: var(--usx-color-inverse-surface, #2d2d2d);
+  color: var(--usx-color-inverse-on-surface, #e0e0e0);
+  border-radius: var(--usx-shape-corner-extra-small, 4px);
+  box-shadow: var(--usx-elevation-level3, 0 4px 12px rgba(0,0,0,0.3));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10000;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.m3-snackbar--info { border-left: 4px solid var(--usx-color-primary, #58a6ff); }
+.m3-snackbar--success { border-left: 4px solid #2a9d8f; }
+.m3-snackbar--error { border-left: 4px solid var(--usx-color-error, #f85149); }
+.m3-snackbar--warning { border-left: 4px solid #e9c46a; }
+
+.m3-snackbar-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.m3-snackbar--info .m3-snackbar-icon { color: var(--usx-color-primary, #58a6ff); }
+.m3-snackbar--success .m3-snackbar-icon { color: #2a9d8f; }
+.m3-snackbar--error .m3-snackbar-icon { color: var(--usx-color-error, #f85149); }
+.m3-snackbar--warning .m3-snackbar-icon { color: #e9c46a; }
+
+.m3-snackbar-text { flex: 1; line-height: 1.4; }
+
+.m3-snackbar-action {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-inverse-primary, #58a6ff);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.m3-snackbar-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
