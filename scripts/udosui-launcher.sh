@@ -404,6 +404,12 @@ case "${1:-}" in
   --all|-a)
     node "$CONNECT_DIR/scripts/udos.cjs" start --all
     ;;
+  --all-server|--all-with-server)
+    node "$CONNECT_DIR/scripts/udos.cjs" start --all --with-server
+    ;;
+  --server)
+    node "$CONNECT_DIR/scripts/udos.cjs" start-server
+    ;;
   --menu-bar|-m)
     node "$CONNECT_DIR/scripts/udos.cjs" menu-bar
     ;;
@@ -419,7 +425,7 @@ case "${1:-}" in
     ;;
   *)
     echo "❌ Unknown surface: $1"
-    echo "   Usage: bash scripts/udosui-launcher.sh [surface|--all|--menu-bar|dev]"
+    echo "   Usage: bash scripts/udosui-launcher.sh [surface|--all|--all-server|--server|--menu-bar|dev]"
     echo "   Surfaces: ui proseui code3ui code4ui opsui gridui dev"
     exit 1
     ;;

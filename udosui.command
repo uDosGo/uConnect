@@ -10,10 +10,12 @@
 # so you can see logs / shut down with Ctrl+C.
 #
 # Flags:
-#   --all       Launch all surfaces + hub + menu bar
-#   --menu-bar  Start only the menu bar app
-#   --ops       Launch opsui (SnackMachine) for operator testing
-#   <surface>   Launch a specific surface (ui, proseui, code3ui, etc.)
+#   --all           Launch all surfaces + hub + menu bar
+#   --all-server    Launch all surfaces + uServer (Snackbar) backend
+#   --menu-bar      Start only the menu bar app
+#   --ops           Launch opsui (SnackMachine) for operator testing
+#   --server        Start only the uServer (Snackbar) backend
+#   <surface>       Launch a specific surface (ui, proseui, code3ui, etc.)
 
 cd "$(dirname "$0")"
 
@@ -24,6 +26,20 @@ case "${1:-}" in
     echo "============================================"
     echo ""
     node scripts/udos.cjs start --all
+    ;;
+  --all-server|--all-with-server)
+    echo "============================================"
+    echo "  uDos / Connect — Launch Everything + uServer"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start --all --with-server
+    ;;
+  --server)
+    echo "============================================"
+    echo "  uDos / Connect — uServer (Snackbar) Backend"
+    echo "============================================"
+    echo ""
+    node scripts/udos.cjs start-server
     ;;
   --menu-bar|-m)
     echo "============================================"
