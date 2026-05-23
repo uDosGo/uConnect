@@ -241,6 +241,16 @@ export default function App() {
       {/* Surface Header */}
       <header className="surface-header">
         <div className="header-left">
+          {/* Home button — back to UI Hub */}
+          <a
+            href="http://localhost:5173"
+            className="header-btn"
+            title="Back to UI Hub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="material-symbols-outlined">home</span>
+          </a>
           <button className="header-btn" onClick={store.toggleSidebar} title="Toggle sidebar">
             <span className="material-symbols-outlined">menu</span>
           </button>

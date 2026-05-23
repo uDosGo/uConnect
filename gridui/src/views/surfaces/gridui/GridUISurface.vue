@@ -10,6 +10,16 @@
     <!-- ═══ Top App Bar ═══ -->
     <header class="gridui-header">
       <div class="header-left">
+        <!-- Home button — back to UI Hub -->
+        <a
+          href="http://localhost:5173"
+          class="header-btn"
+          title="Back to UI Hub"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="material-symbol">home</span>
+        </a>
         <span class="material-symbol header-menu-icon" @click="store.toggleNavRail()">menu</span>
         <span class="header-title">gridui</span>
         <span class="header-badge">USX v1.0</span>

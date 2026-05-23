@@ -586,7 +586,7 @@ const Code3UISurface: React.FC = () => {
         <div className="header-left">
           {/* Home button */}
           <a
-            href="http://localhost:5176"
+            href="http://localhost:5173"
             className="header-btn"
             title="Back to UI Hub"
             target="_blank"

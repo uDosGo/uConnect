@@ -33,7 +33,7 @@
   height: 100vh;
   background: var(--ops-bg);
   color: var(--ops-text);
-  font-size: var(--ops-font-size);
+  font-size: var(--opsui-font-size, var(--ops-font-size));
   font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
   overflow: hidden;
 }
@@ -44,6 +44,25 @@
 
 .opsui-surface[data-font-style="serif"] {
   font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* ─── Dark Mode ───────────────────────────────────────────────── */
+.opsui-dark {
+  --ops-bg: #0a0e14;
+  --ops-bg-alt: #11161d;
+  --ops-bg-card: #161b22;
+  --ops-bg-hover: #1c2128;
+  --ops-border: #30363d;
+  --ops-border-light: #21262d;
+  --ops-text: #e6edf3;
+  --ops-text-secondary: #8b949e;
+  --ops-text-muted: #6e7681;
+  --ops-accent: #58a6ff;
+  --ops-accent-dim: #1f6feb;
+  --ops-success: #3fb950;
+  --ops-warning: #d29922;
+  --ops-error: #f85149;
+  --ops-degraded: #d29922;
 }
 
 /* ─── Surface Header ──────────────────────────────────────────── */

@@ -79,7 +79,7 @@ const ProseSurfaceManager: React.FC = () => {
         <div className="proseui-header-left">
           {/* Home button — back to UI Hub */}
           <a
-            href="http://localhost:5176"
+            href="http://localhost:5173"
             className="proseui-header-btn proseui-home-btn"
             title="Back to UI Hub"
             target="_blank"
