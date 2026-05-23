@@ -292,17 +292,16 @@ The Snackbar system has been unified into a single cross-platform component with
 - [x] Implement SVG conversion (via Ceefax bridge to_html)
 - [x] Add theme support (retro, modern, dark) (`bbc/skin.py` — 4 built-in skins)
 
-#### ACS Emulator Core
-- [ ] Research and document ACS memory layout
-- [ ] Implement 6502 CPU emulator
-- [ ] Create disk image handler
-- [ ] Add memory management unit
-- [ ] Implement input/output systems
-- [ ] Create graphics mode emulation
+#### ACS Emulator Core — 🟡 In Progress
+- [x] Research and document ACS memory layout (`bbc/lens/acs_memory_map.py`)
+- [x] Implement 6502 CPU emulator (`m6502/` — vendored from hspaans/python-6502-emulator, MIT)
+- [ ] Create disk image handler (ACS `.dsk` format)
+- [ ] Add memory management unit (ACS-specific memory mapping)
+- [ ] Implement input/output systems (ACS peripherals)
+- [ ] Create graphics mode emulation (ACS tile/character display)
 - [ ] Add sound support (optional)
 - [ ] Implement save/load functionality
 - [ ] Create debugging interface
-- [ ] Add performance optimization
 
 #### Data Pipeline Integration — ✅ Complete
 - [x] Design Feed format for live gameplay (`bbc/lens.py` + `feed/`)
