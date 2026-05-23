@@ -261,7 +261,7 @@ body {
   color: var(--usx-color-on-surface-variant, #666666);
   cursor: pointer;
   border-radius: var(--md-sys-shape-corner-extra-small);
-  font-size: calc(var(--code4ui-font-size) * 0.75);
+  font-size: calc(var(--code4ui-font-size) * 0.85);
   font-family: inherit;
   text-align: left;
   transition: all 150ms ease;
