@@ -15,8 +15,8 @@ CONNECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ── Port registry: project → default port ──────────────────────
 # (Using indexed arrays for macOS bash 3.2 compatibility)
-PROJECT_NAMES=(proseui code4ui code3ui gridui)
-PROJECT_PORTS=(5173 5175 5176 5177)
+PROJECT_NAMES=(proseui code3ui code4ui opsui gridui)
+PROJECT_PORTS=(5173 5174 5175 5176 5177)
 
 get_project_port() {
   local name="$1"

@@ -1,13 +1,13 @@
 /* ═══════════════════════════════════════════════════════════════════
    ProseSurfaceManager — App Shell with Topbar and Outlet
-   Uses M3 colour schemes with light/dark variants.
+   Uses CSS palette classes from @usx/palettes/base.css for theming.
    ═══════════════════════════════════════════════════════════════════ */
 
 import React, { useEffect, useState, useRef } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Icon } from "@usx/styles/react/icon";
 import { useProseUIStore } from "../surfaces/proseui/stores/proseUIStore";
-import "@usx/styles/palettes/proseui";
+import "@usx/styles/palettes";
 import "../surfaces/proseui/styles/proseui-theme.css";
 
 const NAV_TABS = [
@@ -15,10 +15,7 @@ const NAV_TABS = [
   { id: 'list', icon: 'format_list_bulleted', label: 'List' },
   { id: 'prose', icon: 'article', label: 'Prose' },
   { id: 'editor', icon: 'edit_note', label: 'Editor' },
-  { id: 'github-sync', icon: 'code', label: 'GitHub' },
   { id: 'story', icon: 'menu_book', label: 'Story' },
-
-
 ]
 
 const MORE_TABS = [
@@ -26,16 +23,8 @@ const MORE_TABS = [
   { id: 'vault', icon: 'folder_open', label: 'Vault Browser' },
   { id: 'workflow', icon: 'account_tree', label: 'Workflow Manager' },
   { id: 'tools', icon: 'tune', label: 'Tool Builder' },
-  { id: 'usxd', icon: 'code', label: 'UniversalSurfaceXD' },
-  { id: 'wordpress', icon: 'cloud_upload', label: 'WordPress Adaptor' },
-  { id: 'dev', icon: 'terminal', label: 'Dev Mode' },
   { id: 'settings', icon: 'settings', label: 'Settings' },
-  { id: 'ucode2', icon: 'publish', label: 'Publishing' },
-
 ]
-
-
-
 
 const ProseSurfaceManager: React.FC = () => {
   const store = useProseUIStore();
@@ -49,8 +38,6 @@ const ProseSurfaceManager: React.FC = () => {
 
   // Derive active tab from current path
   const currentTab = location.pathname.split('/').pop() || 'board'
-
-
 
   // Close panels on outside click
   useEffect(() => {
@@ -68,7 +55,6 @@ const ProseSurfaceManager: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [panelOpen, moreOpen]);
 
-
   // Set document title and sync font size to root <html> so rem units scale
   useEffect(() => {
     document.title = "proseui";
@@ -78,26 +64,30 @@ const ProseSurfaceManager: React.FC = () => {
     document.documentElement.style.fontSize = `${store.fontSize}px`;
   }, [store.fontSize]);
 
-  const tokens =
-    store.themeMode === "light" ? store.scheme.light : store.scheme.dark;
+  // Build CSS classes: palette class + dark mode + font style
+  const shellClasses = [
+    'app-shell',
+    store.palette.cssClass,
+    store.themeMode === 'dark' ? 'usx-dark' : '',
+    `font-${store.fontStyle}`,
+  ].filter(Boolean).join(' ');
 
   return (
-    <div
-      className={`app-shell font-${store.fontStyle}`}
-      style={
-        {
-          "--m3-bg": tokens.background,
-          "--m3-surface": tokens.surface,
-          "--m3-primary": tokens.primary,
-          "--m3-on-surface": tokens.onSurface,
-          "--m3-on-surface-variant": tokens.onSurfaceVariant,
-          "--m3-outline": tokens.outline,
-        } as React.CSSProperties
-      }
-    >
+    <div className={shellClasses}>
       {/* ═══ Topbar ═══ */}
       <header className="proseui-header">
         <div className="proseui-header-left">
+          {/* Home button — back to UI Hub */}
+          <a
+            href="http://localhost:5176"
+            className="proseui-header-btn proseui-home-btn"
+            title="Back to UI Hub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="home" size={18} />
+          </a>
+          <span className="proseui-header-sep" />
           <h1 className="proseui-header-title">proseui</h1>
           <span className="proseui-header-sep" />
           {/* Navigation tabs */}
@@ -124,7 +114,6 @@ const ProseSurfaceManager: React.FC = () => {
                 title="More surfaces"
               >
                 <Icon name="more" size={16} />
-
                 <span>More</span>
               </button>
               {moreOpen && (
@@ -142,15 +131,24 @@ const ProseSurfaceManager: React.FC = () => {
                       <span>{tab.label}</span>
                     </button>
                   ))}
+                  <div className="proseui-header-dropdown-divider" />
+                  <a
+                    href="http://localhost:5178"
+                    className="proseui-header-dropdown-item"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMoreOpen(false)}
+                  >
+                    <Icon name="dns" size={16} />
+                    <span>Server Operations</span>
+                  </a>
                 </div>
               )}
             </div>
           </nav>
         </div>
 
-
         <div className="proseui-header-controls">
-
           {/* M3-style toolbar group for font/size/theme */}
           <div className="proseui-header-toolbar">
             <button
@@ -188,7 +186,6 @@ const ProseSurfaceManager: React.FC = () => {
             </button>
           </div>
 
-
           <span className="proseui-header-sep" />
           {/* Chat panel toggle */}
           <button
@@ -196,11 +193,7 @@ const ProseSurfaceManager: React.FC = () => {
             onClick={store.toggleChat}
             title="Toggle chat panel"
           >
-            <Icon
-              name={store.chatOpen ? "chat" : "chat"}
-
-              size={18}
-            />
+            <Icon name={store.chatOpen ? "chat" : "chat"} size={18} />
           </button>
           <span className="proseui-header-sep" />
           {/* Scheme picker — opens slide-out */}
@@ -212,7 +205,6 @@ const ProseSurfaceManager: React.FC = () => {
             <Icon name="palette" size={20} />
           </button>
         </div>
-
       </header>
 
       {/* ═══ Slide-out Scheme Picker ═══ */}
@@ -229,36 +221,36 @@ const ProseSurfaceManager: React.FC = () => {
             </button>
           </div>
           <div className="proseui-control-panel-body">
-            {store.schemes.map((s) => {
-              const active = s.id === store.scheme.id;
+            {store.palettes.map((p) => {
+              const active = p.id === store.palette.id;
               return (
                 <button
-                  key={s.id}
+                  key={p.id}
                   className={`proseui-scheme-btn ${active ? "active" : ""}`}
                   onClick={() => {
-                    store.setScheme(s);
+                    store.setPalette(p);
                     setPanelOpen(false);
                   }}
                 >
                   <div className="proseui-scheme-swatches">
                     <span
                       className="proseui-scheme-swatch"
-                      style={{ background: s.light.background }}
+                      style={{ background: p.lightBg }}
                     />
                     <span
                       className="proseui-scheme-swatch"
-                      style={{ background: s.light.primary }}
+                      style={{ background: p.lightAccent }}
                     />
                     <span
                       className="proseui-scheme-swatch"
-                      style={{ background: s.dark.background }}
+                      style={{ background: p.darkBg }}
                     />
                     <span
                       className="proseui-scheme-swatch"
-                      style={{ background: s.dark.primary }}
+                      style={{ background: p.darkAccent }}
                     />
                   </div>
-                  <span className="proseui-scheme-label">{s.label}</span>
+                  <span className="proseui-scheme-label">{p.label}</span>
                   {active && <Icon name="check" size={14} />}
                 </button>
               );
@@ -273,8 +265,8 @@ const ProseSurfaceManager: React.FC = () => {
           <Outlet />
         </main>
 
-        {/* ═══ Chat Sheet (persistent across all surfaces) ═══ */}
-        {store.chatOpen && (
+        {/* ═══ Chat Sheet (persistent across all surfaces, hidden on Vibe) ═══ */}
+        {store.chatOpen && location.pathname !== '/surface/vibe' && (
           <div className="proseui-chat-sheet">
             <div className="chat-messages">
               {store.chatMessages.map((msg, i) => (
@@ -300,8 +292,6 @@ const ProseSurfaceManager: React.FC = () => {
           </div>
         )}
       </div>
-
-
     </div>
   );
 };

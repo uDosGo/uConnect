@@ -1,0 +1,53 @@
+{
+  "open_box": {
+    "id": "udo-command-manifest",
+    "type": "application/vnd.udo.commands",
+    "version": "1.0.0"
+  },
+  "commands": {
+    "task": {
+      "add": "Create a new task",
+      "list": "List tasks with filters",
+      "show": "Show task details",
+      "do": "Mark task as complete",
+      "undo": "Reopen completed task",
+      "delete": "Remove task",
+      "tag": "Add label to task",
+      "assign": "Assign task to agent/user"
+    },
+    "run": {
+      "skill": "Execute installed skill",
+      "snack": "Execute temporary action",
+      "spice": "Execute system action"
+    },
+    "surface": {
+      "list": "List available surfaces",
+      "open": "Open surface",
+      "close": "Close surface",
+      "focus": "Switch to surface"
+    },
+    "vault": {
+      "get": "Read from vault",
+      "set": "Write to vault",
+      "list": "List vault contents",
+      "watch": "Watch vault path"
+    },
+    "agent": {
+      "list": "List agents",
+      "call": "Call agent with prompt",
+      "status": "Agent status",
+      "stop": "Stop agent"
+    },
+    "mcp": {
+      "list": "List MCP tools",
+      "call": "Call MCP tool",
+      "server": "Manage MCP servers"
+    },
+    "dev": {
+      "build": "Build skill",
+      "test": "Test skill",
+      "logs": "View logs",
+      "shell": "Enter container"
+    }
+  }
+}

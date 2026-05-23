@@ -32,7 +32,9 @@
     "./components/progress": "./components/usx-progress.css",
     "./components/divider": "./components/usx-divider.css",
     "./components/ui-components": "./components/ui-components.css",
+    "./components/surface": "./components/usx-surface.css",
     "./react": "./react/index.tsx",
+
     "./react/theme": "./react/USXThemeProvider.tsx",
     "./react/controls": "./react/ThemeControls.tsx",
     "./react/button": "./react/Button.tsx",
@@ -40,7 +42,16 @@
     "./react/input": "./react/Input.tsx",
     "./react/grid": "./react/Grid.tsx",
     "./react/icon": "./react/Icon.tsx",
+    "./react/surface-header": "./react/SurfaceHeader.tsx",
+    "./react/surface-navrail": "./react/SurfaceNavRail.tsx",
+    "./react/surface-chat": "./react/SurfaceChatSheet.tsx",
+    "./react/surface-snackbar": "./react/SurfaceSnackbar.tsx",
+    "./react/surface-store": "./react/useSurfaceStore.ts",
     "./icons": "./icons/index.ts"
+
+  },
+  "dependencies": {
+    "zustand": "^4.5.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",

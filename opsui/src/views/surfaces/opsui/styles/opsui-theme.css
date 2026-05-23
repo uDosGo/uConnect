@@ -1,0 +1,1627 @@
+/* ═══════════════════════════════════════════════════════════════════
+   opsui Theme — Server Operations Surface
+   Dark ops dashboard with terminal-inspired accents.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── CSS Custom Properties ───────────────────────────────────── */
+:root {
+  --ops-bg: #0d1117;
+  --ops-bg-alt: #161b22;
+  --ops-bg-card: #1c2128;
+  --ops-bg-hover: #21262d;
+  --ops-border: #30363d;
+  --ops-border-light: #21262d;
+  --ops-text: #e6edf3;
+  --ops-text-secondary: #8b949e;
+  --ops-text-muted: #6e7681;
+  --ops-accent: #58a6ff;
+  --ops-accent-dim: #1f6feb;
+  --ops-success: #3fb950;
+  --ops-warning: #d29922;
+  --ops-error: #f85149;
+  --ops-degraded: #d29922;
+  --ops-font-size: 13px;
+  --ops-radius: 6px;
+  --ops-radius-sm: 4px;
+  --ops-transition: 150ms ease;
+}
+
+/* ─── Surface Container ───────────────────────────────────────── */
+.opsui-surface {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--ops-bg);
+  color: var(--ops-text);
+  font-size: var(--ops-font-size);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+  overflow: hidden;
+}
+
+.opsui-surface[data-font-style="sans"] {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+.opsui-surface[data-font-style="serif"] {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* ─── Surface Header ──────────────────────────────────────────── */
+.opsui-surface .surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--ops-bg-alt);
+  border-bottom: 1px solid var(--ops-border);
+  flex-shrink: 0;
+}
+
+.opsui-surface .header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opsui-surface .header-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ops-text);
+  margin: 0;
+}
+
+.opsui-surface .header-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--ops-radius-sm);
+  background: var(--ops-accent-dim);
+  color: var(--ops-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.opsui-surface .header-center {
+  display: flex;
+  align-items: center;
+}
+
+.opsui-surface .header-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .breadcrumb-item {
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .breadcrumb-current {
+  color: var(--ops-text);
+  font-weight: 500;
+}
+
+.opsui-surface .breadcrumb-sep {
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.opsui-surface .header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .header-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+.opsui-surface .header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--ops-border);
+  margin: 0 4px;
+}
+
+.opsui-surface .swatch-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--swatch-color, var(--ops-accent));
+  border: 2px solid var(--ops-border);
+}
+
+/* ─── Workspace Layout ────────────────────────────────────────── */
+.opsui-surface .workspace-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ─── Nav Rail ────────────────────────────────────────────────── */
+.opsui-surface .opsui-nav-rail {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background: var(--ops-bg-alt);
+  border-right: 1px solid var(--ops-border);
+  flex-shrink: 0;
+  transition: width var(--ops-transition);
+  overflow: hidden;
+}
+
+.opsui-surface .opsui-nav-rail.collapsed {
+  width: 48px;
+}
+
+.opsui-surface .nav-rail-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-bottom: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .nav-rail-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.opsui-surface .nav-rail-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 12px;
+  font-family: inherit;
+  text-align: left;
+  transition: all var(--ops-transition);
+  white-space: nowrap;
+}
+
+.opsui-surface .nav-rail-tab:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+.opsui-surface .nav-rail-tab.active {
+  background: var(--ops-accent-dim);
+  color: var(--ops-accent);
+}
+
+.opsui-surface .nav-rail-tab-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.opsui-surface .nav-rail-tab-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opsui-surface .opsui-nav-rail.collapsed .nav-rail-tab-label {
+  display: none;
+}
+
+.opsui-surface .nav-rail-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  border-top: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .nav-rail-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .nav-rail-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+/* ─── Main Content ────────────────────────────────────────────── */
+.opsui-surface .ops-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* ─── Ops Grid ────────────────────────────────────────────────── */
+.opsui-surface .ops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 12px;
+}
+
+/* ─── Ops Card ────────────────────────────────────────────────── */
+.opsui-surface .ops-card {
+  background: var(--ops-bg-card);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius);
+  overflow: hidden;
+}
+
+.opsui-surface .ops-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ops-border-light);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .ops-card-header h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .ops-card-content {
+  padding: 12px;
+}
+
+/* ─── Service Row ─────────────────────────────────────────────── */
+.opsui-surface .ops-service-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ops-border-light);
+  cursor: pointer;
+  transition: background var(--ops-transition);
+}
+
+.opsui-surface .ops-service-row:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-service-row:hover {
+  background: var(--ops-bg-hover);
+  margin: 0 -12px;
+  padding: 8px 12px;
+}
+
+.opsui-surface .ops-service-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.opsui-surface .ops-service-name {
+  font-weight: 500;
+  color: var(--ops-text);
+  font-size: 13px;
+}
+
+.opsui-surface .ops-service-desc {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-service-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opsui-surface .ops-service-status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.opsui-surface .ops-service-status.up {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-service-status.degraded {
+  background: rgba(210, 153, 34, 0.15);
+  color: var(--ops-warning);
+}
+
+.opsui-surface .ops-service-status.down {
+  background: rgba(248, 81, 73, 0.15);
+  color: var(--ops-error);
+}
+
+.opsui-surface .ops-service-port {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-service-uptime {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-service-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.opsui-surface .ops-service-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--ops-border);
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 14px;
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-service-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+  border-color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-service-btn.restart:hover {
+  border-color: var(--ops-warning);
+  color: var(--ops-warning);
+}
+
+/* ─── Stats Row ───────────────────────────────────────────────── */
+.opsui-surface .ops-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.opsui-surface .ops-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px;
+  background: var(--ops-bg);
+  border-radius: var(--ops-radius-sm);
+}
+
+.opsui-surface .ops-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ops-accent);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-stat-label {
+  font-size: 10px;
+  color: var(--ops-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Log Entry ───────────────────────────────────────────────── */
+.opsui-surface .ops-log-entry {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 11px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  border-bottom: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .ops-log-entry:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-log-time {
+  color: var(--ops-text-muted);
+  flex-shrink: 0;
+  width: 75px;
+}
+
+.opsui-surface .ops-log-service {
+  color: var(--ops-accent);
+  flex-shrink: 0;
+  width: 100px;
+}
+
+.opsui-surface .ops-log-level {
+  flex-shrink: 0;
+  width: 40px;
+  font-weight: 600;
+}
+
+.opsui-surface .ops-log-level.info {
+  color: var(--ops-accent);
+}
+
+.opsui-surface .ops-log-level.warn {
+  color: var(--ops-warning);
+}
+
+.opsui-surface .ops-log-level.error {
+  color: var(--ops-error);
+}
+
+.opsui-surface .ops-log-message {
+  color: var(--ops-text);
+  flex: 1;
+}
+
+/* ─── Log Filter ──────────────────────────────────────────────── */
+.opsui-surface .ops-log-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.opsui-surface .ops-log-filter input {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--ops-bg);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius-sm);
+  color: var(--ops-text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+.opsui-surface .ops-log-filter input:focus {
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .ops-log-filter input::placeholder {
+  color: var(--ops-text-muted);
+}
+
+/* ─── Workflow Row ────────────────────────────────────────────── */
+.opsui-surface .ops-workflow-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .ops-workflow-row:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-workflow-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opsui-surface .ops-workflow-name {
+  font-weight: 500;
+  color: var(--ops-text);
+  font-size: 13px;
+}
+
+.opsui-surface .ops-workflow-schedule {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-workflow-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opsui-surface .ops-workflow-status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.opsui-surface .ops-workflow-status.running {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-workflow-status.idle {
+  background: rgba(139, 148, 158, 0.15);
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .ops-workflow-status.completed {
+  background: rgba(63, 185, 80, 0.1);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-workflow-status.failed {
+  background: rgba(248, 81, 73, 0.15);
+  color: var(--ops-error);
+}
+
+.opsui-surface .ops-workflow-lastrun {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+/* ─── Action Button ───────────────────────────────────────────── */
+.opsui-surface .ops-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--ops-border);
+  background: var(--ops-bg);
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 12px;
+  font-family: inherit;
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-action-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+  border-color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-action-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* ─── Toolbar ─────────────────────────────────────────────────── */
+.opsui-surface .ops-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.opsui-surface .ops-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opsui-surface .ops-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Welcome Card ────────────────────────────────────────────── */
+.opsui-surface .ops-welcome-card {
+  grid-column: 1 / -1;
+}
+
+.opsui-surface .ops-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ops-text);
+  margin: 0 0 4px 0;
+}
+
+.opsui-surface .ops-text {
+  font-size: 12px;
+  color: var(--ops-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Chat Sheet ──────────────────────────────────────────────── */
+.opsui-surface .opsui-chat {
+  display: flex;
+  flex-direction: column;
+  width: 0;
+  background: var(--ops-bg-alt);
+  border-left: 1px solid var(--ops-border);
+  overflow: hidden;
+  transition: width var(--ops-transition);
+  flex-shrink: 0;
+}
+
+.opsui-surface .opsui-chat.open {
+  width: 340px;
+}
+
+.opsui-surface .opsui-chat .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ops-border);
+  flex-shrink: 0;
+}
+
+.opsui-surface .opsui-chat .chat-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ops-text);
+  margin: 0;
+}
+
+.opsui-surface .opsui-chat .chat-title-icon {
+  font-size: 18px;
+  color: var(--ops-accent);
+}
+
+.opsui-surface .opsui-chat .chat-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+}
+
+.opsui-surface .opsui-chat .chat-close-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+.opsui-surface .opsui-chat .chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opsui-surface .opsui-chat .chat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 8px;
+  padding: 20px;
+}
+
+.opsui-surface .opsui-chat .chat-empty-icon {
+  font-size: 36px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .opsui-chat .chat-empty p {
+  font-size: 12px;
+  color: var(--ops-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.opsui-surface .opsui-chat .chat-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.opsui-surface .opsui-chat .chat-suggestion {
+  padding: 6px 10px;
+  border: 1px solid var(--ops-border);
+  background: var(--ops-bg);
+  color: var(--ops-accent);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 11px;
+  font-family: inherit;
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .opsui-chat .chat-suggestion:hover {
+  background: var(--ops-bg-hover);
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .opsui-chat .chat-message {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--ops-radius-sm);
+}
+
+.opsui-surface .opsui-chat .chat-message--user {
+  background: var(--ops-bg);
+}
+
+.opsui-surface .opsui-chat .chat-message--assistant {
+  background: var(--ops-bg-card);
+}
+
+.opsui-surface .opsui-chat .chat-message-avatar {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--ops-bg-hover);
+}
+
+.opsui-surface .opsui-chat .chat-avatar-icon {
+  font-size: 14px;
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .opsui-chat .chat-message-content {
+  font-size: 12px;
+  color: var(--ops-text);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.opsui-surface .opsui-chat .chat-input-area {
+  padding: 8px 12px;
+  border-top: 1px solid var(--ops-border);
+  flex-shrink: 0;
+}
+
+.opsui-surface .opsui-chat .chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ops-bg);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius-sm);
+  padding: 4px 8px;
+}
+
+.opsui-surface .opsui-chat .chat-input-wrapper:focus-within {
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .opsui-chat .chat-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--ops-text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+.opsui-surface .opsui-chat .chat-input::placeholder {
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .opsui-chat .chat-send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--ops-accent);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+}
+
+.opsui-surface .opsui-chat .chat-send-btn:disabled {
+  color: var(--ops-text-muted);
+  cursor: default;
+}
+
+.opsui-surface .opsui-chat .chat-send-btn:hover:not(:disabled) {
+  background: var(--ops-bg-hover);
+}
+
+/* ─── Snackbar ────────────────────────────────────────────────── */
+.opsui-surface .m3-snackbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--ops-bg-card);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius);
+  color: var(--ops-text);
+  font-size: 12px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: ops-snackbar-in 200ms ease;
+}
+
+@keyframes ops-snackbar-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.opsui-surface .m3-snackbar--success {
+  border-color: var(--ops-success);
+}
+
+.opsui-surface .m3-snackbar--error {
+  border-color: var(--ops-error);
+}
+
+.opsui-surface .m3-snackbar--info {
+  border-color: var(--ops-accent);
+}
+
+.opsui-surface .m3-snackbar-action {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--ops-accent);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 500;
+  border-radius: var(--ops-radius-sm);
+}
+
+.opsui-surface .m3-snackbar-action:hover {
+  background: var(--ops-bg-hover);
+}
+
+/* ─── Placeholder Panel ───────────────────────────────────────── */
+.opsui-surface .panel-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .panel-placeholder .panel-icon {
+  font-size: 48px;
+}
+
+.opsui-surface .panel-placeholder h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .panel-placeholder p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ops-text-muted);
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────── */
+.opsui-surface ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.opsui-surface ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.opsui-surface ::-webkit-scrollbar-thumb {
+  background: var(--ops-border);
+  border-radius: 3px;
+}
+
+.opsui-surface ::-webkit-scrollbar-thumb:hover {
+  background: var(--ops-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SnackMachine Tab Styles
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Filter Tabs ──────────────────────────────────────────────── */
+.opsui-surface .ops-filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.opsui-surface .ops-filter-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--ops-border);
+  background: var(--ops-bg);
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 12px;
+  font-family: inherit;
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-filter-tab:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+.opsui-surface .ops-filter-tab.active {
+  background: var(--ops-accent-dim);
+  color: var(--ops-accent);
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .ops-filter-count {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: var(--ops-bg-hover);
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-filter-tab.active .ops-filter-count {
+  background: rgba(88, 166, 255, 0.2);
+  color: var(--ops-accent);
+}
+
+/* ─── Install Bar ──────────────────────────────────────────────── */
+.opsui-surface .ops-install-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: var(--ops-bg-card);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius);
+}
+
+.opsui-surface .ops-install-bar input {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--ops-bg);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius-sm);
+  color: var(--ops-text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+.opsui-surface .ops-install-bar input:focus {
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .ops-install-bar input::placeholder {
+  color: var(--ops-text-muted);
+}
+
+/* ─── Spice Table ──────────────────────────────────────────────── */
+.opsui-surface .ops-spice-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.opsui-surface .ops-spice-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ops-border-light);
+  cursor: pointer;
+  transition: background var(--ops-transition);
+}
+
+.opsui-surface .ops-spice-row:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-spice-row:hover {
+  background: var(--ops-bg-hover);
+}
+
+.opsui-surface .ops-spice-row.disabled {
+  opacity: 0.5;
+}
+
+.opsui-surface .ops-spice-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ops-radius-sm);
+  background: var(--ops-bg);
+}
+
+.opsui-surface .ops-spice-icon .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.opsui-surface .ops-spice-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.opsui-surface .ops-spice-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ops-text);
+  margin-bottom: 2px;
+}
+
+.opsui-surface .ops-spice-desc {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opsui-surface .ops-spice-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.opsui-surface .ops-spice-version {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-spice-author {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-spice-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.opsui-surface .ops-spice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--ops-text-secondary);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-spice-btn:hover {
+  background: var(--ops-bg-hover);
+  color: var(--ops-text);
+}
+
+/* ─── Toggle ────────────────────────────────────────────────────── */
+.opsui-surface .ops-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-toggle.on {
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-toggle.off {
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-toggle:hover {
+  background: var(--ops-bg-hover);
+}
+
+/* ─── Badge ─────────────────────────────────────────────────────── */
+.opsui-surface .ops-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--ops-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* ─── Tag ───────────────────────────────────────────────────────── */
+.opsui-surface .ops-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.opsui-surface .ops-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--ops-radius-sm);
+  background: var(--ops-bg);
+  color: var(--ops-text-secondary);
+  border: 1px solid var(--ops-border);
+  font-family: 'SF Mono', monospace;
+}
+
+/* ─── Modal ─────────────────────────────────────────────────────── */
+.opsui-surface .ops-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.opsui-surface .ops-modal {
+  background: var(--ops-bg-card);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius);
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.opsui-surface .ops-modal--sm {
+  width: 400px;
+}
+
+.opsui-surface .ops-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ops-border);
+}
+
+.opsui-surface .ops-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opsui-surface .ops-modal-title h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ops-text);
+}
+
+.opsui-surface .ops-modal-body {
+  padding: 16px;
+}
+
+.opsui-surface .ops-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ops-border);
+}
+
+/* ─── Detail Grid ──────────────────────────────────────────────── */
+.opsui-surface .ops-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.opsui-surface .ops-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opsui-surface .ops-detail-label {
+  font-size: 10px;
+  color: var(--ops-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.opsui-surface .ops-detail-value {
+  font-size: 12px;
+  color: var(--ops-text);
+}
+
+.opsui-surface .ops-detail-value.mono {
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+}
+
+/* ─── Execution Row ─────────────────────────────────────────────── */
+.opsui-surface .ops-execution-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .ops-execution-row:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-execution-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opsui-surface .ops-execution-snack {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ops-text);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-execution-time {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-execution-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opsui-surface .ops-execution-status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.opsui-surface .ops-execution-status.running {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-execution-status.completed {
+  background: rgba(63, 185, 80, 0.1);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-execution-status.failed {
+  background: rgba(248, 81, 73, 0.15);
+  color: var(--ops-error);
+}
+
+.opsui-surface .ops-execution-duration {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+/* ─── Card Content No Pad ──────────────────────────────────────── */
+.opsui-surface .ops-card-content--no-pad {
+  padding: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Snacks Tab Styles (Containerisation & Catalog)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Container Row ────────────────────────────────────────────── */
+.opsui-surface .ops-container-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ops-border-light);
+  transition: background var(--ops-transition);
+}
+
+.opsui-surface .ops-container-row:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-container-row:hover {
+  background: var(--ops-bg-hover);
+}
+
+.opsui-surface .ops-container-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.opsui-surface .ops-container-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ops-text);
+  margin-bottom: 2px;
+}
+
+.opsui-surface .ops-container-image {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opsui-surface .ops-container-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.opsui-surface .ops-container-status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.opsui-surface .ops-container-status.running {
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--ops-success);
+}
+
+.opsui-surface .ops-container-status.stopped {
+  background: rgba(139, 148, 158, 0.15);
+  color: var(--ops-text-secondary);
+}
+
+.opsui-surface .ops-container-status.error {
+  background: rgba(248, 81, 73, 0.15);
+  color: var(--ops-error);
+}
+
+.opsui-surface .ops-container-port {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+.opsui-surface .ops-container-started {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-container-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ─── Form Group ───────────────────────────────────────────────── */
+.opsui-surface .ops-form-group {
+  margin-bottom: 12px;
+}
+
+.opsui-surface .ops-form-label {
+  display: block;
+  font-size: 11px;
+  color: var(--ops-text-secondary);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.opsui-surface .ops-form-input {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--ops-bg);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius-sm);
+  color: var(--ops-text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.opsui-surface .ops-form-input:focus {
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .ops-form-input::placeholder {
+  color: var(--ops-text-muted);
+}
+
+/* ─── Preset List ──────────────────────────────────────────────── */
+.opsui-surface .ops-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.opsui-surface .ops-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--ops-border);
+  background: var(--ops-bg);
+  color: var(--ops-text);
+  cursor: pointer;
+  border-radius: var(--ops-radius-sm);
+  font-size: 12px;
+  font-family: inherit;
+  text-align: left;
+  transition: all var(--ops-transition);
+}
+
+.opsui-surface .ops-preset-btn:hover {
+  background: var(--ops-bg-hover);
+  border-color: var(--ops-accent-dim);
+}
+
+.opsui-surface .ops-preset-name {
+  font-weight: 500;
+  color: var(--ops-text);
+}
+
+.opsui-surface .ops-preset-image {
+  font-size: 10px;
+  color: var(--ops-text-muted);
+  font-family: 'SF Mono', monospace;
+}
+
+/* ─── Catalog ──────────────────────────────────────────────────── */
+.opsui-surface .ops-catalog-filters {
+  display: flex;
+  gap: 4px;
+}
+
+.opsui-surface .ops-catalog-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.opsui-surface .ops-catalog-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--ops-border-light);
+}
+
+.opsui-surface .ops-catalog-item:last-child {
+  border-bottom: none;
+}
+
+.opsui-surface .ops-catalog-item.installed {
+  opacity: 0.7;
+}
+
+.opsui-surface .ops-catalog-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.opsui-surface .ops-catalog-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ops-text);
+  margin-bottom: 2px;
+}
+
+.opsui-surface .ops-catalog-item-desc {
+  font-size: 11px;
+  color: var(--ops-text-muted);
+  margin-bottom: 4px;
+}
+
+.opsui-surface .ops-catalog-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--ops-text-muted);
+}
+
+.opsui-surface .ops-catalog-item-actions {
+  flex-shrink: 0;
+}
+
+.opsui-surface .ops-installed-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--ops-radius-sm);
+  background: rgba(63, 185, 80, 0.15);
+  color: var(--ops-success);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* ─── Script Editor ────────────────────────────────────────────── */
+.opsui-surface .ops-script-editor {
+  width: 100%;
+  min-height: 300px;
+  padding: 12px;
+  background: var(--ops-bg);
+  border: 1px solid var(--ops-border);
+  border-radius: var(--ops-radius-sm);
+  color: var(--ops-text);
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  tab-size: 2;
+}
+
+.opsui-surface .ops-script-editor:focus {
+  border-color: var(--ops-accent-dim);
+}

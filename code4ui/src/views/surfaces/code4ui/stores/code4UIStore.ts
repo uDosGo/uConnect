@@ -1,10 +1,14 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+/* ═══════════════════════════════════════════════════════════════════
+   code4ui Store — Wireframe Surface State
+   Uses the unified useSurfaceStore from @usx/react for shared state,
+   with code4ui-specific extensions for wireframe data.
+   ═══════════════════════════════════════════════════════════════════ */
 
-export interface ChatMessage {
-  role: 'user' | 'assistant'
-  content: string
-}
+import { create } from 'zustand'
+import type { ChatMessage } from '@usx/react'
+
+export type FontStyle = 'mono' | 'sans' | 'serif'
+export type Palette = 'wireframe' | 'blueprint' | 'terminal' | 'paper'
 
 export interface Snackbar {
   message: string
@@ -12,89 +16,81 @@ export interface Snackbar {
   action?: string
 }
 
-export type FontStyle = 'mono' | 'sans' | 'serif'
-export type Palette = 'wireframe' | 'blueprint' | 'terminal' | 'paper'
+export interface Code4UIState {
+  // Surface state
+  sidebarCollapsed: boolean
+  chatOpen: boolean
+  isDark: boolean
+  chatMessages: ChatMessage[]
+  snackbar: Snackbar | null
+  fontSize: number
+  fontStyle: FontStyle
+  currentPalette: Palette
 
-export const useCode4UIStore = defineStore('code4ui', () => {
-  const sidebarCollapsed = ref(false)
-  const chatOpen = ref(false)
-  const isDark = ref(false)
-  const chatMessages = ref<ChatMessage[]>([])
-  const snackbar = ref<Snackbar | null>(null)
-  const fontSize = ref(14)
-  const fontStyle = ref<FontStyle>('mono')
-  const currentPalette = ref<Palette>('wireframe')
+  // Actions
+  toggleSidebar: () => void
+  toggleChat: () => void
+  toggleTheme: () => void
+  increaseFontSize: () => void
+  decreaseFontSize: () => void
+  cycleFontStyle: () => void
+  setPalette: (palette: Palette) => void
+  cyclePalette: () => void
+  addChatMessage: (role: 'user' | 'assistant', content: string) => void
+  showSnackbar: (message: string, type?: 'info' | 'success' | 'error', action?: string) => void
+  dismissSnackbar: () => void
+}
 
-  function toggleSidebar() {
-    sidebarCollapsed.value = !sidebarCollapsed.value
-  }
+export const useCode4UIStore = create<Code4UIState>((set, get) => ({
+  // Initial state
+  sidebarCollapsed: false,
+  chatOpen: false,
+  isDark: false,
+  chatMessages: [],
+  snackbar: null,
+  fontSize: 14,
+  fontStyle: 'mono',
+  currentPalette: 'wireframe',
 
-  function toggleChat() {
-    chatOpen.value = !chatOpen.value
-  }
+  // Actions
+  toggleSidebar: () => set(s => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+  toggleChat: () => set(s => ({ chatOpen: !s.chatOpen })),
+  toggleTheme: () => set(s => ({ isDark: !s.isDark })),
 
-  function toggleTheme() {
-    isDark.value = !isDark.value
-  }
+  increaseFontSize: () => {
+    const { fontSize } = get()
+    if (fontSize < 24) set({ fontSize: fontSize + 1 })
+  },
 
-  function increaseFontSize() {
-    if (fontSize.value < 24) fontSize.value += 1
-  }
+  decreaseFontSize: () => {
+    const { fontSize } = get()
+    if (fontSize > 10) set({ fontSize: fontSize - 1 })
+  },
 
-  function decreaseFontSize() {
-    if (fontSize.value > 10) fontSize.value -= 1
-  }
-
-  function cycleFontStyle() {
+  cycleFontStyle: () => {
     const order: FontStyle[] = ['mono', 'sans', 'serif']
-    const idx = order.indexOf(fontStyle.value)
-    fontStyle.value = order[(idx + 1) % order.length]
-  }
+    const idx = order.indexOf(get().fontStyle)
+    set({ fontStyle: order[(idx + 1) % order.length] })
+  },
 
-  function setPalette(palette: Palette) {
-    currentPalette.value = palette
-  }
+  setPalette: (palette: Palette) => set({ currentPalette: palette }),
 
-  function cyclePalette() {
+  cyclePalette: () => {
     const order: Palette[] = ['wireframe', 'blueprint', 'terminal', 'paper']
-    const idx = order.indexOf(currentPalette.value)
-    currentPalette.value = order[(idx + 1) % order.length]
-  }
+    const idx = order.indexOf(get().currentPalette)
+    set({ currentPalette: order[(idx + 1) % order.length] })
+  },
 
-  function addChatMessage(role: 'user' | 'assistant', content: string) {
-    chatMessages.value.push({ role, content })
-  }
+  addChatMessage: (role, content) => {
+    set(s => ({ chatMessages: [...s.chatMessages, { role, content }] }))
+  },
 
-  function showSnackbar(message: string, type: 'info' | 'success' | 'error' = 'info', action?: string) {
-    snackbar.value = { message, type, action }
+  showSnackbar: (message, type = 'info', action) => {
+    set({ snackbar: { message, type, action } })
     setTimeout(() => {
-      snackbar.value = null
+      set({ snackbar: null })
     }, 4000)
-  }
+  },
 
-  function dismissSnackbar() {
-    snackbar.value = null
-  }
-
-  return {
-    sidebarCollapsed,
-    chatOpen,
-    isDark,
-    chatMessages,
-    snackbar,
-    fontSize,
-    fontStyle,
-    currentPalette,
-    toggleSidebar,
-    toggleChat,
-    toggleTheme,
-    increaseFontSize,
-    decreaseFontSize,
-    cycleFontStyle,
-    setPalette,
-    cyclePalette,
-    addChatMessage,
-    showSnackbar,
-    dismissSnackbar,
-  }
-})
+  dismissSnackbar: () => set({ snackbar: null }),
+}))

@@ -1,9 +1,9 @@
 {
   "name": "code3ui",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "code3ui — Jotion-style Notion workspace surface with USX toolbar + chat panel",
+  "description": "code3ui — Jotion-style Notion workspace surface (React)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,17 +11,19 @@
   },
   "dependencies": {
     "@usx/styles": "file:../packages/usx",
-    "pinia": "^2.3.1",
-    "vue": "^3.5.13",
-    "vue-router": "^4.6.4"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.5.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.7.3",
-    "vite": "^6.0.3",
-    "vue-tsc": "^2.2.0"
+    "vite": "^6.0.3"
   }
 }

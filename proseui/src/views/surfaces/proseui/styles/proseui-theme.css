@@ -25,23 +25,15 @@ html, body, #app {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: var(--m3-bg, #0f172a);
+  background: var(--usx-color-background, #0f172a);
 }
 
-/* ─── M3 Token Mapping ─────────────────────────────────────────── */
-/* .app-shell sets --m3-bg, --m3-surface, --m3-primary, etc. */
-.app-shell {
-  --usx-color-background: var(--m3-bg);
-  --usx-color-surface: var(--m3-surface);
-  --usx-color-primary: var(--m3-primary);
-  --usx-color-on-surface: var(--m3-on-surface);
-  --usx-color-on-surface-variant: var(--m3-on-surface-variant);
-  --usx-color-outline: var(--m3-outline);
-  --usx-color-on-primary: var(--m3-bg);
-  --usx-color-error-container: var(--m3-surface);
-  --usx-color-on-error-container: var(--m3-primary);
-  --usx-color-tertiary-container: var(--m3-surface);
-  --usx-color-on-tertiary-container: var(--m3-primary);
+/* ─── Dark Mode Override ───────────────────────────────────────── */
+/* When .usx-dark is applied, palettes use their dark tokens.
+   The palette CSS classes already define both light and dark values
+   via the .usx-dark selector in base.css. */
+.usx-dark {
+  color-scheme: dark;
 }
 
 /* ─── Font Styles ──────────────────────────────────────────────── */

@@ -1,31 +1,25 @@
 /* ═══════════════════════════════════════════════════════════════════
    proseUIStore — React state for ProseUISurface
-   M3-style colour schemes with built-in light/dark variants.
+   Uses CSS palette classes from @usx/palettes/base.css instead of inline M3 tokens.
    ═══════════════════════════════════════════════════════════════════ */
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
 
 export type FontStyle = 'sans' | 'serif' | 'mono'
 
-/** M3 colour scheme — each palette has both light and dark tokens */
-export interface M3Scheme {
+/** A palette entry — maps to a CSS class like .palette-paper */
+export interface PaletteEntry {
   id: string
   label: string
-  light: {
-    background: string
-    surface: string
-    primary: string
-    onSurface: string
-    onSurfaceVariant: string
-    outline: string
-  }
-  dark: {
-    background: string
-    surface: string
-    primary: string
-    onSurface: string
-    onSurfaceVariant: string
-    outline: string
-  }
+  /** CSS class name, e.g. "palette-paper" */
+  cssClass: string
+  /** Light background colour for swatch preview */
+  lightBg: string
+  /** Light accent colour for swatch preview */
+  lightAccent: string
+  /** Dark background colour for swatch preview */
+  darkBg: string
+  /** Dark accent colour for swatch preview */
+  darkAccent: string
 }
 
 export type ThemeMode = 'light' | 'dark'
@@ -33,9 +27,9 @@ export type ThemeMode = 'light' | 'dark'
 export interface ChatMessage { role: 'user' | 'assistant'; content: string }
 
 export interface ProseUIStoreValue {
-  scheme: M3Scheme
-  setScheme: (s: M3Scheme) => void
-  schemes: M3Scheme[]
+  palette: PaletteEntry
+  setPalette: (p: PaletteEntry) => void
+  palettes: PaletteEntry[]
   themeMode: ThemeMode
   toggleTheme: () => void
   fontSize: number
@@ -55,107 +49,69 @@ export interface ProseUIStoreValue {
   sendChat: () => void
 }
 
-
-const M3_SCHEMES: M3Scheme[] = [
+const PALETTES: PaletteEntry[] = [
   {
     id: 'paper',
     label: 'Paper',
-    light: {
-      background: '#f5f0e8',
-      surface: '#ede7d9',
-      primary: '#8b5e3c',
-      onSurface: '#3d3229',
-      onSurfaceVariant: '#7a6b5a',
-      outline: '#d4c9b8',
-    },
-    dark: {
-      background: '#1a1612',
-      surface: '#2a241e',
-      primary: '#c49a6c',
-      onSurface: '#e8e0d4',
-      onSurfaceVariant: '#9a8b7a',
-      outline: '#4a4036',
-    },
+    cssClass: 'palette-paper',
+    lightBg: '#faf6ef',
+    lightAccent: '#5c4a32',
+    darkBg: '#1a1612',
+    darkAccent: '#c49a6c',
   },
   {
     id: 'parchment',
     label: 'Parchment',
-    light: {
-      background: '#faf3e0',
-      surface: '#f5ecd0',
-      primary: '#a0522d',
-      onSurface: '#3d3028',
-      onSurfaceVariant: '#7a6b5a',
-      outline: '#d4c4a8',
-    },
-    dark: {
-      background: '#1e1812',
-      surface: '#2e261e',
-      primary: '#d4845a',
-      onSurface: '#e8ddd0',
-      onSurfaceVariant: '#9a8b7a',
-      outline: '#4a3c30',
-    },
+    cssClass: 'palette-parchment',
+    lightBg: '#f5ecd6',
+    lightAccent: '#5c4a32',
+    darkBg: '#1e1812',
+    darkAccent: '#d4845a',
   },
   {
     id: 'modern',
     label: 'Modern',
-    light: {
-      background: '#ffffff',
-      surface: '#f5f5f5',
-      primary: '#4361ee',
-      onSurface: '#1a1a2e',
-      onSurfaceVariant: '#6b7280',
-      outline: '#e5e7eb',
-    },
-    dark: {
-      background: '#0f172a',
-      surface: '#1e293b',
-      primary: '#60a5fa',
-      onSurface: '#e2e8f0',
-      onSurfaceVariant: '#64748b',
-      outline: '#334155',
-    },
+    cssClass: 'palette-modern',
+    lightBg: '#ffffff',
+    lightAccent: '#1a73e8',
+    darkBg: '#0f172a',
+    darkAccent: '#60a5fa',
   },
   {
     id: 'forest',
     label: 'Forest',
-    light: {
-      background: '#f0f7f0',
-      surface: '#e4efe4',
-      primary: '#2d6a4f',
-      onSurface: '#1a2e1a',
-      onSurfaceVariant: '#5a7a5a',
-      outline: '#c8dcc8',
-    },
-    dark: {
-      background: '#0f1a0f',
-      surface: '#1a2e1a',
-      primary: '#52b788',
-      onSurface: '#d8e8d8',
-      onSurfaceVariant: '#7a9a7a',
-      outline: '#2a4a2a',
-    },
+    cssClass: 'palette-forest',
+    lightBg: '#f0f7f0',
+    lightAccent: '#2d6a4f',
+    darkBg: '#0f1a0f',
+    darkAccent: '#52b788',
   },
   {
     id: 'sunset',
     label: 'Sunset',
-    light: {
-      background: '#fef0e8',
-      surface: '#fce4d6',
-      primary: '#c2410c',
-      onSurface: '#3d2018',
-      onSurfaceVariant: '#8a6a5a',
-      outline: '#e8ccc0',
-    },
-    dark: {
-      background: '#1e1410',
-      surface: '#2e2018',
-      primary: '#f97316',
-      onSurface: '#f0d8cc',
-      onSurfaceVariant: '#a07a6a',
-      outline: '#4a3428',
-    },
+    cssClass: 'palette-sunset',
+    lightBg: '#fef0e8',
+    lightAccent: '#c2410c',
+    darkBg: '#1e1410',
+    darkAccent: '#f97316',
+  },
+  {
+    id: 'notion',
+    label: 'Notion',
+    cssClass: 'palette-notion',
+    lightBg: '#ffffff',
+    lightAccent: '#37352f',
+    darkBg: '#121212',
+    darkAccent: '#bb86fc',
+  },
+  {
+    id: 'dark',
+    label: 'Dark',
+    cssClass: 'palette-dark',
+    lightBg: '#ffffff',
+    lightAccent: '#bb86fc',
+    darkBg: '#121212',
+    darkAccent: '#bb86fc',
   },
 ]
 
@@ -164,7 +120,7 @@ const ProseUIContext = createContext<ProseUIStoreValue | undefined>(undefined)
 const STORAGE_KEY = 'proseui-prefs'
 
 interface PersistedPrefs {
-  schemeId: string
+  paletteId: string
   themeMode: ThemeMode
   fontSize: number
   fontStyle: FontStyle
@@ -205,8 +161,8 @@ function getChatResponse(text: string): string {
 
 export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const saved = loadPrefs()
-  const initialScheme = saved ? M3_SCHEMES.find(s => s.id === saved.schemeId) || M3_SCHEMES[2] : M3_SCHEMES[2]
-  const [scheme, setScheme] = useState<M3Scheme>(initialScheme)
+  const initialPalette = saved ? PALETTES.find(p => p.id === saved.paletteId) || PALETTES[2] : PALETTES[2]
+  const [palette, setPalette] = useState<PaletteEntry>(initialPalette)
   const [themeMode, setThemeMode] = useState<ThemeMode>(saved?.themeMode ?? 'dark')
   const [fontSize, setFontSize] = useState(saved?.fontSize ?? 16)
   const [fontStyle, setFontStyle] = useState<FontStyle>(saved?.fontStyle ?? 'serif')
@@ -261,12 +217,12 @@ export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Persist prefs whenever they change
   useEffect(() => {
-    savePrefs({ schemeId: scheme.id, themeMode, fontSize, fontStyle })
-  }, [scheme.id, themeMode, fontSize, fontStyle])
+    savePrefs({ paletteId: palette.id, themeMode, fontSize, fontStyle })
+  }, [palette.id, themeMode, fontSize, fontStyle])
 
   const value: ProseUIStoreValue = {
-    scheme, setScheme,
-    schemes: M3_SCHEMES,
+    palette, setPalette,
+    palettes: PALETTES,
     themeMode, toggleTheme,
     fontSize, setFontSize: setFontSizeDirect, increaseFont, decreaseFont,
     fontStyle, setFontStyle: setFontStyleDirect, cycleFontStyle,
@@ -274,7 +230,6 @@ export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ child
     chatOpen, toggleChat,
     chatMessages, chatInput, setChatInput, sendChat,
   }
-
 
   return (
     <ProseUIContext.Provider value={value}>

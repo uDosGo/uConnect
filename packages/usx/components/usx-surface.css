@@ -1,0 +1,433 @@
+/* ═══════════════════════════════════════════════════════════════════
+   @usx/components/surface — Shared Surface Layout Components
+   Header, NavRail, ChatSheet, Snackbar for all USX surfaces.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Surface Header ───────────────────────────────────────────── */
+.usx-surface-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--usx-color-surface);
+  border-bottom: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.usx-header-left,
+.usx-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.usx-header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-on-surface-variant);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.usx-header-btn:hover {
+  background: var(--usx-color-surface-container-high);
+}
+
+.usx-header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--usx-color-outline);
+  margin: 0 4px;
+}
+
+.usx-header-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.usx-header-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--usx-color-on-surface-variant);
+  background: var(--usx-color-surface-container);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.usx-header-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--usx-color-on-surface-variant);
+}
+
+.usx-breadcrumb-sep {
+  color: var(--usx-color-outline);
+}
+
+.usx-breadcrumb-current {
+  color: var(--usx-color-on-surface);
+  font-weight: 500;
+}
+
+.usx-swatch-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--usx-color-outline);
+}
+
+.usx-header-fontsize {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--usx-color-on-surface-variant);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* ─── Nav Rail ─────────────────────────────────────────────────── */
+.usx-nav-rail {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background: var(--usx-color-surface);
+  border-right: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+  transition: width 0.2s;
+  overflow: hidden;
+}
+
+.usx-nav-rail.collapsed {
+  width: 48px;
+}
+
+.nav-rail-top,
+.nav-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  gap: 4px;
+}
+
+.nav-rail-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 8px;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.nav-rail-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-on-surface-variant);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.nav-rail-btn:hover {
+  background: var(--usx-color-surface-container-high);
+}
+
+.nav-rail-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-on-surface-variant);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 13px;
+  text-align: left;
+}
+
+.nav-rail-tab:hover {
+  background: var(--usx-color-surface-container-high);
+}
+
+.nav-rail-tab.active {
+  background: var(--usx-color-primary-container);
+  color: var(--usx-color-on-primary-container);
+}
+
+.nav-rail-tab-icon {
+  flex-shrink: 0;
+}
+
+.nav-rail-tab-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.usx-nav-rail.collapsed .nav-rail-tab-label {
+  display: none;
+}
+
+/* ─── Chat Sheet ───────────────────────────────────────────────── */
+.usx-chat {
+  display: flex;
+  flex-direction: column;
+  width: 0;
+  background: var(--usx-color-surface);
+  border-left: 1px solid var(--usx-color-outline);
+  overflow: hidden;
+  transition: width 0.2s;
+  flex-shrink: 0;
+}
+
+.usx-chat.open {
+  width: 320px;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+}
+
+.chat-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.chat-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-on-surface-variant);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chat-close-btn:hover {
+  background: var(--usx-color-surface-container-high);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--usx-color-on-surface-variant);
+  text-align: center;
+  padding: 24px;
+  gap: 12px;
+}
+
+.chat-empty-icon {
+  opacity: 0.5;
+}
+
+.chat-empty p {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.chat-message {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chat-message--user {
+  background: var(--usx-color-primary-container);
+  color: var(--usx-color-on-primary-container);
+}
+
+.chat-message--assistant {
+  background: var(--usx-color-surface-container);
+  color: var(--usx-color-on-surface);
+}
+
+.chat-message--system {
+  background: var(--usx-color-surface-variant);
+  color: var(--usx-color-on-surface-variant);
+  font-style: italic;
+  font-size: 12px;
+}
+
+.chat-message-avatar {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--usx-color-surface-container-high);
+}
+
+.chat-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--usx-color-surface-container);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.chat-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--usx-color-on-surface);
+  font-size: 13px;
+  outline: none;
+  padding: 6px 0;
+}
+
+.chat-input::placeholder {
+  color: var(--usx-color-on-surface-variant);
+}
+
+.chat-send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.chat-send-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.chat-send-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* ─── Snackbar ─────────────────────────────────────────────────── */
+.usx-snackbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: usx-snackbar-in 0.3s ease-out;
+}
+
+@keyframes usx-snackbar-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.usx-snackbar--info {
+  background: var(--usx-color-primary-container);
+  color: var(--usx-color-on-primary-container);
+}
+
+.usx-snackbar--success {
+  background: var(--usx-color-tertiary-container);
+  color: var(--usx-color-on-tertiary-container);
+}
+
+.usx-snackbar--error {
+  background: var(--usx-color-error-container);
+  color: var(--usx-color-on-error-container);
+}
+
+.usx-snackbar--warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.usx-snackbar-action {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.usx-snackbar-action:hover {
+  background: rgba(0, 0, 0, 0.1);
+}

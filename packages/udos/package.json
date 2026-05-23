@@ -1,0 +1,28 @@
+{
+  "name": "@udos/core",
+  "version": "1.0.0",
+  "description": "UDO Core — Unified automation framework for Skills, Snacks, Spices, Tasks, Agents, and MCP bridge. Cross-platform containerised action execution.",
+  "type": "module",
+  "main": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./commands": "./commands/index.ts",
+    "./commands/task": "./commands/task.ts",
+    "./commands/run": "./commands/run.ts",
+    "./commands/surface": "./commands/surface.ts",
+    "./commands/vault": "./commands/vault.ts",
+    "./commands/agent": "./commands/agent.ts",
+    "./commands/mcp": "./commands/mcp.ts",
+    "./commands/dev": "./commands/dev.ts",
+    "./manifest": "./manifest.json",
+    "./types": "./types.ts",
+    "./task": "./task.ts",
+    "./skill": "./skill.ts",
+    "./agent": "./agent.ts",
+    "./automation": "./automation.ts"
+  },
+  "peerDependencies": {
+    "zod": "^3.22.0"
+  },
+  "license": "MIT"
+}
