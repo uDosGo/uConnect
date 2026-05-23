@@ -22,8 +22,6 @@ const MORE_TABS = [
   { id: 'vibe', icon: 'school', label: 'Vibe Terminal' },
   { id: 'vault', icon: 'folder_open', label: 'Vault Browser' },
   { id: 'workflow', icon: 'account_tree', label: 'Workflow Manager' },
-  { id: 'tools', icon: 'tune', label: 'Tool Builder' },
-  { id: 'settings', icon: 'settings', label: 'Settings' },
 ]
 
 const ProseSurfaceManager: React.FC = () => {
@@ -131,17 +129,6 @@ const ProseSurfaceManager: React.FC = () => {
                       <span>{tab.label}</span>
                     </button>
                   ))}
-                  <div className="proseui-header-dropdown-divider" />
-                  <a
-                    href="http://localhost:5178"
-                    className="proseui-header-dropdown-item"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMoreOpen(false)}
-                  >
-                    <Icon name="dns" size={16} />
-                    <span>Server Operations</span>
-                  </a>
                 </div>
               )}
             </div>
