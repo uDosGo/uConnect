@@ -54,6 +54,295 @@
   --usx-active: var(--usx-color-surface-container-highest);
 }
 
+/* ─── Dark Mode Overrides ──────────────────────────────────────── */
+/* When .usx-dark is applied alongside a palette class, swap to dark colours */
+.palette-notion.usx-dark {
+  --usx-color-primary: #bb86fc;
+  --usx-color-on-primary: #1a1a1a;
+  --usx-color-primary-container: #3a2a5c;
+  --usx-color-on-primary-container: #bb86fc;
+  --usx-color-secondary: #9e9e9e;
+  --usx-color-on-secondary: #1a1a1a;
+  --usx-color-secondary-container: #333333;
+  --usx-color-on-secondary-container: #9e9e9e;
+  --usx-color-tertiary: #6cb4ee;
+  --usx-color-on-tertiary: #1a1a1a;
+  --usx-color-tertiary-container: #1a3a5c;
+  --usx-color-on-tertiary-container: #6cb4ee;
+  --usx-color-error: #cf6679;
+  --usx-color-on-error: #1a1a1a;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #cf6679;
+  --usx-color-background: #121212;
+  --usx-color-on-background: #e0e0e0;
+  --usx-color-surface: #1e1e1e;
+  --usx-color-on-surface: #e0e0e0;
+  --usx-color-surface-variant: #2a2a2a;
+  --usx-color-on-surface-variant: #9e9e9e;
+  --usx-color-surface-container-lowest: #0a0a0a;
+  --usx-color-surface-container-low: #2a2a2a;
+  --usx-color-surface-container: #333333;
+  --usx-color-surface-container-high: #3a3a3a;
+  --usx-color-surface-container-highest: #424242;
+  --usx-color-surface-dim: #121212;
+  --usx-color-surface-bright: #2a2a2a;
+  --usx-color-outline: #444444;
+  --usx-color-outline-variant: #444444;
+  --usx-color-inverse-surface: #e0e0e0;
+  --usx-color-inverse-on-surface: #121212;
+  --usx-color-inverse-primary: #6200ee;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+.palette-paper.usx-dark {
+  --usx-color-primary: #c49a6c;
+  --usx-color-on-primary: #1a1612;
+  --usx-color-primary-container: #3a2a1a;
+  --usx-color-on-primary-container: #c49a6c;
+  --usx-color-secondary: #a08060;
+  --usx-color-on-secondary: #1a1612;
+  --usx-color-secondary-container: #3a2a1a;
+  --usx-color-on-secondary-container: #a08060;
+  --usx-color-tertiary: #b89070;
+  --usx-color-on-tertiary: #1a1612;
+  --usx-color-tertiary-container: #3a2a1a;
+  --usx-color-on-tertiary-container: #b89070;
+  --usx-color-error: #cf6679;
+  --usx-color-on-error: #1a1612;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #cf6679;
+  --usx-color-background: #1a1612;
+  --usx-color-on-background: #e0d8c8;
+  --usx-color-surface: #2a221a;
+  --usx-color-on-surface: #e0d8c8;
+  --usx-color-surface-variant: #3a2e22;
+  --usx-color-on-surface-variant: #a09080;
+  --usx-color-surface-container-lowest: #0e0c0a;
+  --usx-color-surface-container-low: #3a2e22;
+  --usx-color-surface-container: #44382a;
+  --usx-color-surface-container-high: #4e4030;
+  --usx-color-surface-container-highest: #584838;
+  --usx-color-surface-dim: #1a1612;
+  --usx-color-surface-bright: #3a2e22;
+  --usx-color-outline: #504438;
+  --usx-color-outline-variant: #504438;
+  --usx-color-inverse-surface: #e0d8c8;
+  --usx-color-inverse-on-surface: #1a1612;
+  --usx-color-inverse-primary: #8a7050;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+.palette-parchment.usx-dark {
+  --usx-color-primary: #d4845a;
+  --usx-color-on-primary: #1e1812;
+  --usx-color-primary-container: #3a2a1a;
+  --usx-color-on-primary-container: #d4845a;
+  --usx-color-secondary: #b08050;
+  --usx-color-on-secondary: #1e1812;
+  --usx-color-secondary-container: #3a2a1a;
+  --usx-color-on-secondary-container: #b08050;
+  --usx-color-tertiary: #c09060;
+  --usx-color-on-tertiary: #1e1812;
+  --usx-color-tertiary-container: #3a2a1a;
+  --usx-color-on-tertiary-container: #c09060;
+  --usx-color-error: #cf6679;
+  --usx-color-on-error: #1e1812;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #cf6679;
+  --usx-color-background: #1e1812;
+  --usx-color-on-background: #e0d0b8;
+  --usx-color-surface: #2e241a;
+  --usx-color-on-surface: #e0d0b8;
+  --usx-color-surface-variant: #3e3022;
+  --usx-color-on-surface-variant: #a09070;
+  --usx-color-surface-container-lowest: #0e0c0a;
+  --usx-color-surface-container-low: #3e3022;
+  --usx-color-surface-container: #4a3a2a;
+  --usx-color-surface-container-high: #544432;
+  --usx-color-surface-container-highest: #5e4e3a;
+  --usx-color-surface-dim: #1e1812;
+  --usx-color-surface-bright: #3e3022;
+  --usx-color-outline: #504438;
+  --usx-color-outline-variant: #504438;
+  --usx-color-inverse-surface: #e0d0b8;
+  --usx-color-inverse-on-surface: #1e1812;
+  --usx-color-inverse-primary: #8a7050;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+.palette-modern.usx-dark {
+  --usx-color-primary: #60a5fa;
+  --usx-color-on-primary: #0f172a;
+  --usx-color-primary-container: #1a3a6a;
+  --usx-color-on-primary-container: #60a5fa;
+  --usx-color-secondary: #94a3b8;
+  --usx-color-on-secondary: #0f172a;
+  --usx-color-secondary-container: #1e293b;
+  --usx-color-on-secondary-container: #94a3b8;
+  --usx-color-tertiary: #34d399;
+  --usx-color-on-tertiary: #0f172a;
+  --usx-color-tertiary-container: #064e3b;
+  --usx-color-on-tertiary-container: #34d399;
+  --usx-color-error: #f87171;
+  --usx-color-on-error: #0f172a;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #f87171;
+  --usx-color-background: #0f172a;
+  --usx-color-on-background: #e2e8f0;
+  --usx-color-surface: #1e293b;
+  --usx-color-on-surface: #e2e8f0;
+  --usx-color-surface-variant: #334155;
+  --usx-color-on-surface-variant: #94a3b8;
+  --usx-color-surface-container-lowest: #0a0f1a;
+  --usx-color-surface-container-low: #334155;
+  --usx-color-surface-container: #3b4a60;
+  --usx-color-surface-container-high: #475569;
+  --usx-color-surface-container-highest: #526070;
+  --usx-color-surface-dim: #0f172a;
+  --usx-color-surface-bright: #334155;
+  --usx-color-outline: #475569;
+  --usx-color-outline-variant: #475569;
+  --usx-color-inverse-surface: #e2e8f0;
+  --usx-color-inverse-on-surface: #0f172a;
+  --usx-color-inverse-primary: #2563eb;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+.palette-forest.usx-dark {
+  --usx-color-primary: #52b788;
+  --usx-color-on-primary: #0f1a0f;
+  --usx-color-primary-container: #1a3a2a;
+  --usx-color-on-primary-container: #52b788;
+  --usx-color-secondary: #7ab07a;
+  --usx-color-on-secondary: #0f1a0f;
+  --usx-color-secondary-container: #2a4a2a;
+  --usx-color-on-secondary-container: #7ab07a;
+  --usx-color-tertiary: #5aaa7a;
+  --usx-color-on-tertiary: #0f1a0f;
+  --usx-color-tertiary-container: #1a3a2a;
+  --usx-color-on-tertiary-container: #5aaa7a;
+  --usx-color-error: #cf6679;
+  --usx-color-on-error: #0f1a0f;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #cf6679;
+  --usx-color-background: #0f1a0f;
+  --usx-color-on-background: #d0e0d0;
+  --usx-color-surface: #1a2e1a;
+  --usx-color-on-surface: #d0e0d0;
+  --usx-color-surface-variant: #2a4a2a;
+  --usx-color-on-surface-variant: #8aaa8a;
+  --usx-color-surface-container-lowest: #0a100a;
+  --usx-color-surface-container-low: #2a4a2a;
+  --usx-color-surface-container: #3a5a3a;
+  --usx-color-surface-container-high: #4a6a4a;
+  --usx-color-surface-container-highest: #5a7a5a;
+  --usx-color-surface-dim: #0f1a0f;
+  --usx-color-surface-bright: #2a4a2a;
+  --usx-color-outline: #4a6a4a;
+  --usx-color-outline-variant: #4a6a4a;
+  --usx-color-inverse-surface: #d0e0d0;
+  --usx-color-inverse-on-surface: #0f1a0f;
+  --usx-color-inverse-primary: #2d6a4f;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+.palette-sunset.usx-dark {
+  --usx-color-primary: #f97316;
+  --usx-color-on-primary: #1e1410;
+  --usx-color-primary-container: #4a2a1a;
+  --usx-color-on-primary-container: #f97316;
+  --usx-color-secondary: #d08050;
+  --usx-color-on-secondary: #1e1410;
+  --usx-color-secondary-container: #4a2a1a;
+  --usx-color-on-secondary-container: #d08050;
+  --usx-color-tertiary: #e07040;
+  --usx-color-on-tertiary: #1e1410;
+  --usx-color-tertiary-container: #4a2a1a;
+  --usx-color-on-tertiary-container: #e07040;
+  --usx-color-error: #cf6679;
+  --usx-color-on-error: #1e1410;
+  --usx-color-error-container: #4a1a1a;
+  --usx-color-on-error-container: #cf6679;
+  --usx-color-background: #1e1410;
+  --usx-color-on-background: #e8d0c0;
+  --usx-color-surface: #2e2018;
+  --usx-color-on-surface: #e8d0c0;
+  --usx-color-surface-variant: #3e2a20;
+  --usx-color-on-surface-variant: #a08070;
+  --usx-color-surface-container-lowest: #0e0a08;
+  --usx-color-surface-container-low: #3e2a20;
+  --usx-color-surface-container: #4a3428;
+  --usx-color-surface-container-high: #543e30;
+  --usx-color-surface-container-highest: #5e4838;
+  --usx-color-surface-dim: #1e1410;
+  --usx-color-surface-bright: #3e2a20;
+  --usx-color-outline: #504030;
+  --usx-color-outline-variant: #504030;
+  --usx-color-inverse-surface: #e8d0c0;
+  --usx-color-inverse-on-surface: #1e1410;
+  --usx-color-inverse-primary: #c2410c;
+  --usx-color-shadow: #000000;
+  --usx-color-scrim: #000000;
+  --usx-bg: var(--usx-color-background);
+  --usx-fg: var(--usx-color-on-background);
+  --usx-accent: var(--usx-color-primary);
+  --usx-muted: var(--usx-color-on-surface-variant);
+  --usx-surface: var(--usx-color-surface-variant);
+  --usx-border: var(--usx-color-outline);
+  --usx-hover: var(--usx-color-surface-container-high);
+  --usx-active: var(--usx-color-surface-container-highest);
+}
+
+/* palette-dark already IS a dark palette — .usx-dark on it just ensures consistency */
+.palette-dark.usx-dark {
+  /* Already dark, keep as-is */
+}
+
 /* ─── Palette: Paper (cream/ink) ────────────────────────────────── */
 .palette-paper {
   --usx-color-primary: #5c4a32;
