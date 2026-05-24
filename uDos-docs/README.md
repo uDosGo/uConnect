@@ -8,7 +8,9 @@ Welcome to the uDos documentation hub. Here you'll find comprehensive guides, AP
 - **[Student Guide](student/)**: Plain-language tutorials for beginners
 - **[Development Guide](DEVELOPMENT_GUIDE.md)**: Everything you need to start developing with uDos
 - **[Project Structure](STRUCTURE.md)**: Overview of the project organization
-- **[Architecture](ARCHITECTURE.md)**: Technical architecture and design principles
+- **[Architecture](CORE_ARCHITECTURE.md)**: Technical architecture and design principles
+- **[Legacy Docs](legacy/)**: Superseded/outdated documentation (ARCHITECTURE.md, GITHUB_WORKFLOW.md, DEVLOG.md, roadmap/)
+- **[Docs Under Review](review/)**: Iffy/uncertain/WIP docs needing triage (LOCKED specs, v4/)
 
 ## API Documentation
 

@@ -47,6 +47,9 @@ export interface ProseUIStoreValue {
   chatInput: string
   setChatInput: (v: string) => void
   sendChat: () => void
+  /** Selected document for the editor detail panel (Kanban/Table click) */
+  selectedDoc: { title: string; type: string; status: string; date: string } | null
+  setSelectedDoc: (doc: { title: string; type: string; status: string; date: string } | null) => void
 }
 
 const PALETTES: PaletteEntry[] = [
@@ -172,6 +175,7 @@ export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ child
     { role: 'assistant', content: 'Hello! I can help you with documents, publishing, and more. Try asking me something.' },
   ])
   const [chatInput, setChatInput] = useState('')
+  const [selectedDoc, setSelectedDoc] = useState<{ title: string; type: string; status: string; date: string } | null>(null)
 
   const setFontSizeDirect = useCallback((size: number) => {
     setFontSize(Math.max(10, Math.min(24, size)))
@@ -229,6 +233,7 @@ export const ProseUIProvider: React.FC<{ children: React.ReactNode }> = ({ child
     activeView, setActiveView,
     chatOpen, toggleChat,
     chatMessages, chatInput, setChatInput, sendChat,
+    selectedDoc, setSelectedDoc,
   }
 
   return (

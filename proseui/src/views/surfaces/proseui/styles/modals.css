@@ -1,0 +1,347 @@
+/* ═══════════════════════════════════════════════════════════════════
+   modals.css — Modal Overlays, Dialogs, Forms
+   ═══════════════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: overlayFadeIn 0.12s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-lg);
+  box-shadow: var(--usx-shadow-lg);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.15s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--usx-color-outline);
+}
+
+.modal-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin: 0;
+}
+
+.modal-body {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--usx-color-outline);
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modal-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-input {
+  padding: 0.5rem 0.75rem;
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.modal-input:focus {
+  border-color: var(--usx-color-primary);
+}
+
+.modal-select {
+  padding: 0.5rem 0.75rem;
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.modal-select:focus {
+  border-color: var(--usx-color-primary);
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border: none;
+  border-radius: var(--usx-radius-sm);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--usx-transition);
+}
+
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  background: transparent;
+  color: var(--usx-color-on-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--usx-transition);
+}
+
+.btn-secondary:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+}
+
+.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all var(--usx-transition);
+}
+
+.btn-icon:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+/* ─── Extra UI bits ─────────────────────────────────────────────── */
+.kanban-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: transparent;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 4px;
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all var(--usx-transition);
+  margin-left: auto;
+}
+
+.kanban-add-btn:hover {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border-color: var(--usx-color-primary);
+}
+
+.kanban-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.kanban-card-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--usx-transition);
+  flex-shrink: 0;
+}
+
+.kanban-card:hover .kanban-card-delete {
+  opacity: 0.6;
+}
+
+.kanban-card-delete:hover {
+  opacity: 1;
+  background: var(--usx-color-error-container, rgba(255, 0, 0, 0.1));
+  color: var(--usx-color-error, #ef4444);
+}
+
+.kanban-card-date {
+  color: var(--usx-color-on-surface-variant);
+  font-size: 0.7rem;
+}
+
+.table-detail {
+  padding: 0.75rem 1rem;
+  background: var(--usx-color-surface);
+  border-top: 1px solid var(--usx-color-outline);
+  font-size: 0.8rem;
+  color: var(--usx-color-on-surface-variant);
+}
+
+.table-detail p { margin: 0.15rem 0; }
+
+.editor-publish-status {
+  padding: 0.5rem 1rem;
+  background: var(--usx-color-tertiary-container);
+  color: var(--usx-color-on-tertiary-container);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.editor-preview {
+  flex: 1;
+  padding: 1rem;
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  border-left: 1px solid var(--usx-color-outline);
+  overflow-y: auto;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.editor-body.split .editor-textarea {
+  width: 50%;
+}
+
+.sort-arrow {
+  font-size: 0.65rem;
+  margin-left: 0.15rem;
+}
+
+.table-th.sorted {
+  color: var(--usx-color-primary);
+}
+
+.table-row.selected {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  border-left: 3px solid var(--usx-color-primary);
+}
+
+/* ─── Story View ────────────────────────────────────────────────── */
+.story-view {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.story-header {
+  margin-bottom: 1.5rem;
+}
+
+.story-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin: 0 0 0.25rem 0;
+}
+
+.story-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.story-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-md);
+  transition: border-color var(--usx-transition);
+}
+
+.story-card:hover {
+  border-color: var(--usx-color-primary);
+}
+
+.story-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.story-card-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--usx-color-on-surface);
+}
+
+.story-card-meta {
+  font-size: 0.75rem;
+  color: var(--usx-color-on-surface-variant);
+  white-space: nowrap;
+}
+
+.story-card-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}

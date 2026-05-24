@@ -183,7 +183,45 @@ export {
 } from './commands/story.ts'
 export type { Story, StoryStep, StoryAction, StoryExecution, StoryOptions, StoryStepResult, StoryActionResult } from './commands/story.ts'
 
+export {
+  handlePublish,
+  handlePublishSetPermission,
+  handlePublishGenerateIndex,
+  handlePublishWatch,
+} from './commands/publish.ts'
+export type { PublishOptions, PublishResult, Frontmatter } from './commands/publish.ts'
+
+// ─── Oracle Trinity ──────────────────────────────────────────────
+export {
+  registerOracle,
+  getOracle,
+  listOracles,
+  queryOracle,
+  conductQuery,
+  registerProvider,
+  getProvider,
+  executeOracleSkill,
+  registerBuiltinOracles,
+} from './oracle.ts'
+export type {
+  OracleDomain,
+  OracleConfig,
+  OracleQuery,
+  OracleResponse,
+  OracleConductorResult,
+  LLMProviderConfig,
+  LLMProvider,
+} from './oracle.ts'
+
+export {
+  handleOracleAsk,
+  handleOracleList,
+  handleOracleStatus,
+} from './commands/oracle.ts'
+export type { OracleAskOptions } from './commands/oracle.ts'
+
 // ─── Initialization ──────────────────────────────────────────────
+
 
 export interface UDOInitOptions {
   registerSpices?: boolean
@@ -191,6 +229,7 @@ export interface UDOInitOptions {
   registerSurfaces?: boolean
   registerMCP?: boolean
   registerAutomation?: boolean
+  registerOracles?: boolean
 }
 
 export function initUDO(opts: UDOInitOptions = {}): void {
@@ -200,6 +239,7 @@ export function initUDO(opts: UDOInitOptions = {}): void {
     registerSurfaces = true,
     registerMCP = true,
     registerAutomation = true,
+    registerOracles = true,
   } = opts
 
   if (registerSpices) {
@@ -225,6 +265,11 @@ export function initUDO(opts: UDOInitOptions = {}): void {
   if (registerAutomation) {
     const { registerDefaultRules } = require('./automation.ts')
     registerDefaultRules()
+  }
+
+  if (registerOracles) {
+    const { registerBuiltinOracles } = require('./oracle.ts')
+    registerBuiltinOracles()
   }
 
   console.log('[UDO] Core initialized')

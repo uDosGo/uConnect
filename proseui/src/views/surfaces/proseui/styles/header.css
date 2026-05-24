@@ -1,0 +1,210 @@
+/* ═══════════════════════════════════════════════════════════════════
+   header.css — Topbar, Toolbar, Nav Tabs, Dropdown
+   ═══════════════════════════════════════════════════════════════════ */
+
+.proseui-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: var(--usx-color-surface);
+  border-bottom: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.proseui-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.proseui-header-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--usx-color-primary);
+  margin: 0;
+}
+
+.proseui-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 4px;
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.proseui-header-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-header-btn-round {
+  border-radius: 50%;
+}
+
+.proseui-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ─── M3 Toolbar Group ─────────────────────────────────────────── */
+.proseui-header-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--usx-color-surface);
+}
+
+.proseui-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.proseui-toolbar-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-toolbar-value {
+  font-size: 0.75rem;
+  font-family: var(--usx-font-mono);
+  color: var(--usx-color-on-surface-variant);
+  min-width: 1.5em;
+  text-align: center;
+  line-height: 1;
+}
+
+.proseui-toolbar-label {
+  font-size: 0.65rem;
+  font-family: var(--usx-font-mono);
+  color: var(--usx-color-on-surface-variant);
+  text-transform: uppercase;
+  min-width: 2.5em;
+  text-align: center;
+  line-height: 1;
+}
+
+.proseui-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--usx-color-outline);
+  flex-shrink: 0;
+}
+
+/* ─── Header Nav ───────────────────────────────────────────────── */
+.proseui-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.proseui-header-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: all var(--usx-transition);
+  white-space: nowrap;
+}
+
+.proseui-header-nav-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-header-nav-btn.active {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border-color: var(--usx-color-primary);
+}
+
+.proseui-header-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--usx-color-outline);
+  margin: 0 0.25rem;
+}
+
+/* ─── Header Dropdown ──────────────────────────────────────────── */
+.proseui-header-dropdown-wrapper {
+  position: relative;
+}
+
+.proseui-header-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  min-width: 180px;
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-md);
+  box-shadow: var(--usx-shadow-lg);
+  z-index: 200;
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  animation: dropdownFadeIn 0.12s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.proseui-header-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.65rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: all var(--usx-transition);
+  white-space: nowrap;
+  width: 100%;
+  text-align: left;
+}
+
+.proseui-header-dropdown-item:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-header-dropdown-item.active {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+}

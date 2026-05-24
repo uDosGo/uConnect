@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════════════════
+   editor-panel.css — Editor Detail Panel (side panel)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.proseui-editor-panel {
+  width: 320px;
+  min-width: 280px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  background: var(--usx-color-surface, var(--usx-color-background));
+  border-left: 1px solid var(--usx-color-outline, var(--usx-border));
+  overflow: hidden;
+}
+
+.proseui-editor-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--usx-color-outline, var(--usx-border));
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.proseui-editor-panel-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  border-radius: var(--usx-radius-sm, 4px);
+  color: var(--usx-color-on-surface-variant, var(--usx-muted));
+  cursor: pointer;
+  transition: all var(--usx-transition, 0.15s);
+}
+
+.proseui-editor-panel-close:hover {
+  background: var(--usx-color-surface-variant, var(--usx-surface));
+  color: var(--usx-color-on-surface, var(--usx-fg));
+}
+
+.proseui-editor-panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.proseui-editor-panel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--usx-color-on-surface-variant, var(--usx-muted));
+  border-bottom: 1px solid var(--usx-color-outline, var(--usx-border));
+}
+
+.proseui-editor-panel-textarea {
+  flex: 1;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--usx-color-on-surface, var(--usx-fg));
+  font-family: var(--usx-font-family, 'Inter', system-ui, sans-serif);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.proseui-editor-panel-textarea::placeholder {
+  color: var(--usx-color-on-surface-variant, var(--usx-muted));
+}

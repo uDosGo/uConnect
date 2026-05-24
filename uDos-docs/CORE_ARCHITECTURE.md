@@ -397,8 +397,267 @@ else:
     from ucode1.core_py import PythonProcessor
 ```
 
+## Current System Architecture (v1.2.0+)
+
+### uServer (Snackbar) — Core Infrastructure
+
+**Location**: `~/Code/uServer/snackbar/`
+**Language**: Rust
+**Port**: 8484 (REST API), 8485 (WebSocket)
+**Status**: ✅ Core infrastructure
+
+The Snackbar service has been elevated from a peripheral component to **core infrastructure**. It provides:
+
+- **Container orchestration** — Manages lifecycle of Snack containers
+- **REST API** — `POST /v1/snacks/execute`, `GET /v1/health`, etc.
+- **WebSocket** — Real-time event streaming for surface updates
+- **Secret management** — Encrypted storage for API keys and credentials
+- **MCP bridge** — Model Context Protocol server for AI tool integration
+- **Narrator daemon** — Feed spool translator for human-readable stories
+
+#### Integration with uConnect
+
+```bash
+# Start all surfaces + uServer
+node scripts/udos.js start --all --with-server
+
+# Or start uServer independently
+node scripts/udos.js start-server
+```
+
+The uServer is managed by `scripts/udos.cjs` which handles:
+- Building from source (`cargo build --release`)
+- Process lifecycle (start, stop, restart)
+- Auto-recovery on crash
+- Health checks via HTTP endpoint
+
+### Container System (USX Surfaces)
+
+Each surface in uConnect is a **standalone Vite application** that acts as a container:
+
+| Surface | Port | Purpose | Framework |
+|---------|------|---------|-----------|
+| **ui** (Hub) | 5173 | Index page with 5 surface cards | React/TypeScript |
+| **proseui** | 5174 | Prose editor, kanban, chat | React/TypeScript |
+| **code3ui** | 5175 | Code editor v3 | React/TypeScript |
+| **code4ui** | 5176 | Code editor v4 | React/TypeScript |
+| **opsui** | 5177 | Server operations | React/TypeScript |
+| **gridui** | 5178 | Grid workspace | Vue 3 |
+
+Each surface:
+- Is independently runnable (`npx vite --port XXXX`)
+- Shares the `@usx/styles` design system
+- Can communicate via the Snackbar WebSocket
+- Has its own store (Zustand for React, Pinia for Vue)
+
+### USX/UDO Package Architecture
+
+#### `@usx/styles` (packages/usx/)
+
+The shared design system providing:
+
+```
+packages/usx/
+├── tokens/          # M3-inspired design tokens (colors, typography, shapes, elevation, motion, spacing)
+├── palettes/        # Surface-specific color palettes (base, proseui, code3ui, code4ui, gridui)
+├── components/      # CSS component classes (btn, card, switch, chip, dialog, snackbar, etc.)
+├── react/           # React component wrappers (Button, Card, Input, Grid, SurfaceHeader, etc.)
+└── icons/           # Icon system
+```
+
+#### `@udos/core` (packages/udos/)
+
+The unified automation framework providing:
+
+```
+packages/udos/
+├── commands/        # CLI commands (bench, condense, dev, devmode, mcp, oracle, publish, run, story, surface, task, vault)
+├── types.ts         # Shared type definitions
+├── skill.ts         # Skill system
+├── task.ts          # Task system
+├── agent.ts         # Agent definitions
+├── automation.ts    # Automation engine
+├── oracle.ts        # Oracle Trinity engine (Knowledge, Creation, Insight)
+└── providers/       # LLM provider implementations (planned)
+```
+
+### Oracle Trinity (Phase 8B)
+
+The Oracle Trinity is a three-oracle system that provides AI-powered reasoning across the uDos ecosystem:
+
+| Oracle | Domain | Purpose | CLI |
+|--------|--------|---------|-----|
+| **Oracle of Knowledge** | `knowledge` | Vault search, semantic retrieval, Q&A | `udo oracle ask "..."` |
+| **Oracle of Creation** | `creation` | Content/code/story generation | `udo oracle ask --domain creation "..."` |
+| **Oracle of Insight** | `insight` | Pattern recognition, anomaly detection | `udo oracle ask --domain insight "..."` |
+
+Each oracle is registered as both an **Agent** and a **Skill**, making them accessible through:
+- **CLI**: `udo oracle ask "What is in the vault?"`
+- **Agent system**: `udo agent list` → `oracle-knowledge`, `oracle-creation`, `oracle-insight`
+- **Skill system**: `udo run oracle-knowledge --params '{"query":"..."}'`
+- **Automation**: Task completion triggers, cron schedules, event rules
+- **MCP bridge**: Via Snackbar's MCP server for AI tool integration
+
+The `OracleConductor` (Hivemind) routes queries to the appropriate oracle(s) based on keyword analysis and merges responses for a unified answer.
+
+### Centralized LLM Architecture (Planned — Phase 9)
+
+The LLM infrastructure follows a **centralized server, distributed client** model:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    Linux Server (uServer)                            │
+│                                                                     │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                    Ollama (LLM Runtime)                       │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │ DeepSeek │ │  Llama   │ │  Mistral │ │  CodeLlama│       │   │
+│  │  │  Coder   │ │    3     │ │    7B    │ │   33B    │        │   │
+│  │  │  33B     │ │  70B     │ │          │ │          │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │ REST API :11434                           │
+│                          ▼                                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              uServer Snackbar (LLM Proxy)                     │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │ Ollama   │ │  Model   │ │  Cache   │ │  Rate    │        │   │
+│  │  │ Client   │ │ Router   │ │  Layer   │ │  Limiter │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │ MCP :8484 / REST :8484                    │
+└──────────────────────────┼──────────────────────────────────────────┘
+                           │
+                           ▼ (LAN/WAN)
+┌─────────────────────────────────────────────────────────────────────┐
+│                    Local Machines (macOS/Linux)                      │
+│                                                                     │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              @udos/core Oracle Trinity                        │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │Knowledge │ │ Creation │ │ Insight  │ │ Fallback │        │   │
+│  │  │ Oracle   │ │ Oracle   │ │ Oracle   │ │ Tiny LLM │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  │                    │                                           │   │
+│  │                    ▼                                           │   │
+│  │  ┌──────────────────────────────────────────────────────┐     │   │
+│  │  │           Provider Router                             │     │   │
+│  │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐              │     │   │
+│  │  │  │  Remote  │ │  Local   │ │  Fallback│              │     │   │
+│  │  │  │ (uServer)│ │ (Ollama) │ │ (Tiny)   │              │     │   │
+│  │  │  └──────────┘ └──────────┘ └──────────┘              │     │   │
+│  │  └──────────────────────────────────────────────────────┘     │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                     │
+│  The fallback is a tiny custom LLM (~100MB) distributed to local    │
+│  machines for offline/basic operations. All heavy LLM work routes   │
+│  through the Linux server's Ollama instance.                        │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Design Decisions:**
+
+1. **Centralized LLMs on Linux Server**: All large models (DeepSeek Coder 33B, Llama 3 70B, etc.) run on the Linux server via Ollama. This keeps disk usage and GPU requirements off local machines.
+
+2. **Tiny Local Fallback**: A small custom LLM (~100MB, distilled from a larger model) is distributed to local machines for:
+   - Offline operation when the server is unreachable
+   - Basic pattern matching and keyword extraction
+   - Low-latency responses for simple queries
+   - Graceful degradation when the server is busy
+
+3. **Provider Router**: The Oracle Trinity uses a pluggable provider system:
+   - `remote` — Routes to uServer Snackbar's Ollama proxy (default for heavy queries)
+   - `local` — Routes to local Ollama instance (if installed)
+   - `fallback` — Uses the tiny embedded LLM (always available)
+   - `openai` / `anthropic` / `deepseek` — Cloud API providers (optional)
+
+4. **uServer as LLM Proxy**: The Snackbar on the Linux server acts as an LLM proxy, providing:
+   - Model routing (which model for which oracle)
+   - Response caching (avoid redundant LLM calls)
+   - Rate limiting (prevent resource exhaustion)
+   - Request queuing (fair scheduling across clients)
+
+### macOS Integration
+
+The system provides native macOS integration:
+
+- **`udosui.command`** — Double-clickable launcher that starts all surfaces + menu bar
+- **`scripts/udos-menu-bar.swift`** — Native Swift menu bar app with snackbar icon
+- **`scripts/udos.cjs`** — Process manager with port allocation, health checks, auto-recovery
+
+### System Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         macOS Desktop                                │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │  Menu Bar    │  │  Browser     │  │  Terminal    │              │
+│  │  (Swift)     │  │  (localhost) │  │  (udo CLI)   │              │
+│  └──────────────┘  └──────────────┘  └──────────────┘              │
+│                          │                    │                      │
+│                          ▼                    ▼                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                    uConnect Surfaces                          │   │
+│  │  ┌─────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌─────┐ ┌──────┐       │   │
+│  │  │ ui  │ │prose │ │code3 │ │code4 │ │ops  │ │grid  │       │   │
+│  │  │:5173│ │:5174 │ │:5175 │ │:5176 │ │:5177│ │:5178 │       │   │
+│  │  └─────┘ └──────┘ └──────┘ └──────┘ └─────┘ └──────┘       │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │                                           │
+│                          ▼                                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              @udos/core (Oracle Trinity)                      │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │Knowledge │ │ Creation │ │ Insight  │ │ Fallback │        │   │
+│  │  │ Oracle   │ │ Oracle   │ │ Oracle   │ │ Tiny LLM │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │                                           │
+│                          ▼                                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              uServer (Snackbar) :8484                         │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │Container │ │  REST    │ │WebSocket │ │ Secrets  │        │   │
+│  │  │Orchestr. │ │  API     │ │  :8485   │ │ Manager  │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │                                           │
+│                          ▼                                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              uCode1 (Python Core)                             │   │
+│  │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────────┐          │   │
+│  │  │snack │ │relic │ │binder│ │usxd  │ │integration│          │   │
+│  │  └──────┘ └──────┘ └──────┘ └──────┘ └──────────┘          │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │                                           │
+│                          ▼                                           │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              uCode3 (Rust Performance)                        │   │
+│  │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐              │   │
+│  │  │snack │ │relic │ │binder│ │usxd  │ │ ffi  │              │   │
+│  │  └──────┘ └──────┘ └──────┘ └──────┘ └──────┘              │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                          │                                           │
+│                          ▼ (LAN)                                     │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              Linux Server (Ollama + uServer)                  │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │   │
+│  │  │ DeepSeek │ │  Llama   │ │  Mistral │ │  CodeLlama│       │   │
+│  │  │  Coder   │ │    3     │ │    7B    │ │   33B    │        │   │
+│  │  │  33B     │ │  70B     │ │          │ │          │        │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+
 ## References
 
+- [Integration Guide](integration-guide.md) — Python/Rust FFI technical details
+- [Hybrid Workflow](hybrid-workflow.md) — Development workflow across language boundary
+- [USX Specs](../uCode1/docs/specs/usx/) — Surface format specifications
+- [UDO Specs](../uCode1/docs/specs/udo/) — Document format specifications
 - [Python Performance Optimization Guide](https://docs.python.org/3/howto/optimization.html)
 - [Rust Performance Guide](https://doc.rust-lang.org/1.89.0/book/ch13-04-performance.html)
 - [Pyo3 User Guide](https://pyo3.rs/)

@@ -425,10 +425,16 @@ const ProseUISurface: React.FC = () => {
                     {col.items.map(item => (
                       <div key={item.id} className="kanban-card"
                            draggable
-                           onDragStart={() => handleDragStart(item, col.id)}>
+                           onDragStart={() => handleDragStart(item, col.id)}
+                           onClick={() => store.setSelectedDoc({
+                             title: item.title,
+                             type: item.type,
+                             status: col.title,
+                             date: item.date,
+                           })}>
                         <div className="kanban-card-header">
                           <div className="kanban-card-title">{item.title}</div>
-                          <button className="kanban-card-delete" onClick={() => deleteKanbanItem(item.id)} title="Delete card">
+                          <button className="kanban-card-delete" onClick={(e) => { e.stopPropagation(); deleteKanbanItem(item.id) }} title="Delete card">
                             <Icon name="close" size={12} />
                           </button>
                         </div>
@@ -459,7 +465,15 @@ const ProseUISurface: React.FC = () => {
               </div>
               {sortedTable.map(item => (
                 <div key={item.id} className={`table-row ${selectedRow === item.id ? 'selected' : ''}`}
-                     onClick={() => setSelectedRow(selectedRow === item.id ? null : item.id)}>
+                     onClick={() => {
+                       setSelectedRow(selectedRow === item.id ? null : item.id)
+                       store.setSelectedDoc({
+                         title: item.title,
+                         type: item.type,
+                         status: item.status,
+                         date: item.date,
+                       })
+                     }}>
                   <span className="table-td title">{item.title}</span>
                   <span className="table-td"><span className={`status-badge ${item.status}`}>{item.status}</span></span>
                   <span className="table-td type">{item.type}</span>

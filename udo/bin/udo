@@ -66,6 +66,11 @@ Agent Orchestration:
   agent status <name>           Check agent status
   agent stop <name>             Stop an agent
 
+Oracle Trinity:
+  oracle ask <query>            Ask the oracles a question
+  oracle list                   List available oracles
+  oracle status                 Show oracle status
+
 MCP Bridge:
   mcp list                      List MCP tools
   mcp call <tool> [--params]    Call an MCP tool
@@ -102,6 +107,12 @@ Extension Management:
   ext create <name>             Scaffold a new extension
   ext validate <name>           Validate extension manifest
   ext publish <name>            Publish extension to catalog
+
+Publishing:
+  publish [--input dir] [--output dir]  Generate static site from Markdown
+  publish --watch                       Watch for changes and auto-publish
+  publish index                         Regenerate index only
+  serve                                 Start localhost library server (port 8080)
 
 Development:
   dev build <skill>             Build a skill container
@@ -2026,6 +2037,123 @@ main() {
                 list) cmd_skill_list ;;
                 run) cmd_skill_run "$@" ;;
                 *) error "Unknown skill subcommand: $sub"; exit 1 ;;
+            esac
+            ;;
+        publish)
+            # udo publish [--input dir] [--output dir] [--watch] [--force]
+            # udo publish index
+            local input_dir=""
+            local output_dir=""
+            local watch_mode=false
+            local force_mode=false
+
+            if [ "$1" = "index" ]; then
+                shift
+                # Regenerate index only
+                info "Regenerating index..."
+                node "$HOME/Code/uConnect/tools/localhost-library/server.ts" --generate-index 2>/dev/null || \
+                    warn "Index regeneration not available (run 'udo publish' first)"
+                return
+            fi
+
+            while [ $# -gt 0 ]; do
+                case "$1" in
+                    --input) input_dir="$2"; shift 2 ;;
+                    --output) output_dir="$2"; shift 2 ;;
+                    --watch) watch_mode=true; shift ;;
+                    --force) force_mode=true; shift ;;
+                    *) shift ;;
+                esac
+            done
+
+            info "Publishing static site..."
+            local cmd="node -e "
+            cmd+='"const { handlePublish, handlePublishWatch } = require('"'./packages/udos/commands/publish.ts'"'); "
+            if [ "$watch_mode" = true ]; then
+                cmd+="handlePublishWatch({ input: '${input_dir:-}', output: '${output_dir:-}' });"
+            else
+                cmd+="handlePublish({ input: '${input_dir:-}', output: '${output_dir:-}', force: ${force_mode} }).then(r => process.exit(r.success ? 0 : 1));"
+            fi
+            cmd+='"'
+            eval "$cmd" 2>/dev/null || {
+                warn "Publish command not available via Node"
+                echo "  Try: cd ~/Code/uConnect && npx tsx packages/udos/commands/publish.ts"
+            }
+            ;;
+        serve)
+            # udo serve — Start localhost library server on port 8080
+            info "Starting localhost library server..."
+            if [ -f "$HOME/Code/uConnect/tools/localhost-library/server.ts" ]; then
+                cd "$HOME/Code/uConnect"
+                npx tsx tools/localhost-library/server.ts 2>/dev/null || \
+                    node tools/localhost-library/server.ts 2>/dev/null || {
+                    warn "Failed to start server"
+                    echo "  Try: cd ~/Code/uConnect && npx tsx tools/localhost-library/server.ts"
+                }
+            else
+                warn "Server script not found"
+            fi
+            ;;
+        oracle)
+            # udo oracle ask <query> [--domain <domain>] [--verbose]
+            # udo oracle list
+            # udo oracle status
+            [ $# -lt 1 ] && { error "Usage: udo oracle <ask|list|status>"; exit 1; }
+            local sub="$1"; shift
+            case "$sub" in
+                ask)
+                    local domain=""
+                    local verbose=false
+                    local query=""
+
+                    while [ $# -gt 0 ]; do
+                        case "$1" in
+                            --domain) domain="$2"; shift 2 ;;
+                            --verbose) verbose=true; shift ;;
+                            *) query="$*"; break ;;
+                        esac
+                    done
+
+                    if [ -z "$query" ]; then
+                        error "Usage: udo oracle ask <query> [--domain knowledge|creation|insight] [--verbose]"
+                        exit 1
+                    fi
+
+                    info "Consulting the oracles..."
+                    cd "$HOME/Code/uConnect"
+                    npx tsx -e "
+                        const { handleOracleAsk } = require('./packages/udos/commands/oracle.ts');
+                        handleOracleAsk({ prompt: '$query', domain: '${domain}', verbose: ${verbose} }).then(() => process.exit(0));
+                    " 2>/dev/null || {
+                        warn "Oracle command not available via Node"
+                        echo "  Try: cd ~/Code/uConnect && npx tsx -e '...'"
+                    }
+                    ;;
+                list)
+                    cd "$HOME/Code/uConnect"
+                    npx tsx -e "
+                        const { handleOracleList } = require('./packages/udos/commands/oracle.ts');
+                        handleOracleList();
+                    " 2>/dev/null || {
+                        warn "Oracle list not available"
+                        echo "  Available oracles: knowledge, creation, insight"
+                    }
+                    ;;
+                status)
+                    cd "$HOME/Code/uConnect"
+                    npx tsx -e "
+                        const { handleOracleStatus } = require('./packages/udos/commands/oracle.ts');
+                        handleOracleStatus();
+                    " 2>/dev/null || {
+                        warn "Oracle status not available"
+                        echo "  Status: fallback mode (no LLM provider configured)"
+                    }
+                    ;;
+                *)
+                    error "Unknown oracle subcommand: $sub"
+                    echo "  Usage: udo oracle <ask|list|status>"
+                    exit 1
+                    ;;
             esac
             ;;
         *)

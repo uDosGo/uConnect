@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════════════════
+   editor.css — Editor View
+   ═══════════════════════════════════════════════════════════════════ */
+
+.editor-view {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-md);
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--usx-color-surface);
+  border-bottom: 1px solid var(--usx-color-outline);
+}
+
+.editor-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--usx-color-on-surface-variant);
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--usx-transition);
+}
+
+.editor-toolbar-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.editor-toolbar-btn.primary {
+  background: var(--usx-color-primary);
+  color: var(--usx-color-on-primary);
+  border-color: var(--usx-color-primary);
+}
+
+.editor-toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--usx-color-outline);
+  margin: 0 0.25rem;
+}
+
+.editor-body {
+  flex: 1;
+  display: flex;
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 350px;
+  padding: 1rem;
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  border: none;
+  font-family: var(--usx-font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.editor-textarea::placeholder {
+  color: var(--usx-color-on-surface-variant);
+  opacity: 0.5;
+}

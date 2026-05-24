@@ -1,0 +1,144 @@
+/* ═══════════════════════════════════════════════════════════════════
+   github.css — GitHub Repository Browser
+   ═══════════════════════════════════════════════════════════════════ */
+
+.github-view {
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.gh-header {
+  border-bottom: 1px solid var(--usx-color-outline);
+  padding: 1rem;
+}
+
+.gh-repo-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: var(--usx-color-on-surface);
+}
+
+.gh-repo-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--usx-color-primary);
+}
+
+.gh-repo-desc {
+  font-size: 0.8rem;
+  color: var(--usx-color-on-surface-variant);
+}
+
+.gh-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--usx-color-outline);
+}
+
+.gh-tab {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.gh-tab.active {
+  color: var(--usx-color-on-surface);
+  border-bottom-color: var(--usx-color-primary);
+}
+
+.gh-tab:hover { color: var(--usx-color-on-surface); }
+
+.gh-content { display: flex; flex-direction: column; }
+
+.gh-file-list { border-bottom: 1px solid var(--usx-color-outline); }
+
+.gh-file-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--usx-color-surface);
+  border-bottom: 1px solid var(--usx-color-outline);
+  font-size: 0.8rem;
+}
+
+.gh-branch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--usx-color-on-surface-variant);
+}
+
+.gh-file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--usx-color-outline);
+  transition: background 0.1s;
+}
+
+.gh-file-row:hover { background: var(--usx-color-surface-variant, var(--usx-color-surface)); }
+.gh-file-row:last-child { border-bottom: none; }
+
+.gh-file-icon { width: 16px; display: flex; align-items: center; color: var(--usx-color-on-surface-variant); flex-shrink: 0; }
+.gh-file-name { color: var(--usx-color-primary); font-weight: 500; min-width: 120px; }
+.gh-file-msg { flex: 1; color: var(--usx-color-on-surface-variant); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gh-file-date { color: var(--usx-color-on-surface-variant); font-size: 0.75rem; white-space: nowrap; }
+
+.gh-readme { padding: 1.5rem; }
+
+.gh-readme-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--usx-color-outline);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+  margin-bottom: 1rem;
+}
+
+.gh-readme-body {
+  color: var(--usx-color-on-surface);
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.gh-readme-body h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--usx-color-outline);
+  padding-bottom: 0.5rem;
+}
+
+.gh-readme-body h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.gh-readme-body p { margin-bottom: 1rem; }
+.gh-readme-body ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+.gh-readme-body li { margin-bottom: 0.25rem; }
+
+.gh-readme-body pre {
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.gh-readme-body code { font-family: var(--usx-font-mono); font-size: 0.85em; }
+.gh-readme-body pre code { background: none; padding: 0; }

@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════════════════
+   table.css — Table View, Status Badges
+   ═══════════════════════════════════════════════════════════════════ */
+
+.table-view {
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-md);
+  overflow: hidden;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background: var(--usx-color-surface);
+  border-bottom: 1px solid var(--usx-color-outline);
+}
+
+.table-th {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--usx-color-surface);
+  transition: background var(--usx-transition);
+}
+
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--usx-color-surface); }
+
+.table-td {
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+}
+
+.table-td.title { color: var(--usx-color-on-surface); font-weight: 500; }
+.table-td.type { color: var(--usx-color-on-surface-variant); }
+.table-td.date { color: var(--usx-color-on-surface-variant); font-family: var(--usx-font-mono); font-size: 0.8rem; }
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.draft {
+  background: var(--usx-color-surface);
+  color: var(--usx-color-on-surface-variant);
+  border: 1px solid var(--usx-color-outline);
+}
+
+.status-badge.review {
+  background: var(--usx-color-error-container);
+  color: var(--usx-color-on-error-container);
+  border: 1px solid var(--usx-color-outline);
+}
+
+.status-badge.published {
+  background: var(--usx-color-tertiary-container);
+  color: var(--usx-color-on-tertiary-container);
+  border: 1px solid var(--usx-color-outline);
+}

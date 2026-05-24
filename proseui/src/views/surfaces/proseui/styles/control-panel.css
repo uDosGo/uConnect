@@ -1,0 +1,166 @@
+/* ═══════════════════════════════════════════════════════════════════
+   control-panel.css — Slide-out Settings Panel, Scheme Picker
+   ═══════════════════════════════════════════════════════════════════ */
+
+.proseui-control-panel {
+  position: fixed;
+  top: 48px;
+  right: 0.5rem;
+  width: 240px;
+  background: var(--usx-color-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-md);
+  box-shadow: var(--usx-shadow-lg);
+  z-index: 100;
+  overflow: hidden;
+  animation: panelSlideIn 0.15s ease-out;
+}
+
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.proseui-control-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--usx-color-outline);
+}
+
+.proseui-control-panel-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-control-panel-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+}
+
+.proseui-control-panel-close:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}
+
+.proseui-control-panel-body {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ─── Scheme Picker Buttons ────────────────────────────────────── */
+.proseui-scheme-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: all var(--usx-transition);
+  width: 100%;
+  text-align: left;
+}
+
+.proseui-scheme-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+}
+
+.proseui-scheme-btn.active {
+  border-color: var(--usx-color-primary);
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+}
+
+.proseui-scheme-swatches {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.proseui-scheme-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--usx-color-outline);
+}
+
+.proseui-scheme-label {
+  flex: 1;
+}
+
+/* ─── Settings Panel Sections ──────────────────────────────────── */
+.proseui-settings-section {
+  margin-bottom: 0.5rem;
+}
+
+.proseui-settings-heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--usx-color-on-surface-variant);
+  margin: 0 0 0.35rem 0;
+  padding: 0.35rem 0.5rem 0;
+}
+
+.proseui-settings-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: all var(--usx-transition);
+  width: 100%;
+  text-align: left;
+}
+
+.proseui-settings-row:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+}
+
+.proseui-settings-btn-group {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+
+.proseui-settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  color: var(--usx-color-on-surface-variant);
+  cursor: pointer;
+  transition: all var(--usx-transition);
+}
+
+.proseui-settings-btn:hover {
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  color: var(--usx-color-on-surface);
+}

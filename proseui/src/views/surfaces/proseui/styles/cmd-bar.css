@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════════════════════════════════
+   cmd-bar.css — Command Bar (bottom)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.proseui-cmd-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--usx-color-surface);
+  border-top: 1px solid var(--usx-color-outline);
+  flex-shrink: 0;
+}
+
+.cmd-prompt {
+  font-family: var(--usx-font-mono);
+  font-size: 0.85rem;
+  color: var(--usx-color-primary);
+  font-weight: 700;
+}
+
+.cmd-input {
+  flex: 1;
+  padding: 0.35rem 0.5rem;
+  background: var(--usx-color-background);
+  color: var(--usx-color-on-surface);
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  font-family: var(--usx-font-mono);
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.cmd-input:focus {
+  border-color: var(--usx-color-primary);
+}
+
+.cmd-input::placeholder {
+  color: var(--usx-color-on-surface-variant);
+  opacity: 0.5;
+}
+
+.cmd-output {
+  padding: 0.35rem 0.75rem;
+  background: var(--usx-color-surface-variant, var(--usx-color-surface));
+  border: 1px solid var(--usx-color-outline);
+  border-radius: var(--usx-radius-sm);
+  font-family: var(--usx-font-mono);
+  font-size: 0.75rem;
+  color: var(--usx-color-on-surface);
+  cursor: pointer;
+  white-space: nowrap;
+}

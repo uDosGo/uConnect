@@ -137,6 +137,14 @@ const ProseSurfaceManager: React.FC = () => {
         </div>
 
         <div className="proseui-header-controls">
+          {/* Chat toggle */}
+          <button
+            onClick={store.toggleChat}
+            className={`proseui-header-btn proseui-header-btn-round ${store.chatOpen ? 'active' : ''}`}
+            title={store.chatOpen ? 'Close Chat Panel' : 'Open Chat Panel'}
+          >
+            <Icon name="chat" size={20} />
+          </button>
           {/* Settings — opens slide-out panel */}
           <button
             onClick={() => setPanelOpen((prev) => !prev)}
@@ -256,6 +264,35 @@ const ProseSurfaceManager: React.FC = () => {
         <main className="proseui-main">
           <Outlet />
         </main>
+
+        {/* ═══ Editor Detail Panel (when item selected in Kanban/Table) ═══ */}
+        {store.selectedDoc && (
+          <div className="proseui-editor-panel">
+            <div className="proseui-editor-panel-header">
+              <span className="proseui-editor-panel-title">{store.selectedDoc.title}</span>
+              <button
+                className="proseui-editor-panel-close"
+                onClick={() => store.setSelectedDoc(null)}
+                title="Close"
+              >
+                <Icon name="close" size={16} />
+              </button>
+            </div>
+            <div className="proseui-editor-panel-body">
+              <div className="proseui-editor-panel-meta">
+                <span><strong>Type:</strong> {store.selectedDoc.type}</span>
+                <span><strong>Status:</strong> {store.selectedDoc.status}</span>
+                <span><strong>Updated:</strong> {store.selectedDoc.date}</span>
+              </div>
+              <textarea
+                className="proseui-editor-panel-textarea"
+                defaultValue={`# ${store.selectedDoc.title}\n\nStart editing this document...`}
+                placeholder="Edit document content..."
+                spellCheck={false}
+              />
+            </div>
+          </div>
+        )}
 
         {/* ═══ Chat Sheet (persistent across all surfaces, hidden on Vibe) ═══ */}
         {store.chatOpen && location.pathname !== '/surface/vibe' && (

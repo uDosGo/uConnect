@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════════════════
+   base.css — Root Variables, Reset, Dark Mode, Font Helpers
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Base Theme Variables ─────────────────────────────────────── */
+:root {
+  --usx-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --usx-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --usx-font-serif: 'Georgia', 'Times New Roman', serif;
+
+  --usx-radius-sm: 4px;
+  --usx-radius-md: 8px;
+  --usx-radius-lg: 12px;
+
+  --usx-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --usx-shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+  --usx-shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+
+  --usx-transition: 0.15s ease;
+}
+
+/* Kill body white flash — inherit from app-shell */
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--usx-color-background, #0f172a);
+}
+
+/* ─── Dark Mode Override ───────────────────────────────────────── */
+.usx-dark {
+  color-scheme: dark;
+}
+
+/* ─── Font Styles ──────────────────────────────────────────────── */
+.font-sans  { --usx-font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+.font-serif { --usx-font-family: 'Georgia', 'Times New Roman', serif; }
+.font-mono  { --usx-font-family: 'JetBrains Mono', 'Fira Code', monospace; }

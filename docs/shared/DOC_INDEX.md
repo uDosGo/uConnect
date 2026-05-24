@@ -28,7 +28,6 @@ This index maps where to find documentation across all uDos ecosystem repos.
 | Quickstart | `QUICKSTART.md` | 5-minute setup |
 | Structure | `STRUCTURE.md` | Project structure overview |
 | Architecture | `CORE_ARCHITECTURE.md` | Python/Rust version boundaries |
-| Architecture | `ARCHITECTURE.md` | Legacy architecture (Vue.js/Node.js) |
 | Dev guides | `DEV-GUIDE-NODE.md` | Node.js development guide |
 | Dev guides | `DEV-GUIDE-PYTHON.md` | Python/Rust development guide |
 | Lexicon | `lexicon.md` | Terminology across dev/story/student lanes |
@@ -37,9 +36,11 @@ This index maps where to find documentation across all uDos ecosystem repos.
 | Guides | `guides/` | 15 guides (AGENTS, DEPLOYMENT, MCP, ThinUI, etc.) |
 | Public | `public/` | 7 public-facing docs (faq, feeds, getting-started, etc.) |
 | Roadmaps | `roadmaps/` | 10 roadmap docs (Phase 8, WordPress, Universal Feed, etc.) |
-| Specs | `specs/` | ~40 spec docs (OBF, USXD, UDO, grid, fonts, vault, etc.) |
+| Specs | `specs/` | ~35 spec docs (OBF, USXD, UDO, grid, fonts, vault, etc.) |
 | Student | `student/` | Student-facing tutorials |
 | API | `api/openapi.yaml` | OpenAPI specification |
+| **Legacy** | `legacy/` | Superseded docs (ARCHITECTURE.md, GITHUB_WORKFLOW.md, DEVLOG.md, roadmap/) |
+| **Review** | `review/` | Docs under review (LOCKED_* specs, v4/ subdirectory) |
 
 ---
 
