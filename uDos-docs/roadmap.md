@@ -1,7 +1,7 @@
 # uDos Development Roadmap
 
-> **⚠️ CONSOLIDATED:** The single source of truth for uDos development planning has moved to **[`ROADMAP.md`](ROADMAP.md)**.
+> **⚠️ CONSOLIDATED:** The single source of truth for uDos development planning has moved to **[`devflow-roadmap.md`](devflow-roadmap.md)**.
 >
 > This file is kept for bookmarks and external links only.
 
-→ **Read:** [`ROADMAP.md`](ROADMAP.md)
+→ **Read:** [`devflow-roadmap.md`](devflow-roadmap.md) — Consolidated dev workflow & phased execution plan

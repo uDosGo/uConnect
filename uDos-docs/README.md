@@ -10,6 +10,7 @@ Welcome to the uDos documentation hub. Here you'll find comprehensive guides, AP
 - **[Project Structure](STRUCTURE.md)**: Overview of the project organization
 - **[Architecture](CORE_ARCHITECTURE.md)**: Technical architecture and design principles
 - **[Development Roadmap](ROADMAP.md)**: Consolidated development roadmap (single source of truth)
+- **[DevFlow Roadmap](devflow-roadmap.md)**: Consolidated dev workflow & phased execution plan (10-phase roadmap)
 - **[Legacy Docs](legacy/)**: Superseded/outdated documentation (ARCHITECTURE.md, GITHUB_WORKFLOW.md, DEVLOG.md, roadmap/)
 - **[Docs Under Review](review/)**: Iffy/uncertain/WIP docs needing triage (LOCKED specs, v4/)
 

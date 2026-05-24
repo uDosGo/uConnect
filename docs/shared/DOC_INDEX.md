@@ -134,6 +134,7 @@ This index maps where to find documentation across all uDos ecosystem repos.
 | uCode2 CLI | `uCode2/docs/API-REFERENCE.md` |
 | Educational content | `uConnect/docs/shared/educational-content/` |
 | Roadmap | `uConnect/uDos-docs/ROADMAP.md` |
+| DevFlow Roadmap | `uConnect/uDos-docs/devflow-roadmap.md` — Consolidated dev workflow & phased execution plan |
 | Documentation policy | `uConnect/uDos-docs/documentation-policy.md` |
 
 ---
