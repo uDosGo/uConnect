@@ -35,7 +35,8 @@ This index maps where to find documentation across all uDos ecosystem repos.
 | Policy | `documentation-policy.md` | Audience tags, OBF, VA1 anchors |
 | Guides | `guides/` | 15 guides (AGENTS, DEPLOYMENT, MCP, ThinUI, etc.) |
 | Public | `public/` | 7 public-facing docs (faq, feeds, getting-started, etc.) |
-| Roadmaps | `roadmaps/` | 10 roadmap docs (Phase 8, WordPress, Universal Feed, etc.) |
+| Roadmap | `ROADMAP.md` | **Consolidated** development roadmap (single source of truth) |
+| Legacy roadmaps | `legacy/roadmaps/` | Superseded roadmaps (WordPress, pre-v5, dev logs, etc.) |
 | Specs | `specs/` | ~35 spec docs (OBF, USXD, UDO, grid, fonts, vault, etc.) |
 | Student | `student/` | Student-facing tutorials |
 | API | `api/openapi.yaml` | OpenAPI specification |
@@ -132,7 +133,7 @@ This index maps where to find documentation across all uDos ecosystem repos.
 | uCode1 CLI | `uCode1/docs/CLI_COMMANDS.md` |
 | uCode2 CLI | `uCode2/docs/API-REFERENCE.md` |
 | Educational content | `uConnect/docs/shared/educational-content/` |
-| Roadmaps | `uConnect/uDos-docs/roadmaps/` |
+| Roadmap | `uConnect/uDos-docs/ROADMAP.md` |
 | Documentation policy | `uConnect/uDos-docs/documentation-policy.md` |
 
 ---
