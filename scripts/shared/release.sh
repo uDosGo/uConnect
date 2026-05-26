@@ -155,4 +155,4 @@ log_echo "  https://github.com/${GITHUB_REPOSITORY:-OkAgentDigital/DevStudio}/ac
 log_info ""
 log_info "Docker images will be available at:"
 log_echo "  ghcr.io/${GITHUB_REPOSITORY:-okagentdigital/devstudio}/secret-server:$VERSION"
-log_echo "  ghcr.io/${GITHUB_REPOSITORY:-okagentdigital/devstudio}/snackbar-linux:$VERSION"
+log_echo "  ghcr.io/${GITHUB_REPOSITORY:-okagentdigital/devstudio}/snackbar:$VERSION"
